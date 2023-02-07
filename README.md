@@ -1,4 +1,4 @@
-# pern-todo-app
+# CS261 base project 
 
 1) Download and install node (https://nodejs.org/en/download/)
 2) Download and install postgres (make sure it has been added to your system variables, you might need to do this manually). 
