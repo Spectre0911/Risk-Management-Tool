@@ -11,6 +11,17 @@ app.use(express.json()); //req.body
 
 //create a todo
 
+//Contains the 
+
+async function testConnect() {
+  console.log('Before connect');
+  const client = await pool.connect();
+  console.log('Connected!');
+  client.release();
+}
+
+testConnect();
+
 app.post("/todos", async (req, res) => {
   try {
     const { description } = req.body;
@@ -24,6 +35,8 @@ app.post("/todos", async (req, res) => {
     console.error(err.message);
   }
 });
+
+
 
 //get all todos
 
