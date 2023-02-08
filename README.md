@@ -33,5 +33,5 @@ git commit -m "INPUT A MESSAGE REGARDING THE CHANGE"
 
 This will store your changes locally and you can view them with the command **git log**
 
-### When you habe completed a feature or want to add something to main code base:
+#### When you have completed a feature or want to add something to main code base:
 git push -m "TELL ME WHY YOU ARE PUSHING YOUR CODE". I will review this and merge it with our existing code base.
