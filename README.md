@@ -15,6 +15,9 @@
 9) Inside server/ run 'nodemon' - The server should start up now
 10) Insider client/ run 'npm start' - The front end should load up and there should be a todo list system website set up. 
 
+Additional software:
+- Install pgAdmin - Can help you view the database and its contents graphically. 
+
 
 Notes: The front end starts from /client/app.js
 - The API's can be found in /server/index.js
