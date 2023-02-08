@@ -22,7 +22,6 @@ git clone git clone git@github.com:Spectre0911/CS261.git
 #### This will create a new, isolated, branch that you will be able to work on without affecting the main code base.
 git checkout -b featureName
 
-
 #### This will show you all the branches that have been created, locally:
 git branch
 
@@ -33,3 +32,6 @@ git checkout branchName
 git commit -m "INPUT A MESSAGE REGARDING THE CHANGE"
 
 This will store your changes locally and you can view them with the command **git log**
+
+### When you habe completed a feature or want to add something to main code base:
+git push -m "TELL ME WHY YOU ARE PUSHING YOUR CODE". I will review this and merge it with our existing code base.
