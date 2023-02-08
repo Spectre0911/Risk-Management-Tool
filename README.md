@@ -11,8 +11,12 @@
 5) Go into server/db.js and edit the 'password' field only with the password you have set up. 
 6) After cloning the github repository, cd into client and run 'npm install'
 7) cd into server and run 'npm install'
-8) Inside server/ run 'nodemon' - The server should start up now
-9) Insider client/ run 'npm start' - The front end should load up and there should be a todo list system website set up. 
+8) Change the password field 'currently san' in db.sql to the password you set when install postgres.
+9) Inside server/ run 'nodemon' - The server should start up now
+10) Insider client/ run 'npm start' - The front end should load up and there should be a todo list system website set up. 
+
+Additional software:
+- Install pgAdmin - Can help you view the database and its contents graphically. 
 
 
 Notes: The front end starts from /client/app.js
