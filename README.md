@@ -1,7 +1,7 @@
 # CS261 base project 
 
 1) Download and install node (https://nodejs.org/en/download/)
-2) Download and install postgres (make sure it has been added to your system variables, you might need to do this manually). 
+2) Download and install postgres (make sure it has been added to your system variables, you might need to do this manually) (When installing set the postgres password to 'root'. 
 3) Download and install pgadmin (to help view the database and its contents)
     - Remember your password for this. 
     - Connect to the database (psql -U postgres) 
