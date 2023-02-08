@@ -16,11 +16,10 @@
 Notes: The front end starts from /client/app.js
 - The API's can be found in /server/index.js
 
-# This is to get the repo locally:
+This is to get the repo locally:
 git clone git clone git@github.com:Spectre0911/CS261.git
-# This will create a new, isolated, branch that you will be able to work on without affecting the main code base.
+This will create a new, isolated, branch that you will be able to work on without affecting the main code base.
 git checkout -b featureName
-# This will show you all the branches that have been created, locally:
-git branch
-# This will allow you to switch between branches 
+This will show you all the branches that have been created, locally:
+git branchThis will allow you to switch between branches 
 git checkout branchName
