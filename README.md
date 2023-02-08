@@ -30,6 +30,6 @@ git branch
 git checkout branchName
 
 #### Every time you make a change, (use frequently but not after very small changes)
-git commit -m "INPUT A MESSAGE REGARDING TO THE CHANGE"
+git commit -m "INPUT A MESSAGE REGARDING THE CHANGE"
 
 This will store your changes locally and you can view them with the command **git log**
