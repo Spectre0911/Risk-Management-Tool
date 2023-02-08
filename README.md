@@ -6,11 +6,13 @@
     - Remember your password for this. 
     - Connect to the database (psql -U postgres) 
     - Run the database schema (psql -U postgres -f "path to the database.sql file")
-4) Go into server/db.js and edit the 'password' field only with the password you have set up. 
-4) After cloning the github repository, cd into client and run 'npm install'
-5) cd into server and run 'npm install'
-6) Inside server/ run 'nodemon' - The server should start up now
-7) Insider client/ run 'npm start' - The front end should load up and there should be a todo list system website set up. 
+4) In the terminal run
+    - npm install -g nodemon
+5) Go into server/db.js and edit the 'password' field only with the password you have set up. 
+6) After cloning the github repository, cd into client and run 'npm install'
+7) cd into server and run 'npm install'
+8) Inside server/ run 'nodemon' - The server should start up now
+9) Insider client/ run 'npm start' - The front end should load up and there should be a todo list system website set up. 
 
 
 Notes: The front end starts from /client/app.js
