@@ -19,7 +19,7 @@ Notes: The front end starts from /client/app.js
 - The API's can be found in /server/index.js
 
 #### This is to get the repo locally:
-git clone git clone git@github.com:Spectre0911/CS261.git
+git clone git@github.com:Spectre0911/CS261.git
 
 #### This will create a new, isolated, branch that you will be able to work on without affecting the main code base.
 git checkout -b featureName
