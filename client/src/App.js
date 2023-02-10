@@ -12,13 +12,12 @@ function App() {
     <div>
       {/* These two components can be removed for the real version
       Just kept these here so we can see how components can be added
-      */}
-      <InputTodo></InputTodo>
-      <ListTodos></ListTodos>
+  */}
       <BrowserRouter>
+      {/* <InputTodo></InputTodo>
+      <ListTodos></ListTodos> */}
             <Routes>
-              <Route path="/" element={<LoginPage />} />
-              <Route path="/dashboard" element={<Admin />} />
+              <Route path="/" element={<Admin />} />
               {/* <Route
                 path="/dashboard"
                 element={isAuth ? <BasketPage /> : <Navigate to="/" />}
