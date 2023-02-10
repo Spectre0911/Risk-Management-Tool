@@ -13,8 +13,8 @@ function App() {
       {/* These two components can be removed for the real version
       Just kept these here so we can see how components can be added
       */}
-      {/* <InputTodo></InputTodo>
-      <ListTodos></ListTodos> */}
+      <InputTodo></InputTodo>
+      <ListTodos></ListTodos>
       <BrowserRouter>
             <Routes>
               <Route path="/" element={<LoginPage />} />
