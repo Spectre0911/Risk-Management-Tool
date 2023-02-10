@@ -1,11 +1,21 @@
+import path from "path";
+import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+
+const require = createRequire(import.meta.url);
 const express = require("express");
 const app = express();
 const cors = require("cors");
-const pool = require("./db");
+const pool = require("./db.cjs");
 
 //middleware
 app.use(cors());
 app.use(express.json()); //req.body
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 //ROUTES//
 

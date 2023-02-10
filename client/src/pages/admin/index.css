@@ -1,0 +1,22 @@
+.splitScreen{
+    display: flex;
+    flex-direction: row;
+    height:100vh;
+}
+
+.leftPane{
+    width: 220px;
+}
+
+.rightPane{
+    position: relative;
+    width: 100%;
+    padding-left: 30px;
+}
+
+.titleBar{
+    width: 100%;
+    background-color: #5873ca;
+    height: 50px;
+    margin-left: -1px;
+}

@@ -1,0 +1,49 @@
+.main{
+    padding-top: 30px;
+    padding-left: 30px;
+}
+
+.infoBox{
+    height: 180px;
+    width: 180px;
+    background-color: white;
+    box-shadow: 2px 2px 20px #130b0b93;
+    border-radius: 10px;
+    padding: 20px;
+    position: relative;
+}
+
+.grid{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+}
+
+
+.icon>svg{
+    height: 50px;
+    width: 50px;
+}
+
+.icon{
+    display: flex;
+    align-items: center;
+    margin: auto;
+    justify-content: center;
+    color: #5873ca;
+}
+
+.number{
+    font-family: 'trebuchet ms';
+    text-align: center;
+    font-size: 20px;
+    padding-top: 10px;
+    margin-bottom: -10px !important;
+}
+
+.metric{
+    font-family: 'trebuchet ms';
+    margin: auto;
+    text-align: center;
+    font-size: 20px;
+}
+
