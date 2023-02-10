@@ -48,6 +48,7 @@ create table features (
     earlytime   timestamp not null,
     latetime    timestamp not null,
     check (earlytime > starttime and latetime > earlytime),
+    completed   boolean not null default false,
     priority    integer not null check (priority >= 1 and priority <= 3),
     currentrisk integer not null check (currentrisk >= 0 and currentrisk <= 100),
     primary key (featureid),
@@ -64,6 +65,7 @@ create table tasks (
     earlytime   timestamp not null check (earlytime >= current_date),
     latetime    timestamp not null,
     check (latetime > earlytime),
+    completed   boolean not null default false,
     primary key (taskid),
     foreign key (featureid) references features(featureid),
     foreign key (devid) references users(userid)
@@ -128,7 +130,7 @@ create table userskill (
     sklevel integer not null check (level > 0 and level <= 10),
     primary key (userid, skill),
     foreign key (userid) references users(userid),
-    foreign key (skill) references skills(skill)
+    foreign key (skill) references skills(skill) on delete cascade
 );
 
 drop table if exists projectskill;
@@ -137,5 +139,5 @@ create table projectskill (
     skill     varchar(50) not null,
     primary key (projectid, skill),
     foreign key (projectid) references projects(projectid),
-    foreign key (skill) references skills(skill)
+    foreign key (skill) references skills(skill) on delete cascade
 );
