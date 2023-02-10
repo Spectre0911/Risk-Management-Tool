@@ -44,9 +44,11 @@ create table features (
     featureid   serial not null,
     projectid   integer not null,
     featurename varchar(50) not null,
-    earlytime   timestamp not null check (earlytime >= current_date),
+    starttime   timestamp not null check (starttime >= current_date),
+    earlytime   timestamp not null,
     latetime    timestamp not null,
-    check (latetime > earlytime),
+    check (earlytime > starttime and latetime > earlytime),
+    priority    integer not null check (priority >= 1 and priority <= 3),
     currentrisk integer not null check (currentrisk >= 0 and currentrisk <= 100),
     primary key (featureid),
     foreign key (projectid) references projects(projectid)
@@ -121,8 +123,9 @@ create table skills (
 
 drop table if exists userskill;
 create table userskill (
-    userid integer not null,
-    skill  varchar(50) not null,
+    userid  integer not null,
+    skill   varchar(50) not null,
+    sklevel integer not null check (level > 0 and level <= 10),
     primary key (userid, skill),
     foreign key (userid) references users(userid),
     foreign key (skill) references skills(skill)
