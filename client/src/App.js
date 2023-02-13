@@ -8,6 +8,7 @@ import InputTodo from "./components/InputTodo";
 import ListTodos from "./components/ListTodos";
 import Admin from "./pages/admin";
 import EditProfile from "./pages/editProfile";
+import GanttChart from "./pages/gantt";
 function App() {
   return (
     <div>
@@ -15,11 +16,13 @@ function App() {
       Just kept these here so we can see how components can be added
   */}
       <BrowserRouter>
-      {/* <InputTodo></InputTodo>
+        {/* <InputTodo></InputTodo>
       <ListTodos></ListTodos> */}
-            <Routes>
-              <Route path="/*" element={<Admin />} />
-              {/* <Route
+        <Routes>
+          <Route path="/*" element={<Admin />} />
+          <Route path="/ganttChart" element={<GanttChart />} />
+
+          {/* <Route
                 path="/dashboard"
                 element={isAuth ? <BasketPage /> : <Navigate to="/" />}
               />
@@ -27,9 +30,9 @@ function App() {
                 path="/home"
                 element={isAuth ? <HomePage /> : <Navigate to="/" />}
               /> */}
-            </Routes>
-        </BrowserRouter>
-      </div>
+        </Routes>
+      </BrowserRouter>
+    </div>
   );
 }
 
