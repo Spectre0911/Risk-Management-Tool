@@ -32,7 +32,7 @@ const AdminSidebar = () => {
                     {'Dashboard'}
                 </MenuItem >
 
-                <MenuItem className="menuItem" icon={<CgProfile />} onClick={() => navigate(`/dashboard/productList`)}>
+                <MenuItem className="menuItem" icon={<CgProfile />} onClick={() => navigate(`/editprofile`)}>
                     {'Edit Profile'}
                 </MenuItem >
 
