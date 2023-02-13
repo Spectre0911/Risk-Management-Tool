@@ -1,0 +1,55 @@
+.mainApp{
+    padding-left:150px;
+    padding-top: 50px;
+}
+
+.editProfileGrid{
+    display: grid;
+    grid-template-columns: 200px auto;
+    border: '4px solid green';
+}
+
+.editProfilePic{
+    height: 200px;
+    width: 200px;
+    border-radius: unset;
+    right: 0;
+    display: block;
+    margin-left: auto;
+
+}
+
+.editProfilePicContainer{
+    position: relative;
+    align-items: center;
+}
+
+.editProfileDetails{
+    padding-left: 20px;
+}
+
+.editProfileName{
+    font-family: 'trebuchet ms';
+    font-size: 25px;
+    font-style: bold;
+    margin: 0;
+}
+
+.editProfileEmail{
+
+}
+
+.editProfileSkills{
+    width: 300px;
+}
+
+.editProfileTextArea{
+    margin-top: 20px;
+    display: flex;
+    grid-column-start:1;
+    grid-column-end: 3;
+    height: 100px;
+    font-family: 'trebuchet ms';
+    width: 600px;
+    box-shadow: 2px 2px 20px #130b0b93;
+}

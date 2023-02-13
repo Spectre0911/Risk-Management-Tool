@@ -1,12 +1,12 @@
-import React, { Component }  from 'react';
+import React, { Component, useEffect }  from 'react';
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux"
 import AdminSidebar from '../../components/AdminSidebar';
 import "./index.css"
 import Dashboard from '../dashboard';
+import EditProfile from '../editProfile';
 
 const Admin = () => {
-
 
   return (
     <div>
@@ -17,7 +17,8 @@ const Admin = () => {
         <div className="rightPane">
             <div className='titleBar'></div>
           <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/*" element={<Dashboard />} />
+              <Route path="/editprofile" element={<EditProfile />} />
           </Routes>
         </div>
       </div>
@@ -27,3 +28,5 @@ const Admin = () => {
 
 
 export default Admin;
+
+

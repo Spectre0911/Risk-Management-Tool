@@ -7,6 +7,7 @@ import LoginPage from "./pages/login";
 import InputTodo from "./components/InputTodo";
 import ListTodos from "./components/ListTodos";
 import Admin from "./pages/admin";
+import EditProfile from "./pages/editProfile";
 function App() {
   return (
     <div>
@@ -17,7 +18,7 @@ function App() {
       {/* <InputTodo></InputTodo>
       <ListTodos></ListTodos> */}
             <Routes>
-              <Route path="/" element={<Admin />} />
+              <Route path="/*" element={<Admin />} />
               {/* <Route
                 path="/dashboard"
                 element={isAuth ? <BasketPage /> : <Navigate to="/" />}
