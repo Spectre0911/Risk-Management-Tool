@@ -1,0 +1,19 @@
+.viewProjectGrid{
+    columns: 5;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    justify-items: center;
+    padding-left: unset !important;
+}
+
+.pageTitle{
+    font-family: 'Montserrat';
+    font-size: 25px;
+    margin: 0;
+}
+
+.viewProjectsPage{
+    padding-top: 30px;
+    padding-left: 30px;
+    padding-right: 30px;
+}

@@ -1,8 +1,10 @@
 .sideBar{
     height: 100vh;
     max-width: 70px;
-    position: fixed;
+    position: sticky;
     box-shadow: 10;
+    top:0;
+    left:0;
     
 }
 .css-dip3t8{
@@ -41,12 +43,15 @@
     transition: 0.5s;
 }
 
+.css-1wvake5{
+    position: sticky !important;
+}
 
 .welcomeMessage{
     padding-top: 10px;
     font-size:20px;
     color: white;
-    font-family: 'trebuchet ms';
+    font-family: 'Montserrat';
     text-align: center;
     font-style: bold;
     padding-bottom: 10px;
@@ -57,7 +62,7 @@
 
 .menuItem{
     color: white;
-    font-family: 'trebuchet ms';
+    font-family: 'Montserrat';
 }
 
 .bottomItem{

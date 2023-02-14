@@ -4,6 +4,7 @@ import { connect } from "react-redux"
 import {FaBell} from 'react-icons/fa';
 import {RiDashboardFill} from 'react-icons/ri'
 import "./index.css"
+import ProjectComponent from '../managedProjects/projectComponent';
 
 const Dashboard = () => {
 
@@ -55,6 +56,10 @@ const Dashboard = () => {
                     <p>Notifications</p>
                 </div>
             </div>
+            <ProjectComponent/>
+            <ProjectComponent/>
+            <ProjectComponent/>
+
         </div>
     </div>
   );

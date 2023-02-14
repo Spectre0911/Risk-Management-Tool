@@ -1,0 +1,159 @@
+.bugContainer{
+    width: 99%;
+    min-height: 180px;
+    height: auto;
+    overflow: hidden;
+    border: 2px solid #d0cfd4;
+    box-shadow: 1px 1px 3px #d0cfd4;
+    border-radius: 5px;
+    position: relative;
+    margin: auto;
+    padding: 10px 10px;
+    margin-bottom: 10px;
+
+}
+
+.bugLeftPane{
+    position: absolute;
+    width: 50%;
+    left: 10px;
+}
+
+.bugRightPane{
+    position: absolute;
+    width: 50%;
+    right: 10px;
+    text-align: right;
+}
+
+.bugContainer p{
+    font-family: 'Montserrat';
+    font-size: 15px;    
+    margin: 0 !important;
+}
+
+.bugSeverityIcon{
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: 5px;
+    margin-right: 5px;
+}
+
+.bugSeverityLevel{
+    display: inline-block;
+    vertical-align: middle;
+    background-color: red;
+    padding: 3px;
+    border-radius: 5px;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.bugSeverityLevel.med{
+    display: inline-block;
+    vertical-align: middle;
+    background-color: rgb(247, 170, 5) !important;
+    padding: 3px;
+    border-radius: 5px;
+    color: white;
+    margin-bottom: 5px;
+}
+
+.bugSeverity{
+    text-align: right;
+}
+
+.bugFeatureLocation{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.bugDesciption{
+    display: table-row;
+    float: left;
+    position: relative;
+}
+
+.bugDescription .bugFeatureLocation{
+    width: 80%;
+    text-overflow: ellipsis;
+    height: 3em;
+    overflow: hidden;
+}
+
+.bugDescription .bugSeverityIcon{
+    vertical-align: top;
+    margin-top: -1px;
+}
+
+.bugViewButton{
+    padding: 5px 20px;
+    margin: 5px;
+    background-color: #cfd7f3;
+    border-radius: 5px;
+    border: none;
+    font-family: 'Montserrat';
+}
+
+.bugViewButton:hover{
+    color: white;
+    transition: 0.3s;
+    background-color: #5873ca;
+}
+
+.bugAssignButton{
+    padding: 5px 20px;
+    margin: 5px;
+    background-color: #ff6767;
+    border-radius: 5px;
+    border: none;
+    font-family: 'Montserrat';
+}
+
+.bugAssignButton:hover{
+    color: white;
+    transition: 0.3s;
+    background-color: #f50000;
+}
+
+.bugTitle{
+    font-family: 'Montserrat';
+    font-size: 20px;
+    font-weight: 800;
+    display: inline-block;
+}
+
+.bugTrashButton{
+    display: inline-block;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.bugProfileImageContainer{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.bugProfileImage{
+    height: 30px;
+    width: 30px;
+    border-radius: 50px;
+    margin-left: -15px;
+}
+
+.bugProfileName{
+    background-color: black;
+    color: white;
+    width: fit-content;
+    display: flex;    
+}
+
+.bugReportedBy .bugSeverityIcon{
+    margin-right: 30px !important;
+    font-style: 'Montserrat';
+}
+
+.bugUserFix .bugSeverityIcon{
+    margin-right: 30px !important;
+    font-style: 'Montserrat';
+}

@@ -36,11 +36,11 @@ const AdminSidebar = () => {
                     {'Edit Profile'}
                 </MenuItem >
 
-                <MenuItem className="menuItem" icon={<FaBell />} onClick={() => navigate(`/dashboard/productList`)}>
+                <MenuItem className="menuItem" icon={<FaBell />} onClick={() => navigate(`/managedprojects`)}>
                     {'Notifications'}
                 </MenuItem >
 
-                <MenuItem className="menuItem" icon={<MdManageAccounts />} onClick={() => navigate(`/dashboard/productList`)}>
+                <MenuItem className="menuItem" icon={<MdManageAccounts />} onClick={() => navigate(`/managedprojects`)}>
                     {'Managed Projcts'}
                 </MenuItem >
 

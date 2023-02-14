@@ -1,0 +1,43 @@
+.bugBox{
+    padding: 20px 20px;
+    height: 90%;
+    width: 95%;
+    background-color: white;
+    box-shadow: 2px 2px 20px #130b0b93;
+    border-radius: 10px;
+    margin: auto;
+    margin-top: 50px;
+    position: relative;
+    font: 'Montserrat';
+    padding-bottom: 50px;
+}
+
+.bugBoxTitle{
+    font-family: 'Montserrat';
+    font-weight: 1000;
+    font-size: 20px;
+    display: inline-block;
+}
+
+.bugAddBug{
+    display: inline-block;
+}
+
+.bugAddBugButton{
+    padding: 5px 20px;
+    background-color: #f50000;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    font-family: 'Montserrat';
+    display: inline-block;
+    position: absolute;
+    top: 20px;
+    margin-left: 10px;
+}
+
+.bugAddBugButton:hover{
+    color: white;
+    transition: 0.3s;
+    background-color: #a10404;
+}
