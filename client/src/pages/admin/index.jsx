@@ -5,6 +5,8 @@ import AdminSidebar from '../../components/AdminSidebar';
 import "./index.css"
 import Dashboard from '../dashboard';
 import EditProfile from '../editProfile';
+import ManagedProjects from '../managedProjects';
+import Bugs from '../bugs';
 
 const Admin = () => {
 
@@ -19,6 +21,8 @@ const Admin = () => {
           <Routes>
               <Route path="/*" element={<Dashboard />} />
               <Route path="/editprofile" element={<EditProfile />} />
+              <Route path="/managedprojects" element={<ManagedProjects />} />
+              <Route path="/bugs" element={<Bugs />} />
           </Routes>
         </div>
       </div>

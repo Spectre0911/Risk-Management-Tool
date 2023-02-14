@@ -15,7 +15,8 @@
 
 .grid{
     display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    
 }
 
 
@@ -33,7 +34,7 @@
 }
 
 .number{
-    font-family: 'trebuchet ms';
+    font-family: 'Montserrat';
     text-align: center;
     font-size: 20px;
     padding-top: 10px;
@@ -41,7 +42,7 @@
 }
 
 .metric{
-    font-family: 'trebuchet ms';
+    font-family: 'Montserrat';
     margin: auto;
     text-align: center;
     font-size: 20px;

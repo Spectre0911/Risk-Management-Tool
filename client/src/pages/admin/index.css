@@ -1,7 +1,7 @@
 .splitScreen{
     display: flex;
     flex-direction: row;
-    height:100vh;
+    height:100%;
 }
 
 .leftPane{
@@ -19,4 +19,5 @@
     background-color: #5873ca;
     height: 50px;
     margin-left: -1px;
+    position: sticky;
 }

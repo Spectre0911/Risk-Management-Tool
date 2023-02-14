@@ -3,7 +3,7 @@ import "./App.css";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/login";
 //components
-
+import "@fontsource/montserrat";
 import InputTodo from "./components/InputTodo";
 import ListTodos from "./components/ListTodos";
 import Admin from "./pages/admin";
