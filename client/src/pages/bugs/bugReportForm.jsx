@@ -3,8 +3,8 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux"
 import {FaBell} from 'react-icons/fa';
 import {GrClose} from 'react-icons/gr';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import {Button} from 'react-bootstrap';
+import {Modal} from 'react-bootstrap';
 import { Formik, Form, Field } from "formik"; 
 import {
     Box,
@@ -31,9 +31,7 @@ const BugReportForm = ({handleClose}) =>{
         severity: yup.number().required("required"),
         priority: yup.number().required("required"),
       });
-      
-  
-      
+            
       const initialValuesRegister = {
         bugName: "",
         bugDate: "",

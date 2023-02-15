@@ -56,9 +56,9 @@ const Dashboard = () => {
                     <p>Notifications</p>
                 </div>
             </div>
+            {/* <ProjectComponent/>
             <ProjectComponent/>
-            <ProjectComponent/>
-            <ProjectComponent/>
+            <ProjectComponent/> */}
 
         </div>
     </div>

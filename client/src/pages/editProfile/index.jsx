@@ -14,25 +14,26 @@ const EditProfile = () => {
     const [selectedOption, setSelectedOption] = useState(null);
     return (
         <div className='mainApp'>
-            <div className='editProfileGrid'>
-                <div className='editProfilePicContainer'>
-                    <img className='editProfilePic' src="http://localhost:5000/assets/jane.jpg"></img>
-                </div>
+            <div className='editProfileBox'>
+                <div className='editProfileGrid'>
+                    <div className='editProfilePicContainer'>
+                        <img className='editProfilePic' src="http://localhost:5000/assets/jane.jpg"></img>
+                    </div>
 
-                <div className='editProfileDetails'>
-                    <p className="editProfileName">Jane Arnold</p>
-                    <p className="editProfileEmail">janearnold@warwick.ac.uk</p>
-                    <Select
-                        defaultValue={[selectedOption]}
-                        isMulti
-                        name="skills"
-                        options={options}
-                        className="editProfileSkills"
-                        classNamePrefix="select"
-                    />
+                    <div className='editProfileDetails'>
+                        <p className="editProfileName">Jane Arnold</p>
+                        <p className="editProfileEmail">janearnold@warwick.ac.uk</p>
+                        <Select
+                            defaultValue={[selectedOption]}
+                            isMulti
+                            name="skills"
+                            options={options}
+                            className="editProfileSkills"
+                            classNamePrefix="select"
+                        />
+                    </div>
+                    <textarea className='editProfileTextArea' placeholder='Enter Bio' type="textarea" name="textValue" />
                 </div>
-
-                <textarea className='editProfileTextArea' placeholder='Enter Bio' type="textarea" name="textValue" />
             </div>
         </div>
     );
