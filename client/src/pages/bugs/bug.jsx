@@ -54,7 +54,7 @@ const Bug = () => {
             <div className="bugReportedBy">
                 <div className="bugSeverityIcon">Report by:</div>
                 <div className="bugProfileImageContainer">
-                    {['Jane Arnold', 'Jane Arnold'].map((name) => (
+                    {['Jane Arnold1', 'Jane Arnold2'].map((name) => (
                         <OverlayTrigger
                         key={name}
                         placement={'top'}
@@ -72,7 +72,7 @@ const Bug = () => {
             <div className="bugUserFix">
             <div className="bugSeverityIcon">Assigned to:</div>
                 <div className="bugProfileImageContainer">
-                    {['Jane Arnold', 'Jane Arnold'].map((name) => (
+                    {['Jane Arnold1', 'Jane Arnold2'].map((name) => (
                         <OverlayTrigger
                         key={name}
                         placement={'top'}
