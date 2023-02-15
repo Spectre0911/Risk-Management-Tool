@@ -35,8 +35,8 @@ create table userproject (
     role      varchar(50) not null,
     ismanager boolean not null default false,
     primary key (userid, projectid),
-    foreign key (userid) references users(userid),
-    foreign key (projectid) references projects(projectid)
+    foreign key (userid) references users(userid) on delete cascade,
+    foreign key (projectid) references projects(projectid) on delete cascade
 );
 
 drop table if exists features cascade;
@@ -52,7 +52,7 @@ create table features (
     priority    integer not null check (priority >= 1 and priority <= 3),
     currentrisk integer not null check (currentrisk >= 0 and currentrisk <= 100),
     primary key (featureid),
-    foreign key (projectid) references projects(projectid)
+    foreign key (projectid) references projects(projectid) on delete cascade
 );
 
 drop table if exists tasks;
@@ -67,7 +67,7 @@ create table tasks (
     check (latetime > earlytime),
     completed   boolean not null default false,
     primary key (taskid),
-    foreign key (featureid) references features(featureid),
+    foreign key (featureid) references features(featureid) on delete cascade,
     foreign key (devid) references users(userid)
 );
 
@@ -76,7 +76,7 @@ create table featuredep (
     featureid integer not null,
     depid     integer not null,
     primary key (featureid, depid),
-    foreign key (featureid) references features(featureid),
+    foreign key (featureid) references features(featureid) on delete cascade,
     foreign key (depid) references features(featureid)
 );
 
@@ -88,7 +88,7 @@ create table bugs (
     bugname   varchar(50) not null,
     bugdesc   varchar(300),
     primary key (bugid),
-    foreign key (featureid) references features(featureid),
+    foreign key (featureid) references features(featureid) on delete cascade,
     foreign key (devid) references users(userid)
 );
 
@@ -100,8 +100,8 @@ create table notifications (
     data      varchar(300) not null,
     seen      boolean not null default false,
     primary key (notifid),
-    foreign key (userid) references users(userid),
-    foreign key (projectid) references projects(projectid)
+    foreign key (userid) references users(userid) on delete cascade,
+    foreign key (projectid) references projects(projectid) on delete cascade
 );
 
 drop table if exists feedback;
@@ -114,7 +114,7 @@ create table feedback (
     fbscore    integer not null check (fbscore >= 0 and fbscore <= 100),
     primary key (fbid),
     foreign key (userid) references users(userid),
-    foreign key (projectid) references projects(projectid)
+    foreign key (projectid) references projects(projectid) on delete cascade
 );
 
 drop table if exists skills cascade;
@@ -127,9 +127,9 @@ drop table if exists userskill;
 create table userskill (
     userid  integer not null,
     skill   varchar(50) not null,
-    sklevel integer not null check (level > 0 and level <= 10),
+    sklevel integer not null check (sklevel > 0 and sklevel <= 10),
     primary key (userid, skill),
-    foreign key (userid) references users(userid),
+    foreign key (userid) references users(userid) on delete cascade,
     foreign key (skill) references skills(skill) on delete cascade
 );
 
@@ -138,6 +138,6 @@ create table projectskill (
     projectid integer not null,
     skill     varchar(50) not null,
     primary key (projectid, skill),
-    foreign key (projectid) references projects(projectid),
+    foreign key (projectid) references projects(projectid) on delete cascade,
     foreign key (skill) references skills(skill) on delete cascade
 );
