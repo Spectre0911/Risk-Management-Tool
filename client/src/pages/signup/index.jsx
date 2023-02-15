@@ -75,7 +75,7 @@ const SignUpPage = () => {
         </div>
         <button type="submit" className="submit-button">Sign Up</button>
         <div>
-          <label class="signupLabel">Already got an account? <a href="/">Sign In</a></label>
+          <label class="signupLabel">Already got an account? <a href="/login">Sign In</a></label>
         </div>
       </form>
     </div>
