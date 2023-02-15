@@ -1,5 +1,6 @@
 drop database if exists riskmanager with (force);
 create database riskmanager;
+GRANT ALL PRIVILEGES ON DATABASE riskmanager TO postgres;
 \c riskmanager;
 
 drop table if exists users cascade;
