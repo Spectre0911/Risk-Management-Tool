@@ -1,14 +1,15 @@
 import React, { Fragment } from "react";
 import "./App.css";
+import 'bootstrap/dist/css/bootstrap.css';
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/login";
-//components
-import "@fontsource/montserrat";
 import InputTodo from "./components/InputTodo";
 import ListTodos from "./components/ListTodos";
 import Admin from "./pages/admin";
 import EditProfile from "./pages/editProfile";
 import GanttChart from "./pages/gantt";
+import SignUp from "./pages/signup";
+import Login from "./pages/login";
+
 function App() {
   return (
     <div>
@@ -19,7 +20,10 @@ function App() {
         {/* <InputTodo></InputTodo>
       <ListTodos></ListTodos> */}
         <Routes>
-          <Route path="/*" element={<Admin />} />
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path ="/signup" element={<SignUp />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="/ganttChart" element={<GanttChart />} />
 
           {/* <Route
