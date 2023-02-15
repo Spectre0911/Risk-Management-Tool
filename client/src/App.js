@@ -1,7 +1,8 @@
 import React, { Fragment } from "react";
 import "./App.css";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/login";
+import Login from "./pages/login";
+import SignUp from "./pages/signup";
 //components
 import "@fontsource/montserrat";
 import InputTodo from "./components/InputTodo";
@@ -19,6 +20,8 @@ function App() {
         {/* <InputTodo></InputTodo>
       <ListTodos></ListTodos> */}
         <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
           <Route path="/*" element={<Admin />} />
           <Route path="/ganttChart" element={<GanttChart />} />
 
