@@ -28,8 +28,8 @@ const BugReportForm = ({handleClose}) =>{
         bugName: yup.string().required("required"),
         bugDate: yup.string().required("required"),
         bugDescription: yup.string().required("required"),
-        severity: yup.string().required("required"),
-        priority: yup.string().required("required"),
+        severity: yup.number().required("required"),
+        priority: yup.number().required("required"),
       });
       
   
@@ -44,7 +44,17 @@ const BugReportForm = ({handleClose}) =>{
       
 
       const handleFormSubmit = async (values, onSubmitProps) => {
-       console.log(values);
+        console.log(values);
+        try {
+        const body = { values };
+        const response = await fetch("http://localhost:5000/addbug", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
+        } catch (err) {
+            console.error(err.message);
+        }
       };
    
       

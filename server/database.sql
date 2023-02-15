@@ -88,8 +88,6 @@ create table bugs (
     devid     integer not null,
     bugname   varchar(50) not null,
     bugdesc   varchar(300),
-    priority    integer not null check (priority >= 1 and priority <= 3),
-    severity    integer not null check (severity >= 1 and severity <= 3),
     primary key (bugid),
     foreign key (featureid) references features(featureid),
     foreign key (devid) references users(userid)
@@ -130,7 +128,7 @@ drop table if exists userskill;
 create table userskill (
     userid  integer not null,
     skill   varchar(50) not null,
-    sklevel integer not null check (sklevel > 0 and sklevel <= 10),
+    sklevel integer not null check (level > 0 and level <= 10),
     primary key (userid, skill),
     foreign key (userid) references users(userid),
     foreign key (skill) references skills(skill) on delete cascade

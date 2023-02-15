@@ -32,6 +32,8 @@ async function testConnect() {
 
 testConnect();
 
+
+
 app.post("/todos", async (req, res) => {
   try {
     const { description } = req.body;
@@ -41,6 +43,21 @@ app.post("/todos", async (req, res) => {
     );
 
     res.json(newTodo.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/addbug", async (req, res) => {
+  try {
+    const { bugDetails } = req.body.values;
+    console.log(bugDetails);
+    const addbug = await pool.query(
+      "INSERT INTO bugs (featureid, devid, bugname, bugdesc, priority, severity) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
+      [1,2,req.body.values.bugName, req.body.values.bugDescription, req.body.values.priority, req.body.values.severity],
+    );
+
+    res.json("finished");
   } catch (err) {
     console.error(err.message);
   }
