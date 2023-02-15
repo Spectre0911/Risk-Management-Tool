@@ -20,27 +20,28 @@ const LoginPage = () => {
   };
 
   return (
+  <body className="waveBg">
     <div className="login-container">
-      <form onSubmit={handleSubmit} className="form">
-        <h1>Login</h1>
+      <form onSubmit={handleSubmit} className="loginForm">
+        <h1 className='loginH1'>Login</h1>
         {error && <p className="error">{error}</p>}
-        <div className="form-group">
+        <div className="loginForm-group">
           <label class="caption" htmlFor="email">Email:</label>
           <input
             type="text"
             id="email"
-            className="form-control"
+            className="loginForm-control"
             value={email}
             onChange={(event) => setUsername(event.target.value)}
 required
 />
 </div>
-<div className="form-group">
+<div className="loginForm-group">
 <label class="caption" htmlFor="password">Password:</label>
 <input
 type="password"
 id="password"
-className="form-control"
+className="loginForm-control"
 value={password}
 onChange={(event) => setPassword(event.target.value)}
 required
@@ -55,6 +56,7 @@ required
 </div>
 </form>
 </div>
+</body>
 );
 };
 

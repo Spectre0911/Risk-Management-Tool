@@ -24,49 +24,50 @@ const SignUpPage = () => {
   };
 
   return (
+    <body className='waveBg'>
     <div className="signup-container">
-      <form className="form" onSubmit={handleSubmit}>
-        <h1>Sign Up</h1>
+      <form className="loginForm" onSubmit={handleSubmit}>
+        <h1 className='loginH1'>Sign Up</h1>
         {errorMessage && <p className="error">{errorMessage}</p>}
-        <div className="form-group">
+        <div className="loginForm-group">
           <label class="caption" htmlFor="fullName">Full Name:</label>
           <input
             type="text"
             id="fullName"
-            className="form-control"
+            className="loginForm-control"
             value={fullName}
             onChange={(event) => setFullName(event.target.value)}
             required
           />
         </div>
-        <div className="form-group">
+        <div className="loginForm-group">
           <label class="caption" htmlFor="email">Email:</label>
           <input
             type="email"
             id="email"
-            className="form-control"
+            className="loginForm-control"
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             required
           />
         </div>
-        <div className="form-group">
+        <div className="loginForm-group">
           <label class="caption" htmlFor="password">Password:</label>
           <input
             type="password"
             id="password"
-            className="form-control"
+            className="loginForm-control"
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             required
           />
         </div>
-        <div className="form-group">
+        <div className="loginForm-group">
             <label class="caption" htmlFor="confirmPassword">Confirm Password:</label>
           <input
             type="password"
             id="confirmPassword"
-            className="form-control"
+            className="loginForm-control"
             value={confirmPassword}
             onChange={(event) => setConfirmPassword(event.target.value)}
             required
@@ -78,6 +79,7 @@ const SignUpPage = () => {
         </div>
       </form>
     </div>
+    </body>
   );
 };
 
