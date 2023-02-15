@@ -5,9 +5,9 @@ import {MdOutlineReportProblem, MdDescription, MdDateRange} from 'react-icons/md
 import {ImLocation} from 'react-icons/im';
 import {BsFillTrashFill} from 'react-icons/bs'
 import {BiTimer} from 'react-icons/bi'
-import Button from 'react-bootstrap/Button';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
+import {Button} from 'react-bootstrap';
+import {OverlayTrigger} from 'react-bootstrap';
+import {Tooltip} from 'react-bootstrap';
 
 
 import "./bug.css"
