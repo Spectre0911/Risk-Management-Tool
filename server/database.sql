@@ -59,7 +59,7 @@ drop table if exists tasks;
 create table tasks (
     taskid      serial not null,
     featureid   integer not null,
-    devid       integer not null,
+    devid       integer,
     taskname    varchar(50) not null,
     description varchar(300),
     earlytime   timestamp not null check (earlytime >= current_date),
@@ -113,7 +113,7 @@ create table feedback (
     fbquestion varchar(200) not null,
     fbscore    integer not null check (fbscore >= 0 and fbscore <= 100),
     primary key (fbid),
-    foreign key (userid) references users(userid),
+    foreign key (userid) references users(userid) on delete cascade,
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
@@ -141,3 +141,14 @@ create table projectskill (
     foreign key (projectid) references projects(projectid) on delete cascade,
     foreign key (skill) references skills(skill) on delete cascade
 );
+
+create or replace function nullifyuser() returns trigger as $$
+begin
+    update tasks set devid = null where devid = old.userid;
+    update bugs set devid = null where devid = old.userid;
+end;
+$$ language plpgsql;
+
+create trigger userdeleted after delete on users
+for each statement
+    execute procedure nullifyuser();
