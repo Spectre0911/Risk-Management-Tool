@@ -1,11 +1,12 @@
 .main{
     padding-top: 30px;
     padding-left: 30px;
+    margin-top: 10px;
 }
 
-@media (min-width: 992px){
+@media (min-width: 1350px){
 .infoBox{
-    width: 22%;
+    width: 23% !important;
     background-color: white;
     box-shadow: 2px 2px 10px #130b0b93;
     border-radius: 10px;
@@ -19,10 +20,16 @@
 
 
 .infoBox{
+    position: relative;
     padding-right: 15px;
     padding-left: 15px;
     padding-top: 10px;
-    height: 150px;
+    height: 130px;
+    background-color: white;
+    box-shadow: 2px 2px 10px #130b0b93;
+    width: 98%;
+    border-radius: 20px;
+    margin-bottom: 10px;
 }
 
 
@@ -37,7 +44,7 @@
     width: 50px;
 }
 
-.icon{
+/* .icon{
     display: flex;
     align-items: center;
     margin: auto;
@@ -58,5 +65,207 @@
     margin: auto;
     text-align: center;
     font-size: 20px;
+} */
+
+.metricTitle{
+    padding: 8px;
+    font-family: 'Montserrat';
+    font-weight:bolder;
 }
 
+.metricNumber{
+    padding: 8px;
+    font-family: 'Montserrat';
+    font-size: 30px;
+    margin-top: -10px;
+}
+
+@media (min-width: 1350px){
+.metricIcon {
+    position: absolute;
+    top: -7px !important;
+    right: 10px !important;
+}}
+
+.metricIcon{
+    position: absolute;
+    font-size: 40px;
+    top: -8px;
+    right: 10px;
+
+}
+
+@media (min-width: 1350px){
+.metricCircleBackground{
+    position: absolute;
+    right: 20px !important;
+    top: 10px !important;
+    
+}}
+
+.metricCircleBackground{
+    border-radius: 200px;
+    position: absolute;
+    padding:10px;
+    height: 60px;
+    width:60px;
+    right: 30px;
+    top: 20px;
+}
+
+.metricBlueIcon{
+    color: #09326e;
+}
+
+.metricBlueBackground{
+    background-color: #0066ff8e;
+}
+
+.metricRedIcon{
+    color: #c70c0c;
+}
+
+.metricRedBackground{
+    background-color: #ff494991;
+}
+
+@media (min-width: 1350px){
+    .infoBox2{
+        width: 23% !important;
+        background-color: white;
+        box-shadow: 2px 2px 10px #130b0b93;
+        border-radius: 10px;
+        float: left;
+        position: relative;
+        min-height: 1px;
+        margin-left: 10px;
+        margin-right: 10px;
+    }}
+    
+    
+.infoBox2{
+    position: relative;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 10px;
+    height: 500px;
+    background-color: white;
+    box-shadow: 2px 2px 10px #130b0b93;
+    width: 98%;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+@media (min-width: 1350px){
+    .projectTable{
+        width: 72% !important;
+}}
+
+.metricTitle2{
+    padding: 8px;
+    font-family: 'Montserrat';
+    font-weight:bolder;
+    font-size: 20px;
+}
+
+.sortIcon{
+    position: absolute;
+    margin-left: 2px;
+    margin-top: -2px;
+    display: inline-block;
+}
+
+.projectFilterInput{
+    font-family: 'Montserrat';
+    padding: 5px;
+    margin: 5px;
+    flex: right;
+    border-radius: 5px;
+    border: 2px solid #2878f0d5;
+}
+
+
+.projectFilterInput:focus-visible{
+    outline: 2px solid #0066ff;
+    border: none;
+}
+
+.projectFilterRow{
+    margin-left: auto; 
+    margin-right: 0;
+    float: right;
+    margin-top: -40px;
+}
+
+.projectTableContainer{
+    padding-top: 20px;
+}
+
+.projectTable th{
+    font-size: 14px;
+    padding: 0 !important;
+}
+
+.projectTable td{
+    font-size: 14px;
+    padding: 0 !important;
+}
+
+.projectTable table{
+    border: none !important;
+    outline: 0px !important;
+    font-family: 'Montserrat';
+}
+
+.projectTable th{
+    border: none !important;
+    border-bottom: 2px solid #0066ff !important;
+    padding-bottom: 3px !important;
+    margin-bottom:10px !important;
+}
+
+.projectTable td{
+    border: none !important;
+    padding-top: 10px !important;
+    padding-left: 5px !important;
+    padding-bottom: 10px !important;
+    vertical-align: auto;
+}
+
+.projectTable tr{
+    margin: 20px !important;
+
+}
+
+
+.table-bordered{
+    border: 0px !important;
+    border: 2px solid #0066ff !important;
+    font-family: 'Montserrat';
+}
+
+.projectTableControls{
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+
+.projectTableNextButton{
+    margin: 10px;
+}
+
+.projectTableNextPageNumber{
+    margin-top: 18px;
+}
+
+.projectCircularProgressBar{
+    width: 38px;
+    height: 38px;
+}
+
+.CircularProgressbar-text{
+    font-size: 34px !important;
+    font-family: 'Montserrat';
+    font-weight: 900;
+}

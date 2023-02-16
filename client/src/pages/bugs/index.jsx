@@ -4,7 +4,7 @@ import { connect } from "react-redux"
 import {FaBell} from 'react-icons/fa';
 import {GrClose} from 'react-icons/gr';
 import {Button} from 'react-bootstrap';
-import {Modal} from 'react-bootstrap';
+import Modal from 'react-bootstrap/Modal';
 import { Formik, Form, Field } from "formik"; 
 import {
     Box,
@@ -26,8 +26,14 @@ const Bugs = () => {
     }
 
     const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const handleClose = () => {
+        setShow(false);
+        console.log(show);
+    }
+    const handleShow = () => {
+        setShow(true);
+        console.log(show);
+    }
 
     return (
         <div className='bugBox'>
@@ -41,7 +47,7 @@ const Bugs = () => {
             </div>
             
             <div>
-                <Modal className="bugModal" show={show} onHide={handleClose}>
+                <Modal className="bugModal" fade={false} show={show} onHide={handleClose}>
                     <Modal.Header>
                     <div className="bugFormClose" onClick={handleClose}>
                         <GrClose />
