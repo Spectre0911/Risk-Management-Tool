@@ -157,3 +157,7 @@
     margin-right: 30px !important;
     font-style: 'Montserrat';
 }
+
+.bugAddForm{
+    display: none;
+}
