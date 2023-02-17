@@ -11,12 +11,15 @@ import {BiLogOutCircle} from 'react-icons/bi'
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { useSelector } from 'react-redux';
 import "./AdminSidebar.css";
 
 const AdminSidebar = () => {
     const [collapsed, setCollapsed] = useState(false);
     const { collapseSidebar } = useProSidebar();
     const navigate = useNavigate();
+
+    const username = useSelector(state => state.username);
 
     const onClickMenuIcon = () => {
         setCollapsed(!collapsed);
@@ -26,7 +29,7 @@ const AdminSidebar = () => {
             <Menu iconShape='square'>
                 <div className="profilePicContainer">
                     <img className='profilePic' src="http://localhost:5000/assets/jane.jpg"></img>
-                    <p className="welcomeMessage">Jane Arnold</p>
+                    <p className="welcomeMessage">{username}</p>
                 </div>
                 <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/dashboard/productList`)}>
                     {'Dashboard'}

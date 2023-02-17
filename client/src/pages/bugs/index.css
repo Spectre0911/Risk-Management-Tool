@@ -41,3 +41,41 @@
     transition: 0.3s;
     background-color: #a10404;
 }
+
+.bugFormClose{
+    position: absolute;
+    right: 20px;
+    top: 25px;
+}
+
+.bugAddButton{
+    margin-top: 20px;
+    position: relative;
+    float: right;
+    
+}
+
+.bugCancelButton{
+    margin-top: 20px;
+    position: relative;
+    float: right;
+    color: white;
+    background-color: #be0404;
+    margin-right: 10px;
+}
+
+.bugCancelButton:hover{
+    color: white;
+    transition: 0.5s;
+    background-color: #8a0404;
+}
+
+.bugModal{
+    position: absolute;
+    margin-top: 0px;
+    padding-top: 100px;
+}
+
+.bugFormBody{
+    margin-top: 100px;
+}

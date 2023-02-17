@@ -1,6 +1,6 @@
 drop database if exists riskmanager with (force);
 create database riskmanager;
-grant all privileges on database riskmanager to postgres;
+GRANT ALL PRIVILEGES ON DATABASE riskmanager TO postgres;
 \c riskmanager;
 
 drop table if exists users cascade;
@@ -87,7 +87,9 @@ create table bugs (
     featureid integer not null,
     devid     integer default null,
     bugname   varchar(50) not null,
-    bugdesc   varchar(300) default null,
+    bugdesc   varchar(300),
+    priority  integer not null check (priority >= 1 and priority <= 3),
+    severity  integer not null check (severity >= 1 and severity <= 3)
     primary key (bugid),
     foreign key (featureid) references features(featureid) on delete cascade,
     foreign key (devid) references users(userid)
