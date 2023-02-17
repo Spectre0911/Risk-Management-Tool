@@ -1,11 +1,14 @@
 import { useFormik } from "formik";
-const GanttForm = () => {
+import { Button } from "react-bootstrap";
+
+const GanttForm = ({ handleClose }) => {
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
         name: "",
         start: "",
         end: "",
+        dependencies: "",
       },
     });
   return (
@@ -37,8 +40,26 @@ const GanttForm = () => {
         placeholder="Feature end date"
         onblur={handleBlur}
       />
-
+      <label htmlFor="dependencies">Dependencies</label>
+      <input
+        value={values.dependencies}
+        onChange={handleChange}
+        id="dependencies"
+        type="string"
+        placeholder="Dependencies"
+        onblur={handleBlur}
+      />
       <button type="submit">Submit</button>
+      <Button
+        fullWidth
+        onClick={handleClose}
+        sx={{
+          m: "2rem 0",
+          p: "1rem",
+        }}
+      >
+        {"Cancel"}
+      </Button>
     </form>
   );
 };
