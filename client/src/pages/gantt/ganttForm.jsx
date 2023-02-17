@@ -23,7 +23,7 @@ const GanttForm = ({ handleClose }) => {
         id="name"
         type="string"
         placeholder="Feature name"
-        onblur={handleBlur}
+        onBlur={handleBlur}
       />
       <label htmlFor="name">Start Date</label>
       <input
@@ -32,7 +32,7 @@ const GanttForm = ({ handleClose }) => {
         id="start"
         type="date"
         placeholder="Feature start date"
-        onblur={handleBlur}
+        onBlur={handleBlur}
       />
       <label htmlFor="end">End Date</label>
       <input
@@ -41,7 +41,7 @@ const GanttForm = ({ handleClose }) => {
         id="end"
         type="date"
         placeholder="Feature end date"
-        onblur={handleBlur}
+        onBlur={handleBlur}
       />
       <label htmlFor="dependencies">Dependencies</label>
       <input
@@ -50,7 +50,7 @@ const GanttForm = ({ handleClose }) => {
         id="dependencies"
         type="string"
         placeholder="Dependencies"
-        onblur={handleBlur}
+        onBlur={handleBlur}
       />
       <button type="submit">Submit</button>
       <Button

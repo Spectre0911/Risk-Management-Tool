@@ -16,6 +16,5 @@ root.render(
     <ProSidebarProvider>
       <App />
     </ProSidebarProvider>
-  </Provider>,
-  document.getElementById("root")
+  </Provider>
 );
