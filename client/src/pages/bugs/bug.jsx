@@ -5,9 +5,9 @@ import {MdOutlineReportProblem, MdDescription, MdDateRange} from 'react-icons/md
 import {ImLocation} from 'react-icons/im';
 import {BsFillTrashFill} from 'react-icons/bs'
 import {BiTimer} from 'react-icons/bi'
-import Button from 'react-bootstrap/Button';
-import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
-import Tooltip from 'react-bootstrap/Tooltip';
+import {Button} from 'react-bootstrap';
+import {OverlayTrigger} from 'react-bootstrap';
+import {Tooltip} from 'react-bootstrap';
 
 
 import "./bug.css"
@@ -54,7 +54,7 @@ const Bug = () => {
             <div className="bugReportedBy">
                 <div className="bugSeverityIcon">Report by:</div>
                 <div className="bugProfileImageContainer">
-                    {['Jane Arnold', 'Jane Arnold'].map((name) => (
+                    {['Jane Arnold1', 'Jane Arnold2'].map((name) => (
                         <OverlayTrigger
                         key={name}
                         placement={'top'}
@@ -72,7 +72,7 @@ const Bug = () => {
             <div className="bugUserFix">
             <div className="bugSeverityIcon">Assigned to:</div>
                 <div className="bugProfileImageContainer">
-                    {['Jane Arnold', 'Jane Arnold'].map((name) => (
+                    {['Jane Arnold1', 'Jane Arnold2'].map((name) => (
                         <OverlayTrigger
                         key={name}
                         placement={'top'}
