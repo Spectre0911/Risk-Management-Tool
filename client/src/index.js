@@ -9,7 +9,7 @@ import App from './App';
 
 // REDUX
 import {ProSidebarProvider} from 'react-pro-sidebar';
-
+window.process = {};
 ReactDOM.render(
     <Provider store={store}>
         <ProSidebarProvider>
