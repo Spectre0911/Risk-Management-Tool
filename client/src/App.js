@@ -16,7 +16,7 @@ import { createTheme } from "@mui/material/styles";
 import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 function App() {
-  const mode = "light"
+  const mode = "light";
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (
     <div>
@@ -24,16 +24,16 @@ function App() {
       Just kept these here so we can see how components can be added
   */}
       <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        {/* <InputTodo></InputTodo>
+        <ThemeProvider theme={theme}>
+          {/* <InputTodo></InputTodo>
       <ListTodos></ListTodos> */}
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/*" element={<Admin />} />
-          <Route path="/ganttChart" element={<GanttChart />} />
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/*" element={<Admin />} />
+            <Route path="/ganttChart" element={<GanttChart />} />
 
-          {/* <Route
+            {/* <Route
                 path="/dashboard"
                 element={isAuth ? <BasketPage /> : <Navigate to="/" />}
               />
@@ -41,7 +41,7 @@ function App() {
                 path="/home"
                 element={isAuth ? <HomePage /> : <Navigate to="/" />}
               /> */}
-        </Routes>
+          </Routes>
         </ThemeProvider>
       </BrowserRouter>
     </div>

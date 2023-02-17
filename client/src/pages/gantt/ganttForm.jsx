@@ -10,6 +10,9 @@ const GanttForm = ({ handleClose }) => {
         end: "",
         dependencies: "",
       },
+      onSubmit: (values) => {
+        console.log(values);
+      },
     });
   return (
     <form onSubmit={handleSubmit} autoComplete="off">
