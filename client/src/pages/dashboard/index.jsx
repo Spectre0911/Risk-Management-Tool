@@ -78,8 +78,54 @@ const Dashboard = () => {
                 <Table/>
             </div>
 
-            <div className="infoBox2">
+            <div className="infoBox2 scrollable">
+                <div className='metricTitle2'>
+                    Notifications
+                </div>
+
+                <div className="notificationBox">
+                    <div className="notificationIcon">
+                        <AiFillWarning/>
+                    </div>
+
+                    <div className="NotificationText">
+                        <p>Risk alert!</p>
+                    </div>
+
+                    <div className="NotificationDescription">
+                        <p>Risk on CS261 project is increasingRisk on CS261 project is increasingRisk on CS261 project is increasing.</p>
+                    </div>
+                </div>
+
+                <div className="notificationBox">
+                    <div className="notificationIcon blueIcon">
+                        <BsBriefcaseFill/>
+                    </div>
+
+                    <div className="NotificationText">
+                        <p>Added to new project!</p>
+                    </div>
+
+                    <div className="NotificationDescription">
+                        <p>Yuo have been added to a new project</p>
+                    </div>
+                </div>
+                <div className="notificationBox">
+                    <div className="notificationIcon blueIcon">
+                        <BsBriefcaseFill/>
+                    </div>
+
+                    <div className="NotificationText">
+                        <p>Added to new project!</p>
+                    </div>
+
+                    <div className="NotificationDescription">
+                        <p>Yuo have been added to a new project</p>
+                    </div>
+                </div>
             </div>
+        </div>
+
             
 
 
@@ -100,7 +146,6 @@ const Dashboard = () => {
             <ProjectComponent/>
             <ProjectComponent/> */}
 
-        </div>
     </div>
   );
 };

@@ -72,5 +72,10 @@
 
 .bugModal{
     position: absolute;
+    margin-top: 0px;
+    padding-top: 100px;
+}
+
+.bugFormBody{
     margin-top: 100px;
 }

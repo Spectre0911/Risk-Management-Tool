@@ -269,3 +269,37 @@
     font-family: 'Montserrat';
     font-weight: 900;
 }
+
+.projectTrackBar{
+    width: 50%;
+    height:7px;
+}
+
+.progress{
+    height: 5px !important;
+    width: 60%;
+    margin-top: 7px;
+    right: 0;
+    margin-left: 20px;
+    background-color: rgb(184, 178, 178) !important;
+}
+
+.progressNumber{
+    float: left;
+    background-color: #dc3545;
+    border-radius: 1900px;
+    height: 25px;
+    width: 25px;
+    margin-left: 0px;
+    position: absolute;
+    color: white;
+    padding: 4px;
+    margin-top: -10px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.progressDisplayContainer{
+    margin-left: 0px;
+}
+

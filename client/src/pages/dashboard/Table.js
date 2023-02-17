@@ -14,6 +14,7 @@ import {
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import TableContainer from './TableContainer';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { SelectColumnFilter } from './filters';
 import ChangingProgressProvider from './ChangingProgressProvider';
@@ -23,7 +24,7 @@ const Table = () => {
     const doFetch = async () => {
       const response = await fetch('https://randomuser.me/api/?results=100');
       const body = await response.json();
-      const contacts = [{'projectName':'cs261', 'projectManager':'Jane Arnold', 'deadline':'26/10/2022', 'status':"ontime", 'progress':"20"},{'projectName':'cs261', 'projectManager':'Jane Arnold', 'deadline':'26/10/2022', 'status':"ontime", 'progress':"20"}];
+      const contacts = [{'projectName':'cs261', 'projectManager':'Jane Arnold', 'deadline':'26/10/2022', 'status':"ontime", 'progress':20, 'risk':10},{'projectName':'cs261', 'projectManager':'Jane Arnold', 'deadline':'26/10/2022', 'status':"ontime", 'progress':20, 'risk':10}];
       console.log(contacts);
       setData(contacts);
     };
@@ -59,12 +60,28 @@ const Table = () => {
       {
         Header: 'Title',
         accessor: 'projectName',
-        // disableSortBy: true,
-        // Filter: SelectColumnFilter,
-        // filter: 'equals',
         filterable: false,
         disableFilters:true,
         filterable: false,
+      },
+      {
+        Header: 'Progress',
+        accessor: 'progress',
+        filterable: false,
+        disableFilters:true,
+        filterable: false,
+        Cell: ({ cell }) => {
+          const percentage = cell.value;
+          console.log(percentage);
+          return (
+            <div className="progressDisplayContainer">
+              <div className="progressNumber">
+                {percentage}
+              </div>
+              <ProgressBar variant="danger" now={percentage} />
+            </div>
+          );
+        },
       },
       {
         Header: 'Project Manager',
@@ -88,18 +105,18 @@ const Table = () => {
         filterable: false,
       },
       {
-        Header: 'Progress',
-        accessor: 'progress',
+        Header: 'Risk',
+        accessor: 'risk',
         filterable: false,
         disableFilters:true,
         filterable: false,
         Cell: ({ cell }) => {
-          const {percentage} = Number(cell);
+          const percentage = cell.value;
           console.log(percentage);
           return (
             <div className="projectCircularProgressBar">
-            <CircularProgressbar value={20} text={`${20}%`} strokeWidth={12} />
-          </div>
+               <CircularProgressbar value={percentage} text={`${percentage}%`} strokeWidth={12} />
+            </div>
           );
         },
       },
