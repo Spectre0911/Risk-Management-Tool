@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { FrappeGantt } from "frappe-gantt-react";
+import GanttForm from "./ganttForm";
 class GanttChart extends Component {
   state = {};
   render() {
@@ -52,6 +53,7 @@ class GanttChart extends Component {
     ];
     return (
       <div>
+        <GanttForm></GanttForm>
         <FrappeGantt
           tasks={tasks}
           viewMode={this.state.mode}
