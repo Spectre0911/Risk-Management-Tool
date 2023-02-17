@@ -46,12 +46,12 @@ create table features (
     projectid   integer not null,
     featurename varchar(50) not null,
     starttime   timestamp not null check (starttime >= current_date),
-    earlytime   timestamp not null,
-    latetime    timestamp not null,
-    check (earlytime > starttime and latetime > earlytime),
+    endtime     timestamp not null,
+    check (endtime > starttime),
     completed   boolean not null default false,
     priority    integer not null check (priority >= 1 and priority <= 3),
     currentrisk integer not null check (currentrisk >= 0 and currentrisk <= 100),
+    progress    integer not null check (progress >= 0 and progress <= 100),
     primary key (featureid),
     foreign key (projectid) references projects(projectid) on delete cascade
 );
@@ -63,9 +63,9 @@ create table tasks (
     devid       integer default null,
     taskname    varchar(50) not null,
     description varchar(300) default null,
-    earlytime   timestamp not null check (earlytime >= current_date),
-    latetime    timestamp not null,
-    check (latetime > earlytime),
+    starttime   timestamp not null check (starttime >= current_date),
+    endtime     timestamp not null,
+    check (endtime > starttime),
     completed   boolean not null default false,
     primary key (taskid),
     foreign key (featureid) references features(featureid) on delete cascade,
@@ -172,7 +172,7 @@ begin
     end if;
 
     -- Project deadline cannot be before feature deadline
-    if ((projectend < new.earlytime) or (projectend < new.latetime)) then
+    if (projectend < new.endtime) then
         raise exception 'Feature deadline too late for this project';
     end if;
 end;
@@ -186,20 +186,18 @@ for each statement
 create or replace function tasktimes() returns trigger as $$
 declare
     featurestart timestamp; -- Start time of feature
-    featureearly timestamp; -- Feature early deadline
-    featurelate timestamp;  -- Feature late deadline
+    featureend timestamp;   -- Feature deadline
 begin
     select starttime from features where featureid = new.featureid into featurestart;
-    select earlytime from features where featureid = new.featureid into featureearly;
-    select latetime from features where featureid = new.featureid into featurelate;
+    select endtime from features where featureid = new.featureid into featureend;
 
-    -- Feature start time cannot be after task early deadline
-    if (featurestart > new.earlytime) then
-        raise exception 'Task deadlines too early for this feature';
+    -- Feature start time cannot be after task start time
+    if (featurestart > new.starttime) then
+        raise exception 'Task start time too early for this feature';
     end if;
 
     -- Feature deadline cannot be before task deadline
-    if ((featureearly < new.earlytime) or (featurelate < new.latetime)) then
+    if (featureend < new.endtime) then
         raise exception 'Task deadline too late for this feature';
     end if;
 end;
@@ -216,7 +214,7 @@ declare
     depdeadline timestamp;  -- Deadline of feature's dependency
 begin
     select starttime from features where featureid = new.featureid into featurestart;
-    select latetime from features where featureid = new.depid into depdeadline;
+    select endtime from features where featureid = new.depid into depdeadline;
 
     -- Feature start time cannot be before its dependency's deadline
     if (featurestart < depdeadline) then

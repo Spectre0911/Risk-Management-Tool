@@ -6,6 +6,7 @@ import {RiDashboardFill} from 'react-icons/ri'
 import {BsBriefcaseFill} from 'react-icons/bs'
 import {BiTask} from 'react-icons/bi'
 import {AiFillWarning} from 'react-icons/ai'
+import { Scrollbars } from 'react-custom-scrollbars';
 import "./index.css"
 import Table from './Table';
 
@@ -78,9 +79,10 @@ const Dashboard = () => {
                 <Table/>
             </div>
 
-            <div className="infoBox2 scrollable">
+            <div className="infoBox2">
+            <Scrollbars>
                 <div className='metricTitle2'>
-                    Notifications
+                    Notificationss
                 </div>
 
                 <div className="notificationBox">
@@ -123,6 +125,21 @@ const Dashboard = () => {
                         <p>Yuo have been added to a new project</p>
                     </div>
                 </div>
+
+                <div className="notificationBox">
+                    <div className="notificationIcon blueIcon">
+                        <BsBriefcaseFill/>
+                    </div>
+
+                    <div className="NotificationText">
+                        <p>Added to new project!</p>
+                    </div>
+
+                    <div className="NotificationDescription">
+                        <p>Yuo have been added to a new project</p>
+                    </div>
+                </div>
+                </Scrollbars>
             </div>
         </div>
 
