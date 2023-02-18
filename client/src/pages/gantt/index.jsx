@@ -2,10 +2,8 @@ import React, { Component, useState } from "react";
 import { FrappeGantt } from "frappe-gantt-react";
 import ModalForm from "./modalForm";
 class GanttChart extends Component {
-  state = {};
-
-  render() {
-    let tasks = [
+  state = {
+    tasks: [
       {
         id: "Task 1",
         name: "Buy hosting",
@@ -51,12 +49,33 @@ class GanttChart extends Component {
         progress: 0,
         dependencies: "Task 4, Task 5",
       },
-    ];
+    ],
+  };
+
+  addFeature = (newTaskObj) => {
+    console.log(newTaskObj);
+    let newName = newTaskObj.name;
+    let newStart = newTaskObj.start;
+    let newEnd = newTaskObj.end;
+    let newDependency = newTaskObj.dependencies;
+    // Added ability to add new tasks, dependencies need to be handled
+    let newTask = {
+      id: "New Tasks",
+      name: newName,
+      start: newStart,
+      end: newEnd,
+    };
+
+    var taskCopy = [...this.state.tasks];
+    taskCopy.push(newTask);
+    this.setState({ tasks: taskCopy });
+  };
+  render() {
     return (
       <div>
-        <ModalForm></ModalForm>
+        <ModalForm addFeature={this.addFeature}></ModalForm>
         <FrappeGantt
-          tasks={tasks}
+          tasks={this.state.tasks}
           viewMode={this.state.mode}
           onClick={(task) => console.log(task)}
           onDateChange={(task, start, end) => console.log(task, start, end)}
