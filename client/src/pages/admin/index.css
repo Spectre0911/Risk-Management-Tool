@@ -19,5 +19,47 @@
     background-color: #5873ca;
     height: 50px;
     margin-left: -1px;
-    position: sticky;
+    position: fixed;
+    z-index: 2;
 }
+
+.accountInitialsCircle{
+    position: fixed;
+    right: 0px;
+    width: 35px;
+    height: 35px;
+    border-radius: 1000px;
+    z-index: 3;
+    background-color: rgb(192, 192, 192);
+    margin-top: 8px;
+    margin-right: 20px;
+    border: none;
+}
+
+.accountInitials{
+    font-family: 'Montserrat';
+    z-index: 3;
+    margin: auto;
+    margin-top: 2px;
+    margin-left: 1px;
+    font-weight: 800;
+}
+
+.uploadImageButton{
+    color:#5873ca;
+    position: absolute;
+}
+
+.uploadImageLabel{
+    position: relative;
+    top: 100px;
+    left: -30px;
+}
+
+.editProfileSkills{
+    width: 110%;
+    grid-column-start: 2;
+    grid-column-end: 5;
+    left: -40px;
+}
+
