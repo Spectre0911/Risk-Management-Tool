@@ -51,14 +51,18 @@ class GanttChart extends Component {
       },
     ],
   };
-
+  /*
+  TODO: 
+  ADD ABILITY TO DEFINE DEPENDENCIES
+  VERIFY DATA 
+  */
   addFeature = (newTaskObj) => {
     console.log(newTaskObj);
     let newName = newTaskObj.name;
     let newStart = newTaskObj.start;
     let newEnd = newTaskObj.end;
     let newDependency = newTaskObj.dependencies;
-    // Added ability to add new tasks, dependencies need to be handled
+    // Added ability to add new tasks
     let newTask = {
       id: "New Tasks",
       name: newName,
