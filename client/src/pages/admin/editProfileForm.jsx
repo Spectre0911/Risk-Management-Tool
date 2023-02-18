@@ -7,6 +7,9 @@ import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import { IconButton, Tooltip } from '@mui/material';
+import { Scrollbars } from "react-custom-scrollbars";
+import { BsBriefcaseFill } from "react-icons/bs";
+import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
 
 import {
@@ -26,19 +29,19 @@ const EditProfileForm = ({ handleClose }) => {
   const [image, setImage] = useState("http://localhost:5000/assets/jane.jpg");
   const { palette } = useTheme();
   const options = [
-    { value: 'Python', label: 'Python' },
-    { value: 'Front-End', label: 'Front-End' },
-    { value: 'Backend', label: 'Backend' },
+    { value: 'Python', label: 'Python', experience:"0"},
+    { value: 'Front-End', label: 'Front-End', experience:"0" },
+    { value: 'Backend', label: 'Backend', experience:"0" },
   ];
 
-  const [skills, setSkills] = useState([{value: 'Python', label: 'Python'}, {value: 'React', label: 'React'}])
+  const [skills, setSkills] = useState([{value: 'Python', label: 'Python', experience:"0"}, {value: 'React', label: 'React', experience:"0"}])
+  const [skillExperience, setSkillExperience] = useState([])
 
   const reportBugSchema = yup.object().shape({
     name: yup.string().required("required"),
     email: yup.string().required("required"),
     bio: yup.string().required("required"),
     gitHubToken: yup.string().required("required"),
-    yearsOfExperience: yup.number().required("required"),
     // skills: yup.array().required("required")
   });
 
@@ -46,7 +49,6 @@ const EditProfileForm = ({ handleClose }) => {
     name: "Jane Arnold",
     email: "janearnold@mail.com",
     bio: "Hi, my name is Jane and I am a software developer",
-    yearsOfExperience: 2,
     gitHubToken: "mvvnknvjknerngvegver",
     // skills: { value: 'Python', label: 'Python' }
   };
@@ -60,6 +62,7 @@ const EditProfileForm = ({ handleClose }) => {
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log("fff");
     console.log(skills);
+    console.log(values)
     try {
       const body = { values };
       const response = await fetch("http://localhost:5000/addbug", {
@@ -74,6 +77,11 @@ const EditProfileForm = ({ handleClose }) => {
 
   const handleSkillChange = (e) => {
     setSkills(e);
+  }
+  const handleExperienceChange = (e, key) =>{
+    var tempSkills = [...skills];
+    tempSkills[key]['experience'] = e.target.value;
+    setSkillExperience(tempSkills);
   }
 
   return (
@@ -154,23 +162,13 @@ const EditProfileForm = ({ handleClose }) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.gitHubToken}
-                  name="Github Token"
+                  name="gitHubToken"
                   error={Boolean(touched.gitHubToken) && Boolean(errors.gitHubToken)}
                   helperText={touched.gitHubToken && errors.gitHubToken}
-                  sx={{ gridColumn: "span 2" }}
+                  sx={{ gridColumn: "span 4" }}
                 />
 
-                <TextField
-                  label="Years of Experience"
-                  onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.yearsOfExperience}
-                  name="Years of Experience"
-                  error={Boolean(touched.yearsOfExperience) && Boolean(errors.yearsOfExperience)}
-                  helperText={touched.yearsOfExperience && errors.yearsOfExperience}
-                  sx={{ gridColumn: "span 2" }}
-                />
-
+                
                 <p style={{ gridColumn: "span 1", margin:'auto'}}>Skills:</p>
                 <Select
                     defaultValue={skills}
@@ -183,7 +181,36 @@ const EditProfileForm = ({ handleClose }) => {
                     onChange={handleSkillChange}
                     style={{ gridColumn: "span 3", width:"80%"}}
                 />
-                              
+                {skills.length > 0 &&
+                  <div className="metricTitle2"  style={{ gridColumn: "span 4", marginTop:"-20px", paddingBottom:"20px"}}>Experience of each skill</div>
+                }
+
+                {skills.length > 0 &&
+                <div style={{marginTop:"-50px", gridColumn: "span 4", width:"100%", }}>
+                  <Scrollbars  style={{ gridColumn: "span 4", width:"100%", height:"90px"}}>
+                    <div className="skillIExperienceInputBox" style={{"width":"450px"}}>
+                    {skills.map((skill,key)=>{ return(
+                          <div style={{gridColumn: "span 4", marginLeft:"50px", alignItems:"center", paddingBottom:"20px"}}>
+                            <p style={{ gridColumn: "span 2",display:"inline-block", marginTop:"10px"}}>{skill.value}</p>
+                            <TextField
+                              className="skillInputField"
+                              label="Years of Experience"
+                              onBlur={handleBlur}
+                              onChange={(e) =>handleExperienceChange(e, key)}
+                              value={skill.experience}                            
+                              name={key}
+                              // error={Boolean(touched.experience) && Boolean(errors.experience)}
+                              // helperText={touched.experience && errors.experience}
+                              sx={{ gridColumn: "span 2", display:"inline-block", right:"100px", width:"40%",position:"absolute"}}
+                            />
+                          </div>
+                        )})}
+                      </div>
+                  </Scrollbars>
+                </div>
+                }
+
+
                 <TextField
                   label="Bio"
                   onBlur={handleBlur}
