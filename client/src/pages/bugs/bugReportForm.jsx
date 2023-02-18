@@ -154,7 +154,7 @@ const BugReportForm = ({ handleClose }) => {
 
             <Button
               className="bugCancelButton"
-              fullWidth
+              fullwidth
               onClick={handleClose}
               sx={{
                 m: "2rem 0",

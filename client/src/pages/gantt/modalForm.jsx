@@ -3,7 +3,7 @@ import GanttForm from "./ganttForm";
 import { GrClose } from "react-icons/gr";
 import Modal from "react-bootstrap/Modal";
 
-const ModalForm = () => {
+const ModalForm = ({ addFeature }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleOverlay = () => {
     setIsOpen(isOpen);
@@ -26,7 +26,7 @@ const ModalForm = () => {
       </div>
 
       <div>
-        <Modal fade={false} show={show} onHide={handleClose}>
+        <Modal show={show} onHide={handleClose}>
           <Modal.Header>
             <div onClick={handleClose}>
               <GrClose />
@@ -34,7 +34,7 @@ const ModalForm = () => {
             <Modal.Title>Create Feature</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <GanttForm handleClose={handleClose} />
+            <GanttForm handleClose={handleClose} addFeature={addFeature} />
           </Modal.Body>
         </Modal>
       </div>

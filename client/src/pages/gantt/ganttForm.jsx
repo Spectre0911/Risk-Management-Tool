@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { Button } from "react-bootstrap";
 
-const GanttForm = ({ handleClose }) => {
+const GanttForm = ({ handleClose, addFeature }) => {
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
@@ -11,9 +11,10 @@ const GanttForm = ({ handleClose }) => {
         dependencies: "",
       },
       onSubmit: (values) => {
-        console.log(values);
+        addFeature(values);
       },
     });
+
   return (
     <form onSubmit={handleSubmit} autoComplete="off">
       <label htmlFor="name">Name</label>
@@ -54,7 +55,6 @@ const GanttForm = ({ handleClose }) => {
       />
       <button type="submit">Submit</button>
       <Button
-        fullWidth
         onClick={handleClose}
         sx={{
           m: "2rem 0",
