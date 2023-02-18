@@ -24,6 +24,11 @@ const AdminSidebar = () => {
     const onClickMenuIcon = () => {
         setCollapsed(!collapsed);
     };
+
+    
+
+
+
     return (
         <Sidebar className="sideBar" collapsed={false}>
             <Menu iconShape='square'>
@@ -33,10 +38,6 @@ const AdminSidebar = () => {
                 </div>
                 <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/dashboard/productList`)}>
                     {'Dashboard'}
-                </MenuItem >
-
-                <MenuItem className="menuItem" icon={<CgProfile />} onClick={() => navigate(`/editprofile`)}>
-                    {'Edit Profile'}
                 </MenuItem >
 
                 <MenuItem className="menuItem" icon={<FaBell />} onClick={() => navigate(`/managedprojects`)}>
