@@ -63,3 +63,31 @@
     left: -40px;
 }
 
+
+.skillInputField .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.css-16t7a0e-MuiInputBase-root-MuiOutlinedInput-root {
+    width:100%
+}
+
+.skillInputField .MuiFormControl-root.MuiTextField-root.skillInputField.css-bbi62c-MuiFormControl-root-MuiTextField-root {
+    position: absolute;
+    left: 100px;
+}
+
+.skillIExperienceInputBox{
+    position: relative;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 10px;
+    height: 100px;
+    width: 98%;
+    border-radius: 20px;
+    margin-top: 15px;    
+}
+
+/* .skillInputField{
+    width:300px;
+} */
+
+/* .skillInputField input{
+    width: 100%;
+} */
