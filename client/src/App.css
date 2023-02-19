@@ -36,3 +36,8 @@
     transform: rotate(360deg);
   }
 }
+
+input.input-error,
+select.input-error {
+  border-color: #fc8181;
+}
