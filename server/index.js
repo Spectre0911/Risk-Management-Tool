@@ -1,6 +1,6 @@
 import path from "path";
-import { createRequire } from 'module';
-import { fileURLToPath } from 'url';
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
 
 const require = createRequire(import.meta.url);
 const express = require("express");
@@ -12,7 +12,6 @@ const pool = require("./db.cjs");
 app.use(cors());
 app.use(express.json()); //req.body
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
@@ -21,18 +20,16 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 
 //create a todo
 
-//Contains the 
+//Contains the
 
 async function testConnect() {
-  console.log('Before connect');
+  console.log("Before connect");
   const client = await pool.connect();
-  console.log('Connected!');
+  console.log("Connected!");
   client.release();
 }
 
 testConnect();
-
-
 
 app.post("/todos", async (req, res) => {
   try {
@@ -54,7 +51,14 @@ app.post("/addbug", async (req, res) => {
     console.log(bugDetails);
     const addbug = await pool.query(
       "INSERT INTO bugs (featureid, devid, bugname, bugdesc, priority, severity) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
-      [1,2,req.body.values.bugName, req.body.values.bugDescription, req.body.values.priority, req.body.values.severity],
+      [
+        1,
+        2,
+        req.body.values.bugName,
+        req.body.values.bugDescription,
+        req.body.values.priority,
+        req.body.values.severity,
+      ]
     );
 
     res.json("finished");
@@ -63,7 +67,19 @@ app.post("/addbug", async (req, res) => {
   }
 });
 
+app.post("/api/createAccount", async (req, res) => {
+  try {
+    console.log(req.body);
+    const createAccount = await pool.query(
+      "INSERT INTO users (email, firstname, lastname, password ) VALUES($1, $2, $3, $4) RETURNING *",
+      [req.body.firstName, req.body.lastName, req.body.email, req.body.password]
+    );
 
+    res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 //get all todos
 
@@ -82,7 +98,7 @@ app.get("/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const todo = await pool.query("SELECT * FROM todo WHERE todo_id = $1", [
-      id
+      id,
     ]);
 
     res.json(todo.rows[0]);
@@ -114,7 +130,7 @@ app.delete("/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [
-      id
+      id,
     ]);
     res.json("Todo was deleted!");
   } catch (err) {
