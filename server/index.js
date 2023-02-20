@@ -1,6 +1,7 @@
 import path from "path";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
+import bcrypt from "bcryptjs";
 
 const require = createRequire(import.meta.url);
 const express = require("express");
@@ -70,11 +71,46 @@ app.post("/addbug", async (req, res) => {
 app.post("/api/createAccount", async (req, res) => {
   try {
     console.log(req.body);
+    const uniqueSalt = bcrypt.genSaltSync(10);
+    const saltPassword = bcrypt.hashSync(req.body.password, uniqueSalt);
     const createAccount = await pool.query(
-      "INSERT INTO users (email, firstname, lastname, password ) VALUES($1, $2, $3, $4) RETURNING *",
-      [req.body.firstName, req.body.lastName, req.body.email, req.body.password]
+      "INSERT INTO users (email, firstname, lastname, password, salt) VALUES($1, $2, $3, $4, $5) RETURNING *",
+      [
+        req.body.email,
+        req.body.firstName,
+        req.body.lastName,
+        saltPassword,
+        uniqueSalt,
+      ]
     );
 
+    res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/api/login", async (req, res) => {
+  try {
+    // console.log(req.body);
+    const actualPassword = pool.query(
+      "SELECT password FROM users WHERE email = $1",
+      [req.body.email],
+      function (err, res) {
+        if (err) {
+        } else {
+          var hash = res.rows[0].password;
+          console.log(hash);
+          bcrypt.compare(req.body.password, hash, function (err, result) {
+            if (result == true) {
+              console.log("Logged in");
+            } else {
+              console.log("Incorrect password");
+            }
+          });
+        }
+      }
+    );
     res.json("finished");
   } catch (err) {
     console.error(err.message);
