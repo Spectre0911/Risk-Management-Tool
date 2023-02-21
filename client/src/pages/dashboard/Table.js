@@ -24,7 +24,7 @@ const Table = () => {
     const doFetch = async () => {
       const response = await fetch('https://randomuser.me/api/?results=100');
       const body = await response.json();
-      const contacts = [{'projectName':'cs261', 'projectManager':'Jane Arnold', 'deadline':'26/10/2022', 'status':"ontime", 'progress':20, 'risk':10},{'projectName':'cs261', 'projectManager':'Jane Arnold', 'deadline':'26/10/2022', 'status':"ontime", 'progress':20, 'risk':10}];
+      const contacts = [{'projectId':'1','projectName':'cs261', 'projectManager':'Jane Arnold', 'deadline':'26/10/2022', 'status':"ontime", 'progress':20, 'risk':10},{'projectId':'2', 'projectName':'cs261', 'projectManager':'Jane Arnold', 'deadline':'26/10/2022', 'status':"ontime", 'progress':20, 'risk':10}];
       console.log(contacts);
       setData(contacts);
     };
@@ -120,36 +120,6 @@ const Table = () => {
           );
         },
       },
-    //   {
-    //     Header: 'Hemisphere',
-    //     accessor: (values) => {
-    //       const { latitude, longitude } = values.location.coordinates;
-    //       const first = Number(latitude) > 0 ? 'N' : 'S';
-    //       const second = Number(longitude) > 0 ? 'E' : 'W';
-    //       return first + '/' + second;
-    //     },
-    //     disableSortBy: true,
-    //     Filter: SelectColumnFilter,
-    //     filter: 'equals',
-    //     Cell: ({ cell }) => {
-    //       const { value } = cell;
-
-    //       const pickEmoji = (value) => {
-    //         let first = value[0]; // N or S
-    //         let second = value[2]; // E or W
-    //         const options = ['⇖', '⇗', '⇙', 'p'];
-    //         let num = first === 'N' ? 0 : 2;
-    //         num = second === 'E' ? num + 1 : num;
-    //         return options[num];
-    //       };
-
-    //       return (
-    //         <div style={{ textAlign: 'center', fontSize: 18 }}>
-    //           {pickEmoji(value)}
-    //         </div>
-    //       );
-    //     },
-    //   },
     ],
     []
   );

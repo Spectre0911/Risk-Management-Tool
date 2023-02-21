@@ -15,7 +15,7 @@ const Dashboard = () => {
     <div className="main">
       <div className="grid">
         <div className="infoBox">
-          <div className="metricTitle">Active projects</div>
+          <div className="metricTitle dashboard">Active projects</div>
           <div className="metricNumber">25</div>
           <div className="metricCircleBackground metricBlueBackground">
             <div className="metricIcon metricBlueIcon">
@@ -25,7 +25,7 @@ const Dashboard = () => {
         </div>
 
         <div className="infoBox">
-          <div className="metricTitle">Tasks to complete</div>
+          <div className="metricTitle dashboard">Tasks to complete</div>
           <div className="metricNumber">14</div>
           <div className="metricCircleBackground metricBlueBackground">
             <div className="metricIcon metricBlueIcon">
@@ -35,7 +35,7 @@ const Dashboard = () => {
         </div>
 
         <div className="infoBox">
-          <div className="metricTitle">Notifications</div>
+          <div className="metricTitle dashboard">Notifications</div>
           <div className="metricNumber">20</div>
           <div className="metricCircleBackground metricBlueBackground">
             <div className="metricIcon metricBlueIcon">
@@ -45,7 +45,7 @@ const Dashboard = () => {
         </div>
 
         <div className="infoBox">
-          <div className="metricTitle">Warnings</div>
+          <div className="metricTitle dashboard">Warnings</div>
           <div className="metricNumber">2</div>
           <div className="metricCircleBackground metricRedBackground">
             <div className="metricIcon metricRedIcon">
@@ -61,7 +61,7 @@ const Dashboard = () => {
 
         <div className="infoBox2">
           <Scrollbars>
-            <div className="metricTitle2">Notificationss</div>
+            <div className="metricTitle2" style={{marginBottom:'20px'}}>Notificationss</div>
 
             <div className="notificationBox">
               <div className="notificationIcon">

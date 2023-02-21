@@ -1,0 +1,276 @@
+.infoBox.project{
+    height:300px;
+}
+
+.metricDonutContainer canvas{
+    /* padding:30px; */
+    margin: 10px;
+    height: 220px !important;
+    width: 220px !important;
+    margin: auto;
+    margin-top: -5px;
+    height: 350px;
+}
+
+.metricDonutContainer.smaller canvas{
+    height: 210px !important;
+    width: 210px !important;
+}
+
+.metricDonutContainer.smaller1 canvas{
+    height: 205px !important;
+    width: 205px !important;
+}
+
+.donutText{
+    font-family:"Montserrat";
+    width: 100%;
+    text-align: center;
+    margin-top: -150px;
+    z-index: 10;
+    position: absolute;
+    font-weight: 900;
+    font-size: 30px;
+    margin-left: -4px;
+}
+
+.donutText.risk{
+    margin-top: -160px;
+}
+
+.donutText p{
+    width: 100%;
+    text-align: center;
+    margin-left: -10px;
+}
+
+.project .metricTitle{
+    text-align: center;
+    font-size: 20px;
+}
+
+
+
+.featureViewTasksButton{
+    background-color: #0069cc;
+    color: white;
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    margin-top: 4px;
+}
+
+.featureViewTasksButton:hover{
+    background-color: #032f58;
+    transition: 0.8s;
+}
+
+
+.progressNumber.feature{
+    width: 26px;
+    height: 26px;
+}
+
+.featureEditButton{
+    background-color: #cccccc;
+    color: rgb(0, 0, 0);
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    margin-top: 4px;
+    width: 50px;
+}
+
+.featureEditButton:hover{
+    background-color: #929292;
+    transition: 0.8s;
+}
+
+.featureDeleteTasksButton{
+    background-color: #d10404;
+    color: rgb(255, 255, 255);
+    border-radius: 5px;
+    border: none;
+    padding: 5px;
+    margin-top: 4px;
+    width: 50px;
+}
+
+.featureDeleteTasksButton:hover{
+    background-color: #8d0000;
+    transition: 0.8s;
+}
+
+.projectFilterInput.addFeatureButton{
+    background-color: #0069cc;
+    color: white;
+}
+
+.projectFilterInput.addFeatureButton{
+    background-color: #0069cc;
+    color: white;
+}
+
+.projectFilterInput.viewProject{
+    margin-top: -10px;
+}
+
+.projectDashboardProfileName{
+    position: absolute;
+    left: 110px;
+    font-family: 'Montserrat';
+    font-size: 30px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.projectDashboardProfile{
+    padding: 0px 5px;
+    width: 95%;
+    margin: auto;
+    margin-bottom: 20px;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 0px 0px 4px #130b0b93;
+    min-height: 200px;
+    height: fit-content;
+    padding-top: 10px;
+    z-index: 10;
+}
+
+.projectDashboardProfilePic img{
+    width: 80px;
+    height: 80px;
+}
+
+.projectDashboardSkillName{
+    background-color: #cac9c9;
+    padding: 3px;
+    border-radius: 10px;
+    width:fit-content;
+    font-family: 'Montserrat';
+    display: inline-flex;
+    margin: 2px;
+    margin-top: 10px;
+}
+
+
+.projectDashboardSkill{
+    padding: 3px;
+    width:fit-content;
+    font-family: 'Montserrat';
+    display: inline-flex;
+    margin: 2px;
+    font-weight: 900;
+}
+
+.metricTitle2{
+    border-bottom:  2px solid #0069cc;
+}
+
+.metricTitle{
+    border-bottom:  2px solid #0069cc;
+    margin-bottom: 15px;
+}
+.projectTitleId{
+    font-family: 'Montserrat';
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.projectDashboardSkillMatchTitle{
+    padding: 3px;
+    width:fit-content;
+    font-family: 'Montserrat';
+    margin: 2px;
+    font-weight: 900;
+}
+
+.semicircle-container svg{
+    margin: auto;
+    display: block;
+    padding-bottom: 10px;
+    top:-10px
+}
+.semicircle-container circle{
+    width: 30;
+}
+.projectDashboardSkillScore{
+    display: inline;
+    margin-left: 12px;
+    background-color: #d60505;
+    color: white;
+    font-weight: 900;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.projectDashboardBio{
+    display: inline;
+}
+
+.projectDashboardBold{
+    font-weight: 900;
+}
+
+.defineDependenciesBox{
+    width: 95%;
+    grid-column-start: 2;
+    grid-column-end: 5;
+}
+/* .fade-enter{
+    overflow-y: hidden;
+    max-height: 0;
+    opacity: 0;
+  }
+  
+  .fade-enter-active{
+    opacity: 1;
+    transition: opacity 5s ease-in;
+  }
+
+  .fade-exit{
+    opacity: 1;
+  }
+  .fade-exit-active{
+    opacity: 0;
+    transition: opacity 5s ease-in;
+  }
+
+  .newRows {
+    padding: 0;
+    height: inherit;
+    display: block;
+    -webkit-animation: animate 0.5s ease-in;  
+    animation: animate 0.5s ease-in;
+  }
+
+.feature tr{
+    margin: 0px !important;
+}
+
+@-webkit-keyframes animate {
+    from {
+      opacity: 0;
+      width: 100%; 
+      height: 0;
+    }
+    to {    
+      opacity: 1;
+      width: 100%; 
+      height: inherit;
+    } 
+  }
+  @keyframes animate {
+    from {
+      opacity: 0;
+      width: 100%; 
+      height: 0px;
+    }
+    to {
+      opacity: 1;
+      width: 100%; 
+      height: inherit;
+    } 
+  } */
+

@@ -182,7 +182,7 @@ const EditProfileForm = ({ handleClose }) => {
                     style={{ gridColumn: "span 3", width:"80%"}}
                 />
                 {skills.length > 0 &&
-                  <div className="metricTitle2"  style={{ gridColumn: "span 4", marginTop:"-20px", paddingBottom:"20px"}}>Experience of each skill</div>
+                  <div className="metricTitle2"  style={{ gridColumn: "span 4", marginBottom:"20px",marginTop:"-20px"}}>Experience of each skill</div>
                 }
 
                 {skills.length > 0 &&
