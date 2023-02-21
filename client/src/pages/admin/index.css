@@ -91,3 +91,8 @@
 /* .skillInputField input{
     width: 100%;
 } */
+
+.addProfileModal .modal.show .modal-dialog {
+    margin-top: -100px !important;
+}
+

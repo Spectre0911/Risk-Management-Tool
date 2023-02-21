@@ -198,6 +198,10 @@
     margin-top: -40px;
 }
 
+.projectFilterInput{
+    margin-top:-10px;
+}
+
 .projectTableContainer{
     padding-top: 20px;
 }
@@ -340,3 +344,6 @@
     overflow-x: hidden;
 }
 
+.metricTitle.dashboard{
+    width: calc(100% - 80px);
+}

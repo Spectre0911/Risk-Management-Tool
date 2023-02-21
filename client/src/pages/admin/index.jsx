@@ -9,6 +9,7 @@ import Bugs from '../bugs';
 import Modal from 'react-bootstrap/Modal';
 import {GrClose} from 'react-icons/gr';
 import EditProfileForm from './editProfileForm';
+import ProjectDashboard from '../projectDashboard';
 const Admin = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleOverlay = () =>{
@@ -38,7 +39,7 @@ const Admin = () => {
                 <p className="accountInitials">JA</p>
               </button>
               <div>
-                <Modal className="bugModal" fade={false} show={show} onHide={handleClose}>
+                <Modal className="addProfileModal" fade={false} show={show} onHide={handleClose}>
                     <Modal.Header>
                     <div className="bugFormClose" onClick={handleClose}>
                         <GrClose />
@@ -57,6 +58,7 @@ const Admin = () => {
               <Route path="/*" element={<Dashboard />} />
               <Route path="/managedprojects" element={<ManagedProjects />} />
               <Route path="/bugs" element={<Bugs />} />
+              <Route path="/projects/:projectId" element={<ProjectDashboard/> }/>
           </Routes>
         </div>
       </div>
