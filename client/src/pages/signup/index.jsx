@@ -108,6 +108,11 @@ const SignupPage = () => {
               <button type="submit" className="submit-button">
                 Sign Up
               </button>
+              <div>
+                <label className="signupLabel">
+                  Already have an account? <a href="/login">Sign In</a>
+                </label>
+              </div>
             </Form>
           )}
         </Formik>
