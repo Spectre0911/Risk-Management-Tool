@@ -74,14 +74,8 @@ app.post("/api/createAccount", async (req, res) => {
     const uniqueSalt = bcrypt.genSaltSync(10);
     const saltPassword = bcrypt.hashSync(req.body.password, uniqueSalt);
     const createAccount = await pool.query(
-      "INSERT INTO users (email, firstname, lastname, password, salt) VALUES($1, $2, $3, $4, $5) RETURNING *",
-      [
-        req.body.email,
-        req.body.firstName,
-        req.body.lastName,
-        saltPassword,
-        uniqueSalt,
-      ]
+      "INSERT INTO users (email, firstname, lastname, password) VALUES($1, $2, $3, $4) RETURNING *",
+      [req.body.email, req.body.firstName, req.body.lastName, saltPassword]
     );
 
     res.json("finished");
@@ -92,20 +86,23 @@ app.post("/api/createAccount", async (req, res) => {
 
 app.post("/api/login", async (req, res) => {
   try {
-    // console.log(req.body);
+    console.log(req.body.email);
+    console.log(req.body.password);
+
     const actualPassword = pool.query(
       "SELECT password FROM users WHERE email = $1",
       [req.body.email],
       function (err, res) {
         if (err) {
+          // console.log(err);
         } else {
           var hash = res.rows[0].password;
-          console.log(hash);
+          // console.log(hash);
           bcrypt.compare(req.body.password, hash, function (err, result) {
             if (result == true) {
               console.log("Logged in");
             } else {
-              console.log("Incorrect password");
+              console.log("Incorrect password or email");
             }
           });
         }
