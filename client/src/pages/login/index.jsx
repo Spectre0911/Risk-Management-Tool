@@ -2,67 +2,84 @@ import { textAlign } from "@mui/system";
 import React, { useState } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import "./index.css";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useNavigate} from "react-router-dom";
 
 const LoginPage = () => {
-  const [email, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    //this is just here temporarily, will obviously be getting rid of it
-    if (email === "admin" && password === "password") {
-      window.location.href = "/admin";
-    } else {
-      setError("Username or password is incorrect");
-    }
-  };
+  const navigate = useNavigate();
 
   return (
     <body className="waveBg">
       <div className="login-container">
-        <form onSubmit={handleSubmit} className="loginForm">
-          <h1 className="loginH1">Login</h1>
-          {error && <p className="error">{error}</p>}
-          <div className="loginForm-group">
-            <label class="caption" htmlFor="email">
-              Email:
-            </label>
-            <input
-              type="text"
-              id="email"
-              className="loginForm-control"
-              value={email}
-              onChange={(event) => setUsername(event.target.value)}
-              required
-            />
-          </div>
-          <div className="loginForm-group">
-            <label class="caption" htmlFor="password">
-              Password:
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="loginForm-control"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required
-            />
-            <div class="resetLabel">
-              <label class="resetLabel">Forgot password?</label>
-            </div>
-          </div>
-          <button type="submit" className="submit-button">
-            Sign In
-          </button>
-          <div>
-            <label class="signupLabel">
-              No account? <a href="/signup">Sign Up</a>
-            </label>
-          </div>
-        </form>
+        <Formik
+          initialValues={{ email: "", password: "" }}
+          validationSchema={Yup.object({
+            email: Yup.string()
+              .email("Invalid email address")
+              .required("Email is required"),
+            password: Yup.string()
+              .required("Password is required")
+              .min(8, "Password must be at least 8 characters"),
+          })}
+          onSubmit={(values, { setSubmitting, setErrors }) => {
+            if (values.email === "admin" && values.password === "password") {
+              navigate("/admin");
+            } else {
+              setErrors({ email: " ", password: "Invalid email or password" });
+            }
+            setSubmitting(false);
+          }}
+        >
+          {({ isSubmitting }) => (
+            <Form className="loginForm">
+              <h1 className="loginH1">Login</h1>
+              <div className="loginForm-group">
+                <label className="caption" htmlFor="email">
+                  Email:
+                </label>
+                <Field
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="loginForm-control"
+                />
+                 <div class = "error">
+                  <ErrorMessage name="email" className="error" />
+                </div>
+              </div>
+              <div className="loginForm-group">
+                <label className="caption" htmlFor="password">
+                  Password:
+                </label>
+                <Field
+                  type="password"
+                  name="password"
+                  id="password"
+                  className="loginForm-control"
+                />
+                <div class = "error">
+                  <ErrorMessage name="password" className="error" />
+                </div>
+                <div className="resetLabel">
+                  <label className="resetLabel">Forgot password?</label>
+                </div>
+              </div>
+              <button
+                type="submit"
+                className="submit-button"
+                disabled={isSubmitting}
+              >
+                Sign In
+              </button>
+              <div>
+                <label className="signupLabel">
+                  No account? <a href="/signup">Sign Up</a>
+                </label>
+              </div>
+            </Form>
+          )}
+        </Formik>
       </div>
     </body>
   );
