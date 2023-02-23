@@ -1,7 +1,8 @@
-import path from "path";
 import { createRequire } from "module";
 import { fileURLToPath } from "url";
+
 import bcrypt from "bcryptjs";
+import path from "path";
 
 const require = createRequire(import.meta.url);
 const express = require("express");
@@ -84,31 +85,31 @@ app.post("/api/createAccount", async (req, res) => {
   }
 });
 
-app.post("/api/login", async (req, res) => {
+app.post("/api/login", async (req, postResult) => {
   try {
-    console.log(req.body.email);
-    console.log(req.body.password);
-
     const actualPassword = pool.query(
       "SELECT password FROM users WHERE email = $1",
       [req.body.email],
       function (err, res) {
+        var loggedInVal = false;
+        var emailVal = null;
         if (err) {
-          // console.log(err);
         } else {
+          // Need to add validation when password does not exist, add error codes?
           var hash = res.rows[0].password;
-          // console.log(hash);
           bcrypt.compare(req.body.password, hash, function (err, result) {
             if (result == true) {
               console.log("Logged in");
+              loggedInVal = true;
+              emailVal = req.body.email;
             } else {
               console.log("Incorrect password or email");
             }
+            postResult.json({ loggedIn: loggedInVal, email: emailVal });
           });
         }
       }
     );
-    res.json("finished");
   } catch (err) {
     console.error(err.message);
   }
@@ -137,6 +138,7 @@ app.get("/todos/:id", async (req, res) => {
     res.json(todo.rows[0]);
   } catch (err) {
     console.error(err.message);
+    res.end("Error");
   }
 });
 
