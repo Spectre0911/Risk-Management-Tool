@@ -33,7 +33,7 @@ Chart.register([Legend])
 
 const TaskDashboard = () => {
   
-    const {featureId} = useParams();
+    const {taskId} = useParams();
     const labelsRisk = ['Budget','Team','Time','Code', 'Technical'];
     const dataRisk = [29,24,25,25,10];
     const borderColorRisk =['rgba(255,206,86,0.2)'];
@@ -108,7 +108,7 @@ const TaskDashboard = () => {
     <div className="main">
       <div className="grid">
         <div className="infoBox2 projectTable task">
-          <p className="projectTitleId">Tasks for {featureId} project</p>
+          <p className="projectTitleId">Tasks for {taskId} project</p>
           <div className="metricTitle2">Features</div>
           <Table />
         </div>
