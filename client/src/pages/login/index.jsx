@@ -4,10 +4,15 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import "./index.css";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { loginAction } from "../../actions/index";
+import { useSelector, useDispatch } from "react-redux";
 
 const LoginPage = () => {
   const navigate = useNavigate();
+  const emailSelector = useSelector((state) => state.email);
+
+  const dispatch = useDispatch();
 
   return (
     <body className="waveBg">
@@ -23,11 +28,26 @@ const LoginPage = () => {
               .min(8, "Password must be at least 8 characters"),
           })}
           onSubmit={(values, { setSubmitting, setErrors }) => {
-            if (values.email === "admin" && values.password === "password") {
-              navigate("/admin");
-            } else {
-              setErrors({ email: " ", password: "Invalid email or password" });
-            }
+            fetch("http://localhost:5000/api/login", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(values),
+            })
+              .then((response) => {
+                return response.json();
+              })
+              .then((data) => {
+                dispatch(loginAction(data.email));
+                console.log(emailSelector);
+              });
+
+            // if (values.email === "admin" && values.password === "password") {
+            //   navigate("/admin");
+            // } else {
+            //   setErrors({ email: " ", password: "Invalid email or password" });
+            // }
             setSubmitting(false);
           }}
         >
@@ -44,7 +64,7 @@ const LoginPage = () => {
                   id="email"
                   className="loginForm-control"
                 />
-                 <div class = "error">
+                <div class="error">
                   <ErrorMessage name="email" className="error" />
                 </div>
               </div>
@@ -58,7 +78,7 @@ const LoginPage = () => {
                   id="password"
                   className="loginForm-control"
                 />
-                <div class = "error">
+                <div class="error">
                   <ErrorMessage name="password" className="error" />
                 </div>
                 <div className="resetLabel">
@@ -84,4 +104,6 @@ const LoginPage = () => {
     </body>
   );
 };
+
 export default LoginPage;
+
