@@ -9,7 +9,6 @@ import { AiFillWarning } from "react-icons/ai";
 import { Scrollbars } from "react-custom-scrollbars";
 import "./index.css";
 import Table from "./Table";
-
 const Dashboard = () => {
   return (
     <div className="main">

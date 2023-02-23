@@ -23,7 +23,7 @@ import "./index.css";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 
-const EditProfileForm = ({ handleClose }) => {
+const EditProfileForm = ({ handleClose, featureId}) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
   
@@ -36,11 +36,18 @@ const EditProfileForm = ({ handleClose }) => {
     difficulty: yup.string().required("required"),
   });
 
+  const initialValuesRegister = {
+    name: "feature name",
+    description: "Add login screen",
+    startTime: "2017-05-24",
+    endTime: "2017-05-24",
+    difficulty: "0",
+  };
   
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log(values);
-    console.log(priority);
-    console.log(dependencies);
+    console.log("ddd");
+    console.log(featureId);
     // try {
     //   const body = { values };
     //   const response = await fetch("http://localhost:5000/addbug", {
@@ -59,7 +66,7 @@ const EditProfileForm = ({ handleClose }) => {
     {value: '3', label:"Rendering Screen"}
   ];
 
-  const [dependencies, setDependencies] = useState([])
+  const [dependencies, setDependencies] = useState([{value: '1', label:"Login Screen"}])
  
   const handleDependencyChange = (e) => {
     setDependencies(e);
@@ -71,7 +78,7 @@ const EditProfileForm = ({ handleClose }) => {
     {value: '3', label:"Aesthetic"}
   ];
 
-  const [priority, setPriority] = useState();
+  const [priority, setPriority] = useState({value: '1', label:"Core"});
  
   const handlePriorityChange = (e) => {
     setPriority(e);
@@ -83,7 +90,7 @@ const EditProfileForm = ({ handleClose }) => {
   return (
     <Formik
       onSubmit={handleFormSubmit}
-      initialValues={{}}
+      initialValues={initialValuesRegister}
       validationSchema={reportBugSchema}
     >
       {({

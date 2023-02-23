@@ -91,11 +91,11 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
     <Fragment>
         <div className="projectFilterRow">
             <input className="projectFilterInput viewProject"
-                placeholder="Search by feature name"
-                onChange={(e) => setFilter("featureName", e.target.value)}
+                placeholder="Search by task name"
+                onChange={(e) => setFilter("taskName", e.target.value)}
             />
             <button onClick={handleAddShow} className="projectFilterInput viewProject addFeatureButton">
-              Add feature
+              Add Task
             </button>
         </div>
         <div className="projectTableContainer">

@@ -1,6 +1,5 @@
 import React, { Component, useState } from "react";
 import { FrappeGantt } from "frappe-gantt-react";
-import ModalForm from "./modalForm";
 class GanttChart extends Component {
   state = {
     tasks: [
@@ -77,17 +76,14 @@ class GanttChart extends Component {
   render() {
     return (
       <div>
-        <div style={{width:"80%"}}>
-          <ModalForm addFeature={this.addFeature}></ModalForm>
-          <FrappeGantt
-            tasks={this.state.tasks}
-            viewMode={this.state.mode}
-            onClick={(task) => console.log(task)}
-            onDateChange={(task, start, end) => console.log(task, start, end)}
-            onProgressChange={(task, progress) => console.log(task, progress)}
-            onTasksChange={(tasks) => console.log(tasks)}
-          />
-        </div>
+        <FrappeGantt
+          tasks={this.state.tasks}
+          viewMode={"Week"}
+          onClick={(task) => console.log(task)}
+          onDateChange={(task, start, end) => console.log(task, start, end)}
+          onProgressChange={(task, progress) => console.log(task, progress)}
+          onTasksChange={(tasks) => console.log(tasks)}
+        />
       </div>
     );
   }

@@ -34,18 +34,19 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
 const Table = () => {
-  var ReactCSSTransitionGroup = require('react-transition-group'); // ES5 with npm
   const navigate = useNavigate();
+  var ReactCSSTransitionGroup = require('react-transition-group'); // ES5 with npm
+  
   const [data, setData] = useState([]);
   useEffect(() => {
     const doFetch = async () => {
       const response = await fetch('https://randomuser.me/api/?results=100');
       const body = await response.json();
-      const contacts = [{'featureId':'1','featureName':'Add sidebar', 'startTime':'12/11/2022', 'endTime':'30/02/2023', 'progress':20, 'risk':10},{'featureId':'2','featureName':'Add sidebar', 'startTime':'12/11/2022', 'endTime':'30/02/2023', 'progress':20, 'risk':10}];
+      const contacts = [{'featureId':'1','taskName':'Add sidebar', 'startTime':'12/11/2022', 'endTime':'30/02/2023','status':'Completed', 'progress':20, 'risk':10},{'featureId':'2','taskName':'Add sidebar', 'status':'In progress', 'startTime':'12/11/2022', 'endTime':'30/02/2023', 'progress':20, 'risk':10}];
       console.log(contacts);
       setData(contacts);
     };
@@ -81,60 +82,39 @@ const Table = () => {
   const deleteFeature = (featureDeleteId) => {
     console.log("delete this");
     console.log(featureId);
-    setShowDelete(true);
+    setShowDelete(false);
   }
-  // const renderRowSubComponent = (row) => {
-  //   const name = "k";
-  //   console.log("ee");
-  //   console.log(row.cells);
-  //   return (
-  //     <div>
-  //     {row.cells.map((row, index) => (
-  //     <tr className="newRows"key={index}>
-  //         <td><div>1</div></td>
-  //         <td>
-  //           <div><p>fji</p></div>
-  //         </td>
-  //     </tr>
-  //     ))}
-  //     </div>
-  //   )
-  // };
+
 
   const columns = useMemo(
     () => [
       {
-        Header: 'Feature name',
-        accessor: 'featureName',
+        Header: 'Task name',
+        accessor: 'taskName',
         filterable: false,
         disableFilters:true,
         filterable: false,
+        width: 3000,
       },
       {
-        Header: 'Progress',
-        accessor: 'progress',
-        filterable: false,
-        disableFilters:true,
-        filterable: false,
+        Header: 'Status',
+        width: 100,
         Cell: ({ cell }) => {
-          const percentage = cell.value;
-          console.log(percentage);
+          console.log(cell.row.original.status);
           return (
-            <div className="progressDisplayContainer">
-              <div className="progressNumber feature">
-                2/3
-              </div>
-              <ProgressBar variant="danger" now={percentage} />
+            <div className="featureViewTasks">
+               <p>{cell.row.original.status}</p>
             </div>
           );
         },
-      },
+      },      
       {
         Header: 'Start time',
         accessor: 'startTime',
         filterable: false,
         disableFilters:true,
         filterable: false,
+        width: 100,
       },
       {
         Header: 'End Time',
@@ -142,36 +122,23 @@ const Table = () => {
         filterable: false,
         disableFilters:true,
         filterable: false,
-      },
-      {
-        Header: 'Risk',
-        accessor: 'risk',
-        filterable: false,
-        disableFilters:true,
-        filterable: false,
-        Cell: ({ cell }) => {
-          const percentage = cell.value;
-          console.log(percentage);
-          return (
-            <div className="projectCircularProgressBar">
-               <CircularProgressbar value={percentage} text={`${percentage}%`} strokeWidth={12} />
-            </div>
-          );
-        },
+        width: 100,
       },
       {
         Header: 'View Tasks',
+        width: 100,
         Cell: ({ cell }) => {
           console.log(cell.row.original.featureId);
           return (
             <div className="featureViewTasks">
-               <button type="submit" className="featureViewTasksButton" value={cell.row.original.featureId} onClick={() => navigate(`/viewtasks/${cell.row.original.featureId}`)}>View tasks</button>
+               <button onClick={() => navigate(`/viewtasks/${cell.row.original.projectId}`)} type="submit" className="featureViewTasksButton" value={cell.row.original.featureId} >View tasks</button>
             </div>
           );
         },
       },
       {
         Header: 'Edit',
+        width: 100,
         Cell: ({ cell }) => {
           console.log(cell.row.original.featureId);
           return (
@@ -185,6 +152,7 @@ const Table = () => {
       },
       {
         Header: 'Delete',
+        width: 100,
         Cell: ({ cell }) => {
           console.log(cell.row.original.featureId);
           return (
