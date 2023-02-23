@@ -31,15 +31,6 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/*" element={<Admin />} />
             <Route path="/ganttChart" element={<GanttChart />} />
-
-            {/* <Route
-                path="/dashboard"
-                element={isAuth ? <BasketPage /> : <Navigate to="/" />}
-              />
-              <Route
-                path="/home"
-                element={isAuth ? <HomePage /> : <Navigate to="/" />}
-              /> */}
           </Routes>
         </ThemeProvider>
       </BrowserRouter>

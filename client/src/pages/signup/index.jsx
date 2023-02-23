@@ -9,15 +9,20 @@ import * as Yup from "yup";
 
 const SignupPage = () => {
   const initialValues = {
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     password: "",
-    confirmPassword: ""
+    confirmPassword: "",
   };
 
   const validationSchema = Yup.object().shape({
-    name: Yup.string().required("Please enter your name"),
-    email: Yup.string().email("Invalid email address").required("Please enter your email address"),
+    firstName: Yup.string().required("Please enter your name"),
+    lastName: Yup.string().required("Please enter your name"),
+
+    email: Yup.string()
+      .email("Invalid email address")
+      .required("Please enter your email address"),
     password: Yup.string()
       .required("Please enter your password")
       .min(6, "Password must be at least 6 characters long"),
@@ -34,24 +39,52 @@ const SignupPage = () => {
 
   const onSubmit = (values) => {
     console.log(values);
+    // This will not check if there is an issue with singup
+    fetch("http://localhost:5000/api/createAccount", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    });
   };
 
   return (
     <body className="waveBg">
       <div className="signup-container">
-        <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={onSubmit}>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
           {({ errors, touched }) => (
             <Form className="loginForm">
               <h1 className="loginH1">Sign Up</h1>
               <div className="loginForm-group">
-                <label htmlFor="name" className="caption">
-                  Full Name:
+                <label htmlFor="firstName" className="caption">
+                  First Name:
                 </label>
                 <Field
                   type="text"
-                  id="name"
-                  name="name"
-                  className={`loginForm-control ${errors.name && touched.name ? "is-invalid" : ""}`}
+                  id="firstName"
+                  name="firstName"
+                  className={`loginForm-control ${
+                    errors.name && touched.lastName ? "is-invalid" : ""
+                  }`}
+                />
+                <ErrorMessage name="name" component="div" className="error" />
+              </div>
+              <div className="loginForm-group">
+                <label htmlFor="lastName" className="caption">
+                  Last Name:
+                </label>
+                <Field
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  className={`loginForm-control ${
+                    errors.name && touched.firstName ? "is-invalid" : ""
+                  }`}
                 />
                 <ErrorMessage name="name" component="div" className="error" />
               </div>
@@ -63,7 +96,9 @@ const SignupPage = () => {
                   type="email"
                   id="email"
                   name="email"
-                  className={`loginForm-control ${errors.email && touched.email ? "is-invalid" : ""}`}
+                  className={`loginForm-control ${
+                    errors.email && touched.email ? "is-invalid" : ""
+                  }`}
                 />
                 <ErrorMessage name="email" component="div" className="error" />
               </div>
@@ -75,9 +110,15 @@ const SignupPage = () => {
                   type="password"
                   id="password"
                   name="password"
-                  className={`loginForm-control ${errors.password && touched.password ? "is-invalid" : ""}`}
+                  className={`loginForm-control ${
+                    errors.password && touched.password ? "is-invalid" : ""
+                  }`}
                 />
-                <ErrorMessage name="password" component="div" className="error" />
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="error"
+                />
               </div>
               <div className="loginForm-group">
                 <label htmlFor="confirmPassword" className="caption">
@@ -88,10 +129,16 @@ const SignupPage = () => {
                   id="confirmPassword"
                   name="confirmPassword"
                   className={`loginForm-control ${
-                    errors.confirmPassword && touched.confirmPassword ? "is-invalid" : ""
+                    errors.confirmPassword && touched.confirmPassword
+                      ? "is-invalid"
+                      : ""
                   }`}
                 />
-                <ErrorMessage name="confirmPassword" component="div" className="error" />
+                <ErrorMessage
+                  name="confirmPassword"
+                  component="div"
+                  className="error"
+                />
               </div>
               <div className="loginForm-group">
                 <label htmlFor="avatar" className="caption">
@@ -101,10 +148,12 @@ const SignupPage = () => {
                   type="file"
                   id="avatar"
                   name="avatar"
-                  className={`loginForm-control ${errors.avatar && touched.avatar ? "is-invalid" : ""}`}
+                  className={`loginForm-control ${
+                    errors.avatar && touched.avatar ? "is-invalid" : ""
+                  }`}
                 />
                 <ErrorMessage name="avatar" component="div" className="error" />
-            </div>
+              </div>
               <button type="submit" className="submit-button">
                 Sign Up
               </button>
