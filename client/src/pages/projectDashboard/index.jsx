@@ -1,4 +1,4 @@
-import React, { Component} from "react";
+import React, { Component, useState, } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { FaBell } from "react-icons/fa";
@@ -15,7 +15,19 @@ import DonutChart from "./DonutChart";
 import {Doughnut} from 'react-chartjs-2';
 import SemiCircleProgressBar from "react-progressbar-semicircle";
 import {Chart, ArcElement, Tooltip, Legend} from 'chart.js'
-
+import { Button } from "react-bootstrap";
+import {CgUserRemove} from 'react-icons/cg';
+import Modal from 'react-bootstrap/Modal';
+import {GrClose} from 'react-icons/gr';
+import {
+  Box,
+  TextField,
+  useMediaQuery,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import GanttChart from "./gantt";
+// import GanttChart from "../gantt";
 Chart.register(ArcElement);
 Chart.register([Tooltip])
 Chart.register([Legend])
@@ -50,25 +62,45 @@ const ProjectDashboard = () => {
       'rgba(255,255,0,1)',
     ];
 
-    const labelsBudget = ['Used', 'Available'];
-    const dataBudget = [8,14];
-    const backgroundColorBudget = [
+    const labelsTime = ['Remaining', 'Total'];
+    const dataTime = [8,14];
+    const backgroundColorTime = [
       'rgba(255,0,0,1)',
       'rgba(255,128,0,1)',
     ];
 
     const teamMembers = [
       {
+        id: "1",
         name:"Jane Arnold",
         image:"http://localhost:5000/assets/jane.jpg",
         skills:["Python","React"],
         suitabilityScore:0
       },{ 
+        id: "2",
         name:"Jane Arnold",
         image:"http://localhost:5000/assets/jane.jpg",
         skills:["Python","React"],
         suitabilityScore:0
       }];
+
+    const [showDelete, setShowDelete] = useState(false);
+    const [removeUserId, setRemoveUserId] = useState();
+
+
+    const handleDeleteClose = () => {
+      setShowDelete(false);
+    }
+    const handleDeleteShow = (e) => {
+      setRemoveUserId(e.target.value);
+      setShowDelete(true);
+    }
+  
+    const deleteFeature = (e) => {
+      console.log("delete this");
+      console.log(removeUserId);
+      setShowDelete(false);
+    }
     
       
 
@@ -112,30 +144,29 @@ const ProjectDashboard = () => {
         </div>
 
         <div className="infoBox project">
-          <div className="metricTitle">Budget Left</div>
+          <div className="metricTitle">Time Left</div>
             <div className="metricDonutContainer smaller1">
-              <DonutChart chartData={dataBudget} labels={labelsBudget} border={borderColorRisk} backgroundColor={backgroundColorBudget} cutOut={60}/>
+              <DonutChart chartData={dataTime} labels={labelsTime} border={borderColorRisk} backgroundColor={backgroundColorTime} cutOut={60}/>
             <div className="donutText">
-              <p>£1999</p>
+              <p>5 days</p>
             </div>
           </div>
         </div>
 
         <div className="infoBox2 projectTable feature">
           <div className="metricTitle2">Features</div>
-          <Table />
+          <Table/>
         </div>
 
         <div className="infoBox2">
           <Scrollbars>
             <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Team members</div>
             {teamMembers.map((member,index)=>{
-              console.log("ff");
-              console.log(member.image);
               const imageUrl = member.image;
               return(
               <div className="projectDashboardProfile">
                 <p className="projectDashboardProfileName">{member.name}</p>
+
                 <div className="projectDashboardProfilePic">
                   <img key={index} className='profilePic' style={{marginLeft:"0px"}} src={imageUrl}></img>
                 </div>
@@ -158,6 +189,11 @@ const ProjectDashboard = () => {
                 <div className="projectDashboardSkillMatchTitle">
                   <p><b className="projectDashboardBold">Bio:</b> Hi, my name is Jane and I am a software developer</p> 
                 </div>
+                <div className="featureDeleteTasksButtonDiv">
+                  <button type="submit" id={member.id} name={member.id} value={member.id} onClick={handleDeleteShow} className="featureDeleteTasksButton removeUser" style={{width:"40px"}} >
+                    Remove
+                  </button>
+                </div>
                 {/* <SemiCircleProgressBar diameter={200} strokeWidth={30} percentage={33} showPercentValue /> */}
               </div>
               )
@@ -165,20 +201,74 @@ const ProjectDashboard = () => {
             
           </Scrollbars>
       </div>
+      
+      <div className="infoBox2 gantt">
+          <div className="metricTitle2"><p>Gannt Chart</p>
+          <div class="chart-controls">
+            <p>Change Chart Timescale</p>
+            <div class="button-cont">
+                <button id="day-btn" className="featureViewTasksButton" style={{marginLeft:"10px"}}>
+                    Day
+                </button>
+
+                <button id="week-btn" className="featureViewTasksButton" style={{marginLeft:"10px"}}>
+                    Week
+                </button>
+
+                <button id="month-btn" className="featureViewTasksButton" style={{marginLeft:"10px"}}>
+                    Month
+                </button>
+            </div>
+          </div>
+          </div>
+          <div className="ganttContainer">
+            <GanttChart/>
+          </div>
+      </div>
+      
       </div>
 
-      {/* <div className='icon'>
-                    <FaBell />
-                </div>
-                <div className="number">`
-                    <p>50</p>
-                </div>
-                <div className="metric">
-                    <p>Notifications</p>
-                </div> */}
-      {/* <ProjectComponent/>
-            <ProjectComponent/>
-            <ProjectComponent/> */}
+      
+      <Modal className="addProfileModal" style={{"marginTop":"200px"}} fade={false} show={showDelete} onHide={handleDeleteClose}>
+            <Modal.Header>
+            <div className="bugFormClose" onClick={handleDeleteClose}>
+                <GrClose />
+            </div>
+            <Modal.Title>Remove team member</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            
+            <p>Are you would you would like to remove Jane from the team?</p>
+            <Box>
+              <Button
+                className="bugCancelButton"
+                fullWidth
+                sx={{
+                  m: "2rem 1rem",
+                  p: "1rem",
+                }}
+                style={{marginLeft: "10px"}}
+                onClick={deleteFeature}
+              >
+                {"Remove"}
+              </Button>
+
+              <Button
+                className="bugAddButton"
+                fullWidth
+                onClick={handleDeleteClose}
+                sx={{
+                  m: "2rem 1rem",
+                  p: "1rem",
+                }}
+              >
+                {"Cancel"}
+              </Button>
+            </Box>
+
+            </Modal.Body>
+        </Modal>
+      
     </div>
   );
 };

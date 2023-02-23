@@ -10,6 +10,7 @@ import Modal from 'react-bootstrap/Modal';
 import {GrClose} from 'react-icons/gr';
 import EditProfileForm from './editProfileForm';
 import ProjectDashboard from '../projectDashboard';
+import TaskDashboard from '../viewTask';
 const Admin = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleOverlay = () =>{
@@ -59,6 +60,7 @@ const Admin = () => {
               <Route path="/managedprojects" element={<ManagedProjects />} />
               <Route path="/bugs" element={<Bugs />} />
               <Route path="/projects/:projectId" element={<ProjectDashboard/> }/>
+              <Route path="/viewtasks/:taskId" element={<TaskDashboard/> }/>
           </Routes>
         </div>
       </div>

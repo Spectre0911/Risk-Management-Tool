@@ -84,5 +84,4 @@ const LoginPage = () => {
     </body>
   );
 };
-
 export default LoginPage;
