@@ -60,7 +60,7 @@ const Admin = () => {
               <Route path="/managedprojects" element={<ManagedProjects />} />
               <Route path="/bugs" element={<Bugs />} />
               <Route path="/projects/:projectId" element={<ProjectDashboard/> }/>
-              <Route path="/viewtasks/:taskId" element={<TaskDashboard/> }/>
+              <Route path="/viewtasks/:featureId" element={<TaskDashboard/> }/>
           </Routes>
         </div>
       </div>

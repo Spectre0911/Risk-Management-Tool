@@ -85,6 +85,7 @@ const ProjectDashboard = () => {
       }];
 
     const [showDelete, setShowDelete] = useState(false);
+    const [ganttViewState, setGanttViewState] = useState("Week");
     const [removeUserId, setRemoveUserId] = useState();
 
 
@@ -100,6 +101,10 @@ const ProjectDashboard = () => {
       console.log("delete this");
       console.log(removeUserId);
       setShowDelete(false);
+    }
+
+    const changeGanttViewState = (e) =>{
+      setGanttViewState(e.target.value);
     }
     
       
@@ -202,27 +207,27 @@ const ProjectDashboard = () => {
           </Scrollbars>
       </div>
       
-      <div className="infoBox2 gantt">
+      <div className="infoBox2 ganttChart">
           <div className="metricTitle2"><p>Gannt Chart</p>
-          <div class="chart-controls">
-            <p>Change Chart Timescale</p>
-            <div class="button-cont">
-                <button id="day-btn" className="featureViewTasksButton" style={{marginLeft:"10px"}}>
+          <div className="chart-controls">
+            <p>Change Chart Timescale: </p>
+            <div className="button-cont">
+                <button id="day-btn" type="submit" className="featureViewTasksButton" value="Day" onClick={changeGanttViewState} style={{marginLeft:"10px"}}>
                     Day
                 </button>
 
-                <button id="week-btn" className="featureViewTasksButton" style={{marginLeft:"10px"}}>
+                <button id="week-btn" type="submit" className="featureViewTasksButton" value="Week" onClick={changeGanttViewState} style={{marginLeft:"10px"}}>
                     Week
                 </button>
 
-                <button id="month-btn" className="featureViewTasksButton" style={{marginLeft:"10px"}}>
+                <button id="month-btn" type="submit" className="featureViewTasksButton" value="Month" onClick={changeGanttViewState} style={{marginLeft:"10px"}}>
                     Month
                 </button>
             </div>
           </div>
           </div>
           <div className="ganttContainer">
-            <GanttChart/>
+            <GanttChart viewMode={ganttViewState}/>
           </div>
       </div>
       

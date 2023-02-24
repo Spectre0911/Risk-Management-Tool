@@ -23,7 +23,7 @@ import "./index.css";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 
-const EditProfileForm = ({ handleClose, featureId}) => {
+const EditProfileForm = ({ handleClose, featureId, mode}) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
   
@@ -72,6 +72,8 @@ const EditProfileForm = ({ handleClose, featureId}) => {
     setDependencies(e);
   };
 
+
+
   const priorityOptions = [
     {value: '1', label:"Core"}, 
     {value: '2', label:"Optional"},
@@ -84,13 +86,25 @@ const EditProfileForm = ({ handleClose, featureId}) => {
     setPriority(e);
   }
 
+  const teamMembers = [
+    {value: '1', label:"Jane Arnold"}, 
+    {value: '2', label:"Joshua"},
+    {value: '3', label:"Morgan"}
+  ];
+
+  const handleUserChange = (e) => {
+    setUser(e);
+  };
+
+  const [user, setUser] = useState({value: '3', label:"Morgan"});
+
 
 
 
   return (
     <Formik
       onSubmit={handleFormSubmit}
-      initialValues={initialValuesRegister}
+      initialValues={mode ? initialValuesRegister: {}}
       validationSchema={reportBugSchema}
     >
       {({
@@ -170,6 +184,18 @@ const EditProfileForm = ({ handleClose, featureId}) => {
                     onChange={handleDependencyChange}
                     style={{ gridColumn: "span 3", width:"70%"}}
                 />
+
+                <p style={{ gridColumn: "span 1", margin:'auto', paddingRight:'20px'}}>Assign to:</p>
+                <Select
+                    defaultValue={user}
+                    label="Users"
+                    name="Users"
+                    options={teamMembers}
+                    className="defineDependenciesBox"
+                    classNamePrefix="select"
+                    onChange={handleUserChange}
+                    style={{ gridColumn: "span 3", width:"70%"}}
+                />
                 
                 <p style={{ gridColumn: "span 1", margin:'auto', paddingRight:'20px'}}>Start:</p>
                 <TextField
@@ -228,6 +254,7 @@ const EditProfileForm = ({ handleClose, featureId}) => {
         </form>
       )}
     </Formik>
+    
   );
 };
 
