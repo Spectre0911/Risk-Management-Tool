@@ -73,13 +73,26 @@ class GanttChart extends Component {
     taskCopy.push(newTask);
     this.setState({ tasks: taskCopy });
   };
+
+
+
   render() {
     return (
       <div>
         <FrappeGantt
           tasks={this.state.tasks}
-          viewMode={"Week"}
+          viewMode={this.props.viewMode}
           onClick={(task) => console.log(task)}
+          customPopupHtml={(task) =>{
+            return (
+              <div class="details-container">
+                <h5>${task.name}</h5>
+                <p>Task started on: ${task._start.getDate()}</p>
+                <p>Expected to finish by ${task._start.getDate()}</p>
+                <p>${task.progress}% completed!</p>
+              </div>
+            );}}       
+
           onDateChange={(task, start, end) => console.log(task, start, end)}
           onProgressChange={(task, progress) => console.log(task, progress)}
           onTasksChange={(tasks) => console.log(tasks)}

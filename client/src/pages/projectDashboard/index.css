@@ -268,18 +268,25 @@
     width: 50vw;
     position: absolute;
     right: 0px;
+    margin-top: -10px;
 }
 .button-cont > button{
     display: inline-block;
+    font-size: 15px;
 }
 .chart-controls > p {
-    font-size: 1.2rem;
+    font-size: 17px;
     font-weight: 500;
     display: inline-block;
+    position: absolute;
+    right: 205px;
+    margin-top: 10px;
 }
 
 .button-cont{
     display: inline;
+    position: absolute;
+    right: 20px;
 }
 
 .metricTitle2>p{
@@ -295,10 +302,15 @@
     margin: auto;
 }
 
-.infoBox2.gantt{
-    width: 96% !important;
+.infoBox2.ganttChart{
+    width: 98%;
     margin-bottom: 100px;
 }
+
+@media (min-width: 1350px){
+    .infoBox2.ganttChart {
+        width: 96% !important;
+    }}
 
 .ganttContainer{
     height: 100%;
@@ -314,6 +326,44 @@
 
 .ganttContainer > div > div{
     overflow: unset !important;
+    width: 105%;
+}
+
+@media (min-width: 1350px){
+    .ganttContainer > div > div{
+        overflow: unset !important;
+        width: 98%;
+    }
+}
+
+.gantt-container .popup-wrapper {
+    width: 200px !important;
+    padding: 0 5px !important;
+}
+
+.gantt{
+  pointer-events:none
+}
+
+.gantt .bar {
+    fill: #3bdff5 !important;
+}
+.gantt .bar-progress {
+    fill: #a3a2ff !important;
+}
+
+.gantt .bar-label {
+    fill: rgb(0, 0, 0) !important;
+    font-weight: 700 !important;
+}
+
+.gantt .arrow {
+    stroke: royalblue !important;
+    stroke-width: 2.8px !important;
+}
+
+.gantt .tick {
+    stroke: #003cff;
 }
 /* .gantt{
     width: 100% !important;
