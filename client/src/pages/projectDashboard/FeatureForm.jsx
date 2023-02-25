@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { FaBell } from "react-icons/fa";
@@ -27,6 +27,41 @@ import { createGrid } from "@mui/system";
 const EditProfileForm = ({ handleClose, featureId }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
+  // const dependencyOptions = [
+  //   { value: "1", label: "Login Screen" },
+  //   { value: "2", label: "Render Screen" },
+  //   { value: "3", label: "Rendering Screen" },
+  // ];
+
+  const [dependencies, setDependencies] = useState([]);
+  const [dependencyOptions, setDependencyOptions] = useState([
+    { value: "1", label: "Login Screen" },
+    { value: "2", label: "Render Screen" },
+    { value: "3", label: "Rendering Screen" },
+  ]);
+
+  useEffect(() => {
+    const getAllFeatures = (values) => {
+      fetch("http://localhost:5000/api/features", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          const outputList = data.map((inputObj, index) => ({
+            value: `${index + 1}$`,
+            label: inputObj.featurename,
+          }));
+          setDependencyOptions(outputList);
+        });
+    };
+    getAllFeatures({ projectid: 1 });
+  }, []);
 
   const reportBugSchema = yup.object().shape({
     name: yup.string().required("required"),
@@ -39,8 +74,8 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   const initialValuesRegister = {
     name: "feature name",
     description: "Add login screen",
-    startTime: "2017-05-24",
-    endTime: "2017-05-24",
+    startTime: "2023-05-24",
+    endTime: "2023-05-24",
     difficulty: "0",
   };
 
@@ -55,6 +90,7 @@ const EditProfileForm = ({ handleClose, featureId }) => {
       currentRisk: 0,
       progress: 0,
       difficulty: values.difficulty,
+      dependencies,
     };
     console.log(values);
     console.log(dependencies);
@@ -62,18 +98,6 @@ const EditProfileForm = ({ handleClose, featureId }) => {
 
     createFeature(newValues);
   };
-
-  /*
-    req.body.projectid,
-        req.body.featurename,
-        req.body.startTime,
-        req.body.endTime,
-        req.body.completed,
-        req.body.priority,
-        req.body.currentRisk,
-        req.body.progress,
-        req.body.difficulty,
-*/
 
   const createFeature = (values) => {
     fetch("http://localhost:5000/api/createFeature", {
@@ -91,18 +115,13 @@ const EditProfileForm = ({ handleClose, featureId }) => {
       });
   };
 
-  const dependencyOptions = [
-    { value: "1", label: "Login Screen" },
-    { value: "2", label: "Render Screen" },
-    { value: "3", label: "Rendering Screen" },
-  ];
-
-  const [dependencies, setDependencies] = useState([
-    { value: "1", label: "Login Screen" },
-  ]);
-
   const handleDependencyChange = (e) => {
-    setDependencies(e);
+    const chosenDependencies = dependencies;
+    chosenDependencies.push(e);
+    setDependencies(chosenDependencies);
+    console.log(chosenDependencies);
+
+    console.log(dependencyOptions);
   };
 
   const priorityOptions = [
@@ -207,17 +226,19 @@ const EditProfileForm = ({ handleClose, featureId }) => {
                     paddingRight: "20px",
                   }}
                 >
-                  Dependencies:
+                  Dependencies {dependencyOptions.length}:
                 </p>
+
                 <Select
-                  defaultValue={dependencies}
-                  label="Dependencies"
-                  isMulti
-                  name="Dependencies"
+                  id="Dependencies"
+                  isMulti={true}
+                  name="dependencies"
                   options={dependencyOptions}
                   className="defineDependenciesBox"
                   classNamePrefix="select"
-                  onChange={handleDependencyChange}
+                  onChange={(e) => {
+                    console.log(e);
+                  }}
                   style={{ gridColumn: "span 3", width: "70%" }}
                 />
 
