@@ -22,6 +22,7 @@ import {
 import "./index.css";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
+import { createGrid } from "@mui/system";
 
 const EditProfileForm = ({ handleClose, featureId }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
@@ -44,24 +45,39 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
+    const newValues = {
+      projectid: 1,
+      featureName: values.name,
+      startTime: values.startTime,
+      endTime: values.endTime,
+      completed: false,
+      priority: priority.value,
+      currentRisk: 0,
+      progress: 0,
+      difficulty: values.difficulty,
+    };
     console.log(values);
-    console.log("ddd");
-    console.log(featureId);
-    // try {
-    //   const body = { values };
-    //   const response = await fetch("http://localhost:5000/addbug", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(body),
-    //   });
-    // } catch (err) {
-    //   console.error(err.message);
-    // }
+    console.log(dependencies);
+    console.log(priority);
+
+    createFeature(newValues);
   };
 
-  const getAllFeatures = (values) => {
-    fetch("http://localhost:5000/api/features", {
-      method: "GET",
+  /*
+    req.body.projectid,
+        req.body.featurename,
+        req.body.startTime,
+        req.body.endTime,
+        req.body.completed,
+        req.body.priority,
+        req.body.currentRisk,
+        req.body.progress,
+        req.body.difficulty,
+*/
+
+  const createFeature = (values) => {
+    fetch("http://localhost:5000/api/createFeature", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
