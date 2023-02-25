@@ -153,6 +153,7 @@ create or replace function nullifyuser() returns trigger as $$
 begin
     update tasks set devid = null where devid = old.userid;
     update bugs set devid = null where devid = old.userid;
+    return old;
 end;
 $$ language plpgsql;
 
@@ -178,6 +179,8 @@ begin
     if (projectend < new.endtime) then
         raise exception 'Feature deadline too late for this project';
     end if;
+
+    return new;
 end;
 $$ language plpgsql;
 
@@ -203,6 +206,8 @@ begin
     if (featureend < new.endtime) then
         raise exception 'Task deadline too late for this feature';
     end if;
+
+    return new;
 end;
 $$ language plpgsql;
 
@@ -223,6 +228,8 @@ begin
     if (featurestart < depdeadline) then
         raise exception 'Feature cannot start before its dependency is completed';
     end if;
+    
+    return new;
 end;
 $$ language plpgsql;
 
