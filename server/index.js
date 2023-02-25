@@ -115,19 +115,56 @@ app.post("/api/login", async (req, postResult) => {
   }
 });
 
-//get all todos
-
-app.get("/todos", async (req, res) => {
+// Create feature
+app.post("/api/createFeature", async (req, res) => {
   try {
-    const allTodos = await pool.query("SELECT * FROM todo");
-    res.json(allTodos.rows);
+    console.log(req.body);
+
+    const createFeature = await pool.query(
+      "INSERT INTO features (projectid, featurename, starttime, endtime, completed, priority, currentrisk, progress) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *",
+      [
+        req.body.projectid,
+        req.body.featureName,
+        req.body.startTime,
+        req.body.endTime,
+        req.body.completed,
+        req.body.priority,
+        req.body.currentRisk,
+        req.body.progress,
+      ]
+    );
+
+    res.json("finished");
   } catch (err) {
+    console.log("error");
+    console.error(err.message);
+  }
+});
+
+//get all features
+app.post("/api/features", async (req, postRes) => {
+  try {
+    console.log("Hello");
+
+    const allFeatures = await pool.query(
+      "SELECT * FROM features WHERE projectid = $1",
+      [req.body.projectid]
+    );
+    console.log(allFeatures.rows.length);
+    if (allFeatures.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      postRes.json(allFeatures.rows);
+    }
+    console.log("Hello");
+  } catch (err) {
+    console.log("Hello");
+
     console.error(err.message);
   }
 });
 
 //get a todo
-
 app.get("/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;

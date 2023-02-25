@@ -8,7 +8,6 @@ import "@fontsource/montserrat";
 import InputTodo from "./components/InputTodo";
 import ListTodos from "./components/ListTodos";
 import Admin from "./pages/admin";
-import GanttChart from "./pages/gantt";
 import { useMemo } from "react";
 import { themeSettings } from "./theme";
 import { createTheme } from "@mui/material/styles";

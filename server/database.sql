@@ -148,7 +148,7 @@ create table projectskill (
     foreign key (skill) references skills(skill) on delete cascade
 );
 
--- When user is deleted, change this user's ID to null in other tables
+
 create or replace function nullifyuser() returns trigger as $$
 begin
     update tasks set devid = null where devid = old.userid;
