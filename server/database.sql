@@ -13,6 +13,7 @@ create table users (
     pfppath     varchar(300) default null,
     githubtoken varchar(100) default null,
     bio         varchar(300) default null,
+    guideseen   boolean not null default false,
     primary key (userid)
 );
 
@@ -45,10 +46,12 @@ create table features (
     featureid   serial not null,
     projectid   integer not null,
     featurename varchar(50) not null,
+    featuredesc varchar(300),
     starttime   timestamp not null check (starttime >= current_date),
     endtime     timestamp not null,
     check (endtime > starttime),
     completed   boolean not null default false,
+    difficulty  integer not null check (difficulty >=1 and difficulty <= 10),
     priority    integer not null check (priority >= 1 and priority <= 3),
     currentrisk integer not null check (currentrisk >= 0 and currentrisk <= 100),
     progress    integer not null check (progress >= 0 and progress <= 100),
@@ -145,84 +148,91 @@ create table projectskill (
     foreign key (skill) references skills(skill) on delete cascade
 );
 
--- When user is deleted, change this user's ID to null in other tables
--- create or replace function nullifyuser() returns trigger as $$
--- begin
---     update tasks set devid = null where devid = old.userid;
---     update bugs set devid = null where devid = old.userid;
--- end;
--- $$ language plpgsql;
 
--- create trigger userdeleted after delete on users
--- for each statement
---     execute procedure nullifyuser();
+create or replace function nullifyuser() returns trigger as $$
+begin
+    update tasks set devid = null where devid = old.userid;
+    update bugs set devid = null where devid = old.userid;
+    return old;
+end;
+$$ language plpgsql;
 
--- -- Check that feature's start times and deadlines compatible with those of the project
--- create or replace function featuretimes() returns trigger as $$
--- declare
---     projectstart timestamp; -- Start time of project
---     projectend timestamp;   -- Project deadline
--- begin
---     select opened from projects where projectid = new.projectid into projectstart;
---     select deadline from projects where projectid = new.projectid into projectend;
+create trigger userdeleted after delete on users
+for each statement
+    execute procedure nullifyuser();
 
---     -- Project start time cannot be later than feature start time
---     if (projectstart > new.starttime) then
---         raise exception 'Feature start time too early for this project';
---     end if;
+-- Check that feature's start times and deadlines compatible with those of the project
+create or replace function featuretimes() returns trigger as $$
+declare
+    projectstart timestamp; -- Start time of project
+    projectend timestamp;   -- Project deadline
+begin
+    select opened from projects where projectid = new.projectid into projectstart;
+    select deadline from projects where projectid = new.projectid into projectend;
 
---     -- Project deadline cannot be before feature deadline
---     if (projectend < new.endtime) then
---         raise exception 'Feature deadline too late for this project';
---     end if;
--- end;
--- $$ language plpgsql;
+    -- Project start time cannot be later than feature start time
+    if (projectstart > new.starttime) then
+        raise exception 'Feature start time too early for this project';
+    end if;
 
--- create trigger newfeature before insert on features
--- for each statement
---     execute procedure featuretimes();
+    -- Project deadline cannot be before feature deadline
+    if (projectend < new.endtime) then
+        raise exception 'Feature deadline too late for this project';
+    end if;
 
--- -- Check that task's start times and deadlines compatible with those of the feature
--- create or replace function tasktimes() returns trigger as $$
--- declare
---     featurestart timestamp; -- Start time of feature
---     featureend timestamp;   -- Feature deadline
--- begin
---     select starttime from features where featureid = new.featureid into featurestart;
---     select endtime from features where featureid = new.featureid into featureend;
+    return new;
+end;
+$$ language plpgsql;
 
---     -- Feature start time cannot be after task start time
---     if (featurestart > new.starttime) then
---         raise exception 'Task start time too early for this feature';
---     end if;
+create trigger newfeature before insert on features
+for each statement
+    execute procedure featuretimes();
 
---     -- Feature deadline cannot be before task deadline
---     if (featureend < new.endtime) then
---         raise exception 'Task deadline too late for this feature';
---     end if;
--- end;
--- $$ language plpgsql;
+-- Check that task's start times and deadlines compatible with those of the feature
+create or replace function tasktimes() returns trigger as $$
+declare
+    featurestart timestamp; -- Start time of feature
+    featureend timestamp;   -- Feature deadline
+begin
+    select starttime from features where featureid = new.featureid into featurestart;
+    select endtime from features where featureid = new.featureid into featureend;
 
--- create trigger newtask before insert on tasks
--- for each statement
---     execute procedure tasktimes();
+    -- Feature start time cannot be after task start time
+    if (featurestart > new.starttime) then
+        raise exception 'Task start time too early for this feature';
+    end if;
 
--- -- Check that dependency deadlines are compatible
--- create or replace function checkdep() returns trigger as $$
--- declare
---     featurestart timestamp; -- Start time of feature
---     depdeadline timestamp;  -- Deadline of feature's dependency
--- begin
---     select starttime from features where featureid = new.featureid into featurestart;
---     select endtime from features where featureid = new.depid into depdeadline;
+    -- Feature deadline cannot be before task deadline
+    if (featureend < new.endtime) then
+        raise exception 'Task deadline too late for this feature';
+    end if;
 
---     -- Feature start time cannot be before its dependency's deadline
---     if (featurestart < depdeadline) then
---         raise exception 'Feature cannot start before its dependency is completed';
---     end if;
--- end;
--- $$ language plpgsql;
+    return new;
+end;
+$$ language plpgsql;
 
--- create trigger newdep before insert on featuredep
--- for each statement
---     execute procedure checkdep();
+create trigger newtask before insert on tasks
+for each statement
+    execute procedure tasktimes();
+
+-- Check that dependency deadlines are compatible
+create or replace function checkdep() returns trigger as $$
+declare
+    featurestart timestamp; -- Start time of feature
+    depdeadline timestamp;  -- Deadline of feature's dependency
+begin
+    select starttime from features where featureid = new.featureid into featurestart;
+    select endtime from features where featureid = new.depid into depdeadline;
+
+    -- Feature start time cannot be before its dependency's deadline
+    if (featurestart < depdeadline) then
+        raise exception 'Feature cannot start before its dependency is completed';
+    end if;
+    
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger newdep before insert on featuredep
+for each statement
+    execute procedure checkdep();
