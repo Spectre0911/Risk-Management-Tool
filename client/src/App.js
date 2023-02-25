@@ -30,7 +30,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/*" element={<Admin />} />
-            <Route path="/ganttChart" element={<GanttChart />} />
+
+            {/* <Route path="/ganttChart" element={<GanttChart />} /> */}
           </Routes>
         </ThemeProvider>
       </BrowserRouter>
