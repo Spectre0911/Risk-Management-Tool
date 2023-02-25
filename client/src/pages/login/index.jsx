@@ -39,15 +39,18 @@ const LoginPage = () => {
                 return response.json();
               })
               .then((data) => {
-                dispatch(loginAction(data.email));
-                console.log(emailSelector);
+                console.log(data);
+                if (data.loggedIn) {
+                  dispatch(loginAction(data.email));
+                  navigate("/admin");
+                } else {
+                  setErrors({
+                    email: " ",
+                    password: "Invalid email or password",
+                  });
+                }
               });
 
-            // if (values.email === "admin" && values.password === "password") {
-            //   navigate("/admin");
-            // } else {
-            //   setErrors({ email: " ", password: "Invalid email or password" });
-            // }
             setSubmitting(false);
           }}
         >
@@ -106,4 +109,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
