@@ -27,18 +27,9 @@ import { createGrid } from "@mui/system";
 const EditProfileForm = ({ handleClose, featureId }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
-  // const dependencyOptions = [
-  //   { value: "1", label: "Login Screen" },
-  //   { value: "2", label: "Render Screen" },
-  //   { value: "3", label: "Rendering Screen" },
-  // ];
 
   const [dependencies, setDependencies] = useState([]);
-  const [dependencyOptions, setDependencyOptions] = useState([
-    { value: "1", label: "Login Screen" },
-    { value: "2", label: "Render Screen" },
-    { value: "3", label: "Rendering Screen" },
-  ]);
+  const [dependencyOptions, setDependencyOptions] = useState([]);
 
   useEffect(() => {
     const getAllFeatures = (values) => {
@@ -53,11 +44,13 @@ const EditProfileForm = ({ handleClose, featureId }) => {
           return response.json();
         })
         .then((data) => {
-          const outputList = data.map((inputObj, index) => ({
-            value: `${index + 1}$`,
-            label: inputObj.featurename,
-          }));
-          setDependencyOptions(outputList);
+          if (data != null) {
+            const outputList = data.map((inputObj, index) => ({
+              value: `${index + 1}`,
+              label: inputObj.featurename,
+            }));
+            setDependencyOptions(outputList);
+          }
         });
     };
     getAllFeatures({ projectid: 1 });
@@ -72,14 +65,15 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   });
 
   const initialValuesRegister = {
-    name: "feature name",
-    description: "Add login screen",
+    name: "Task",
+    description: "Description",
     startTime: "2023-05-24",
     endTime: "2023-05-24",
-    difficulty: "0",
+    difficulty: "1",
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
+    // console.log(dependencies);
     const newValues = {
       projectid: 1,
       featureName: values.name,
@@ -90,11 +84,8 @@ const EditProfileForm = ({ handleClose, featureId }) => {
       currentRisk: 0,
       progress: 0,
       difficulty: values.difficulty,
-      dependencies,
+      dependencies: dependencies,
     };
-    console.log(values);
-    console.log(dependencies);
-    console.log(priority);
 
     createFeature(newValues);
   };
@@ -119,9 +110,6 @@ const EditProfileForm = ({ handleClose, featureId }) => {
     const chosenDependencies = dependencies;
     chosenDependencies.push(e);
     setDependencies(chosenDependencies);
-    console.log(chosenDependencies);
-
-    console.log(dependencyOptions);
   };
 
   const priorityOptions = [
@@ -236,9 +224,7 @@ const EditProfileForm = ({ handleClose, featureId }) => {
                   options={dependencyOptions}
                   className="defineDependenciesBox"
                   classNamePrefix="select"
-                  onChange={(e) => {
-                    console.log(e);
-                  }}
+                  onChange={handleDependencyChange}
                   style={{ gridColumn: "span 3", width: "70%" }}
                 />
 

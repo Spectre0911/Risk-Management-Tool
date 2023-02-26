@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { FrappeGantt, Task } from "frappe-gantt-react";
-
+import { getAllDependencies } from "../services/AllDependencies";
 const GanttChart = () => {
   const [tasks, setTasks] = useState([{}]);
 
   useEffect(() => {
     const getAllFeatures = (values) => {
+      var outputList = [];
       fetch("http://localhost:5000/api/features", {
         method: "POST",
         headers: {
@@ -18,21 +19,44 @@ const GanttChart = () => {
         })
         .then((data) => {
           if (data != null) {
-            const outputList = data.map((inputObj, index) => ({
-              id: `Task ${index + 1}$`,
-              name: inputObj.featurename,
-              start: new Date(inputObj.starttime).toISOString().split("T")[0],
-              end: new Date(inputObj.endtime).toISOString().split("T")[0],
-              progress: inputObj.progress,
-              // dependencies: inputObj.dependencies,
-            }));
-            setTasks(outputList);
+            let featureDepMap = new Map();
+            let promises = [];
+
+            for (let i = 0; i < data.length; i++) {
+              let currentFeatureId = data[i].featureid;
+              let promise = getAllDependencies({ featureid: currentFeatureId })
+                .then((dependencyIds) => {
+                  featureDepMap.set(currentFeatureId, dependencyIds);
+                })
+                .catch((error) => {
+                  featureDepMap.set(currentFeatureId, []);
+                });
+              promises.push(promise);
+            }
+
+            Promise.all(promises)
+              .then(() => {
+                console.log(featureDepMap.get(3).join(","));
+                outputList = data.map((inputObj, index) => ({
+                  id: inputObj.featureid,
+                  name: inputObj.featurename,
+                  start: new Date(inputObj.starttime)
+                    .toISOString()
+                    .split("T")[0],
+                  end: new Date(inputObj.endtime).toISOString().split("T")[0],
+                  progress: inputObj.progress,
+                  dependencies: featureDepMap.get(inputObj.featureid).join(","),
+                }));
+                console.log(outputList);
+                setTasks(outputList);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
           }
         });
     };
     getAllFeatures({ projectid: 1 });
-    // console.log("Current tasks");
-    // console.log(tasks);
   }, []);
 
   return (
@@ -41,16 +65,6 @@ const GanttChart = () => {
         tasks={tasks}
         viewMode={"Week"}
         onClick={(task) => console.log(task)}
-        customPopupHtml={(task) => {
-          return (
-            <div class="details-container">
-              <h5>${task.name}</h5>
-              <p>Task started on: ${task._start.getDate()}</p>
-              <p>Expected to finish by ${task._start.getDate()}</p>
-              <p>${task.progress}% completed!</p>
-            </div>
-          );
-        }}
         onDateChange={(task, start, end) => console.log(task, start, end)}
         onProgressChange={(task, progress) => console.log(task, progress)}
         onTasksChange={(tasks) => console.log(tasks)}
