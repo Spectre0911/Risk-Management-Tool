@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { FaBell } from "react-icons/fa";
@@ -22,10 +22,39 @@ import {
 import "./index.css";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
+import { createGrid } from "@mui/system";
 
 const EditProfileForm = ({ handleClose, featureId }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
+
+  const [dependencies, setDependencies] = useState([]);
+  const [dependencyOptions, setDependencyOptions] = useState([]);
+
+  useEffect(() => {
+    const getAllFeatures = (values) => {
+      fetch("http://localhost:5000/api/features", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+        .then((response) => {
+          return response.json();
+        })
+        .then((data) => {
+          if (data != null) {
+            const outputList = data.map((inputObj, index) => ({
+              value: `${index + 1}`,
+              label: inputObj.featurename,
+            }));
+            setDependencyOptions(outputList);
+          }
+        });
+    };
+    getAllFeatures({ projectid: 1 });
+  }, []);
 
   const reportBugSchema = yup.object().shape({
     name: yup.string().required("required"),
@@ -36,32 +65,34 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   });
 
   const initialValuesRegister = {
-    name: "feature name",
-    description: "Add login screen",
-    startTime: "2017-05-24",
-    endTime: "2017-05-24",
-    difficulty: "0",
+    name: "Task",
+    description: "Description",
+    startTime: "2023-05-24",
+    endTime: "2023-05-24",
+    difficulty: "1",
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    console.log(values);
-    console.log("ddd");
-    console.log(featureId);
-    // try {
-    //   const body = { values };
-    //   const response = await fetch("http://localhost:5000/addbug", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(body),
-    //   });
-    // } catch (err) {
-    //   console.error(err.message);
-    // }
+    // console.log(dependencies);
+    const newValues = {
+      projectid: 1,
+      featureName: values.name,
+      startTime: values.startTime,
+      endTime: values.endTime,
+      completed: false,
+      priority: priority.value,
+      currentRisk: 0,
+      progress: 0,
+      difficulty: values.difficulty,
+      dependencies: dependencies,
+    };
+
+    createFeature(newValues);
   };
 
-  const getAllFeatures = (values) => {
-    fetch("http://localhost:5000/api/features", {
-      method: "GET",
+  const createFeature = (values) => {
+    fetch("http://localhost:5000/api/createFeature", {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
@@ -75,18 +106,10 @@ const EditProfileForm = ({ handleClose, featureId }) => {
       });
   };
 
-  const dependencyOptions = [
-    { value: "1", label: "Login Screen" },
-    { value: "2", label: "Render Screen" },
-    { value: "3", label: "Rendering Screen" },
-  ];
-
-  const [dependencies, setDependencies] = useState([
-    { value: "1", label: "Login Screen" },
-  ]);
-
   const handleDependencyChange = (e) => {
-    setDependencies(e);
+    const chosenDependencies = dependencies;
+    chosenDependencies.push(e);
+    setDependencies(chosenDependencies);
   };
 
   const priorityOptions = [
@@ -191,13 +214,13 @@ const EditProfileForm = ({ handleClose, featureId }) => {
                     paddingRight: "20px",
                   }}
                 >
-                  Dependencies:
+                  Dependencies {dependencyOptions.length}:
                 </p>
+
                 <Select
-                  defaultValue={dependencies}
-                  label="Dependencies"
-                  isMulti
-                  name="Dependencies"
+                  id="Dependencies"
+                  isMulti={true}
+                  name="dependencies"
                   options={dependencyOptions}
                   className="defineDependenciesBox"
                   classNamePrefix="select"

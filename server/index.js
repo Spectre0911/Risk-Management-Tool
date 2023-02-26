@@ -115,19 +115,95 @@ app.post("/api/login", async (req, postResult) => {
   }
 });
 
-//get all todos
-
-app.get("/todos", async (req, res) => {
+// Create feature
+app.post("/api/createFeature", async (req, res) => {
   try {
-    const allTodos = await pool.query("SELECT * FROM todo");
-    res.json(allTodos.rows);
+    console.log(req.body);
+    // Insert the feature into the databasea
+    const createFeature = await pool.query(
+      "INSERT INTO features (projectid, featurename, starttime, endtime, completed, priority, currentrisk, progress, difficulty) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+      [
+        req.body.projectid,
+        req.body.featureName,
+        req.body.startTime,
+        req.body.endTime,
+        req.body.completed,
+        req.body.priority,
+        req.body.currentRisk,
+        req.body.progress,
+        req.body.difficulty,
+      ]
+    );
+    // Get the feature id
+    const featureId = await pool.query(
+      "SELECT featureid FROM features WHERE projectid = $1 AND featurename = $2",
+      [req.body.projectid, req.body.featureName]
+    );
+
+    // Get the IDs of the dependencies
+    const dependencyLength = req.body.dependencies.length;
+    const dependencyIds = [];
+    const dependencies = req.body.dependencies[dependencyLength - 1];
+    for (let i = 0; i < dependencyLength; i++) {
+      const depName = dependencies[i].label;
+      const depID = await pool.query(
+        "SELECT featureid FROM features WHERE projectid = $1 AND featurename = $2",
+        [req.body.projectid, depName]
+      );
+      dependencyIds.push(depID.rows[0]);
+    }
+
+    // Insert dependencies into dependency table
+    for (let k = 0; k < dependencyLength; k++) {
+      const insertDependency = await pool.query(
+        "INSERT INTO featuredep (featureid,depid) VALUES ($1, $2)",
+        [featureId.rows[0].featureid, dependencyIds[k].featureid]
+      );
+    }
+  } catch (err) {
+    console.log("error");
+    console.error(err.message);
+  }
+});
+
+// Get all features
+app.post("/api/features", async (req, postRes) => {
+  try {
+    const allFeatures = await pool.query(
+      "SELECT * FROM features WHERE projectid = $1",
+      [req.body.projectid]
+    );
+    if (allFeatures.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      postRes.json(allFeatures.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Get all dependencies for a feature
+app.post("/api/dependencies", async (req, postRes) => {
+  try {
+    // console.log(req.body);
+
+    const allFeatures = await pool.query(
+      "SELECT featurename FROM features INNER JOIN (SELECT depid from featuredep WHERE featureid = $1) as o1 on features.featureid = o1.depid;",
+      [req.body.featureid]
+    );
+    if (allFeatures.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      // console.log(allFeatures.rows);
+      postRes.json(allFeatures.rows);
+    }
   } catch (err) {
     console.error(err.message);
   }
 });
 
 //get a todo
-
 app.get("/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
