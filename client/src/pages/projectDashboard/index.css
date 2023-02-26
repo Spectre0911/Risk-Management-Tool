@@ -326,6 +326,7 @@
   width: 105%;
 }
 
+
 @media (min-width: 1350px) {
   .ganttContainer > div > div {
     overflow: unset !important;
