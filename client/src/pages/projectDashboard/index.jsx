@@ -19,6 +19,7 @@ import { Button } from "react-bootstrap";
 import {CgUserRemove} from 'react-icons/cg';
 import Modal from 'react-bootstrap/Modal';
 import {GrClose} from 'react-icons/gr';
+import NewGantt from './App.js'
 import {
   Box,
   TextField,
@@ -227,7 +228,8 @@ const ProjectDashboard = () => {
           </div>
           </div>
           <div className="ganttContainer">
-            <GanttChart viewMode={ganttViewState}/>
+            {/* <GanttChart viewMode={ganttViewState}/> */}
+            <NewGantt/>
           </div>
       </div>
       

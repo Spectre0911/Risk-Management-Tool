@@ -11,7 +11,7 @@ const data = {
     { id: 1, source: 1, target: 2, type: '0' }
   ]
 };
-const App = () => {
+const NewGantt = () => {
 
 
   const [currentZoom, setZoom] = useState('Days');
@@ -47,5 +47,5 @@ const App = () => {
     );
 };
 
-export default App;
+export default NewGantt;
 
