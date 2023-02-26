@@ -45,7 +45,7 @@ drop table if exists features cascade;
 create table features (
     featureid   serial not null,
     projectid   integer not null,
-    featurename varchar(50) not null,
+    featurename varchar(50) not null unique,
     featuredesc varchar(300),
     starttime   timestamp not null check (starttime >= current_date),
     endtime     timestamp not null,
