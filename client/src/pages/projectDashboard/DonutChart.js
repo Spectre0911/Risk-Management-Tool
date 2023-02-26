@@ -2,8 +2,8 @@ import React, { useEffect, useState, useMemo } from 'react';
 import {Doughnut} from 'react-chartjs-2';
 import {Chart, ArcElement, Tooltip, Legend} from 'chart.js'
 Chart.register(ArcElement);
-Chart.register([Tooltip])
-Chart.register([Legend])
+Chart.register(Tooltip);
+Chart.register(Legend);
 const DonutChart = ({chartData, labels, border, backgroundColor, cutOut}) => {
   const data = {
     labels: labels,
