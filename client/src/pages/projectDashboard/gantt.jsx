@@ -36,9 +36,10 @@ const GanttChart = () => {
 
             Promise.all(promises)
               .then(() => {
-                console.log(featureDepMap.get(3).join(","));
+                // console.log(featureDepMap.get(3).join(","));
+                // console.log(data);
                 outputList = data.map((inputObj, index) => ({
-                  id: inputObj.featureid,
+                  id: inputObj.featurename,
                   name: inputObj.featurename,
                   start: new Date(inputObj.starttime)
                     .toISOString()
