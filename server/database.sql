@@ -55,6 +55,7 @@ create table features (
     priority    integer not null check (priority >= 1 and priority <= 3),
     currentrisk integer not null check (currentrisk >= 0 and currentrisk <= 100),
     progress    integer not null check (progress >= 0 and progress <= 100),
+    members     integer not null check (members >= 0) default 0,
     primary key (featureid),
     foreign key (projectid) references projects(projectid) on delete cascade
 );
