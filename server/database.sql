@@ -45,7 +45,7 @@ drop table if exists features cascade;
 create table features (
     featureid   serial not null,
     projectid   integer not null,
-    featurename varchar(50) not null,
+    featurename varchar(50) not null unique,
     featuredesc varchar(300),
     starttime   timestamp not null check (starttime >= current_date),
     endtime     timestamp not null,
@@ -55,6 +55,7 @@ create table features (
     priority    integer not null check (priority >= 1 and priority <= 3),
     currentrisk integer not null check (currentrisk >= 0 and currentrisk <= 100),
     progress    integer not null check (progress >= 0 and progress <= 100),
+    members     integer not null check (members >= 0) default 0,
     primary key (featureid),
     foreign key (projectid) references projects(projectid) on delete cascade
 );
@@ -148,11 +149,12 @@ create table projectskill (
     foreign key (skill) references skills(skill) on delete cascade
 );
 
--- When user is deleted, change this user's ID to null in other tables
+
 create or replace function nullifyuser() returns trigger as $$
 begin
     update tasks set devid = null where devid = old.userid;
     update bugs set devid = null where devid = old.userid;
+    return old;
 end;
 $$ language plpgsql;
 
@@ -178,6 +180,8 @@ begin
     if (projectend < new.endtime) then
         raise exception 'Feature deadline too late for this project';
     end if;
+
+    return new;
 end;
 $$ language plpgsql;
 
@@ -203,6 +207,8 @@ begin
     if (featureend < new.endtime) then
         raise exception 'Task deadline too late for this feature';
     end if;
+
+    return new;
 end;
 $$ language plpgsql;
 
@@ -223,6 +229,8 @@ begin
     if (featurestart < depdeadline) then
         raise exception 'Feature cannot start before its dependency is completed';
     end if;
+    
+    return new;
 end;
 $$ language plpgsql;
 
