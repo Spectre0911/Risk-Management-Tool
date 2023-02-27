@@ -10,7 +10,8 @@ export default class Toolbar extends Component {
       const isActive = this.props.zoom === value;
       return (
         <label key={ value } className={ `radio-label ${isActive ? 'radio-label-active': ''}` }>
-          <input type='radio'
+          <input type='radio' 
+            className="featureViewTasksButton" 
             checked={ isActive }
             onChange={ this.handleZoomChange }
             value={ value }/>
@@ -21,7 +22,7 @@ export default class Toolbar extends Component {
 
     return (
       <div className="tool-bar">
-        <b>Zoom: </b>
+        <b className="toolBarText">Change Chart Timescale: </b>
           { zoomRadios }
       </div>
     );
