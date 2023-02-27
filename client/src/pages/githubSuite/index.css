@@ -27,3 +27,9 @@
     margin: auto auto !important;
     text-align: center !important;
 }
+
+.issueLeftPane{
+    position: absolute;
+    width: 80%;
+    left: 10px;
+}

@@ -19,7 +19,9 @@ import { Button } from "react-bootstrap";
 import {CgUserRemove} from 'react-icons/cg';
 import Modal from 'react-bootstrap/Modal';
 import {GrClose} from 'react-icons/gr';
-import NewGantt from './App.js'
+import {IoIosPersonAdd} from 'react-icons/io';
+import NewGantt from './App.js';
+import Select from "react-select";
 import {
   Box,
   TextField,
@@ -55,7 +57,6 @@ const ProjectDashboard = () => {
       'rgba(255,255,0,1)',
     ];
 
-
     const labelsFeatures = ['Core','Optional','Aesthetic'];
     const dataFeatures = [8,14,12];
     const backgroundColorFeatures = [
@@ -87,6 +88,7 @@ const ProjectDashboard = () => {
       }];
 
     const [showDelete, setShowDelete] = useState(false);
+    const [showAdd, setShowAdd] = useState(false);
     const [ganttViewState, setGanttViewState] = useState("Days");
     const [removeUserId, setRemoveUserId] = useState();
 
@@ -99,15 +101,40 @@ const ProjectDashboard = () => {
       setShowDelete(true);
     }
   
+    const handleAddClose = () => {
+      setShowAdd(false);
+    }
+    const handleAddShow = (e) => {
+      console.log("2dd");
+      setShowAdd(true);
+    }
+
+
     const deleteFeature = (e) => {
       console.log("delete this");
       console.log(removeUserId);
       setShowDelete(false);
     }
 
+    const addTeamMember = (e) =>{
+      console.log(teamMembersList);
+    }
+
     const changeGanttViewState = (e) =>{
       setGanttViewState(e.target.value);
     }
+
+    
+  const teamMembersOptions = [
+    { value: "1", label: "Joshua" },
+    { value: "2", label: "Morgan" },
+    { value: "3", label: "Sanjula" },
+  ];
+
+  const [teamMembersList, setTeamMembersList] = useState([]);
+  const handleTeamMemberChange =(e) =>{
+    setTeamMembersList(e);
+  }
     
       
 
@@ -167,7 +194,13 @@ const ProjectDashboard = () => {
 
         <div className="infoBox2">
           <Scrollbars>
-            <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Team members</div>
+            <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Team members
+            <button onClick={handleAddShow} className="projectFilterInput viewProject addFeatureButton" style={{"height":"35px","width":"40px" ,"padding":"0", "position": "absolute",
+            "right": "20px", "top":"15px"}}>
+              <IoIosPersonAdd/>
+            </button>
+            </div>
+            
             {teamMembers.map((member,index)=>{
               const imageUrl = member.image;
               return(
@@ -261,6 +294,63 @@ const ProjectDashboard = () => {
             </Modal.Body>
         </Modal>
       
+        <Modal className="addProfileModal" style={{"marginTop":"200px"}} fade={false} show={showAdd} onHide={handleAddClose}>
+            <Modal.Header>
+            <div className="bugFormClose" onClick={handleAddClose}>
+                <GrClose />
+            </div>
+            <Modal.Title>Add team member</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            
+            <p>Please select the team member you would like to add:</p>
+            <p
+              style={{
+                gridColumn: "span 1",
+                margin: "auto",
+                paddingRight: "2px",
+              }}
+            >
+              Select team member:
+            </p>
+            <Select
+              id="teamMembers"
+              name="teamMembers"
+              options={teamMembersOptions}
+              onChange={handleTeamMemberChange}
+              className="defineDependenciesBox"
+              sx={{ gridColumn: "span 3", width: "70%" }}
+              value={teamMembersList}
+            />
+            <Box>
+              <Button
+                className="bugCancelButton"
+                fullWidth
+                sx={{
+                  m: "2rem 1rem",
+                  p: "1rem",
+                }}
+                style={{marginLeft: "10px"}}
+                onClick={addTeamMember}
+              >
+                {"Add"}
+              </Button>
+
+              <Button
+                className="bugAddButton"
+                fullWidth
+                onClick={handleDeleteClose}
+                sx={{
+                  m: "2rem 1rem",
+                  p: "1rem",
+                }}
+              >
+                {"Cancel"}
+              </Button>
+            </Box>
+
+            </Modal.Body>
+        </Modal>
     </div>
   );
 };

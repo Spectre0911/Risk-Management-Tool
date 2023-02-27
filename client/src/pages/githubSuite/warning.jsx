@@ -13,7 +13,7 @@ import {Tooltip} from 'react-bootstrap';
 const Warning = ({warning}) => {
   return (
     <div className='bugContainer'>     
-        <div className="bugLeftPane"> 
+        <div className="issueLeftPane"> 
             <div className="bugHeader">
                 <div className="bugTitle">{warning[0]+". "+warning[1]}</div>
             </div>

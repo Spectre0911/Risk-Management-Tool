@@ -272,7 +272,7 @@ const GithubIntegrator = () => {
                 <div className="metricTitle2">Git Commit History</div>
                 <Table />
             </div>
-            <div className="infoBox2 projectTable" style={{marginTop:"-50px",paddingBottom:"100px"}}>
+            <div className="infoBox2 projectTable" style={{marginTop:"-50px",paddinBottom:"100px"}}>
                 <div className="metricTitle2">Git Code Issues</div>
                 <div style={{height:"400px"}}>
                     <Scrollbars>
