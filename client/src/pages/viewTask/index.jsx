@@ -32,7 +32,6 @@ const TaskDashboard = () => {
 
     const [show, setShow] = useState(false);
     const handleClose = () => {
-        console.log("dd");
         setShow(false);
     }
     const handleShow = () => {

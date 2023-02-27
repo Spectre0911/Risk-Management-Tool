@@ -1,0 +1,29 @@
+.bugBox > div > canvas {
+    max-height: 500px;
+}
+
+.graphTitleBox{
+    font-size: 30px;
+    font-family: 'Montserrat';
+    font-weight: bold;
+}
+
+
+@media (min-width: 1350px){
+.bugBox .projectTable {
+    width: 98% !important;
+}}
+
+
+.bugBox.gitMetrics .infoBox2.projectTable {
+    width: 98% !important;
+    margin-bottom: 100px !important;
+}
+
+
+.projectTableControls.row{
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: auto auto !important;
+    text-align: center !important;
+}

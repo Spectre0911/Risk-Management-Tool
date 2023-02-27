@@ -29,6 +29,9 @@ import {
 import { Bar} from 'react-chartjs-2';
 import { te } from 'date-fns/locale';
 import { setDate } from 'date-fns';
+import Table from "./Table";
+import Warning from './warning';
+import { Scrollbars } from "react-custom-scrollbars";
 Chart.register(
     CategoryScale,
     LinearScale,
@@ -36,6 +39,8 @@ Chart.register(
     Tooltip,
     Legend
 );
+
+
 
 const GithubIntegrator = () => {
     const {projectId} = useParams();
@@ -57,7 +62,7 @@ const GithubIntegrator = () => {
               color: "rgb(0, 0, 0)",
               font: {
                 family: "Montserrat", // Add your font here to change the font of your legend label
-                size: "20px",
+                size: "15px",
               }
             },
             tooltip: {
@@ -76,7 +81,8 @@ const GithubIntegrator = () => {
             stacked: true,
             ticks: {
                 font: {
-                    size: 20,
+                    size: 15,
+                    family: "Montserrat"
                 }
             }
           },
@@ -84,7 +90,8 @@ const GithubIntegrator = () => {
             stacked: true,
             ticks: {
                 font: {
-                    size: 20,
+                    size: 15,
+                    family: "Montserrat"
                 }
             }
           },
@@ -101,8 +108,6 @@ const GithubIntegrator = () => {
         auth: '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',
       });
       const [tempData, setTempData] = useState([]);
-
-      
       
       useEffect(() => {
         let fetchData = [];
@@ -130,10 +135,38 @@ const GithubIntegrator = () => {
         })();
       },[]);
 
+      const [tempCodeIssues, setTempCodeIssues] = useState([]);
+      useEffect(() => {
+        let fetchData = [];
+        (async () => {
+            try{
+                const iterator = await octokit.paginate.iterator("GET /repos/{owner}/{repo}/code-scanning/alerts", {
+                    owner: "sanjula-hettiarachchige",
+                    repo: "fileman",
+                    per_page:100,
+                });
+                for await (const {data} of iterator) {
+                    for (var i=0; i<data.length; i++){
+                        fetchData = [...fetchData,data[i]];
+                    }
+                }
+                
+                setTempCodeIssues(fetchData);
+    
+            } catch (error) {
+                if (error.response) {
+                console.error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`)
+                }
+                console.error(error)
+            }
+        })();
+      },[]);
+
     useEffect(() => {
         if (tempData.length==0){
             return;
         }
+        console.log(tempData);
         var uniqueDates = [];
         for (var i=0; i<tempData.length; i++){
             var date = tempData[i]['commit']['author']['date'].split('T')[0];
@@ -171,7 +204,6 @@ const GithubIntegrator = () => {
             }
             commitHistory.push(devCommits);
         }
-
         let tempDataset = [];
         console.log(uniqueContributors);
         for (var i=0; i<uniqueContributors.length; i++){
@@ -190,6 +222,28 @@ const GithubIntegrator = () => {
           });
     }, [tempData])
     
+    const [codeIssues, setCodeIssues] = useState([]);
+    useEffect(() => {
+        if (tempCodeIssues.length==0){
+            return;
+        }
+        let tempArray = [];
+        for (var i=0; i<tempCodeIssues.length; i++){
+            let temp = [];
+            temp.push(tempCodeIssues[i]['number']);
+            temp.push(tempCodeIssues[i]['rule']['description']);
+            temp.push(tempCodeIssues[i]['rule']['severity']);
+            temp.push(tempCodeIssues[i]['created_at'].split('T')[0]);
+            temp.push(tempCodeIssues[i]['most_recent_instance']['message']['text']);
+            temp.push(tempCodeIssues[i]['most_recent_instance']['location']['path']);
+            tempArray.push(temp);
+        }
+        console.log(tempCodeIssues);
+        setCodeIssues(tempArray.reverse());
+
+    }, [tempCodeIssues])
+
+
     function fillDates(start, end) {
         var output = [start];
         var date = new Date(start);
@@ -206,13 +260,30 @@ const GithubIntegrator = () => {
     }
     
     return (
-        <div className='bugBox'>
+        <div className='bugBox gitMetrics'>
             <div className="bugBoxTitle">
                 <p>Git metrics: {projectId}</p>
             </div>
-            <div style={{textAlign:"center", margin:'5%'}}>
-                <p>Github commit tracking</p>
+            <div style={{textAlign:"center", margin:'1%'}}>
+                <p className="graphTitleBox">Github commit tracking</p>
                 {dataset.length!=0 && <Bar options={options} data={data} />}
+            </div>
+            <div className="infoBox2 projectTable">
+                <div className="metricTitle2">Git Commit History</div>
+                <Table />
+            </div>
+            <div className="infoBox2 projectTable" style={{marginTop:"-50px",paddingBottom:"100px"}}>
+                <div className="metricTitle2">Git Code Issues</div>
+                <div style={{height:"400px"}}>
+                    <Scrollbars>
+                    {codeIssues.map((warning)=>{
+                    return(
+                        <Warning warning={warning}/>
+                    )})}
+                    </Scrollbars>
+                </div>
+                
+                
             </div>
         </div>
     );
