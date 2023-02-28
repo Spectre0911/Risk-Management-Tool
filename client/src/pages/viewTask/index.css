@@ -89,11 +89,21 @@
     box-shadow: 0px 0px 30px #130b0b93;
 }
 .featureProgress .progressNumber.feature{
-    position: absolute;
+    position: relative;
     background-color: #fdfdfd;
     height: 14px;
     width: 14px;
     margin-top: -4px;
+}
+
+.featureProgress .progressNumber.feature{
+    animation-name: movedot;
+    animation-duration: 2s;
+}
+
+.featureProgress .progress-bar{
+    animation-duration: 2s;
+    animation-name: movebar;
 }
 
 .featureProgressTitle{
@@ -129,9 +139,11 @@
 }
 
 .featureProgress .progressDisplayContainer .progress{
-    width:95% !important;
+    width:100% !important;
     height: 2px !important;
     background:black;
+    margin-bottom: 80px !important;
+    margin-left: 0px !important;
     background: -webkit-gradient(radial, 50% 50%, 0, 50% 50%, 350, from(#9ba5adcb), to(#2191ec4f));
     /* background: linear-gradient(0deg, rgba(184,178,178,0.5690651260504201) 0%, rgba(184,178,178,1) 49%, rgba(184,178,178,0.6811099439775911) 100%); */
 }
@@ -140,9 +152,7 @@
     background-color: #ffffff !important;
 }
 
-.featureProgress .progress{
-    margin-bottom: 80px;
-}
+
 
 .featureProgress .progressText{
     width: 100%;
@@ -152,4 +162,9 @@
     margin-top: -40px;
     font-weight: 500;
     color: white;
+}
+
+.featureProgress .progressDisplayContainer{
+    width: 95% !important;
+    margin: auto !important;
 }

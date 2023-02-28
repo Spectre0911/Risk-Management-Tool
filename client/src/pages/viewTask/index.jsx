@@ -1,4 +1,4 @@
-import React, { Component, useState }  from 'react';
+import React, { Component, useState, useEffect }  from 'react';
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux"
 import {FaBell} from 'react-icons/fa';
@@ -23,7 +23,7 @@ import * as yup from "yup";
 import BugReportForm from './bugReportForm';
 import EditProfileForm from './FeatureForm';
 const TaskDashboard = () => {
-    const percentage = 20;
+    const percentage = 70;
     const {featureId} = useParams();
     const [isOpen, setIsOpen] = useState(false);
     const toggleOverlay = () =>{
@@ -32,12 +32,38 @@ const TaskDashboard = () => {
 
     const [show, setShow] = useState(false);
     const handleClose = () => {
-        console.log("dd");
         setShow(false);
     }
     const handleShow = () => {
         setShow(true);
     }
+    
+    const progressDotStyle = (percentage) => ({
+        left: `calc(${percentage}%)`,
+        top: "9px",
+    });
+
+    useEffect(() => {
+        const head = document.getElementsByTagName('head')[0];
+        const progressDot = document.getElementById("progressDot");
+        const progressBar = document.getElementsByClassName("progress-bar")[0];
+        let keyframes = `
+            @keyframes movedot {
+                from {left: 0px;}
+                to {left: `+percentage+ `%;}
+                            },
+            @keyframes movebar {
+                from {width: 0px;}
+                to {width: `+percentage+ `%;}
+            }`;        
+        let style = document.createElement('STYLE');
+        style.innerHTML = keyframes;
+        head.appendChild(style);
+        progressDot.style.animationName = 'movedot';
+        progressBar.style.animationName = 'movebar';
+
+      }, []); 
+    
 
     return (
         <div className='bugBox'>
@@ -48,8 +74,10 @@ const TaskDashboard = () => {
             <div className="featureProgress">
                 <div className="featureProgressTitle">Feature Progress</div>
                 <div className="progressDisplayContainer">
-                    <div className="progressNumber feature" style={{marginLeft:percentage+"%"}}></div>
-                    <ProgressBar now={20} />
+                    <div style={{width:'100%'}}>
+                        <div id="progressDot" className="progressNumber feature" style={progressDotStyle(percentage)}></div>
+                    </div>
+                    <ProgressBar now={percentage} />
                         <div className="progressAddTaskButtonontainer">
                             <p className="progressText">2/3 Tasks Completed</p>
                             <button className="progressAddTaskButton" onClick={handleShow}>
@@ -83,6 +111,12 @@ const TaskDashboard = () => {
                 <p style={{fontSize:"30px"}}>Completed:</p>
             </div>
             <Bug/>
+            <div className="bugBoxTitle" style={{paddingTop:"20px"}}>
+                <p style={{fontSize:"30px"}}>Verified</p>
+            </div>
+            <Bug/>
+            
+            
         </div>
     );
 };

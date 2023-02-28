@@ -11,6 +11,7 @@ import {GrClose} from 'react-icons/gr';
 import EditProfileForm from './editProfileForm';
 import ProjectDashboard from '../projectDashboard';
 import TaskDashboard from '../viewTask';
+import GithubIntegrator from '../githubSuite';
 const Admin = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleOverlay = () =>{
@@ -61,6 +62,7 @@ const Admin = () => {
               <Route path="/bugs" element={<Bugs />} />
               <Route path="/projects/:projectId" element={<ProjectDashboard/> }/>
               <Route path="/viewtasks/:featureId" element={<TaskDashboard/> }/>
+              <Route path="/github/:projectId" element={<GithubIntegrator/> }/>
           </Routes>
         </div>
       </div>

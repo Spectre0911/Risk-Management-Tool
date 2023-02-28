@@ -326,6 +326,7 @@
   width: 105%;
 }
 
+
 @media (min-width: 1350px) {
   .ganttContainer > div > div {
     overflow: unset !important;
@@ -361,6 +362,20 @@
 
 .gantt .tick {
   stroke: #003cff;
+}
+
+.gantt_data_area{
+    overflow-x: scroll !important;
+}
+.gantt_layout_cell.gantt_ver_scroll {
+    overflow-y: scroll;
+}
+
+
+
+
+.gantt-container{
+    height:400px !important;
 }
 /* .gantt{
     width: 100% !important;
