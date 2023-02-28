@@ -188,7 +188,7 @@ const Table = () => {
                 className="featureViewTasksButton"
                 value={cell.row.original.featureId}
                 onClick={() =>
-                  navigate(`/viewtasks/${cell.row.original.featureId}`)
+                  navigate(`./viewtasks/${cell.row.original.featureId}`)
                 }
               >
                 View tasks

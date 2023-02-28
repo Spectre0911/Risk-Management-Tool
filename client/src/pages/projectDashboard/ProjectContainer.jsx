@@ -1,19 +1,26 @@
-import React, { Component, useEffect, useState }  from 'react';
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-import { connect } from "react-redux"
-import AdminSidebar from '../../components/AdminSidebar';
-import "./index.css"
+import React, { useEffect, useState, useMemo } from "react";
+import { BrowserRouter, Navigate, Routes, Route, useParams } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { connect } from "react-redux";
+import Modal from "react-bootstrap/Modal";
+import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
+import AdminSidebar from "../../components/AdminSidebar";
 import Dashboard from '../dashboard';
 import ManagedProjects from '../managedProjects';
-import Bugs from '../bugs';
-import Modal from 'react-bootstrap/Modal';
+import Bugs from "../bugs";
 import {GrClose} from 'react-icons/gr';
-import EditProfileForm from './editProfileForm';
-import ProjectDashboard from '../projectDashboard';
-import TaskDashboard from '../viewTask';
+
+import EditProfileForm from "../admin/editProfileForm";
+import ProjectDashboard from ".";
+import TaskDashboard from "../viewTask";
 import GithubIntegrator from '../githubSuite';
-import ProjectContainer from '../projectDashboard/ProjectContainer';
-const Admin = () => {
+
+const ProjectContainer = () => {
+  const {projectId} = useParams();
+  const navigate = useNavigate();
+  const [data, setData] = useState([]);
+
   const [isOpen, setIsOpen] = useState(false);
   const toggleOverlay = () =>{
       setIsOpen(isOpen);
@@ -28,13 +35,14 @@ const Admin = () => {
       setShow(true);
       console.log(show);
   }
-
+  
 
   return (
     <div>
       <div className="splitScreen">
         <div className="leftPane">
-          <AdminSidebar/>
+          
+          <AdminSidebar projectId={projectId}/>
         </div>
         <div className="rightPane">
             <div className='titleBar'>
@@ -57,23 +65,16 @@ const Admin = () => {
                 </Modal>
             </div>
             </div>
-            {/* <Dashboard /> */}
           <Routes>
-              <Route exact path="/" element={<Dashboard />} />
-              {/* <Route path="/bugs" element={<Bugs />} /> */}
-              {/* <Route path="/managedprojects" element={<ManagedProjects />} />
+              <Route path="/" element={<ProjectDashboard />} />
               <Route path="/bugs/:projectId" element={<Bugs />} />
-              <Route path="/projects/:projectId" element={<ProjectDashboard/> }/>
               <Route path="/viewtasks/:featureId" element={<TaskDashboard/> }/>
-              <Route path="/github/:projectId" element={<GithubIntegrator/> }/>  */}
-          </Routes>
+              <Route path="/github/:projectId" element={<GithubIntegrator/> }/>
+              </Routes>
         </div>
       </div>
     </div>
   );
 };
 
-
-export default Admin;
-
-
+export default ProjectContainer;
