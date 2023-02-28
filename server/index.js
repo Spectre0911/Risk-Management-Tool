@@ -3,12 +3,14 @@ import { fileURLToPath } from "url";
 
 import bcrypt from "bcryptjs";
 import path from "path";
+import { reverse } from "dns";
 
 const require = createRequire(import.meta.url);
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db.cjs");
+const topoSort = require("toposort"); // you will need to install this package
 
 //middleware
 app.use(cors());
@@ -183,13 +185,22 @@ app.post("/api/features", async (req, postRes) => {
   }
 });
 
+function reviver(key, value) {
+  if (typeof value === "object" && value !== null) {
+    if (value.dataType === "Map") {
+      return new Map(value.value);
+    }
+  }
+  return value;
+}
+
 // Get all dependencies for a feature
 app.post("/api/dependencies", async (req, postRes) => {
   try {
     // console.log(req.body);
 
     const allFeatures = await pool.query(
-      "SELECT featurename FROM features INNER JOIN (SELECT depid from featuredep WHERE featureid = $1) as o1 on features.featureid = o1.depid;",
+      "SELECT featurename, featureid FROM features INNER JOIN (SELECT depid from featuredep WHERE featureid = $1) as o1 on features.featureid = o1.depid;",
       [req.body.featureid]
     );
     if (allFeatures.rows.length == 0) {
@@ -203,49 +214,70 @@ app.post("/api/dependencies", async (req, postRes) => {
   }
 });
 
-//get a todo
-app.get("/todos/:id", async (req, res) => {
+// Topo sort
+app.post("/api/topoSort", async (req, res) => {
   try {
-    const { id } = req.params;
-    const todo = await pool.query("SELECT * FROM todo WHERE todo_id = $1", [
-      id,
-    ]);
+    const dependencies = new Map(req.body.adj);
+    // create an array of edges from the dependencies hash map
+    let edges = [];
+    for (let [featureId, dependencyIds] of dependencies.entries()) {
+      dependencyIds.forEach((dependencyId) =>
+        edges.push([dependencyId, featureId])
+      );
+    }
+    // perform topological sorting using the edges array
+    const sortedFeatureIds = topoSort(edges);
+    console.log(sortedFeatureIds);
 
-    res.json(todo.rows[0]);
+    // For each feature
+    for (let i = 0; i < sortedFeatureIds.length; i++) {
+      let featureid = sortedFeatureIds[i];
+
+      const duration = await pool.query(
+        "SELECT (endtime - starttime) as duration from features WHERE projectid = $1 AND featureid = $2",
+        [req.body.projectid, featureid]
+      );
+      //SELECT featurename, endtime FROM features JOIN featuredep ON features.featureid = featuredep.depid WHERE featuredep.featureid = 5 AND projectid = 1 ORDER BY endtime DESC LIMIT 1;
+      let latestEndTime = await pool.query(
+        "SELECT features.featurename, endtime FROM features JOIN featuredep ON features.featureid = featuredep.depid WHERE featuredep.featureid = $1 AND projectid = $2 ORDER BY endtime DESC LIMIT 1;",
+        [featureid, req.body.projectid]
+      );
+
+      if (latestEndTime.rows.length == 0) {
+        console.log("Updating to project start time");
+        latestEndTime = await pool.query(
+          "SELECT featurename, starttime as endtime from features WHERE projectid = $1 ORDER BY starttime ASC LIMIT 1;",
+          [req.body.projectid]
+        );
+      }
+      console.log(featureid);
+      console.log(duration.rows);
+      console.log(latestEndTime.rows);
+
+      await pool.query(
+        "UPDATE features SET starttime = $1 ,endtime = ($1 :: TIMESTAMP +  $2)  WHERE featureid = $3 AND projectid = $4;",
+        [
+          latestEndTime.rows[0].endtime,
+          duration.rows[0].duration,
+          featureid,
+          req.body.projectid,
+        ]
+      );
+
+      // duration = SELECT (endtime - starttime) as duration from features;
+      // latestEndTime = SELECT endtime FROM features JOIN featuredep ON features.featureid = featuredep.depid WHERE featuredep.featureid = $1 AND projectid = $2 ORDER BY endtime DESC LIMIT 1;
+      // If 0 rows:
+      //   There are no dependencies, so default time should be the start time of the project
+      //   lastestEndTime = SELECT starttime from features WHERE projectid = $1 ORDER BY starttime ASC LIMIT 1;
+
+      // UPDATE feature SET endtime = $1 + interval $2 WHERE featureid = $3 AND projectid = $4;
+      // UPDATE feature SET starttime = $1
+
+      // return the sorted feature IDs as JSON response
+    }
+    res.json(sortedFeatureIds);
   } catch (err) {
     console.error(err.message);
-    res.end("Error");
-  }
-});
-
-//update a todo
-
-app.put("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { description } = req.body;
-    const updateTodo = await pool.query(
-      "UPDATE todo SET description = $1 WHERE todo_id = $2",
-      [description, id]
-    );
-
-    res.json("Todo was updated!");
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-//delete a todo
-
-app.delete("/todos/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteTodo = await pool.query("DELETE FROM todo WHERE todo_id = $1", [
-      id,
-    ]);
-    res.json("Todo was deleted!");
-  } catch (err) {
-    console.log(err.message);
   }
 });
 

@@ -14,7 +14,7 @@ export const getAllDependencies = (values) => {
       .then((data) => {
         if (data != null) {
           for (let i = 0; i < data.length; i++) {
-            dependencyIds.push(data[i].featurename);
+            dependencyIds.push(data[i].featureid);
           }
           resolve(dependencyIds);
         } else {
