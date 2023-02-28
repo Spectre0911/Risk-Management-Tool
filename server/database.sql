@@ -102,6 +102,7 @@ create table bugs (
 drop table if exists notifications;
 create table notifications (
     notifid   serial not null,
+    location  integer not null check (location >= 0 and location <= 5),
     userid    integer not null,
     projectid integer not null,
     data      varchar(300) not null,
