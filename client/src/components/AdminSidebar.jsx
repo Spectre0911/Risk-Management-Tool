@@ -10,11 +10,14 @@ import {RiDashboardFill} from 'react-icons/ri'
 import {BiLogOutCircle} from 'react-icons/bi'
 import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
+import {BsGraphUp} from 'react-icons/bs';
+import {IoIosBug} from 'react-icons/io'
+import {AiOutlineFundProjectionScreen} from 'react-icons/ai'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import "./AdminSidebar.css";
 
-const AdminSidebar = () => {
+const AdminSidebar = ({projectId}) => {
     const [collapsed, setCollapsed] = useState(false);
     const { collapseSidebar } = useProSidebar();
     const navigate = useNavigate();
@@ -36,46 +39,44 @@ const AdminSidebar = () => {
                     <img className='profilePic' src="http://localhost:5000/assets/jane.jpg"></img>
                     <p className="welcomeMessage">{username}</p>
                 </div>
-                <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/dashboard/productList`)}>
+                <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/`)}>
                     {'Dashboard'}
                 </MenuItem >
 
-                <MenuItem className="menuItem" icon={<FaBell />} onClick={() => navigate(`/managedprojects`)}>
+                {!projectId && <MenuItem className="menuItem" icon={<FaBell />} onClick={() => navigate(`/managedprojects`)}>
                     {'Notifications'}
-                </MenuItem >
+                </MenuItem >}
 
-                <MenuItem className="menuItem" icon={<MdManageAccounts />} onClick={() => navigate(`/managedprojects`)}>
+                {!projectId && <MenuItem className="menuItem" icon={<MdManageAccounts />} onClick={() => navigate(`/managedprojects`)}>
                     {'Managed Projcts'}
-                </MenuItem >
+                </MenuItem >}
 
-                <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/dashboard/productList`)}>
+                {!projectId && <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/dashboard/productList`)}>
                     {'Developed Projects'}
-                </MenuItem >
+                </MenuItem >}
+
+                {projectId && <MenuItem className="menuItem" icon={<AiOutlineFundProjectionScreen />} onClick={() => navigate(`/projects/${projectId}`)}>
+                    {'Project Summary'}
+                </MenuItem >}
+
+                {projectId && <MenuItem className="menuItem" icon={<BsGraphUp />} onClick={() => navigate(`/projects/${projectId}/github/${projectId}`)}>
+                    {'Github Metrics'}
+                </MenuItem >}
+
+                {projectId && <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/projects/${projectId}/softmetrics/${projectId}`)}>
+                    {'Soft Metrics'}
+                </MenuItem >}
+
+                {projectId && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projects/${projectId}/bugs/${projectId}`)}>
+                    {'Bugs'}
+                </MenuItem >}
+
 
                 <MenuItem className="bottomItem" icon={<BiLogOutCircle />} onClick={() => navigate(`/dashboard/productList`)}>
                     {'Log out'}
                 </MenuItem >
 
-                {/* <SubMenu label="other" title='Other' icon={<FaHeart />}>
-                    <MenuItem icon={<FaGem />}>
-                    {'Order'}
-                    </MenuItem>
-                    <MenuItem icon={<FaGem />}>
-                    {' '}
-                    </MenuItem>
-                    <MenuItem icon={<FaGem />}>
-                    {' '}
-                    </MenuItem>
-                    <MenuItem icon={<FaGem />}>
-                    {' '}
-                    </MenuItem>
-                    <MenuItem icon={<FaGem />}>
-                    {' '}
-                    </MenuItem>
-                    <MenuItem icon={<FaGem />}>
-                    {' '}
-                    </MenuItem>
-                </SubMenu> */}
+                
             </Menu>
         </Sidebar>
     );

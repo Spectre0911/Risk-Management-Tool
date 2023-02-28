@@ -1,11 +1,5 @@
-import React, { Component, useState, } from "react";
+import React, { Component, useState, useEffect} from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-import { connect } from "react-redux";
-import { FaBell } from "react-icons/fa";
-import { RiDashboardFill } from "react-icons/ri";
-import { BsBriefcaseFill } from "react-icons/bs";
-import { BiTask } from "react-icons/bi";
-import { AiFillWarning } from "react-icons/ai";
 import { useParams } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
 import Table from "./Table";
@@ -22,6 +16,7 @@ import {GrClose} from 'react-icons/gr';
 import {IoIosPersonAdd} from 'react-icons/io';
 import NewGantt from './App.js';
 import Select from "react-select";
+import ProgressBar from "react-bootstrap/ProgressBar";
 import {
   Box,
   TextField,
@@ -32,11 +27,15 @@ import {
 import GanttChart from "./gantt";
 import { gantt } from "dhtmlx-gantt";
 // import GanttChart from "../gantt";
+import { Octokit } from "octokit";
+import { RadarChart } from "./radar/RadarChart";
+import LineGraph from "./Line";
+import { useNavigate } from "react-router-dom";
 Chart.register(ArcElement);
 Chart.register([Tooltip])
 Chart.register([Legend])
 const ProjectDashboard = () => {
-  
+    const navigate = useNavigate();
     const {projectId} = useParams();
     const labelsRisk = ['Budget','Team','Time','Code', 'Technical'];
     const dataRisk = [29,24,25,25,10];
@@ -136,7 +135,116 @@ const ProjectDashboard = () => {
     setTeamMembersList(e);
   }
     
-      
+  const [data, setData] = useState();
+
+  const owner = 'sanjula-hettiarachchige';
+  const access_token = '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';
+  const headers = {'Authorization':"Token "+access_token};
+
+  const octokit = new Octokit({ 
+    auth: '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',
+  });
+
+
+
+  //Fetching github commit data
+  const [tempData, setTempData] = useState([]);
+  const [dataset, setDataset] = useState([]);
+  useEffect(() => {
+    let fetchData = [];
+    (async () => {
+        try{
+            const iterator = await octokit.paginate.iterator("GET /repos/{owner}/{repo}/commits", {
+                owner: "Spectre0911",
+                repo: "CS261",
+                per_page:100,
+            });
+            for await (const {data} of iterator) {
+                for (var i=0; i<data.length; i++){
+                    fetchData = [...fetchData,data[i]];
+                }
+            }
+            
+            setTempData(fetchData);
+
+        } catch (error) {
+            if (error.response) {
+            console.error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`)
+            }
+            console.error(error)
+        }
+    })();
+  },[]);
+
+  //Fetching github commit data
+  const [dates, setDates] = useState([]);
+  const [commits, setCommits] = useState([]);
+  useEffect(() => {
+    if (tempData.length==0){
+        return;
+    }
+    var uniqueDates = [];
+    for (var i=0; i<tempData.length; i++){
+        var date = tempData[i]['commit']['author']['date'].split('T')[0];
+        if (!uniqueDates.includes(date)){
+            uniqueDates.push(date);
+        }
+    }
+    uniqueDates.splice(-5);
+    uniqueDates = fillDates(uniqueDates[uniqueDates.length-1],uniqueDates[0]);
+    
+    var uniqueContributors = [];
+    for (var i=0; i<tempData.length; i++){
+        if (!uniqueContributors.includes(tempData[i]['commit']['committer']['name'])){
+            uniqueContributors.push(tempData[i]['commit']['committer']['name']);
+        }
+    }
+    var index = uniqueContributors.indexOf('GitHub');
+    if (index !== -1) {
+        uniqueContributors.splice(index, 1);
+    }
+
+    let commitHistory = [];
+    for (var a=0; a<uniqueDates.length; a++){
+      let totalCommits = 0
+      let currDate = uniqueDates[a];
+      for (var b=0; b<tempData.length; b++){
+          if ((tempData[b]['commit']['author']['date'].split('T')[0]==currDate)){
+                  totalCommits+=1;
+              }
+      }
+      commitHistory.push([currDate, totalCommits]);
+    }
+    setDataset(commitHistory);
+    var tempDates = [];
+    var tempCount = [];
+    for (var i=0; i<commitHistory.length; i++){
+      tempDates.push(commitHistory[i][0]);
+      tempCount.push(commitHistory[i][1]);
+    }
+
+    setDates(tempDates);
+    setCommits(tempCount);
+    
+  }, [tempData])
+
+
+
+  function fillDates(start, end) {
+      var output = [start];
+      var date = new Date(start);
+      var endDate = new Date(end);
+
+      do {
+          output.push(date.toISOString().split('T')[0]);
+          date = new Date(date.getTime());
+          date.setDate(date.getDate() + 1);
+      } while (date < endDate);
+
+      output.push(end);
+      return output;
+  }    
+
 
   return (
     <div className="main">
@@ -250,10 +358,44 @@ const ProjectDashboard = () => {
             <NewGantt viewMode={ganttViewState}/>
           </div>
       </div>
-      
+
+      <div className="infoBox2 softMetricBox">
+          <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Soft Metric Summary
+            <button onClick={handleAddShow} className="projectFilterInput viewProject addFeatureButton" style={{"height":"35px","width":"160px" ,"padding":"0", "position": "absolute",
+            "right": "20px", "top":"20px"}}>
+              View Analysis
+            </button>
+          </div>
+            <RadarChart/>
       </div>
 
-      
+      <div className="infoBox2 softMetricBox">
+          <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Github Metrics Suite
+            <button onClick={() => navigate(`./github/${projectId}`)
+                } className="projectFilterInput viewProject addFeatureButton" style={{"height":"35px","width":"160px" ,"padding":"0", "position": "absolute",
+            "right": "20px", "top":"20px"}}>
+              More details
+            </button>
+          </div>
+            <LineGraph labels={dates} datavalues={commits}/>
+      </div>
+
+      <div className="infoBox2 bugs">
+          <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Bugs summary
+            <button onClick={() => navigate(`./bugs/${projectId}`)
+                } className="projectFilterInput viewProject addFeatureButton" style={{"height":"35px","width":"120px" ,"padding":"0", "position": "absolute",
+            "right": "20px", "top":"20px"}}>
+              View bugs
+            </button>
+          </div>
+          <div>
+            <p>What should go here???</p>
+            {/* <ProgressBar variant="danger" now={20} /> */}
+          </div>
+      </div>
+
+
+      </div>
       <Modal className="addProfileModal" style={{"marginTop":"200px"}} fade={false} show={showDelete} onHide={handleDeleteClose}>
             <Modal.Header>
             <div className="bugFormClose" onClick={handleDeleteClose}>

@@ -4,6 +4,7 @@ import { connect } from "react-redux"
 import {FaBell} from 'react-icons/fa';
 import {GrClose} from 'react-icons/gr';
 import {Button} from 'react-bootstrap';
+import { useParams } from "react-router-dom";
 import Modal from 'react-bootstrap/Modal';
 import { Formik, Form, Field } from "formik"; 
 import {
@@ -20,6 +21,7 @@ import Dropzone from "react-dropzone";
 import * as yup from "yup";
 import BugReportForm from './bugReportForm';
 const Bugs = () => {
+    const {projectId} = useParams();
     const [isOpen, setIsOpen] = useState(false);
     const toggleOverlay = () =>{
         setIsOpen(isOpen);
