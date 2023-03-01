@@ -1,0 +1,21 @@
+
+.overviewContainer{
+    max-height: 90%;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.halfdonutRisk{
+    margin-top: -100px;
+    margin-left: -4px;
+}
+
+.metricHalfDonutContainer canvas{
+    /* padding:30px; */
+    height: 220px !important;
+    width: 220px !important;
+    margin: auto;
+    margin-top: -10px;
+    height: 350px;
+}
