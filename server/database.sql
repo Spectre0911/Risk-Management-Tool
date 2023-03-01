@@ -30,6 +30,15 @@ create table projects (
     primary key (projectid)
 );
 
+--TODO trigger to add entry when project risk is changed?
+drop table if exists risks;
+create table risks (
+    projectid integer not null,
+    riskdate  timestamp not null,
+    primary key (projectid, riskdate),
+    foreign key (projectid) references projects(projectid) on delete cascade
+);
+
 drop table if exists userproject;
 create table userproject (
     userid    integer not null,
