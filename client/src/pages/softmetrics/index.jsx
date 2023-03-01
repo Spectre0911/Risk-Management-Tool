@@ -114,7 +114,7 @@ const SoftMetrics = () => {
       </div>
 
       <div className="infoBox project">
-        <div className="metricTitle">Effective Decisions</div>
+        <div className="metricTitle">Project Understanding</div>
         <div className="metricHalfDonutContainer">
           <HalfDoughnutChart data1={4.1} label="Effective Decisions" />
           <div className="donutText halfdonutRisk">
@@ -124,7 +124,7 @@ const SoftMetrics = () => {
       </div>
 
       <div className="infoBox project">
-        <div className="metricTitle">Core Values</div>
+        <div className="metricTitle">Team Cohesion</div>
         <div className="metricHalfDonutContainer">
           <HalfDoughnutChart data1={3.8} label="Core Values" />
           <div className="donutText halfdonutRisk">

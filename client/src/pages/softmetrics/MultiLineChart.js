@@ -11,13 +11,13 @@ const data = {
       borderColor: '#8884d8',
     },
     {
-      label: 'Effective Decisions',
+      label: 'Project Understanding',
       data: [60, 68, 80, 65, 70, 75],
       fill: false,
       borderColor: '#82ca9d',
     },
     {
-      label: 'Core Values',
+      label: 'Team Cohesion',
       data: [75, 83, 85, 70, 65, 70],
       fill: false,
       borderColor: '#ffc658',
@@ -26,7 +26,7 @@ const data = {
       label: 'Confidence in Skillset',
       data: [65, 78, 75, 79, 87, 90],
       fill: false,
-      borderColor: '#4d67bd',
+      borderColor: '#ad2fa5',
     },
   ],
 };
