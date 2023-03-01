@@ -2,6 +2,7 @@ import React, { Component, useEffect, useState } from "react";
 import Gantt from "./Gantt/";
 import Toolbar from "./Toolbar/";
 import { getAllDependencies } from "../services/AllDependencies";
+import { CallTopoSort } from "../services/TopoSort";
 const data = {
   data: [
     {
@@ -45,7 +46,7 @@ const NewGantt = () => {
 
   useEffect(() => {
     getAllFeatures({ projectid: 1 });
-    // sortTopologically({ projectid: 1 });
+    sortTopologically({ projectid: 1 });
   }, []);
 
   const getAllFeatures = (values) => {
@@ -109,6 +110,49 @@ const NewGantt = () => {
               console.log(links);
               setTasks(outputList);
               setLinks(links);
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
+  };
+  const sortTopologically = (values) => {
+    var outputList = [];
+    fetch("http://localhost:5000/api/features", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data != null) {
+          let featureDepMap = new Map();
+          let promises = [];
+
+          for (let i = 0; i < data.length; i++) {
+            let currentFeatureId = data[i].featureid;
+            let promise = getAllDependencies({ featureid: currentFeatureId })
+              .then((dependencyIds) => {
+                featureDepMap.set(currentFeatureId, dependencyIds);
+              })
+              .catch((error) => {
+                featureDepMap.set(currentFeatureId, []);
+              });
+            promises.push(promise);
+          }
+
+          Promise.all(promises)
+            .then(() => {
+              console.log(values);
+              CallTopoSort({
+                dependencies: featureDepMap,
+                projectid: 1,
+              });
             })
             .catch((error) => {
               console.error(error);
