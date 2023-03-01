@@ -93,7 +93,7 @@ create table bugs (
     bugname   varchar(50) not null,
     bugdesc   varchar(300),
     priority  integer not null check (priority >= 1 and priority <= 3),
-    severity  integer not null check (severity >= 1 and severity <= 3)
+    severity  integer not null check (severity >= 1 and severity <= 3),
     primary key (bugid),
     foreign key (featureid) references features(featureid) on delete cascade,
     foreign key (devid) references users(userid)
