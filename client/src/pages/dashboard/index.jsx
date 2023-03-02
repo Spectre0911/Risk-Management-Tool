@@ -8,6 +8,7 @@ import { BiTask } from "react-icons/bi";
 import { AiFillWarning } from "react-icons/ai";
 import { Scrollbars } from "react-custom-scrollbars";
 import "./index.css";
+import ProjectTable from "./ProjectTable";
 import Table from "./Table";
 const Dashboard = () => {
   return (
@@ -55,7 +56,7 @@ const Dashboard = () => {
 
         <div className="infoBox2 projectTable">
           <div className="metricTitle2">Project Summary</div>
-          <Table />
+          <ProjectTable />
         </div>
 
         <div className="infoBox2">
@@ -122,6 +123,76 @@ const Dashboard = () => {
           </Scrollbars>
         </div>
       </div>
+
+      <div className="infoBox2 projectTable">
+          <div className="metricTitle2">Task Summary</div>
+          <Table />
+        </div>
+
+        <div className="infoBox2">
+          <Scrollbars>
+            <div className="metricTitle2" style={{marginBottom:'20px'}}>Notificationss</div>
+
+            <div className="notificationBox">
+              <div className="notificationIcon">
+                <AiFillWarning />
+              </div>
+
+              <div className="NotificationText">
+                <p>Risk alert!</p>
+              </div>
+
+              <div className="NotificationDescription">
+                <p>
+                  Risk on CS261 project is increasingRisk on CS261 project is
+                  increasingRisk on CS261 project is increasing.
+                </p>
+              </div>
+            </div>
+
+            <div className="notificationBox">
+              <div className="notificationIcon blueIcon">
+                <BsBriefcaseFill />
+              </div>
+
+              <div className="NotificationText">
+                <p>Added to new project!</p>
+              </div>
+
+              <div className="NotificationDescription">
+                <p>Yuo have been added to a new project</p>
+              </div>
+            </div>
+            <div className="notificationBox">
+              <div className="notificationIcon blueIcon">
+                <BsBriefcaseFill />
+              </div>
+
+              <div className="NotificationText">
+                <p>Added to new project!</p>
+              </div>
+
+              <div className="NotificationDescription">
+                <p>Yuo have been added to a new project</p>
+              </div>
+            </div>
+
+            <div className="notificationBox">
+              <div className="notificationIcon blueIcon">
+                <BsBriefcaseFill />
+              </div>
+
+              <div className="NotificationText">
+                <p>Added to new project!</p>
+              </div>
+
+              <div className="NotificationDescription">
+                <p>Yuo have been added to a new project</p>
+              </div>
+            </div>
+          </Scrollbars>
+        </div>
+
 
       {/* <div className='icon'>
                     <FaBell />

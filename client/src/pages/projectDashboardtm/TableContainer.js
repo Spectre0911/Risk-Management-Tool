@@ -84,11 +84,6 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
           placeholder="Search by task name"
           onChange={(e) => setFilter("featureName", e.target.value)}
         />
-        <input
-          className="projectFilterInput viewProject"
-          placeholder="Search by project name"
-          onChange={(e) => setFilter("projectName", e.target.value)}
-        />
       </div>
       <div className="projectTableContainer">
         <Table bordered hover {...getTableProps()}>

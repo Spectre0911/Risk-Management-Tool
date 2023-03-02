@@ -5,7 +5,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 import Table from "./Table";
 import "./index.css"
 import { height } from "@mui/system";
-import DonutChart from "./DonutChart";
+import DonutChart from "../projectDashboard/DonutChart";
 import {Doughnut} from 'react-chartjs-2';
 import SemiCircleProgressBar from "react-progressbar-semicircle";
 import {Chart, ArcElement, Tooltip, Legend} from 'chart.js'
@@ -24,13 +24,11 @@ import GanttChart from "./gantt";
 import { gantt } from "dhtmlx-gantt";
 // import GanttChart from "../gantt";
 import { Octokit } from "octokit";
-import { RadarChart } from "./radar/RadarChart";
-import LineGraph from "./Line";
 import { useNavigate } from "react-router-dom";
 Chart.register(ArcElement);
 Chart.register([Tooltip])
 Chart.register([Legend])
-const ProjectDashboard = () => {
+const ProjectDashboardTm = () => {
     const navigate = useNavigate();
     const {projectId} = useParams();
     const labelsRisk = ['Budget','Team','Time','Code', 'Technical'];
@@ -131,133 +129,23 @@ const ProjectDashboard = () => {
     setTeamMembersList(e);
   }
     
-  const [data, setData] = useState();
-
-  const owner = 'sanjula-hettiarachchige';
-  const access_token = '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';
-  const headers = {'Authorization':"Token "+access_token};
-
-  const octokit = new Octokit({ 
-    auth: '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',
-  });
-
-
-
-  //Fetching github commit data
-  const [tempData, setTempData] = useState([]);
-  const [dataset, setDataset] = useState([]);
-  useEffect(() => {
-    let fetchData = [];
-    (async () => {
-        try{
-            const iterator = await octokit.paginate.iterator("GET /repos/{owner}/{repo}/commits", {
-                owner: "Spectre0911",
-                repo: "CS261",
-                per_page:100,
-            });
-            for await (const {data} of iterator) {
-                for (var i=0; i<data.length; i++){
-                    fetchData = [...fetchData,data[i]];
-                }
-            }
-            
-            setTempData(fetchData);
-
-        } catch (error) {
-            if (error.response) {
-            console.error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`)
-            }
-            console.error(error)
-        }
-    })();
-  },[]);
-
-  //Fetching github commit data
-  const [dates, setDates] = useState([]);
-  const [commits, setCommits] = useState([]);
-  useEffect(() => {
-    if (tempData.length==0){
-        return;
-    }
-    var uniqueDates = [];
-    for (var i=0; i<tempData.length; i++){
-        var date = tempData[i]['commit']['author']['date'].split('T')[0];
-        if (!uniqueDates.includes(date)){
-            uniqueDates.push(date);
-        }
-    }
-    uniqueDates.splice(-5);
-    uniqueDates = fillDates(uniqueDates[uniqueDates.length-1],uniqueDates[0]);
-    
-    var uniqueContributors = [];
-    for (var i=0; i<tempData.length; i++){
-        if (!uniqueContributors.includes(tempData[i]['commit']['committer']['name'])){
-            uniqueContributors.push(tempData[i]['commit']['committer']['name']);
-        }
-    }
-    var index = uniqueContributors.indexOf('GitHub');
-    if (index !== -1) {
-        uniqueContributors.splice(index, 1);
-    }
-
-    let commitHistory = [];
-    for (var a=0; a<uniqueDates.length; a++){
-      let totalCommits = 0
-      let currDate = uniqueDates[a];
-      for (var b=0; b<tempData.length; b++){
-          if ((tempData[b]['commit']['author']['date'].split('T')[0]==currDate)){
-                  totalCommits+=1;
-              }
-      }
-      commitHistory.push([currDate, totalCommits]);
-    }
-    setDataset(commitHistory);
-    var tempDates = [];
-    var tempCount = [];
-    for (var i=0; i<commitHistory.length; i++){
-      tempDates.push(commitHistory[i][0]);
-      tempCount.push(commitHistory[i][1]);
-    }
-
-    setDates(tempDates);
-    setCommits(tempCount);
-    
-  }, [tempData])
-
-
-
-  function fillDates(start, end) {
-      var output = [start];
-      var date = new Date(start);
-      var endDate = new Date(end);
-
-      do {
-          output.push(date.toISOString().split('T')[0]);
-          date = new Date(date.getTime());
-          date.setDate(date.getDate() + 1);
-      } while (date < endDate);
-
-      output.push(end);
-      return output;
-  }    
 
 
   return (
     <div className="main">
       <div className="grid">
-        <p className="projectTitleId">Project number {projectId}</p>
+        <p className="projectTitleId">Project number team member {projectId}</p>
+        
         
         <div className="infoBox project">
-        
-          <div className="metricTitle">Risk Score</div>
-          <div className="metricDonutContainer">
-            <DonutChart chartData={dataRisk} labels={labelsRisk} border={borderColorRisk} backgroundColor={backgroundColorRisk} cutOut={60}
-            />
-          <div className="donutText risk">
-            <p>7.8/10</p>
-          </div>
-          </div>
-            
+          <div className="metricTitle">Tasks left to complete</div>
+            <div className="metricDonutContainer smaller">
+              <DonutChart chartData={dataFeatures} labels={labelsFeatures} border={borderColorRisk} backgroundColor={backgroundColorFeatures} cutOut={60}/>
+            <div className="donutText">
+              <p>10</p>
+            </div>
+            </div>
+          
         </div>
 
         <div className="infoBox project">
@@ -270,16 +158,7 @@ const ProjectDashboard = () => {
           </div>
         </div>
 
-        <div className="infoBox project">
-          <div className="metricTitle">Outstanding Features</div>
-            <div className="metricDonutContainer smaller">
-              <DonutChart chartData={dataFeatures} labels={labelsFeatures} border={borderColorRisk} backgroundColor={backgroundColorFeatures} cutOut={60}/>
-            <div className="donutText">
-              <p>10</p>
-            </div>
-            </div>
-          
-        </div>
+        
 
         <div className="infoBox project">
           <div className="metricTitle">Time Left</div>
@@ -291,18 +170,28 @@ const ProjectDashboard = () => {
           </div>
         </div>
 
+        <div className="infoBox project">
+          <div className="metricTitle">Complete Survey</div>
+            <div className="metricDonutContainer smaller1">
+              <div className="surveyText">
+                <p className="daysLeftTitle">6 Days</p>
+                <p className="daysLeftDesc">Since you last completed the feedback survey</p>
+                <button onClick={{}} className="projectFilterInput feedbackForm" >
+                  Complete Survey
+                </button>
+              </div>
+            </div>
+        </div>
+
         <div className="infoBox2 projectTable feature">
-          <div className="metricTitle2">Features</div>
+          <div className="metricTitle2">Tasks</div>
           <Table/>
         </div>
 
         <div className="infoBox2">
           <Scrollbars>
             <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Team members
-            <button onClick={handleAddShow} className="projectFilterInput viewProject addFeatureButton" style={{"height":"35px","width":"40px" ,"padding":"0", "position": "absolute",
-            "right": "20px", "top":"15px"}}>
-              <IoIosPersonAdd/>
-            </button>
+
             </div>
             
             {teamMembers.map((member,index)=>{
@@ -324,20 +213,11 @@ const ProjectDashboard = () => {
                     </div>
                   )
                 })}
-                <div className="projectDashboardSkillMatchTitle">
-                  Skills match: 
-                  <div className="projectDashboardSkillScore">
-                    7.9
-                  </div>
-                </div>
+                
                 <div className="projectDashboardSkillMatchTitle">
                   <p><b className="projectDashboardBold">Bio:</b> Hi, my name is Jane and I am a software developer</p> 
                 </div>
-                <div className="featureDeleteTasksButtonDiv">
-                  <button type="submit" id={member.id} name={member.id} value={member.id} onClick={handleDeleteShow} className="featureDeleteTasksButton removeUser" style={{width:"40px"}} >
-                    Remove
-                  </button>
-                </div>
+                
                 {/* <SemiCircleProgressBar diameter={200} strokeWidth={30} percentage={33} showPercentValue /> */}
               </div>
               )
@@ -355,40 +235,7 @@ const ProjectDashboard = () => {
           </div>
       </div>
 
-      <div className="infoBox2 softMetricBox">
-          <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Soft Metric Summary
-            <button onClick={handleAddShow} className="projectFilterInput viewProject addFeatureButton" style={{"height":"35px","width":"160px" ,"padding":"0", "position": "absolute",
-            "right": "20px", "top":"20px"}}>
-              View Analysis
-            </button>
-          </div>
-            <RadarChart/>
-      </div>
 
-      <div className="infoBox2 softMetricBox">
-          <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Github Metrics Suite
-            <button onClick={() => navigate(`./github/${projectId}`)
-                } className="projectFilterInput viewProject addFeatureButton" style={{"height":"35px","width":"160px" ,"padding":"0", "position": "absolute",
-            "right": "20px", "top":"20px"}}>
-              More details
-            </button>
-          </div>
-            <LineGraph labels={dates} datavalues={commits}/>
-      </div>
-
-      <div className="infoBox2 bugs">
-          <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Bugs summary
-            <button onClick={() => navigate(`./bugs/${projectId}`)
-                } className="projectFilterInput viewProject addFeatureButton" style={{"height":"35px","width":"120px" ,"padding":"0", "position": "absolute",
-            "right": "20px", "top":"20px"}}>
-              View bugs
-            </button>
-          </div>
-          <div>
-            <p>What should go here???</p>
-            {/* <ProgressBar variant="danger" now={20} /> */}
-          </div>
-      </div>
 
 
       </div>
@@ -493,4 +340,4 @@ const ProjectDashboard = () => {
   );
 };
 
-export default ProjectDashboard;
+export default ProjectDashboardTm;

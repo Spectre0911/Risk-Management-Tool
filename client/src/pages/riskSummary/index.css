@@ -1,0 +1,55 @@
+@media (min-width: 1350px){
+.infoBox2.riskBox{
+    width: 40% !important;
+}}
+
+.infoBox2.riskBox{
+    height:500px;
+}
+
+.riskDonutContainer{
+    height:350px;
+}
+
+.riskDonutContainerSmaller{
+    height:200px;
+}
+
+.riskBox .donutText p {
+    margin-top: -50px;
+    font-size: 40px;
+}
+
+
+
+@media (min-width: 1350px){
+    .infoBox2.riskHistoryTrack{
+        width: 55% !important;
+}}
+
+.infoBox2.riskHistoryTrack{
+    height:500px;
+}
+
+.riskHistoryTrack .lineGraphContainer {
+    height: 350px;
+}
+
+.infoBox2.riskRecommendation{
+    width: 48% !important;
+    height: 400px;
+}
+
+
+.riskTitle{
+    font-weight: 900;
+    font-size:20px;
+}
+
+.riskText{
+    font-family: 'Montserrat';
+}
+
+.riskDescription{
+    margin-top: -10px;
+}

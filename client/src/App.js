@@ -15,8 +15,9 @@ import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import ScrollToTop from "./pages/projectDashboard/ScrollToTop";
 import ManagedProjects from "./pages/managedProjects";
-import ProjectContainer from "./pages/projectDashboard/ProjectContainer";
+import ProjectContainer from "./pages/projectDashboard/ProjectManagerContainer";
 import Bugs from "./pages/bugs";
+import ProjectDashboardTm from "./pages/projectDashboardtm";
 function App() {
   const mode = "light";
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -33,6 +34,7 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/" element={<Admin />} />
             <Route path="/projects/:projectId/*" element={<ProjectContainer/> }/>
+            <Route path="/projectstm/:projectId/*" element={<ProjectDashboardTm/> }/>
             
             {/* <Route path="/ganttChart" element={<GanttChart />} /> */}
           </Routes>

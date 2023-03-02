@@ -15,6 +15,8 @@ import EditProfileForm from "../admin/editProfileForm";
 import ProjectDashboard from ".";
 import TaskDashboard from "../viewTask";
 import GithubIntegrator from '../githubSuite';
+import RiskSummary from "../riskSummary";
+import ProjectDashboardTm from "./indextm";
 
 const ProjectContainer = () => {
   const {projectId} = useParams();
@@ -67,9 +69,11 @@ const ProjectContainer = () => {
             </div>
           <Routes>
               <Route path="/" element={<ProjectDashboard />} />
+              <Route path="/projectdashboardtm/:projectId" element={<ProjectDashboardTm />} />
               <Route path="/bugs/:projectId" element={<Bugs />} />
               <Route path="/viewtasks/:featureId" element={<TaskDashboard/> }/>
               <Route path="/github/:projectId" element={<GithubIntegrator/> }/>
+              <Route path="/risks/:projectId" element={<RiskSummary/> }/>
               </Routes>
         </div>
       </div>

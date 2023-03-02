@@ -25,7 +25,6 @@ import FlipMove from "react-flip-move";
 import { MdModeEditOutline } from "react-icons/md";
 import { BsFillTrashFill } from "react-icons/bs";
 import FeatureForm from "./FeatureForm";
-import TaskForm from "./TaskForm";
 import Modal from "react-bootstrap/Modal";
 import { GrClose } from "react-icons/gr";
 import {
@@ -50,8 +49,6 @@ const Table = () => {
         {
           taskId: "1",
           featureId: "1",
-          projectId: "1",
-          projectName: "CS261",
           taskPriority: "Core",
           featureName:"Dashboard",
           taskStatus: "Completed",
@@ -63,8 +60,6 @@ const Table = () => {
         {
           taskId: "2",
           featureId: "1",
-          projectId: "1",
-          projectName: "CS261",
           taskPriority: "Aesthetic",
           taskStatus: "In Progress",
           featureName:"Dashboard",
@@ -76,8 +71,6 @@ const Table = () => {
         {
           taskId: "3",
           featureId: "1",
-          projectId: "1",
-          projectName: "CS261",
           taskPriority: "Aesthetic",
           taskStatus: "Delayed",
           featureName:"Dashboard",
@@ -133,20 +126,6 @@ const Table = () => {
 
   const columns = useMemo(
     () => [
-      {
-        Header: "Project",
-        accessor: "projectName",
-        filterable: false,
-        disableFilters: true,
-        filterable: false,
-        Cell: ({ cell }) => {
-          return (
-            <div>
-              <b>{cell.row.original.projectName}</b>
-             </div>
-          )
-        },
-      },
       {
         Header: "Feature",
         accessor: "featureName",
@@ -222,22 +201,22 @@ const Table = () => {
         },
       },
       {
-        Header: "View Project",
+        Header: "Mark as Complete",
         Cell: ({ cell }) => {
-          return (
-            <div className="featureViewTasks">
-              <button
-                type="submit"
-                className="featureViewTasksButton"
-                value={cell.row.original.projectId}
-                onClick={() =>
-                  navigate(`/projectstm/${cell.row.original.projectId}`)
-                }
-              >
-                View Project
-              </button>
-            </div>
-          );
+          if (cell.row.original.taskStatus != "Completed"){
+            return (
+              <div className="featureViewTasks">
+                <button
+                  type="submit"
+                  className="featureCompleteTasksButton"
+                  value={cell.row.original.taskId}
+                  onClick={markTaskAsComplete}
+                >
+                  Complete task
+                </button>
+              </div>
+            );
+          }
         },
       },
       
@@ -260,7 +239,6 @@ const Table = () => {
         data={data}
         // renderRowSubComponent={renderRowSubComponent}
       />
-      
       <div>
         <Modal
           className="addProfileModal"
@@ -276,7 +254,7 @@ const Table = () => {
             <Modal.Title>Details of task assigned:</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <TaskForm handleClose={handleEditClose} taskId={taskId} />
+            <FeatureForm handleClose={handleEditClose} taskId={taskId} />
           </Modal.Body>
         </Modal>
 
