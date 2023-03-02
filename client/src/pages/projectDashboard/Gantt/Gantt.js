@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import { gantt } from 'dhtmlx-gantt';
-import 'dhtmlx-gantt/codebase/dhtmlxgantt.css';
+import React, { Component } from "react";
+import { gantt } from "dhtmlx-gantt";
+import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
 
 export default class Gantt extends Component {
-
   // instance of gantt.dataProcessor
   dataProcessor = null;
 
@@ -11,39 +10,38 @@ export default class Gantt extends Component {
     gantt.ext.zoom.init({
       levels: [
         {
-          name: 'Hours',
+          name: "Hours",
           scale_height: 60,
           min_column_width: 30,
           scales: [
-            { unit: 'day', step: 1, format: '%d %M' },
-            { unit: 'hour', step: 1, format: '%H' }
-          ]
+            { unit: "day", step: 1, format: "%d %M" },
+            { unit: "hour", step: 1, format: "%H" },
+          ],
         },
         {
-          name: 'Days',
+          name: "Days",
           scale_height: 60,
           min_column_width: 70,
           scales: [
-            { unit: 'week', step: 1, format: 'Week #%W' },
-            { unit: 'day', step: 1, format: '%d %M' }
-          ]
+            { unit: "week", step: 1, format: "Week #%W" },
+            { unit: "day", step: 1, format: "%d %M" },
+          ],
         },
         {
-          name: 'Months',
+          name: "Months",
           scale_height: 60,
           min_column_width: 70,
           scales: [
-            { unit: "month", step: 1, format: '%F' },
-            { unit: 'week', step: 1, format: '#%W' }
-          ]
-        }
-      ]
+            { unit: "month", step: 1, format: "%F" },
+            { unit: "week", step: 1, format: "#%W" },
+          ],
+        },
+      ],
     });
   }
 
-  
   setZoom(value) {
-    if(!gantt.ext.zoom.getLevels()){
+    if (!gantt.ext.zoom.getLevels()) {
       this.initZoom();
     }
     gantt.ext.zoom.setLevel(value);
@@ -71,9 +69,22 @@ export default class Gantt extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    // const { tasks } = this.props;
+    // gantt.clearAll();
+    // gantt.parse(tasks);
+    gantt.clearAll();
+    gantt.parse(this.props.tasks);
+
     return this.props.zoom !== nextProps.zoom;
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.tasks !== this.props.tasks) {
+      console.log("updated");
+      gantt.clearAll();
+      gantt.parse(this.props.tasks);
+    }
+  }
   componentDidMount() {
     gantt.config.date_format = "%Y-%m-%d %H:%i";
     // gantt.config.readonly = true;
@@ -92,11 +103,14 @@ export default class Gantt extends Component {
 
   render() {
     const { zoom } = this.props;
+
     this.setZoom(zoom);
     return (
       <div
-        ref={(input) => { this.ganttContainer = input }}
-        style={{ width: '100%', height: '100%' }}
+        ref={(input) => {
+          this.ganttContainer = input;
+        }}
+        style={{ width: "100%", height: "100%" }}
       ></div>
     );
   }

@@ -1,19 +1,14 @@
-// This should be given all the values to call topo sort
-
 import { replace } from "formik";
 
-export const CallTopoSort = (values) => {
+export const MinimiseOverlappingTasks = (values) => {
   console.log(values);
   // console.log(JSON.stringify(values, replacer));
-  fetch("http://localhost:5000/api/topoSort", {
+  fetch("http://localhost:5000/api/minimize-overlapping-tasks", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      adj: Array.from(values.dependencies.entries()),
-      projectid: values.projectid,
-    }),
+    body: JSON.stringify(values),
   })
     .then((response) => {
       return response.json();

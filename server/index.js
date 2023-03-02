@@ -185,6 +185,49 @@ app.post("/api/features", async (req, postRes) => {
   }
 });
 
+app.post("/api/minimize-overlapping-tasks", async (req, res) => {
+  const projectid = req.body.projectid;
+  console.log(projectid);
+  let tasks = await pool.query(
+    "SELECT featureid, starttime, endtime FROM features WHERE projectid = $1",
+    [projectid]
+  );
+
+  tasks = tasks.rows;
+  console.log(tasks);
+  const n = req.body.n;
+
+  tasks.sort((a, b) => a.starttime - b.starttime); // sort by start time
+  let endTimes = []; // priority queue (min heap)
+  let updatedTasks = [];
+  for (let task of tasks) {
+    while (endTimes.length && task.starttime >= endTimes[0]) {
+      endTimes.shift();
+    }
+    endTimes.push(task.endtime);
+    endTimes.sort((a, b) => a - b); // maintain heap invariant
+    if (endTimes.length > n) {
+      let earliestEndTime = endTimes[0];
+      task.starttime = earliestEndTime;
+      endTimes.shift();
+    }
+    updatedTasks.push(task);
+  }
+
+  for (let task of updatedTasks) {
+    pool.query(
+      "UPDATE features SET starttime=$1, endtime=$2 WHERE featureid=$3 AND projectid = $4",
+      [task.starttime, task.endtime, task.featureid, projectid],
+      (err, result) => {
+        if (err) throw err;
+        console.log(`Updated feature ${task.featureid}`);
+      }
+    );
+  }
+
+  res.json(updatedTasks);
+});
+
 function reviver(key, value) {
   if (typeof value === "object" && value !== null) {
     if (value.dataType === "Map") {

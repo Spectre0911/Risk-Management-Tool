@@ -30,6 +30,15 @@ create table projects (
     primary key (projectid)
 );
 
+--TODO trigger to add entry when project risk is changed?
+drop table if exists risks;
+create table risks (
+    projectid integer not null,
+    riskdate  timestamp not null,
+    primary key (projectid, riskdate),
+    foreign key (projectid) references projects(projectid) on delete cascade
+);
+
 drop table if exists userproject;
 create table userproject (
     userid    integer not null,
@@ -93,7 +102,7 @@ create table bugs (
     bugname   varchar(50) not null,
     bugdesc   varchar(300),
     priority  integer not null check (priority >= 1 and priority <= 3),
-    severity  integer not null check (severity >= 1 and severity <= 3)
+    severity  integer not null check (severity >= 1 and severity <= 3),
     primary key (bugid),
     foreign key (featureid) references features(featureid) on delete cascade,
     foreign key (devid) references users(userid)
@@ -102,6 +111,7 @@ create table bugs (
 drop table if exists notifications;
 create table notifications (
     notifid   serial not null,
+    location  integer not null check (location >= 0 and location <= 5),
     userid    integer not null,
     projectid integer not null,
     data      varchar(300) not null,
