@@ -228,14 +228,59 @@ app.post("/api/minimize-overlapping-tasks", async (req, res) => {
   res.json(updatedTasks);
 });
 
-function reviver(key, value) {
-  if (typeof value === "object" && value !== null) {
-    if (value.dataType === "Map") {
-      return new Map(value.value);
+app.post("/api/dependencies", async (req, postRes) => {
+  try {
+    // console.log(req.body);
+
+    const allFeatures = await pool.query(
+      "SELECT featurename, featureid FROM features INNER JOIN (SELECT depid from featuredep WHERE featureid = $1) as o1 on features.featureid = o1.depid;",
+      [req.body.featureid]
+    );
+    if (allFeatures.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      // console.log(allFeatures.rows);
+      postRes.json(allFeatures.rows);
     }
+  } catch (err) {
+    console.error(err.message);
   }
-  return value;
-}
+});
+//ACTIVe: select count(*) from userproject where userid = <userid here>;
+
+app.post("/api/activeProjects", async (req, postRes) => {
+  try {
+    const projectCount = await pool.query(
+      "SELECT COUNT(*) from userproject where userid = (SELECT userid FROM users WHERE email = $1) "[
+        req.body.email
+      ]
+    );
+    if (projectCount.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      postRes.json(projectCount.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/api/featureCount", async (req, postRes) => {
+  try {
+    const featureCount = await pool.query(
+      "SELECT COUNT(*) AS count FROM userproject WHERE userid = (SELECT userid FROM users WHERE email = $1) "[
+        req.body.email
+      ]
+    );
+    if (featureCount.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      postRes.json(featureCount.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 // Get all dependencies for a feature
 app.post("/api/dependencies", async (req, postRes) => {
@@ -306,17 +351,6 @@ app.post("/api/topoSort", async (req, res) => {
           req.body.projectid,
         ]
       );
-
-      // duration = SELECT (endtime - starttime) as duration from features;
-      // latestEndTime = SELECT endtime FROM features JOIN featuredep ON features.featureid = featuredep.depid WHERE featuredep.featureid = $1 AND projectid = $2 ORDER BY endtime DESC LIMIT 1;
-      // If 0 rows:
-      //   There are no dependencies, so default time should be the start time of the project
-      //   lastestEndTime = SELECT starttime from features WHERE projectid = $1 ORDER BY starttime ASC LIMIT 1;
-
-      // UPDATE feature SET endtime = $1 + interval $2 WHERE featureid = $3 AND projectid = $4;
-      // UPDATE feature SET starttime = $1
-
-      // return the sorted feature IDs as JSON response
     }
     res.json(sortedFeatureIds);
   } catch (err) {
