@@ -334,7 +334,7 @@ app.post("/api/timeLeft", async (req, postRes) => {
     // console.log(req.body);
 
     const timeLeft = await pool.query(
-      "SELECT deadline - NOW() FROM projects where projectid = $1;",
+      "SELECT deadline - NOW() as remaining, deadline - (Now()-opened) as completed FROM projects where projectid = $1;",
       [req.body.projectid]
     );
     if (timeLeft.rows.length == 0) {
