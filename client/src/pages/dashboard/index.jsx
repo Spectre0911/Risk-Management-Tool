@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { FaBell } from "react-icons/fa";
@@ -14,19 +14,18 @@ import "./index.css";
 import ProjectTable from "./ProjectTable";
 import Table from "./Table";
 const Dashboard = () => {
-  // const dispatch = useDispatch();
-  // dispatch(loginAction("Hello World"));
-  let value = 0;
+  const [activeProjects, setActiveProjects] = useState(0);
+
   const login = useSelector((state) => state.email);
   ActiveProjects({
     email: login.email,
-  }).then((data) => (value = data));
+  }).then((data) => setActiveProjects(data));
   return (
     <div className="main">
       <div className="grid">
         <div className="infoBox">
           <div className="metricTitle dashboard">Active projects</div>
-          <div className="metricNumber">{value}</div>
+          <div className="metricNumber">{activeProjects}</div>
           <div className="metricCircleBackground metricBlueBackground">
             <div className="metricIcon metricBlueIcon">
               <BsBriefcaseFill />
@@ -137,74 +136,75 @@ const Dashboard = () => {
       </div>
 
       <div className="infoBox2 projectTable">
-          <div className="metricTitle2">Task Summary</div>
-          <Table />
-        </div>
+        <div className="metricTitle2">Task Summary</div>
+        <Table />
+      </div>
 
-        <div className="infoBox2">
-          <Scrollbars>
-            <div className="metricTitle2" style={{marginBottom:'20px'}}>Notificationss</div>
+      <div className="infoBox2">
+        <Scrollbars>
+          <div className="metricTitle2" style={{ marginBottom: "20px" }}>
+            Notificationss
+          </div>
 
-            <div className="notificationBox">
-              <div className="notificationIcon">
-                <AiFillWarning />
-              </div>
-
-              <div className="NotificationText">
-                <p>Risk alert!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>
-                  Risk on CS261 project is increasingRisk on CS261 project is
-                  increasingRisk on CS261 project is increasing.
-                </p>
-              </div>
+          <div className="notificationBox">
+            <div className="notificationIcon">
+              <AiFillWarning />
             </div>
 
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsBriefcaseFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>Added to new project!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>Yuo have been added to a new project</p>
-              </div>
-            </div>
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsBriefcaseFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>Added to new project!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>Yuo have been added to a new project</p>
-              </div>
+            <div className="NotificationText">
+              <p>Risk alert!</p>
             </div>
 
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsBriefcaseFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>Added to new project!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>Yuo have been added to a new project</p>
-              </div>
+            <div className="NotificationDescription">
+              <p>
+                Risk on CS261 project is increasingRisk on CS261 project is
+                increasingRisk on CS261 project is increasing.
+              </p>
             </div>
-          </Scrollbars>
-        </div>
+          </div>
 
+          <div className="notificationBox">
+            <div className="notificationIcon blueIcon">
+              <BsBriefcaseFill />
+            </div>
+
+            <div className="NotificationText">
+              <p>Added to new project!</p>
+            </div>
+
+            <div className="NotificationDescription">
+              <p>Yuo have been added to a new project</p>
+            </div>
+          </div>
+          <div className="notificationBox">
+            <div className="notificationIcon blueIcon">
+              <BsBriefcaseFill />
+            </div>
+
+            <div className="NotificationText">
+              <p>Added to new project!</p>
+            </div>
+
+            <div className="NotificationDescription">
+              <p>Yuo have been added to a new project</p>
+            </div>
+          </div>
+
+          <div className="notificationBox">
+            <div className="notificationIcon blueIcon">
+              <BsBriefcaseFill />
+            </div>
+
+            <div className="NotificationText">
+              <p>Added to new project!</p>
+            </div>
+
+            <div className="NotificationDescription">
+              <p>Yuo have been added to a new project</p>
+            </div>
+          </div>
+        </Scrollbars>
+      </div>
 
       {/* <div className='icon'>
                     <FaBell />

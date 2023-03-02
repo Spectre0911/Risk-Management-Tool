@@ -17,7 +17,7 @@ export const ActiveProjects = (values) => {
         }
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         resolve(data);
       })
       .catch((error) => {

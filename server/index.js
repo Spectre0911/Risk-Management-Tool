@@ -186,6 +186,27 @@ app.post("/api/features", async (req, postRes) => {
   }
 });
 
+// Get all notifcations
+app.post("/api/notifications", async (req, postRes) => {
+  try {
+    const userId = await pool.query(
+      "SELECT userid FROM users WHERE email = $1;",
+      [req.body.email]
+    );
+    const allNotifications = await pool.query(
+      "SELECT COUNT(*) FROM notifications WHERE userid = $1",
+      [userId]
+    );
+    if (allFeatures.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      postRes.json(allFeatures.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.post("/api/minimize-overlapping-tasks", async (req, res) => {
   const projectid = req.body.projectid;
   console.log(projectid);
@@ -255,10 +276,12 @@ app.post("/api/activeProjects", async (req, postRes) => {
       "SELECT userid FROM users WHERE email = $1;",
       [req.body.email]
     );
+    console.log(userId.rows[0]);
     const projectCount = await pool.query(
       "SELECT COUNT(*) from userproject where userid = $1;",
-      [userId.rows.userId]
+      [userId.rows[0].userid]
     );
+    console.log(projectCount.rows[0].count);
     if (projectCount.rows.length == 0) {
       return postRes.json("0");
     } else {
@@ -319,7 +342,6 @@ app.post("/api/topoSort", async (req, res) => {
     }
     // perform topological sorting using the edges array
     const sortedFeatureIds = topoSort(edges);
-    console.log(sortedFeatureIds);
 
     // For each feature
     for (let i = 0; i < sortedFeatureIds.length; i++) {
@@ -342,9 +364,6 @@ app.post("/api/topoSort", async (req, res) => {
           [req.body.projectid]
         );
       }
-      console.log(featureid);
-      console.log(duration.rows);
-      console.log(latestEndTime.rows);
 
       await pool.query(
         "UPDATE features SET starttime = $1 ,endtime = ($1 :: TIMESTAMP +  $2)  WHERE featureid = $3 AND projectid = $4;",
