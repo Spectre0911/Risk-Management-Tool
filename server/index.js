@@ -195,12 +195,12 @@ app.post("/api/notifications", async (req, postRes) => {
     );
     const allNotifications = await pool.query(
       "SELECT COUNT(*) FROM notifications WHERE userid = $1",
-      [userId]
+      [userId.rows[0].count]
     );
-    if (allFeatures.rows.length == 0) {
-      return postRes.json(null);
+    if (allNotifications.rows.length == 0) {
+      return postRes.json("0");
     } else {
-      postRes.json(allFeatures.rows);
+      postRes.json(allNotifications.rows[0].count);
     }
   } catch (err) {
     console.error(err.message);
@@ -209,14 +209,12 @@ app.post("/api/notifications", async (req, postRes) => {
 
 app.post("/api/minimize-overlapping-tasks", async (req, res) => {
   const projectid = req.body.projectid;
-  console.log(projectid);
   let tasks = await pool.query(
     "SELECT featureid, starttime, endtime FROM features WHERE projectid = $1",
     [projectid]
   );
 
   tasks = tasks.rows;
-  console.log(tasks);
   const n = req.body.n;
 
   tasks.sort((a, b) => a.starttime - b.starttime); // sort by start time
@@ -276,12 +274,12 @@ app.post("/api/activeProjects", async (req, postRes) => {
       "SELECT userid FROM users WHERE email = $1;",
       [req.body.email]
     );
-    console.log(userId.rows[0]);
+    // console.log(userId.rows[0]);
     const projectCount = await pool.query(
       "SELECT COUNT(*) from userproject where userid = $1;",
       [userId.rows[0].userid]
     );
-    console.log(projectCount.rows[0].count);
+    // console.log(projectCount.rows[0].count);
     if (projectCount.rows.length == 0) {
       return postRes.json("0");
     } else {
