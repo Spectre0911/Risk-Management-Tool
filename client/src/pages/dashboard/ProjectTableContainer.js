@@ -12,11 +12,9 @@ import { CgSortAz, CgSortZa } from "react-icons/cg";
 import { MdSort } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-import { Scrollbars } from "react-custom-scrollbars";
 import Modal from "react-bootstrap/Modal";
 import { GrClose } from "react-icons/gr";
 import FeatureForm from "./FeatureForm";
-
 const TableContainer = ({ columns, data, renderRowSubComponent }) => {
   const navigate = useNavigate();
   const {
@@ -74,21 +72,35 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
     setPageSize(7);
   }, []);
 
-  
+  const [showAdd, setShowAdd] = useState(false);
+  const handleAddClose = () => {
+    setShowAdd(false);
+  };
+
+  const handleAddShow = () => {
+    setShowAdd(true);
+  };
+
 
   return (
     <Fragment>
       <div className="projectFilterRow">
         <input
-          className="projectFilterInput viewProject"
-          placeholder="Search by task name"
-          onChange={(e) => setFilter("featureName", e.target.value)}
-        />
-        <input
-          className="projectFilterInput viewProject"
+          className="projectFilterInput"
           placeholder="Search by project name"
           onChange={(e) => setFilter("projectName", e.target.value)}
         />
+        <input
+          className="projectFilterInput"
+          placeholder="Search by project manager"
+          onChange={(e) => setFilter("projectManager", e.target.value)}
+        />
+        <button
+          onClick={handleAddShow}
+          className="projectFilterInput viewProject addFeatureButton"
+        >
+          Create Project
+        </button>
       </div>
       <div className="projectTableContainer">
         <Table bordered hover {...getTableProps()}>
@@ -113,6 +125,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
               </tr>
             ))}
           </thead>
+
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);
@@ -121,7 +134,11 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
               }
               return (
                 <Fragment key={row.getRowProps().key}>
-                  <tr>
+                  <tr
+                    onClick={() =>
+                      navigate(`/projects/${row.original.projectId}`)
+                    }
+                  >
                     {row.cells.map((cell) => {
                       return (
                         <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
@@ -201,7 +218,29 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
         </Col>
       </Row>
 
-      
+      <Modal
+          className="addProfileModal"
+          style={{ marginTop: "100px" }}
+          fade={false}
+          show={showAdd}
+          onHide={handleAddClose}
+        >
+          <Modal.Header>
+            <div className="bugFormClose" onClick={handleAddClose}>
+              <GrClose />
+            </div>
+            <Modal.Title>Create Project</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <FeatureForm handleClose={handleAddClose} />
+          </Modal.Body>
+      </Modal>
+
+
+
+
+
+
     </Fragment>
   );
 };

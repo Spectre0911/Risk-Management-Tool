@@ -12,7 +12,7 @@ import EditProfileForm from './editProfileForm';
 import ProjectDashboard from '../projectDashboard';
 import TaskDashboard from '../viewTask';
 import GithubIntegrator from '../githubSuite';
-import ProjectContainer from '../projectDashboard/ProjectContainer';
+import ProjectContainer from '../projectDashboard/ProjectManagerContainer';
 const Admin = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleOverlay = () =>{

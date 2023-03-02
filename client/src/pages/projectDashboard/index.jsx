@@ -19,10 +19,6 @@ import Select from "react-select";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import {
   Box,
-  TextField,
-  useMediaQuery,
-  Typography,
-  useTheme,
 } from "@mui/material";
 import GanttChart from "./gantt";
 import { gantt } from "dhtmlx-gantt";

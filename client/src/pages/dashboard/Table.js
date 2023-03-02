@@ -18,7 +18,29 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SelectColumnFilter } from "./filters";
 import ChangingProgressProvider from "./ChangingProgressProvider";
+import TransitionGroup from "react-transition-group/TransitionGroup";
+import CSSTransition from "react-transition-group/CSSTransition";
+import ReactCSSTransitionGroup from "react-transition-group"; // ES6
+import FlipMove from "react-flip-move";
+import { MdModeEditOutline } from "react-icons/md";
+import { BsFillTrashFill } from "react-icons/bs";
+import FeatureForm from "./FeatureForm";
+import TaskForm from "./TaskForm";
+import Modal from "react-bootstrap/Modal";
+import { GrClose } from "react-icons/gr";
+import {
+  Box,
+  TextField,
+  useMediaQuery,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { Button } from "react-bootstrap";
+
 const Table = () => {
+  var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   useEffect(() => {
     const doFetch = async () => {
@@ -26,22 +48,41 @@ const Table = () => {
       const body = await response.json();
       const contacts = [
         {
+          taskId: "1",
+          featureId: "1",
           projectId: "1",
-          projectName: "cs261",
-          projectManager: "Jane Arnold",
-          deadline: "26/10/2022",
-          status: "ontime",
-          progress: 20,
-          risk: 10,
+          projectName: "CS261",
+          taskPriority: "Core",
+          featureName:"Dashboard",
+          taskStatus: "Completed",
+          taskName: "Add sidebar",
+          startTime: "12/11/2022",
+          endTime: "30/02/2023",
+          daysLeft: "2",
         },
         {
-          projectId: "2",
-          projectName: "cs261",
-          projectManager: "Jane Arnold",
-          deadline: "26/10/2022",
-          status: "ontime",
-          progress: 20,
-          risk: 10,
+          taskId: "2",
+          featureId: "1",
+          projectId: "1",
+          projectName: "CS261",
+          taskPriority: "Aesthetic",
+          taskStatus: "In Progress",
+          featureName:"Dashboard",
+          taskName: "Add sidebar",
+          startTime: "12/11/2022",
+          endTime: "30/02/2023",
+          daysLeft: "2",
+        },
+        {
+          taskId: "3",
+          featureId: "1",
+          projectId: "1",
+          projectName: "CS261",
+          taskPriority: "Aesthetic",
+          taskStatus: "Delayed",
+          featureName:"Dashboard",
+          taskName: "Add sidebar",
+          daysLeft: "2",
         },
       ];
       // console.log(contacts);
@@ -50,107 +91,198 @@ const Table = () => {
     doFetch();
   }, []);
 
-  const renderRowSubComponent = (row) => {
-    const {
-      name: { first, last },
-      location: { city, street, postcode },
-      picture,
-      cell,
-    } = row.original;
-    return (
-      <Card style={{ width: "18rem", margin: "0 auto" }}>
-        <CardImg top src={picture.large} alt="Card image cap" />
-        <CardBody>
-          <CardTitle>
-            <strong>{`${first} ${last}`} </strong>
-          </CardTitle>
-          <CardText>
-            <strong>Phone</strong>: {cell} <br />
-            <strong>Address:</strong>{" "}
-            {`${street.name} ${street.number} - ${postcode} - ${city}`}
-          </CardText>
-        </CardBody>
-      </Card>
-    );
+  const viewTasks = (e) => {
+    // console.log(e.target.value);
   };
+
+  const [showEdit, setShowEdit] = useState(false);
+  const [taskId, setTaskId] = useState(0);
+
+  const handleEditClose = () => {
+    setShowEdit(false);
+  };
+  const handleEditShow = (e) => {
+    setTaskId(e.target.value);
+    setShowEdit(true);
+  };
+
+
+
+
+  const markTaskAsComplete = (e) =>{
+    console.log("mark task as complete");
+    console.log(e.target.value);
+  }
+  // const renderRowSubComponent = (row) => {
+  //   const name = "k";
+  //   console.log("ee");
+  //   console.log(row.cells);
+  //   return (
+  //     <div>
+  //     {row.cells.map((row, index) => (
+  //     <tr className="newRows"key={index}>
+  //         <td><div>1</div></td>
+  //         <td>
+  //           <div><p>fji</p></div>
+  //         </td>
+  //     </tr>
+  //     ))}
+  //     </div>
+  //   )
+  // };
 
   const columns = useMemo(
     () => [
       {
-        Header: "Title",
+        Header: "Project",
         accessor: "projectName",
         filterable: false,
         disableFilters: true,
         filterable: false,
+        Cell: ({ cell }) => {
+          return (
+            <div>
+              <b>{cell.row.original.projectName}</b>
+             </div>
+          )
+        },
       },
       {
-        Header: "Progress",
-        accessor: "progress",
+        Header: "Feature",
+        accessor: "featureName",
+        filterable: false,
+        disableFilters: true,
+        filterable: false,
+      },
+      {
+        Header: "Task",
+        accessor: "taskName",
+        filterable: false,
+        disableFilters: true,
+        filterable: false,
+      },
+      {
+        Header: "Priority",
+        accessor: "taskPriority",
         filterable: false,
         disableFilters: true,
         filterable: false,
         Cell: ({ cell }) => {
-          const percentage = cell.value;
-          // console.log(percentage);
           return (
-            <div className="progressDisplayContainer">
-              <div className="progressNumber">{percentage}</div>
-              <ProgressBar variant="danger" now={percentage} />
-            </div>
-          );
+            <div className={`taskPriority 
+                ${cell.row.original.taskPriority==`Core`? "red":""}
+                ${cell.row.original.taskPriority==`Aesthetic`? "yellow":""}
+                ${cell.row.original.taskPriority==`Optional`? "green":""}
+                `}>
+                {cell.row.original.taskPriority}
+             </div>
+          )
         },
-      },
-      {
-        Header: "Project Manager",
-        accessor: "projectManager",
-        filterable: false,
-        disableFilters: true,
-        filterable: false,
-      },
-      {
-        Header: "Deadline",
-        accessor: "deadline",
-        filterable: false,
-        disableFilters: true,
-        filterable: false,
       },
       {
         Header: "Status",
-        accessor: "status",
+        accessor: "taskStatus",
+        filterable: false,
+        disableFilters: true,
+        filterable: false,
+        Cell: ({ cell }) => {
+          return (
+            <div className={`taskPriority 
+                ${cell.row.original.taskStatus==`Delayed`? "red":""}
+                ${cell.row.original.taskStatus==`In Progress`? "yellow":""}
+                ${cell.row.original.taskStatus==`Completed`? "green":""}
+                `}>
+                {cell.row.original.taskStatus}
+             </div>
+          )
+        },
+      },
+      {
+        Header: "Days Left",
+        accessor: "daysLeft",
         filterable: false,
         disableFilters: true,
         filterable: false,
       },
       {
-        Header: "Risk",
-        accessor: "risk",
-        filterable: false,
-        disableFilters: true,
-        filterable: false,
+        Header: "View Details",
         Cell: ({ cell }) => {
-          const percentage = cell.value;
-          // console.log(percentage);
           return (
-            <div className="projectCircularProgressBar">
-              <CircularProgressbar
-                value={percentage}
-                text={`${percentage}%`}
-                strokeWidth={12}
-              />
+            <div className="featureViewTasks">
+              <button
+                type="submit"
+                className="featureViewTasksButton"
+                value={cell.row.original.featureId}
+                onClick={handleEditShow}
+              >
+                View Details
+              </button>
             </div>
           );
         },
       },
+      {
+        Header: "View Project",
+        Cell: ({ cell }) => {
+          return (
+            <div className="featureViewTasks">
+              <button
+                type="submit"
+                className="featureViewTasksButton"
+                value={cell.row.original.projectId}
+                onClick={() =>
+                  navigate(`/projectstm/${cell.row.original.projectId}`)
+                }
+              >
+                View Project
+              </button>
+            </div>
+          );
+        },
+      },
+      
+    
+      // {
+      // id: 'expander', // 'id' is required
+      // Cell: ({ row }) => (
+      //   <span style={{transition:" all 2s"}}{...row.getToggleRowExpandedProps()}>
+      //     {row.isExpanded ? '👇' : '👉'}
+      //   </span>
+      // )}
     ],
     []
   );
 
   return (
-    <TableContainer
-      columns={columns}
-      data={data}
-      renderRowSubComponent={renderRowSubComponent}
-    />
+    <div>
+      <TableContainer
+        columns={columns}
+        data={data}
+        // renderRowSubComponent={renderRowSubComponent}
+      />
+      
+      <div>
+        <Modal
+          className="addProfileModal"
+          style={{ marginTop: "100px" }}
+          fade={false}
+          show={showEdit}
+          onHide={handleEditClose}
+        >
+          <Modal.Header>
+            <div className="bugFormClose" onClick={handleEditClose}>
+              <GrClose />
+            </div>
+            <Modal.Title>Details of task assigned:</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <TaskForm handleClose={handleEditClose} taskId={taskId} />
+          </Modal.Body>
+        </Modal>
+
+      
+      </div>
+    </div>
   );
 };
 
