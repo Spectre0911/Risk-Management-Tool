@@ -185,6 +185,22 @@ app.post("/api/features", async (req, postRes) => {
     console.error(err.message);
   }
 });
+// Get all features
+
+app.post("/api/projects", async (req, postRes) => {
+  try {
+    const allFeatures = await pool.query(
+      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (opened -  NOW()))) / (EXTRACT(DAY FROM (deadline - NOW())))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = 1) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users;"
+    );
+    if (allFeatures.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      postRes.json(allFeatures.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {
@@ -215,37 +231,8 @@ app.post("/api/minimize-overlapping-tasks", async (req, res) => {
   );
 
   tasks = tasks.rows;
-  const n = req.body.n;
 
-  tasks.sort((a, b) => a.starttime - b.starttime); // sort by start time
-  let endTimes = []; // priority queue (min heap)
-  let updatedTasks = [];
-  for (let task of tasks) {
-    while (endTimes.length && task.starttime >= endTimes[0]) {
-      endTimes.shift();
-    }
-    endTimes.push(task.endtime);
-    endTimes.sort((a, b) => a - b); // maintain heap invariant
-    if (endTimes.length > n) {
-      let earliestEndTime = endTimes[0];
-      task.starttime = earliestEndTime;
-      endTimes.shift();
-    }
-    updatedTasks.push(task);
-  }
-
-  for (let task of updatedTasks) {
-    pool.query(
-      "UPDATE features SET starttime=$1, endtime=$2 WHERE featureid=$3 AND projectid = $4",
-      [task.starttime, task.endtime, task.featureid, projectid],
-      (err, result) => {
-        if (err) throw err;
-        console.log(`Updated feature ${task.featureid}`);
-      }
-    );
-  }
-
-  res.json(updatedTasks);
+  res.json(sortedTasks);
 });
 
 app.post("/api/dependencies", async (req, postRes) => {

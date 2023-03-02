@@ -1,31 +1,24 @@
 import React, { Component, useState, useEffect } from "react";
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
 import Table from "./Table";
 import "./index.css";
-import { height } from "@mui/system";
 import DonutChart from "./DonutChart";
-import { Doughnut } from "react-chartjs-2";
-import SemiCircleProgressBar from "react-progressbar-semicircle";
 import { Chart, ArcElement, Tooltip, Legend } from "chart.js";
 import { Button } from "react-bootstrap";
-import { CgUserRemove } from "react-icons/cg";
 import Modal from "react-bootstrap/Modal";
 import { GrClose } from "react-icons/gr";
 import { IoIosPersonAdd } from "react-icons/io";
 import NewGantt from "./App.js";
 import Select from "react-select";
-import ProgressBar from "react-bootstrap/ProgressBar";
 import { Box } from "@mui/material";
-import GanttChart from "./gantt";
-import { gantt } from "dhtmlx-gantt";
 // import GanttChart from "../gantt";
 import { Octokit } from "octokit";
 import { RadarChart } from "./radar/RadarChart";
 import LineGraph from "./Line";
 import { useNavigate } from "react-router-dom";
 import { TimeLeft } from "../services/TimeLeft";
+import { AllFeatures } from "../services/AllFeatures";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -52,7 +45,7 @@ const ProjectDashboard = () => {
   ];
 
   const labelsFeatures = ["Core", "Optional", "Aesthetic"];
-  const dataFeatures = [8, 14, 12];
+  const [dataFeatures, setDataFeatures] = useState([8, 14, 12]);
   const backgroundColorFeatures = [
     "rgba(255,0,0,1)",
     "rgba(255,128,0,1)",
@@ -140,6 +133,37 @@ const ProjectDashboard = () => {
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
+    // Set the amount of time left: THERE IS AN ISSUEHERE
+    TimeLeft({
+      projectid: 1,
+    }).then((data) => {
+      console.log(data[0]);
+      setDataTime([data[0].remaining.days, data[0].completed.days]);
+    });
+
+    // Get the outstanding features
+    AllFeatures({
+      projectid: 1,
+    }).then((data) => {
+      console.log(data);
+      const counts = {
+        1: 0,
+        2: 0,
+        3: 0,
+      };
+
+      // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
+      data
+        .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
+        .reduce((acc, obj) => {
+          // Increment the count for the priority of the current object
+          acc[obj.priority]++;
+          return acc;
+        }, counts); // Use the counts object as the initial value of the reduce function
+
+      setDataFeatures([counts[1], counts[2], counts[3]]);
+      console.log(counts); // Output the counts object      // setDataTime([data[0].remaining.days, data[0].completed.days]);
+    });
     let fetchData = [];
     (async () => {
       try {
@@ -174,14 +198,6 @@ const ProjectDashboard = () => {
   const [commits, setCommits] = useState([]);
   useEffect(() => {
     // Setting donut data from api calls
-
-    // Set the amount of time left:
-    TimeLeft({
-      projectid: 1,
-    }).then((data) => {
-      console.log(data[0]);
-      setDataTime([data[0].remaining.days, data[0].completed.days]);
-    });
 
     if (tempData.length == 0) {
       return;
@@ -298,7 +314,7 @@ const ProjectDashboard = () => {
               cutOut={60}
             />
             <div className="donutText">
-              <p>10</p>
+              <p>{dataFeatures.reduce((acc, val) => acc + val, 0)}</p>
             </div>
           </div>
         </div>
