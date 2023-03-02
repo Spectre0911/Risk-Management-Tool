@@ -10,8 +10,8 @@ select count(*) from notifications where userid = <userid here> and not seen;
 -- Warnings
 -- TODO
 
--- TODO Project summary
-select projectname, deadline, currentrisk from (select * from projects natural join userproject where userid = <userid here>);
+-- Project summary
+select projectname, firstname as managerfn, lastname as managerln, deadline from ((select projectid, projectname, deadline from projects natural join userproject where userid = <userid here>) natural join userproject where ismanager) natural join users;
 
 -- Features
 select featurename, progress, starttime, endtime, currentrisk from features natural join userproject where userid = <userid here> and projectid = <projectid here>;
