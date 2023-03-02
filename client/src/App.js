@@ -27,15 +27,21 @@ function App() {
       Just kept these here so we can see how components can be added
   */}
       <BrowserRouter>
-      <ScrollToTop />
+        <ScrollToTop />
         <ThemeProvider theme={theme}>
           <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/" element={<Admin />} />
-            <Route path="/projects/:projectId/*" element={<ProjectContainer/> }/>
-            <Route path="/projectstm/:projectId/*" element={<ProjectDashboardTm/> }/>
-            
+            <Route
+              path="/projects/:projectId/*"
+              element={<ProjectContainer />}
+            />
+            <Route
+              path="/projectstm/:projectId/*"
+              element={<ProjectDashboardTm />}
+            />
+
             {/* <Route path="/ganttChart" element={<GanttChart />} /> */}
           </Routes>
         </ThemeProvider>

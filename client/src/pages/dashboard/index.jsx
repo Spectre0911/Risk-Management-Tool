@@ -8,6 +8,7 @@ import { BiTask } from "react-icons/bi";
 import { AiFillWarning } from "react-icons/ai";
 import { Scrollbars } from "react-custom-scrollbars";
 import { ActiveProjects } from "../services/ProjectCount";
+import { NotificationCount } from "../services/NotificationCount";
 import { useSelector, useDispatch } from "react-redux";
 import { loginAction } from "../../actions";
 import "./index.css";
@@ -15,11 +16,15 @@ import ProjectTable from "./ProjectTable";
 import Table from "./Table";
 const Dashboard = () => {
   const [activeProjects, setActiveProjects] = useState(0);
+  const [activeNotifications, setActiveNotifications] = useState(0);
 
   const login = useSelector((state) => state.email);
   ActiveProjects({
     email: login.email,
   }).then((data) => setActiveProjects(data));
+  NotificationCount({
+    email: login.email,
+  }).then((data) => setActiveNotifications(data));
   return (
     <div className="main">
       <div className="grid">
@@ -45,7 +50,7 @@ const Dashboard = () => {
 
         <div className="infoBox">
           <div className="metricTitle dashboard">Notifications</div>
-          <div className="metricNumber">20</div>
+          <div className="metricNumber">{activeNotifications}</div>
           <div className="metricCircleBackground metricBlueBackground">
             <div className="metricIcon metricBlueIcon">
               <FaBell />

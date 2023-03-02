@@ -1,6 +1,6 @@
-export const ActiveProjects = (values) => {
+export const NotificationCount = (values) => {
   return new Promise((resolve, reject) => {
-    fetch("http://localhost:5000/api/activeProjects", {
+    fetch("http://localhost:5000/api/notifications", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
