@@ -357,7 +357,7 @@ const ProjectDashboard = () => {
 
       <div className="infoBox2 softMetricBox">
           <div className="metricTitle2" style={{"marginBottom":"20px", "paddingTop":"7px"}}>Soft Metric Summary
-            <button onClick={handleAddShow} className="projectFilterInput viewProject addFeatureButton" style={{"height":"35px","width":"160px" ,"padding":"0", "position": "absolute",
+            <button onClick={() => navigate(`./softmetrics/${projectId}`)} className="projectFilterInput viewProject addFeatureButton" style={{"height":"35px","width":"160px" ,"padding":"0", "position": "absolute",
             "right": "20px", "top":"20px"}}>
               View Analysis
             </button>

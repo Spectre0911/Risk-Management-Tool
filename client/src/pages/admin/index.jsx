@@ -60,12 +60,6 @@ const Admin = () => {
             {/* <Dashboard /> */}
           <Routes>
               <Route exact path="/" element={<Dashboard />} />
-              {/* <Route path="/bugs" element={<Bugs />} /> */}
-              {/* <Route path="/managedprojects" element={<ManagedProjects />} />
-              <Route path="/bugs/:projectId" element={<Bugs />} />
-              <Route path="/projects/:projectId" element={<ProjectDashboard/> }/>
-              <Route path="/viewtasks/:featureId" element={<TaskDashboard/> }/>
-              <Route path="/github/:projectId" element={<GithubIntegrator/> }/>  */}
           </Routes>
         </div>
       </div>

@@ -1,19 +1,9 @@
 import React, { Component, useState, } from "react";
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-import { connect } from "react-redux";
 import {BsFillExclamationTriangleFill} from 'react-icons/bs';
 import {BsFillChatSquareTextFill} from 'react-icons/bs';
-import { BiTask } from "react-icons/bi";
-import { AiFillWarning } from "react-icons/ai";
-import { useParams } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
-import "../projectDashboard/index.css";
+// import "../projectDashboard/index.css";
 import "./index.css";
-import { height } from "@mui/system";
-import { Button } from "react-bootstrap";
-import {CgUserRemove} from 'react-icons/cg';
-import Modal from 'react-bootstrap/Modal';
-import {GrClose} from 'react-icons/gr';
 import MultiLineChart from "./MultiLineChart";
 import HalfDoughnutChart from "./HalfDoughnutChart";
 

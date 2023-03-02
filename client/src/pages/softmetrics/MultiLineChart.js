@@ -1,5 +1,5 @@
 import React from 'react';
-import Chart from 'chart.js/auto'; import { Line } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
 const data = {
   labels: ['1', '2', '3', '4', '5', '6'],

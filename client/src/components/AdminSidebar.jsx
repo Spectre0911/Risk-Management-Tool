@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import "./AdminSidebar.css";
 
-const AdminSidebar = ({projectId}) => {
+const AdminSidebar = ({projectId, teamMember}) => {
     const [collapsed, setCollapsed] = useState(false);
     const { collapseSidebar } = useProSidebar();
     const navigate = useNavigate();
@@ -54,23 +54,26 @@ const AdminSidebar = ({projectId}) => {
                 {!projectId && <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/dashboard/productList`)}>
                     {'Developed Projects'}
                 </MenuItem >}
-
-                {projectId && <MenuItem className="menuItem" icon={<AiOutlineFundProjectionScreen />} onClick={() => navigate(`/projects/${projectId}`)}>
+ 
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineFundProjectionScreen />} onClick={() => navigate(`/projects/${projectId}`)}>
                     {'Project Summary'}
                 </MenuItem >}
 
-                {projectId && <MenuItem className="menuItem" icon={<BsGraphUp />} onClick={() => navigate(`/projects/${projectId}/github/${projectId}`)}>
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<BsGraphUp />} onClick={() => navigate(`/projects/${projectId}/github/${projectId}`)}>
                     {'Github Metrics'}
                 </MenuItem >}
 
-                {projectId && <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/projects/${projectId}/softmetrics/${projectId}`)}>
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/projects/${projectId}/softmetrics/${projectId}`)}>
                     {'Soft Metrics'}
                 </MenuItem >}
 
-                {projectId && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projects/${projectId}/bugs/${projectId}`)}>
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projects/${projectId}/bugs/${projectId}`)}>
                     {'Bugs'}
                 </MenuItem >}
 
+                {(teamMember&&projectId) && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projectstm/${projectId}/bugs/${projectId}`)}>
+                    {'Bugs'}
+                </MenuItem >}
 
                 <MenuItem className="bottomItem" icon={<BiLogOutCircle />} onClick={() => navigate(`/dashboard/productList`)}>
                     {'Log out'}

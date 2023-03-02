@@ -16,9 +16,9 @@ import ProjectDashboard from ".";
 import TaskDashboard from "../viewTask";
 import GithubIntegrator from '../githubSuite';
 import RiskSummary from "../riskSummary";
-import ProjectDashboardTm from "./indextm";
+import ProjectDashboardTm from ".";
 
-const ProjectContainer = () => {
+const ProjectTmContainer = () => {
   const {projectId} = useParams();
   const navigate = useNavigate();
   const [data, setData] = useState([]);
@@ -44,7 +44,7 @@ const ProjectContainer = () => {
       <div className="splitScreen">
         <div className="leftPane">
           
-          <AdminSidebar projectId={projectId}/>
+          <AdminSidebar projectId={projectId} teamMember={1}/>
         </div>
         <div className="rightPane">
             <div className='titleBar'>
@@ -68,7 +68,7 @@ const ProjectContainer = () => {
             </div>
             </div>
           <Routes>
-              <Route path="/" element={<ProjectDashboard />} />
+              <Route path="/" element={<ProjectDashboardTm />} />
               <Route path="/projectdashboardtm/:projectId" element={<ProjectDashboardTm />} />
               <Route path="/bugs/:projectId" element={<Bugs />} />
               <Route path="/viewtasks/:featureId" element={<TaskDashboard/> }/>
@@ -81,4 +81,4 @@ const ProjectContainer = () => {
   );
 };
 
-export default ProjectContainer;
+export default ProjectTmContainer;
