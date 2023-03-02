@@ -32,7 +32,6 @@ create table projects (
     primary key (projectid)
 );
 
---TODO trigger to add entry when project risk is changed?
 drop table if exists risks;
 create table risks (
     projectid integer not null,
