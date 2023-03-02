@@ -39,7 +39,7 @@ const AdminSidebar = ({projectId}) => {
                     <img className='profilePic' src="http://localhost:5000/assets/jane.jpg"></img>
                     <p className="welcomeMessage">{username}</p>
                 </div>
-                <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/`)}>
+                <MenuItem className="menuItem dashboard" icon={<RiDashboardFill />} onClick={() => navigate(`/`)}>
                     {'Dashboard'}
                 </MenuItem >
 

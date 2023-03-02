@@ -99,5 +99,18 @@
     padding-top: 20px;
     position: relative;
     align-items: center;
-    
+}
+
+.menuItem.dashboard{
+    width: 200px !important;
+    transition: 0.6s;
+    background-color: #5873ca;
+    border-radius: 10px;
+    margin-left: 14px;
+    margin-bottom: 10px;
+}
+
+.menuItem.dashboard >.ps-menu-button:hover{
+    transition: unset !important;
+    background-color: unset !important;
 }
