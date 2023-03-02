@@ -27,14 +27,16 @@ create table projects (
     check (deadline > opened),
     brief       varchar(300) not null,
     budget      integer not null check (budget > 0),
+    currentrisk integer not null default 0,
+    check (currentrisk >= 0 and currentrisk <= 100),
     primary key (projectid)
 );
 
---TODO trigger to add entry when project risk is changed?
 drop table if exists risks;
 create table risks (
     projectid integer not null,
     riskdate  timestamp not null,
+    risk      integer not null check (currentrisk >= 0 and currentrisk <= 100),
     primary key (projectid, riskdate),
     foreign key (projectid) references projects(projectid) on delete cascade
 );
@@ -247,3 +249,15 @@ $$ language plpgsql;
 create trigger newdep before insert on featuredep
 for each statement
     execute procedure checkdep();
+
+-- Update project's current risk in projects when new data added to risks
+create or replace function newrisk() returns trigger as $$
+begin
+    update projects set currentrisk = new.risk where projectid = new.projectid;
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger addrisk after insert on risks
+for each statement
+    execute procedure newrisk();
