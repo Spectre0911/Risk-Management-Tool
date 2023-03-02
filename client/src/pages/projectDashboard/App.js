@@ -3,6 +3,7 @@ import Gantt from "./Gantt/";
 import Toolbar from "./Toolbar/";
 import { getAllDependencies } from "../services/AllDependencies";
 import { CallTopoSort } from "../services/TopoSort";
+import { MinimiseOverlappingTasks } from "../services/MinimiseOverlap";
 const data = {
   data: [
     {
@@ -46,7 +47,9 @@ const NewGantt = () => {
 
   useEffect(() => {
     getAllFeatures({ projectid: 1 });
-    sortTopologically({ projectid: 1 });
+    // sortTopologically({ projectid: 1 });
+    // MinimiseOverlappingTasks({ projectid: 1 });
+    MinimiseOverlappingTasks({ projectid: 1 });
   }, []);
 
   const getAllFeatures = (values) => {
