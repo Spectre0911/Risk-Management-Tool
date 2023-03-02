@@ -327,6 +327,27 @@ app.post("/api/dependencies", async (req, postRes) => {
   }
 });
 
+//SELECT deadline - NOW() FROM projects where projectid = 1
+
+app.post("/api/timeLeft", async (req, postRes) => {
+  try {
+    // console.log(req.body);
+
+    const timeLeft = await pool.query(
+      "SELECT deadline - NOW() FROM projects where projectid = $1;",
+      [req.body.projectid]
+    );
+    if (timeLeft.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      // console.log(allFeatures.rows);
+      postRes.json(timeLeft.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 // Topo sort
 app.post("/api/topoSort", async (req, res) => {
   try {

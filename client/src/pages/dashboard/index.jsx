@@ -178,7 +178,7 @@ const Dashboard = () => {
             </div>
 
             <div className="NotificationDescription">
-              <p>Yuo have been added to a new project</p>
+              <p>You have been added to a new project</p>
             </div>
           </div>
           <div className="notificationBox">
