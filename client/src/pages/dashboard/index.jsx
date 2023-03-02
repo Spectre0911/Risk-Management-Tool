@@ -7,15 +7,25 @@ import { BsBriefcaseFill } from "react-icons/bs";
 import { BiTask } from "react-icons/bi";
 import { AiFillWarning } from "react-icons/ai";
 import { Scrollbars } from "react-custom-scrollbars";
+import { ActiveProjects } from "../services/ProjectCount";
+import { useSelector, useDispatch } from "react-redux";
+import { loginAction } from "../../actions";
 import "./index.css";
 import Table from "./Table";
 const Dashboard = () => {
+  // const dispatch = useDispatch();
+  // dispatch(loginAction("Hello World"));
+  let value = 0;
+  const login = useSelector((state) => state.email);
+  ActiveProjects({
+    email: login.email,
+  }).then((data) => (value = data));
   return (
     <div className="main">
       <div className="grid">
         <div className="infoBox">
           <div className="metricTitle dashboard">Active projects</div>
-          <div className="metricNumber">25</div>
+          <div className="metricNumber">{value}</div>
           <div className="metricCircleBackground metricBlueBackground">
             <div className="metricIcon metricBlueIcon">
               <BsBriefcaseFill />
@@ -60,7 +70,9 @@ const Dashboard = () => {
 
         <div className="infoBox2">
           <Scrollbars>
-            <div className="metricTitle2" style={{marginBottom:'20px'}}>Notificationss</div>
+            <div className="metricTitle2" style={{ marginBottom: "20px" }}>
+              Notificationss
+            </div>
 
             <div className="notificationBox">
               <div className="notificationIcon">

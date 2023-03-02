@@ -1,21 +1,28 @@
 import { replace } from "formik";
 
 export const ActiveProjects = (values) => {
-  console.log(values);
-  // console.log(JSON.stringify(values, replacer));
-  fetch("http://localhost:5000/api/activeProjects  ", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(values),
-  })
-    .then((response) => {
-      return response.json();
+  return new Promise((resolve, reject) => {
+    fetch("http://localhost:5000/api/activeProjects", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
     })
-    .then((data) => {
-      if (data != null) {
-        return data;
-      }
-    });
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Unable to fetch data from API");
+        }
+      })
+      .then((data) => {
+        console.log(data);
+        resolve(data);
+      })
+      .catch((error) => {
+        console.error(error);
+        reject(error);
+      });
+  });
 };

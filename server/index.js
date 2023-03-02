@@ -3,7 +3,8 @@ import { fileURLToPath } from "url";
 
 import bcrypt from "bcryptjs";
 import path from "path";
-import { reverse } from "dns";
+// import { reverse } from "dns";
+// import { user } from "pg/lib/defaults.js";
 
 const require = createRequire(import.meta.url);
 const express = require("express");
@@ -250,15 +251,18 @@ app.post("/api/dependencies", async (req, postRes) => {
 
 app.post("/api/activeProjects", async (req, postRes) => {
   try {
+    const userId = await pool.query(
+      "SELECT userid FROM users WHERE email = $1;",
+      [req.body.email]
+    );
     const projectCount = await pool.query(
-      "SELECT COUNT(*) from userproject where userid = (SELECT userid FROM users WHERE email = $1) "[
-        req.body.email
-      ]
+      "SELECT COUNT(*) from userproject where userid = $1;",
+      [userId.rows.userId]
     );
     if (projectCount.rows.length == 0) {
-      return postRes.json(null);
+      return postRes.json("0");
     } else {
-      postRes.json(projectCount.rows);
+      postRes.json(projectCount.rows[0].count);
     }
   } catch (err) {
     console.error(err.message);

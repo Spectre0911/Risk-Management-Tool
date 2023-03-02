@@ -10,7 +10,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const emailSelector = useSelector((state) => state.email);
 
   const dispatch = useDispatch();
 
@@ -39,10 +38,9 @@ const LoginPage = () => {
                 return response.json();
               })
               .then((data) => {
-                console.log(data);
                 if (data.loggedIn) {
                   dispatch(loginAction(data.email));
-                  navigate("/admin");
+                  navigate("/");
                 } else {
                   setErrors({
                     email: " ",
@@ -93,7 +91,7 @@ const LoginPage = () => {
                 className="submit-button"
                 disabled={isSubmitting}
               >
-                Sign In
+                Sign in
               </button>
               <div>
                 <label className="signupLabel">
