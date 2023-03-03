@@ -84,7 +84,6 @@ const NewGantt = () => {
 
           Promise.all(promises)
             .then(() => {
-              console.log(data);
               outputList = data.map((inputObj, index) => ({
                 id: inputObj.featureid,
                 text: inputObj.featurename,
@@ -110,7 +109,6 @@ const NewGantt = () => {
                   linkid++;
                 }
               }
-              console.log(links);
               setTasks(outputList);
               setLinks(links);
             })
@@ -151,7 +149,6 @@ const NewGantt = () => {
 
           Promise.all(promises)
             .then(() => {
-              console.log(values);
               CallTopoSort({
                 dependencies: featureDepMap,
                 projectid: 1,

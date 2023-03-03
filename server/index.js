@@ -36,42 +36,30 @@ async function testConnect() {
 
 testConnect();
 
-app.post("/todos", async (req, res) => {
-  try {
-    const { description } = req.body;
-    const newTodo = await pool.query(
-      "INSERT INTO todo (description) VALUES($1) RETURNING *",
-      [description]
-    );
+// Create a project
 
-    res.json(newTodo.rows[0]);
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-app.post("/addbug", async (req, res) => {
+// Get all notifcations
+app.post("/api/createProject", async (req, postRes) => {
   try {
-    const { bugDetails } = req.body.values;
-    console.log(bugDetails);
-    const addbug = await pool.query(
-      "INSERT INTO bugs (featureid, devid, bugname, bugdesc, priority, severity) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
+    console.log(req.body);
+    await pool.query(
+      "INSERT INTO projects (projectname, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
       [
-        1,
-        2,
-        req.body.values.bugName,
-        req.body.values.bugDescription,
-        req.body.values.priority,
-        req.body.values.severity,
+        req.body.projectName,
+        req.body.closed,
+        req.body.opened,
+        req.body.deadline,
+        req.body.brief,
+        10,
       ]
     );
-
-    res.json("finished");
   } catch (err) {
+    console.log("ERROR");
     console.error(err.message);
   }
 });
 
+// Login / Signup
 app.post("/api/createAccount", async (req, res) => {
   try {
     console.log(req.body);
@@ -185,8 +173,7 @@ app.post("/api/features", async (req, postRes) => {
     console.error(err.message);
   }
 });
-// Get all features
-
+// Get all projects
 app.post("/api/projects", async (req, postRes) => {
   try {
     const allFeatures = await pool.query(
@@ -201,6 +188,7 @@ app.post("/api/projects", async (req, postRes) => {
     console.error(err.message);
   }
 });
+// Get all bugs
 
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {
