@@ -43,9 +43,10 @@ testConnect();
 // Get all notifcations
 app.post("/api/createProject", async (req, postRes) => {
   try {
+    // Create project
     console.log(req.body);
-    await pool.query(
-      "INSERT INTO projects (projectname, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
+    const projects = await pool.query(
+      "INSERT INTO projects (projectname, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6)",
       [
         req.body.projectName,
         req.body.closed,
@@ -54,6 +55,22 @@ app.post("/api/createProject", async (req, postRes) => {
         req.body.brief,
         10,
       ]
+    );
+
+    const projectidRows = await pool.query(
+      "SELECT projectid FROM projects ORDER BY projectid DESC LIMIT 1"
+    );
+    const projectid = projectidRows.rows[0].projectid;
+    // INSERT all skills
+    req.body.skills.map((item) => {
+      pool.query(
+        "INSERT INTO projectskill (projectid, skill) VALUES($1, $2);",
+        [projectid, item.label]
+      );
+    });
+    pool.query(
+      "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES((SELECT userid FROM users WHERE email = $1), $2, 'PM', True);",
+      [req.body.email.email, projectid]
     );
   } catch (err) {
     console.log("ERROR");
@@ -112,7 +129,7 @@ app.post("/api/login", async (req, postResult) => {
 app.post("/api/createFeature", async (req, res) => {
   try {
     console.log(req.body);
-    // Insert the feature into the databasea
+    // Insert the feature into the database
     const createFeature = await pool.query(
       "INSERT INTO features (projectid, featurename, starttime, endtime, completed, priority, currentrisk, progress, difficulty) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
       [
