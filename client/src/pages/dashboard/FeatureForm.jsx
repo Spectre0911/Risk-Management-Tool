@@ -12,6 +12,7 @@ import { BsBriefcaseFill } from "react-icons/bs";
 import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
 import { CreateProject } from "../services/CreateProject";
+import { useSelector } from "react-redux";
 import {
   Box,
   TextField,
@@ -30,6 +31,7 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   const { palette } = useTheme();
 
   const [dependencyOptions, setDependencyOptions] = useState([]);
+  const [email, setEmail] = useState(useSelector((state) => state.email));
 
   const [skillsRequired, setSkillsRequired] = useState([]);
   const [teamMembers, setTeamMembers] = useState([]);
@@ -51,7 +53,6 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    console.log(values);
     const newValues = {
       projectName: values.name,
       opened: values.startTime,
@@ -61,6 +62,7 @@ const EditProfileForm = ({ handleClose, featureId }) => {
       brief: values.description,
       skills: skillsRequired,
       teamMembers: teamMembers,
+      email: email,
     };
     CreateProject(newValues);
     // createFeature(newValues);
@@ -87,9 +89,9 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   ];
 
   const teamMembersOptions = [
-    { value: "1", label: "Joshua" },
-    { value: "2", label: "Morgan" },
-    { value: "3", label: "Sanjula" },
+    { value: "1", label: "jc@gmail.com" },
+    { value: "2", label: "mk@gmail.com" },
+    { value: "3", label: "sh@gmail.com" },
   ];
 
   const [priority, setPriority] = useState({ value: "1", label: "Core" });

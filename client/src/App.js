@@ -11,7 +11,6 @@ import Admin from "./pages/admin";
 import { useMemo } from "react";
 import { themeSettings } from "./theme";
 import { createTheme } from "@mui/material/styles";
-import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import ScrollToTop from "./pages/projectDashboard/ScrollToTop";
 import ManagedProjects from "./pages/managedProjects";

@@ -41,6 +41,7 @@ testConnect();
 // Get all notifcations
 app.post("/api/createProject", async (req, postRes) => {
   try {
+    // Create project
     console.log(req.body);
     const projects = await pool.query(
       "INSERT INTO projects (projectname, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6)",
@@ -58,13 +59,17 @@ app.post("/api/createProject", async (req, postRes) => {
       "SELECT projectid FROM projects ORDER BY projectid DESC LIMIT 1"
     );
     const projectid = projectidRows.rows[0].projectid;
-    console.log(projectid);
+    // INSERT all skills
     req.body.skills.map((item) => {
       pool.query(
         "INSERT INTO projectskill (projectid, skill) VALUES($1, $2);",
         [projectid, item.label]
       );
     });
+    pool.query(
+      "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES((SELECT userid FROM users WHERE email = $1), $2, 'PM', True);",
+      [req.body.email.email, projectid]
+    );
   } catch (err) {
     console.log("ERROR");
     console.error(err.message);
