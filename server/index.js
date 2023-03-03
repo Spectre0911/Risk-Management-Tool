@@ -7,11 +7,13 @@ import path from "path";
 // import { user } from "pg/lib/defaults.js";
 
 const require = createRequire(import.meta.url);
+var request = require('request-promise'); // to connect to the ML server
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const pool = require("./db.cjs");
 const topoSort = require("toposort"); // you will need to install this package
+
 
 //middleware
 app.use(cors());
@@ -288,7 +290,7 @@ app.post("/api/dependencies", async (req, postRes) => {
     // console.log(req.body);
 
     const allFeatures = await pool.query(
-      "SELECT featurename, featureid FROM features INNER JOIN (SELECT depid from featuredep WHERE featureid = $1) as o1 on features.featureid = o1.depid;",
+      "SELECT featurename, featureid features INNER JOIN (SELECT depid from featuredep WHERE featureid = $1) as o1 on features.featureid = o1.depid;",
       [req.body.featureid]
     );
     if (allFeatures.rows.length == 0) {
@@ -374,6 +376,50 @@ app.post("/api/topoSort", async (req, res) => {
     console.error(err.message);
   }
 });
+
+async function predict(test_array) {
+
+	// This variable contains the data
+	// you want to send
+	var data = {
+		array: test_array
+	}
+
+    // preparing the post request
+	var options = {
+		method: 'POST',
+
+		// http:flaskserverurl:port/route
+		uri: 'http://127.0.0.1:5000/predict',
+		body: data,
+
+		// Automatically stringifies
+		// the body to JSON
+		json: true
+	};
+
+	var sendrequest = await request(options)
+
+		// The parsedBody contains the data
+		// sent back from the Flask server
+		.then(function (parsedBody) {
+			console.log(parsedBody);
+			
+			// You can do something with
+			// returned data
+			let result;
+			result = parsedBody['result'];
+			console.log("The probability of project success: ", result);
+		})
+		.catch(function (err) {
+			console.log(err);
+		});
+}
+
+var test_input_1 = [[0.51342282, 0.84380054, 0.7717033, 0.34, 0.624,0.68704923]]
+var test_input_2 = [[0.67676768, 0.03678401, 0.70619826, 0.21, 0.212, 0.32635373]]
+predict(test_input_1);
+predict(test_input_2);
 
 app.listen(5000, () => {
   console.log("server has started on port 5000");
