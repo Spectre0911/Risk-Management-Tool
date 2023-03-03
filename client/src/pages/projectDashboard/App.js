@@ -47,9 +47,9 @@ const NewGantt = () => {
 
   useEffect(() => {
     getAllFeatures({ projectid: 1 });
-    // sortTopologically({ projectid: 1 });
+    sortTopologically({ projectid: 1 });
     // MinimiseOverlappingTasks({ projectid: 1 });
-    MinimiseOverlappingTasks({ projectid: 1 });
+    // MinimiseOverlappingTasks({ projectid: 1 });
   }, []);
 
   const getAllFeatures = (values) => {
