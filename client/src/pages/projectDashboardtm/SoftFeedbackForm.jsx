@@ -55,31 +55,27 @@ const SoftFeedbackForm = ({ handleClose, taskId, close }) => {
     setValue(newValue);
   };
 
-  const marks = [
-    {
-      value: 0,
-      label: '0',
-    },
-    {
-      value: 1,
-      label: '1',
-    },
-    {
-      value: 2,
-      label: '2',
-    },
-    {
-      value: 3,
-      label: '3',
-    },
-    {
-      value: 4,
-      label: '4',
-    },
-    {
-      value: 5,
-      label: '5',
-    },
+  const marks = [[
+  [{value: 1, label: 'Not at all'},{value: 2, label: 'To a small extent'}, {value: 3, label: 'Moderately'},{value: 4, label: 'To a large extent'},{value: 5, label: 'Completely'}],
+  [{value: 1, label: 'Not at all'},{value: 2, label: 'To a small extent'}, {value: 3, label: 'Moderately'},{value: 4, label: 'To a large extent'},{value: 5, label: 'Completely'}],
+  [{value: 1, label: 'Not at all'},{value: 2, label: 'Rarely'}, {value: 3, label: 'Sometimes'},{value: 4, label: 'Often'},{value: 5, label: 'Very Often'}]
+  ],
+  [
+    [{value: 1, label: 'Not at all'},{value: 2, label: 'To a small extent'}, {value: 3, label: 'Moderately'},{value: 4, label: 'To a large extent'},{value: 5, label: 'Completely'}],
+    [{value: 1, label: 'Not at all'},{value: 2, label: 'Rarely'}, {value: 3, label: 'Sometimes'},{value: 4, label: 'Often'},{value: 5, label: 'Very Often'}],
+    [{value: 1, label: 'Not at all confident'},{value: 2, label: 'Slightly confident'}, {value: 3, label: 'Moderately confident'},{value: 4, label: 'Very confident'},{value: 5, label: 'Extremely confident'}]
+  ],
+  [
+    [{value: 1, label: 'Not at all'},{value: 2, label: 'To a small extent'}, {value: 3, label: 'Moderately'},{value: 4, label: 'To a large extent'},{value: 5, label: 'Completely'}],
+    [{value: 1, label: 'Not well at all'},{value: 2, label: 'Not very well'}, {value: 3, label: 'Moderately well'},{value: 4, label: 'Well'},{value: 5, label: 'Very well'}],
+    [{value: 1, label: 'Not at all confident'},{value: 2, label: 'Slightly confident'}, {value: 3, label: 'Moderately confident'},{value: 4, label: 'Very confident'},{value: 5, label: 'Extremely confident'}]
+  ],
+  [
+    [{value: 1, label: 'Not at all confident'},{value: 2, label: 'Slightly confident'}, {value: 3, label: 'Moderately confident'},{value: 4, label: 'Very confident'},{value: 5, label: 'Extremely confident'}],
+    [{value: 1, label: 'Not at all'},{value: 2, label: 'To a small extent'}, {value: 3, label: 'Moderately'},{value: 4, label: 'To a large extent'},{value: 5, label: 'Completely'}],
+    [{value: 1, label: 'Not well at all confident'},{value: 2, label: 'Slightly confident'}, {value: 3, label: 'Moderately confident'},{value: 4, label: 'Very confident'},{value: 5, label: 'Extremely confident'}],
+    
+  ]
   ];
 
   const questions = [{ 
@@ -190,10 +186,10 @@ const SoftFeedbackForm = ({ handleClose, taskId, close }) => {
                         step={null}
                         className="feedbackFormSlider"
                         valueLabelDisplay="auto"
-                        marks={marks}
+                        marks={marks[index][index1]}
                         row={index}
                         col={index1}
-                        min={0}
+                        min={1}
                         max={5}
                         sx={{
                           gridColumn: "span 4"

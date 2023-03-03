@@ -17,7 +17,7 @@ import Table from "./Table";
 const Dashboard = () => {
   const [activeProjects, setActiveProjects] = useState(0);
   const [activeNotifications, setActiveNotifications] = useState(0);
-
+  
   const login = useSelector((state) => state.email);
   ActiveProjects({
     email: login.email,
@@ -29,6 +29,7 @@ const Dashboard = () => {
     <div className="main">
       <div className="grid">
         <div className="infoBox">
+          
           <div className="metricTitle dashboard">Active projects</div>
           <div className="metricNumber">{activeProjects}</div>
           <div className="metricCircleBackground metricBlueBackground">

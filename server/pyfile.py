@@ -29,4 +29,4 @@ def sum_of_array():
     return json.dumps({"result": result[0]})
 
 if __name__ == "__main__": 
-    app.run(port=5000)
+    app.run(port=5001)
