@@ -269,8 +269,14 @@ const ProjectDashboard = () => {
   return (
     <div className="main">
       <div className="grid">
-        <p className="projectTitleId">Project number {projectId}</p>
-
+        <p className="projectTitleId">Project number {projectId}
+          <button
+            onClick={handleAddShow}
+            className="projectFilterInput viewProject closeProject"
+          >
+            Close Project
+          </button>
+        </p>
         <div className="infoBox project">
           <div className="metricTitle">Risk Score</div>
           <div className="metricDonutContainer">
@@ -430,7 +436,7 @@ const ProjectDashboard = () => {
           >
             Soft Metric Summary
             <button
-              onClick={handleAddShow}
+              onClick={() => navigate(`./softmetrics/${projectId}`)}
               className="projectFilterInput viewProject addFeatureButton"
               style={{
                 height: "35px",

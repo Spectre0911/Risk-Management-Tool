@@ -15,6 +15,7 @@ import {IoIosBug} from 'react-icons/io'
 import {AiOutlineFundProjectionScreen} from 'react-icons/ai'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import {AiOutlineWarning} from 'react-icons/ai'
 import "./AdminSidebar.css";
 
 const AdminSidebar = ({projectId, teamMember}) => {
@@ -65,6 +66,10 @@ const AdminSidebar = ({projectId, teamMember}) => {
 
                 {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/projects/${projectId}/softmetrics/${projectId}`)}>
                     {'Soft Metrics'}
+                </MenuItem >}
+
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineWarning />} onClick={() => navigate(`/projects/${projectId}/risks/${projectId}`)}>
+                    {'Risk Metrics'}
                 </MenuItem >}
 
                 {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projects/${projectId}/bugs/${projectId}`)}>

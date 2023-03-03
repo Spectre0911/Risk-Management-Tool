@@ -23,7 +23,7 @@ const SoftMetrics = () => {
         <p className="projectTitleId">Soft Metric Hub</p>
 
         <div className="infoBox2 projectTable feature" style={{marginBottom:'30px'}}>
-          <div className="metricTitle2">Features</div>
+          <div className="metricTitle2">Soft Skill Tracker</div>
           <div className="ganttContainer overviewContainer">
             <MultiLineChart/>
           </div>
