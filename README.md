@@ -9,15 +9,16 @@
 4) Install Flask using `pip install flask`
 5) Install __requests__ library for python using `pip install requests`
 6) Install __joblib__ library for python using `pip install joblib`
-7) In a new terminal, to run the Flask server type `python pyfile.py`.
-8) In the terminal run
+7) Install __sklearn__ library for python using `pip install sklearn`
+8) In a new terminal, to run the Flask server type `python pyfile.py`
+9) In the terminal run
     - `npm install -g nodemon`
-9) Go into server/db.js and edit the `password` field only with the password you have set up. 
-10) After cloning the github repository, cd into client and run `npm install`
-11) `cd` into server and run `npm install`
-12) Change the password field 'currently san' in db.sql to the password you set when install postgres.
-13) Inside server/ run `nodemon` - The server should start up now
-14) Insider client/ run `npm start` - The front end should load up and there should be a todo list system website set up. 
+10) Go into server/db.js and edit the `password` field only with the password you have set up. 
+11) After cloning the github repository, cd into client and run `npm install`
+12) `cd` into server and run `npm install`
+13) Change the password field 'currently san' in db.sql to the password you set when install postgres.
+14) Inside server/ run `nodemon` - The server should start up now
+15) Insider client/ run `npm start` - The front end should load up and there should be a todo list system website set up. 
 
 Additional software:
 - Install pgAdmin - Can help you view the database and its contents graphically. 
