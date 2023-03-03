@@ -17,7 +17,7 @@ import TaskDashboard from "../viewTask";
 import GithubIntegrator from '../githubSuite';
 import RiskSummary from "../riskSummary";
 import ProjectDashboardTm from "../projectDashboardtm";
-
+import SoftMetrics from "../softmetrics";
 const ProjectContainer = () => {
   const {projectId} = useParams();
   const navigate = useNavigate();
@@ -44,7 +44,7 @@ const ProjectContainer = () => {
       <div className="splitScreen">
         <div className="leftPane">
           
-          <AdminSidebar projectId={projectId}/>
+          <AdminSidebar projectId={projectId} teamMember = {0}/>
         </div>
         <div className="rightPane">
             <div className='titleBar'>
@@ -74,6 +74,7 @@ const ProjectContainer = () => {
               <Route path="/viewtasks/:featureId" element={<TaskDashboard/> }/>
               <Route path="/github/:projectId" element={<GithubIntegrator/> }/>
               <Route path="/risks/:projectId" element={<RiskSummary/> }/>
+              <Route path="/softmetrics/:projectId" element={<SoftMetrics/> }/>
               </Routes>
         </div>
       </div>

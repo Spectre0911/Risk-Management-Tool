@@ -51,6 +51,17 @@
   font-size: 20px !important;
   background-color: #0069cc;
   color: white;
-  padding:10px 10px
+  padding:10px 10px;
+  border-radius: 12px;
 }
 
+
+
+.addProfileModal.Feedback>.modal-dialog{
+  max-width: 900px !important;
+  width: 900px !important;
+}
+
+.addProfileModal.Feedback{
+  margin-top: 120px !important;
+}

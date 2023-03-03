@@ -17,7 +17,7 @@ import ScrollToTop from "./pages/projectDashboard/ScrollToTop";
 import ManagedProjects from "./pages/managedProjects";
 import ProjectContainer from "./pages/projectDashboard/ProjectManagerContainer";
 import Bugs from "./pages/bugs";
-import ProjectDashboardTm from "./pages/projectDashboardtm";
+import ProjectTmContainer from "./pages/projectDashboardtm/ProjectTmManagerContainer";
 function App() {
   const mode = "light";
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
@@ -39,7 +39,7 @@ function App() {
             />
             <Route
               path="/projectstm/:projectId/*"
-              element={<ProjectDashboardTm />}
+              element={<ProjectTmContainer />}
             />
 
             {/* <Route path="/ganttChart" element={<GanttChart />} /> */}

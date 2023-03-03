@@ -8,11 +8,11 @@ const LineGraph = ({labels, datavalues}) => {
     labels: labels,
     datasets: [
         {
-        label: "Commit tracker",
+        label: "Risk history",
         data: datavalues,
         fill: true,
-        backgroundColor: "rgba(75,192,192,0.2)",
-        borderColor: "rgba(75,192,192,1)"
+        backgroundColor: "rgba(254, 50, 6, 0.548)",
+        borderColor: "rgba(219, 52, 0)"
         },
     ],    
     };

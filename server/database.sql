@@ -36,7 +36,7 @@ drop table if exists risks;
 create table risks (
     projectid integer not null,
     riskdate  timestamp not null,
-    risk      integer not null check (currentrisk >= 0 and currentrisk <= 100),
+    risk      integer not null check (risk >= 0 and risk <= 100),
     primary key (projectid, riskdate),
     foreign key (projectid) references projects(projectid) on delete cascade
 );
