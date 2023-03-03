@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { FaBell } from "react-icons/fa";
@@ -25,6 +25,9 @@ const Dashboard = () => {
   NotificationCount({
     email: login.email,
   }).then((data) => setActiveNotifications(data));
+  useEffect(() => {
+    console.log(login);
+  });
   return (
     <div className="main">
       <div className="grid">
