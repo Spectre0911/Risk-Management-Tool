@@ -1,9 +1,11 @@
 
 .overviewContainer{
-    max-height: 90%;
+    max-height: 80%;
     align-content: center;
     justify-content: center;
     align-items: center;
+    width: 99%;
+    margin-top: 20px;
 }
 
 .halfdonutRisk{

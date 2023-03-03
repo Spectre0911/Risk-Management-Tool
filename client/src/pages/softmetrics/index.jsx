@@ -22,16 +22,16 @@ const SoftMetrics = () => {
       <div className="grid">
         <p className="projectTitleId">Soft Metric Hub</p>
 
-        <div className="infoBox2 projectTable feature">
+        <div className="infoBox2 projectTable feature" style={{marginBottom:'30px'}}>
           <div className="metricTitle2">Features</div>
           <div className="ganttContainer overviewContainer">
             <MultiLineChart/>
           </div>
         </div>
         
-        <div className="infoBox2">
+        <div className="infoBox2" style={{marginBottom:'30px'}}>
           <Scrollbars>
-            <div className="metricTitle2" style={{marginBottom:'20px'}}>Notifications</div>
+            <div className="metricTitle2"  style={{marginBottom:'20px'}}>Notifications</div>
 
             <div className="notificationBox">
               <div className="notificationIcon blueIcon">
@@ -92,7 +92,7 @@ const SoftMetrics = () => {
           </Scrollbars>
         </div>
       
-        <div className="infoBox project">
+        <div className="infoBox project"  style={{marginBottom:'50px'}}>
         
         <div className="metricTitle">Communication</div>
         <div className="metricHalfDonutContainer">

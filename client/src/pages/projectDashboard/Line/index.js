@@ -18,8 +18,8 @@ const LineGraph = ({labels, datavalues}) => {
     };
 
     const options = {
-            maintainAspectRatio: false,
-        };
+        maintainAspectRatio: false,
+    };
 
     return (
         <div className="lineGraphContainer">
