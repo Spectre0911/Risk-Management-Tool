@@ -7,15 +7,17 @@
     - Connect to the database (`psql -U postgres`) 
     - Run the database schema (`psql -U postgres -f "path to the database.sql file"`)
 4) Install Flask using `pip install flask`
-5) In a new terminal, to run the Flask server type `python pyfile.py`.
-6) In the terminal run
+5) Install __requests__ library for python using `pip install requests`
+6) Install __joblib__ library for python using `pip install joblib`
+7) In a new terminal, to run the Flask server type `python pyfile.py`.
+8) In the terminal run
     - `npm install -g nodemon`
-7) Go into server/db.js and edit the `password` field only with the password you have set up. 
-8) After cloning the github repository, cd into client and run `npm install`
-9) `cd` into server and run `npm install`
-10) Change the password field 'currently san' in db.sql to the password you set when install postgres.
-11) Inside server/ run `nodemon` - The server should start up now
-12) Insider client/ run `npm start` - The front end should load up and there should be a todo list system website set up. 
+9) Go into server/db.js and edit the `password` field only with the password you have set up. 
+10) After cloning the github repository, cd into client and run `npm install`
+11) `cd` into server and run `npm install`
+12) Change the password field 'currently san' in db.sql to the password you set when install postgres.
+13) Inside server/ run `nodemon` - The server should start up now
+14) Insider client/ run `npm start` - The front end should load up and there should be a todo list system website set up. 
 
 Additional software:
 - Install pgAdmin - Can help you view the database and its contents graphically. 
@@ -42,4 +44,4 @@ Notes: The front end starts from /client/app.js
 This will store your changes locally and you can view them with the command **git log**
 
 #### When you have completed a feature or want to add something to main code base:
-`git push -m "TELL ME WHY YOU ARE PUSHING YOUR CODE"`. I will review this and merge it with our existing code base.
+`git push`. I will review this and merge it with our existing code base.
