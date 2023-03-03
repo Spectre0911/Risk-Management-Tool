@@ -42,8 +42,8 @@ testConnect();
 app.post("/api/createProject", async (req, postRes) => {
   try {
     console.log(req.body);
-    await pool.query(
-      "INSERT INTO projects (projectname, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
+    const projects = await pool.query(
+      "INSERT INTO projects (projectname, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6)",
       [
         req.body.projectName,
         req.body.closed,
@@ -59,12 +59,11 @@ app.post("/api/createProject", async (req, postRes) => {
     );
     const projectid = projectidRows.rows[0].projectid;
     console.log(projectid);
-    console.log("here");
     req.body.skills.map((item) => {
-      pool.query("INSERT INTO projectskill (projectid, skill) VALUES($1, $2)", [
-        projectid,
-        item,
-      ]);
+      pool.query(
+        "INSERT INTO projectskill (projectid, skill) VALUES($1, $2);",
+        [projectid, item.label]
+      );
     });
   } catch (err) {
     console.log("ERROR");
