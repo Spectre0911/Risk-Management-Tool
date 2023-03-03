@@ -185,8 +185,7 @@ app.post("/api/features", async (req, postRes) => {
     console.error(err.message);
   }
 });
-// Get all features
-
+// Get all projects
 app.post("/api/projects", async (req, postRes) => {
   try {
     const allFeatures = await pool.query(
@@ -201,6 +200,7 @@ app.post("/api/projects", async (req, postRes) => {
     console.error(err.message);
   }
 });
+// Get all bugs
 
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {
