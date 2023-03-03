@@ -116,7 +116,7 @@ create table notifications (
     location  integer not null check (location >= 0 and location <= 5),
     userid    integer not null,
     projectid integer not null,
-    notiftype integer not null check (notiftype = 1 or notiftype = 2),
+    notiftype integer not null check (notiftype = 1 or notiftype = 2), -- 1 = regular notification, 2 = warning
     title     varchar(50) not null,
     message   varchar(300) not null,
     seen      boolean not null default false,
