@@ -53,6 +53,19 @@ app.post("/api/createProject", async (req, postRes) => {
         10,
       ]
     );
+
+    const projectidRows = await pool.query(
+      "SELECT projectid FROM projects ORDER BY projectid DESC LIMIT 1"
+    );
+    const projectid = projectidRows.rows[0].projectid;
+    console.log(projectid);
+    console.log("here");
+    req.body.skills.map((item) => {
+      pool.query("INSERT INTO projectskill (projectid, skill) VALUES($1, $2)", [
+        projectid,
+        item,
+      ]);
+    });
   } catch (err) {
     console.log("ERROR");
     console.error(err.message);
@@ -110,7 +123,7 @@ app.post("/api/login", async (req, postResult) => {
 app.post("/api/createFeature", async (req, res) => {
   try {
     console.log(req.body);
-    // Insert the feature into the databasea
+    // Insert the feature into the database
     const createFeature = await pool.query(
       "INSERT INTO features (projectid, featurename, starttime, endtime, completed, priority, currentrisk, progress, difficulty) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
       [
