@@ -36,35 +36,25 @@ async function testConnect() {
 
 testConnect();
 
-app.post("/addbug", async (req, res) => {
-  try {
-    const { bugDetails } = req.body.values;
-    console.log(bugDetails);
-    const addbug = await pool.query(
-      "INSERT INTO bugs (featureid, devid, bugname, bugdesc, priority, severity) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
-      [
-        1,
-        2,
-        req.body.values.bugName,
-        req.body.values.bugDescription,
-        req.body.values.priority,
-        req.body.values.severity,
-      ]
-    );
-
-    res.json("finished");
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
 // Create a project
 
 // Get all notifcations
 app.post("/api/createProject", async (req, postRes) => {
   try {
     console.log(req.body);
+    await pool.query(
+      "INSERT INTO projects (projectname, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
+      [
+        req.body.projectName,
+        req.body.closed,
+        req.body.opened,
+        req.body.deadline,
+        req.body.brief,
+        10,
+      ]
+    );
   } catch (err) {
+    console.log("ERROR");
     console.error(err.message);
   }
 });

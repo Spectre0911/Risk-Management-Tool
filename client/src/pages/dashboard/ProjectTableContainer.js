@@ -81,7 +81,6 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
     setShowAdd(true);
   };
 
-
   return (
     <Fragment>
       <div className="projectFilterRow">
@@ -219,28 +218,22 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
       </Row>
 
       <Modal
-          className="addProfileModal"
-          style={{ marginTop: "100px" }}
-          fade={false}
-          show={showAdd}
-          onHide={handleAddClose}
-        >
-          <Modal.Header>
-            <div className="bugFormClose" onClick={handleAddClose}>
-              <GrClose />
-            </div>
-            <Modal.Title>Create Project</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <FeatureForm handleClose={handleAddClose} />
-          </Modal.Body>
+        className="addProfileModal"
+        style={{ marginTop: "100px" }}
+        fade={false}
+        show={showAdd}
+        onHide={handleAddClose}
+      >
+        <Modal.Header>
+          <div className="bugFormClose" onClick={handleAddClose}>
+            <GrClose />
+          </div>
+          <Modal.Title>Create Project</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <FeatureForm handleClose={handleAddClose} />
+        </Modal.Body>
       </Modal>
-
-
-
-
-
-
     </Fragment>
   );
 };
