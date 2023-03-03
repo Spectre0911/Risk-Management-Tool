@@ -28,22 +28,31 @@ select featurename, progress, starttime, endtime, currentrisk from features natu
 -- Bugs for particular feature
 select bugname, bugdesc, priority, severity, devid from bugs where featureid = <featureid here>;
 
+-- Number of bugs for a particular project (critical)
+select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 1;
+
+-- Number of bugs for a particular project (major)
+select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 2;
+
+-- Number of bugs for a particular project (minor)
+select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 3;
+
 -- Total tasks (for individual user)
 select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here> and devid = <userid here>) as totaltasks;
 
 -- Total tasks (for whole project)
 select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here>) as totaltasks;
 
--- Tasks to be completed (for individual user)
+-- Tasks to be completed (for particular user and project)
 select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here> and devid = <userid here> and not completed) as tasksleft;
 
 -- Tasks to be completed (for whole project)
 select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here> and not completed) as tasksleft;
 
--- List completed tasks (for individual user)
+-- List completed tasks (for particular user and project)
 select taskname, description, starttime, endtime from tasks where projectid = <projectid here> and devid = <userid here> and completed;
 
--- List uncompleted tasks (for individual user)
+-- List uncompleted tasks (for particular user and project)
 select taskname, description, starttime, endtime from tasks where projectid = <projectid here> and devid = <userid here> and not completed;
 
 -- List completed tasks (for whole project)
