@@ -1,0 +1,28 @@
+.userContainer{
+    width: 99%;
+    min-height: 180px;
+    height: auto;
+    overflow: hidden;
+    border: 2px solid #d0cfd4;
+    box-shadow: 1px 1px 3px #d0cfd4;
+    border-radius: 5px;
+    position: relative;
+    margin: auto;
+    padding: 10px 10px;
+    margin-bottom: 10px;
+
+}
+
+.userTitle{
+    font-family: 'Montserrat';
+    font-size: 30px;
+    font-weight: 800;
+    padding-top: 20px;
+    display: inline-block;
+}
+
+p{
+    text-align: left;
+    padding:10px;
+    margin: 10px;
+}
