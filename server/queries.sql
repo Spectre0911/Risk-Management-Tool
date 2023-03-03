@@ -5,10 +5,10 @@ select count(*) from userproject where userid = <userid here>;
 select count(*) from tasks where devid = <userid here>;
 
 -- Notifications
-select count(*) from notifications where userid = <userid here> and not seen;
+select count(*) from notifications where userid = <userid here> and not seen and notiftype = 1;
 
 -- Warnings
--- TODO
+select count(*) from notifications where userid = <userid here> and not seen and notiftype = 2;
 
 -- Projects participated in by user
 select projectname, firstname as managerfn, lastname as managerln, deadline, currentrisk from ((select projectid, projectname, deadline from projects natural join userproject where userid = <userid here>) as projectinfo natural left join userproject where ismanager) as projectdata natural join users;
