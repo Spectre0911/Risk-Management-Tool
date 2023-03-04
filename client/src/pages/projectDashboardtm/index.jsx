@@ -25,6 +25,7 @@ import { gantt } from "dhtmlx-gantt";
 // import GanttChart from "../gantt";
 import { Octokit } from "octokit";
 import { useNavigate } from "react-router-dom";
+import SoftFeedbackForm from "./SoftFeedbackForm";
 Chart.register(ArcElement);
 Chart.register([Tooltip])
 Chart.register([Legend])
@@ -132,7 +133,7 @@ const ProjectDashboardTm = () => {
 
 
   return (
-    <div className="main">
+    <div className="main tm">
       <div className="grid">
         <p className="projectTitleId">Project number team member {projectId}</p>
         
@@ -176,7 +177,7 @@ const ProjectDashboardTm = () => {
               <div className="surveyText">
                 <p className="daysLeftTitle">6 Days</p>
                 <p className="daysLeftDesc">Since you last completed the feedback survey</p>
-                <button onClick={{}} className="projectFilterInput feedbackForm" >
+                <button onClick={handleAddShow} className="projectFilterInput feedbackForm" >
                   Complete Survey
                 </button>
               </div>
@@ -279,63 +280,21 @@ const ProjectDashboardTm = () => {
             </Modal.Body>
         </Modal>
       
-        <Modal className="addProfileModal" style={{"marginTop":"200px"}} fade={false} show={showAdd} onHide={handleAddClose}>
+        <div className="feedbackModal">
+        <Modal className="addProfileModal Feedback" style={{"marginTop":"200px"}} fade={false} show={showAdd} onHide={handleAddClose}>
             <Modal.Header>
             <div className="bugFormClose" onClick={handleAddClose}>
                 <GrClose />
             </div>
-            <Modal.Title>Add team member</Modal.Title>
+            <Modal.Title>Complete team member feedback</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-            
-            <p>Please select the team member you would like to add:</p>
-            <p
-              style={{
-                gridColumn: "span 1",
-                margin: "auto",
-                paddingRight: "2px",
-              }}
-            >
-              Select team member:
-            </p>
-            <Select
-              id="teamMembers"
-              name="teamMembers"
-              options={teamMembersOptions}
-              onChange={handleTeamMemberChange}
-              className="defineDependenciesBox"
-              sx={{ gridColumn: "span 3", width: "70%" }}
-              value={teamMembersList}
-            />
-            <Box>
-              <Button
-                className="bugCancelButton"
-                fullWidth
-                sx={{
-                  m: "2rem 1rem",
-                  p: "1rem",
-                }}
-                style={{marginLeft: "10px"}}
-                onClick={addTeamMember}
-              >
-                {"Add"}
-              </Button>
 
-              <Button
-                className="bugAddButton"
-                fullWidth
-                onClick={handleDeleteClose}
-                sx={{
-                  m: "2rem 1rem",
-                  p: "1rem",
-                }}
-              >
-                {"Cancel"}
-              </Button>
-            </Box>
-
+            <SoftFeedbackForm close={handleAddClose}/>
             </Modal.Body>
         </Modal>
+        </div>
+        
     </div>
   );
 };

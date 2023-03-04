@@ -11,35 +11,45 @@ import Admin from "./pages/admin";
 import { useMemo } from "react";
 import { themeSettings } from "./theme";
 import { createTheme } from "@mui/material/styles";
-import { useSelector } from "react-redux";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import ScrollToTop from "./pages/projectDashboard/ScrollToTop";
 import ManagedProjects from "./pages/managedProjects";
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/lib/integration/react';
 import ProjectContainer from "./pages/projectDashboard/ProjectManagerContainer";
 import Bugs from "./pages/bugs";
-import ProjectDashboardTm from "./pages/projectDashboardtm";
+import { persistor, store } from './store/index.js';
+import ProjectTmContainer from "./pages/projectDashboardtm/ProjectTmManagerContainer";
 function App() {
   const mode = "light";
   const theme = useMemo(() => createTheme(themeSettings(mode)), [mode]);
   return (
     <div>
-      {/* These two components can be removed for the real version
-      Just kept these here so we can see how components can be added
-  */}
-      <BrowserRouter>
-      <ScrollToTop />
-        <ThemeProvider theme={theme}>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/" element={<Admin />} />
-            <Route path="/projects/:projectId/*" element={<ProjectContainer/> }/>
-            <Route path="/projectstm/:projectId/*" element={<ProjectDashboardTm/> }/>
-            
-            {/* <Route path="/ganttChart" element={<GanttChart />} /> */}
-          </Routes>
-        </ThemeProvider>
-      </BrowserRouter>
+      <Provider store={store}>
+          <PersistGate persistor={persistor}>
+          <BrowserRouter>
+            <ScrollToTop />
+            <ThemeProvider theme={theme}>
+              <Routes>
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<SignUp />} />
+                <Route path="/*" element={<Admin />} />
+                <Route
+                  path="/projects/:projectId/*"
+                  element={<ProjectContainer />}
+                />
+                <Route
+                  path="/projectstm/:projectId/*"
+                  element={<ProjectTmContainer />}
+                />
+                {/* <Route path="/managedprojects" element={<ManagedProjects />} /> */}
+
+                {/* <Route path="/ganttChart" element={<GanttChart />} /> */}
+              </Routes>
+            </ThemeProvider>
+          </BrowserRouter>
+          </PersistGate>
+      </Provider>
     </div>
   );
 }

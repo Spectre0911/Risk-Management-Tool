@@ -12,12 +12,14 @@ import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import {BsGraphUp} from 'react-icons/bs';
 import {IoIosBug} from 'react-icons/io'
+import {AiOutlineTeam} from 'react-icons/ai'
 import {AiOutlineFundProjectionScreen} from 'react-icons/ai'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
+import {AiOutlineWarning} from 'react-icons/ai'
 import "./AdminSidebar.css";
 
-const AdminSidebar = ({projectId}) => {
+const AdminSidebar = ({projectId, teamMember}) => {
     const [collapsed, setCollapsed] = useState(false);
     const { collapseSidebar } = useProSidebar();
     const navigate = useNavigate();
@@ -48,29 +50,46 @@ const AdminSidebar = ({projectId}) => {
                 </MenuItem >}
 
                 {!projectId && <MenuItem className="menuItem" icon={<MdManageAccounts />} onClick={() => navigate(`/managedprojects`)}>
-                    {'Managed Projcts'}
+                    {'Managed Projects'}
                 </MenuItem >}
 
-                {!projectId && <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/dashboard/productList`)}>
-                    {'Developed Projects'}
+                {!projectId && <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/tasks`)}>
+                    {'Tasks'}
                 </MenuItem >}
-
-                {projectId && <MenuItem className="menuItem" icon={<AiOutlineFundProjectionScreen />} onClick={() => navigate(`/projects/${projectId}`)}>
+ 
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineFundProjectionScreen />} onClick={() => navigate(`/projects/${projectId}`)}>
                     {'Project Summary'}
                 </MenuItem >}
 
-                {projectId && <MenuItem className="menuItem" icon={<BsGraphUp />} onClick={() => navigate(`/projects/${projectId}/github/${projectId}`)}>
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<BsGraphUp />} onClick={() => navigate(`/projects/${projectId}/github/${projectId}`)}>
                     {'Github Metrics'}
                 </MenuItem >}
 
-                {projectId && <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/projects/${projectId}/softmetrics/${projectId}`)}>
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<RiDashboardFill />} onClick={() => navigate(`/projects/${projectId}/softmetrics/${projectId}`)}>
                     {'Soft Metrics'}
                 </MenuItem >}
 
-                {projectId && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projects/${projectId}/bugs/${projectId}`)}>
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineWarning />} onClick={() => navigate(`/projects/${projectId}/risks/${projectId}`)}>
+                    {'Risk Metrics'}
+                </MenuItem >}
+
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projects/${projectId}/bugs/${projectId}`)}>
                     {'Bugs'}
                 </MenuItem >}
 
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineTeam />} onClick={() => navigate(`/projects/${projectId}/teammembers/${projectId}`)}>
+                    {'Team members'}
+                </MenuItem >}
+
+                {(teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineTeam />} onClick={() => navigate(`/projectstm/${projectId}/teammembers/${projectId}`)}>
+                    {'Team members'}
+                </MenuItem >}
+
+                
+
+                {(teamMember&&projectId) && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projectstm/${projectId}/bugs/${projectId}`)}>
+                    {'Bugs'}
+                </MenuItem >}
 
                 <MenuItem className="bottomItem" icon={<BiLogOutCircle />} onClick={() => navigate(`/dashboard/productList`)}>
                     {'Log out'}

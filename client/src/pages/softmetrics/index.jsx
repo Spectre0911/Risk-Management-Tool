@@ -1,19 +1,9 @@
 import React, { Component, useState, } from "react";
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-import { connect } from "react-redux";
 import {BsFillExclamationTriangleFill} from 'react-icons/bs';
 import {BsFillChatSquareTextFill} from 'react-icons/bs';
-import { BiTask } from "react-icons/bi";
-import { AiFillWarning } from "react-icons/ai";
-import { useParams } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
-import "../projectDashboard/index.css";
+// import "../projectDashboard/index.css";
 import "./index.css";
-import { height } from "@mui/system";
-import { Button } from "react-bootstrap";
-import {CgUserRemove} from 'react-icons/cg';
-import Modal from 'react-bootstrap/Modal';
-import {GrClose} from 'react-icons/gr';
 import MultiLineChart from "./MultiLineChart";
 import HalfDoughnutChart from "./HalfDoughnutChart";
 
@@ -32,16 +22,16 @@ const SoftMetrics = () => {
       <div className="grid">
         <p className="projectTitleId">Soft Metric Hub</p>
 
-        <div className="infoBox2 projectTable feature">
-          <div className="metricTitle2">Features</div>
+        <div className="infoBox2 projectTable feature" style={{marginBottom:'30px'}}>
+          <div className="metricTitle2">Soft Skill Tracker</div>
           <div className="ganttContainer overviewContainer">
             <MultiLineChart/>
           </div>
         </div>
         
-        <div className="infoBox2">
+        <div className="infoBox2" style={{marginBottom:'30px'}}>
           <Scrollbars>
-            <div className="metricTitle2" style={{marginBottom:'20px'}}>Notifications</div>
+            <div className="metricTitle2"  style={{marginBottom:'20px'}}>Notifications</div>
 
             <div className="notificationBox">
               <div className="notificationIcon blueIcon">
@@ -102,7 +92,7 @@ const SoftMetrics = () => {
           </Scrollbars>
         </div>
       
-        <div className="infoBox project">
+        <div className="infoBox project"  style={{marginBottom:'50px'}}>
         
         <div className="metricTitle">Communication</div>
         <div className="metricHalfDonutContainer">

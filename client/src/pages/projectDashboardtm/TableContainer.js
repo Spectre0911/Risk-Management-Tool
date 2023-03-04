@@ -62,7 +62,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
   };
 
   const onChangeInSelect = (event) => {
-    setPageSize(10);
+    setPageSize(5);
   };
 
   const onChangeInInput = (event) => {

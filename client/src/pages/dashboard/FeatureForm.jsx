@@ -11,6 +11,8 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { BsBriefcaseFill } from "react-icons/bs";
 import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
+import { CreateProject } from "../services/CreateProject";
+import { useSelector } from "react-redux";
 import {
   Box,
   TextField,
@@ -28,11 +30,11 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
 
-  const [dependencies, setDependencies] = useState([]);
   const [dependencyOptions, setDependencyOptions] = useState([]);
+  const [email, setEmail] = useState(useSelector((state) => state.email));
 
-  const [skillsRequired, setSkillsRequired] = useState([])
-  const [teamMembers, setTeamMembers] = useState([])
+  const [skillsRequired, setSkillsRequired] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([]);
 
   const reportBugSchema = yup.object().shape({
     name: yup.string().required("required"),
@@ -51,53 +53,28 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    // console.log(dependencies);
     const newValues = {
-      projectid: 1,
-      featureName: values.name,
-      startTime: values.startTime,
-      endTime: values.endTime,
-      completed: false,
-      priority: priority.value,
-      currentRisk: 0,
-      progress: 0,
-      difficulty: values.difficulty,
-      dependencies: dependencies,
+      projectName: values.name,
+      opened: values.startTime,
+      deadline: values.endTime,
+      closed: false,
+      budget: 0,
+      brief: values.description,
+      skills: skillsRequired,
+      teamMembers: teamMembers,
+      email: email,
     };
-
-    createFeature(newValues);
+    CreateProject(newValues);
+    // createFeature(newValues);
   };
-
-  const createFeature = (values) => {
-    fetch("http://localhost:5000/api/createFeature", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(values),
-    })
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        console.log(data);
-      });
-  };
-
-  const handleDependencyChange = (e) => {
-    const chosenDependencies = dependencies;
-    chosenDependencies.push(e);
-    setDependencies(chosenDependencies);
-  };
-
 
   const handleSkillsRequiredChange = (e) => {
     setSkillsRequired(e);
-  }
+  };
 
-  const handleTeamMemberChange =(e) =>{
+  const handleTeamMemberChange = (e) => {
     setTeamMembers(e);
-  }
+  };
 
   const priorityOptions = [
     { value: "1", label: "Core" },
@@ -112,9 +89,9 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   ];
 
   const teamMembersOptions = [
-    { value: "1", label: "Joshua" },
-    { value: "2", label: "Morgan" },
-    { value: "3", label: "Sanjula" },
+    { value: "1", label: "jc@gmail.com" },
+    { value: "2", label: "mk@gmail.com" },
+    { value: "3", label: "sh@gmail.com" },
   ];
 
   const [priority, setPriority] = useState({ value: "1", label: "Core" });
@@ -161,7 +138,7 @@ const EditProfileForm = ({ handleClose, featureId }) => {
                   sx={{ gridColumn: "span 4" }}
                 />
 
-                  <p
+                <p
                   style={{
                     gridColumn: "span 1",
                     margin: "auto",
@@ -215,8 +192,6 @@ const EditProfileForm = ({ handleClose, featureId }) => {
                   helperText={touched.description && errors.description}
                   sx={{ gridColumn: "span 4" }}
                 />
-
-              
 
                 <p
                   style={{
