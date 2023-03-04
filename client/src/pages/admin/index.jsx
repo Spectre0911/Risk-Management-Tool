@@ -13,6 +13,7 @@ import TaskDashboard from '../viewTask';
 import GithubIntegrator from '../githubSuite';
 import ProjectContainer from '../projectDashboard/ProjectManagerContainer';
 import ManagedProjects from '../managedProjects';
+import Tasks from '../tasks';
 
 const Admin = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -62,6 +63,7 @@ const Admin = () => {
           <Routes>
               <Route path="/" exact element={<Dashboard />} />
               <Route path="/managedprojects" exact element={<ManagedProjects />} />
+              <Route path="/Tasks" exact element={<Tasks />} />
           </Routes>
         </div>
       </div>

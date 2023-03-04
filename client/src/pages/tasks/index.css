@@ -1,0 +1,26 @@
+@media (min-width: 1350px){
+.taskTable {
+    width: 100% !important;
+}}
+
+.taskTable{
+    width: 95% !important;
+    height: 80vh !important;
+    position: relative;
+    padding-right: 15px;
+    padding-left: 15px;
+    padding-top: 10px;
+    height: 500px;
+    background-color: white;
+    box-shadow: 2px 2px 10px #130b0b93;
+    width: 98%;
+    border-radius: 20px;
+    margin: auto;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    margin-top: 15px;
+}
+
+.table-bordered{
+    border: none !important;
+}
