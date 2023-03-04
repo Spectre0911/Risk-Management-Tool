@@ -27,6 +27,7 @@ import { BsFillTrashFill } from "react-icons/bs";
 import FeatureForm from "./FeatureForm";
 import Modal from "react-bootstrap/Modal";
 import { GrClose } from "react-icons/gr";
+import { AllFeatures } from "../services/AllFeatures";
 import {
   Box,
   TextField,
@@ -41,32 +42,41 @@ const Table = () => {
   var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const [contacts, setContacts] = useState([
+    {
+      featureId: "1",
+      featureName: "Add sidebar",
+      startTime: "12/11/2022",
+      endTime: "30/02/2023",
+      progress: 20,
+      risk: 10,
+    },
+    {
+      featureId: "2",
+      featureName: "Add sidebar",
+      startTime: "12/11/2022",
+      endTime: "30/02/2023",
+      progress: 20,
+      risk: 10,
+    },
+  ]);
   useEffect(() => {
-    const doFetch = async () => {
-      const response = await fetch("https://randomuser.me/api/?results=100");
-      const body = await response.json();
-      const contacts = [
-        {
-          featureId: "1",
-          featureName: "Add sidebar",
-          startTime: "12/11/2022",
-          endTime: "30/02/2023",
-          progress: 20,
-          risk: 10,
-        },
-        {
-          featureId: "2",
-          featureName: "Add sidebar",
-          startTime: "12/11/2022",
-          endTime: "30/02/2023",
-          progress: 20,
-          risk: 10,
-        },
-      ];
-      // console.log(contacts);
-      setData(contacts);
-    };
-    doFetch();
+    AllFeatures({ projectid: 1 }).then((data) => {
+      console.log("Feature data:");
+      console.log(data);
+      const updatedContacts = data.map((item) => {
+        return {
+          featureid: item.featureid,
+          featureName: item.featurename,
+          startTime: new Date(item.starttime).toLocaleDateString("en-GB"),
+          endTime: new Date(item.endtime).toLocaleDateString("en-GB"),
+          progress: item.progress,
+          risk: 0,
+        };
+      });
+      console.log("IN HERE");
+      setData(updatedContacts);
+    });
   }, []);
 
   const viewTasks = (e) => {
@@ -99,23 +109,6 @@ const Table = () => {
     // console.log(featureId);
     setShowDelete(true);
   };
-  // const renderRowSubComponent = (row) => {
-  //   const name = "k";
-  //   console.log("ee");
-  //   console.log(row.cells);
-  //   return (
-  //     <div>
-  //     {row.cells.map((row, index) => (
-  //     <tr className="newRows"key={index}>
-  //         <td><div>1</div></td>
-  //         <td>
-  //           <div><p>fji</p></div>
-  //         </td>
-  //     </tr>
-  //     ))}
-  //     </div>
-  //   )
-  // };
 
   const columns = useMemo(
     () => [
@@ -233,13 +226,6 @@ const Table = () => {
           );
         },
       },
-      // {
-      // id: 'expander', // 'id' is required
-      // Cell: ({ row }) => (
-      //   <span style={{transition:" all 2s"}}{...row.getToggleRowExpandedProps()}>
-      //     {row.isExpanded ? '👇' : '👉'}
-      //   </span>
-      // )}
     ],
     []
   );

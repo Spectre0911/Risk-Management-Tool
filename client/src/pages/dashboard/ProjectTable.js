@@ -18,34 +18,50 @@ import ProgressBar from "react-bootstrap/ProgressBar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SelectColumnFilter } from "./filters";
 import ChangingProgressProvider from "./ChangingProgressProvider";
+import { AllProjects } from "../services/AllProjects";
 const ProjectTable = () => {
   const [data, setData] = useState([]);
+  const [contacts, setContacts] = useState([
+    {
+      projectId: "1",
+      projectName: "cs261",
+      projectManager: "Jane Arnold",
+      deadline: "26/12/2022",
+      closed: "false",
+      progress: 20,
+      risk: 10,
+    },
+    {
+      projectId: "2",
+      projectName: "cs261",
+      projectManager: "Jane Arnold",
+      deadline: "26/10/2022",
+      closed: "false",
+      progress: 20,
+      risk: 10,
+    },
+  ]);
   useEffect(() => {
     const doFetch = async () => {
       const response = await fetch("https://randomuser.me/api/?results=100");
       const body = await response.json();
-      const contacts = [
-        {
-          projectId: "1",
-          projectName: "cs261",
-          projectManager: "Jane Arnold",
-          deadline: "26/10/2022",
-          status: "ontime",
-          progress: 20,
-          risk: 10,
-        },
-        {
-          projectId: "2",
-          projectName: "cs261",
-          projectManager: "Jane Arnold",
-          deadline: "26/10/2022",
-          status: "ontime",
-          progress: 20,
-          risk: 10,
-        },
-      ];
+      AllProjects().then((data) => {
+        const updatedContacts = data.map((item) => {
+          return {
+            projectId: item.projectid,
+            projectName: item.projectname,
+            projectManager: item.projectmanager,
+            deadline: new Date(item.deadline).toLocaleDateString("en-GB"),
+            closed: item.closed.toString(),
+            progress: Math.floor(item.progress),
+            risk: 0,
+          };
+        });
+        console.log("IN HERE");
+        setData(updatedContacts);
+      });
+
       // console.log(contacts);
-      setData(contacts);
     };
     doFetch();
   }, []);

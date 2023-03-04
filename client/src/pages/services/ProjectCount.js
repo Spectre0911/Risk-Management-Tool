@@ -1,5 +1,3 @@
-import { replace } from "formik";
-
 export const ActiveProjects = (values) => {
   return new Promise((resolve, reject) => {
     fetch("http://localhost:5000/api/activeProjects", {
@@ -17,7 +15,7 @@ export const ActiveProjects = (values) => {
         }
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         resolve(data);
       })
       .catch((error) => {

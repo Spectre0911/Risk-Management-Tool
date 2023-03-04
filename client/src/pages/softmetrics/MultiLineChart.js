@@ -1,5 +1,5 @@
 import React from 'react';
-import Chart from 'chart.js/auto'; import { Line } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 
 const data = {
   labels: ['1', '2', '3', '4', '5', '6'],
@@ -32,22 +32,38 @@ const data = {
 };
 
 const options = {
+  maintainAspectRatio: false,
   scales: {
-    x: {
-      title: {
-        display: true,
-        text: 'Week',
+    r: {
+      pointLabels: {
+        color: 'black',
+        font: {
+          size: 15,
+          family: 'Montserrat',
+          weight: 700,
+        }
       },
-    },
-    y: {
-      title: {
-        display: true,
-        text: 'Score',
-      },
-      min: 0,
-      max: 100,
+      ticks: {
+        font: {
+            size: 15,
+            family: 'Montserrat',
+            weight: 700,
+        }
+      }
+
     },
   },
+  plugins:{
+      legend:{  
+        labels:{
+          font:{
+              size: 15,
+              family: 'Montserrat',
+              weight: 700,
+          }
+        } 
+      }
+  }
 };
 
 const MultiLineChart = () => {

@@ -400,7 +400,17 @@
     width:20%;
 }
 
-
+.closeProject{
+  height: 45px;
+  top: 30px;
+  font-size: 22px;
+  margin-left: 16px;
+  padding-bottom: 35px;
+  background-color: #db0202;
+  color: white;
+  border: none;
+  padding: 5px;
+}
 /* .gantt{
     width: 100% !important;
 } */
