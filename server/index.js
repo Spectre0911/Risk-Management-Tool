@@ -320,8 +320,32 @@ app.post("/api/dependencies", async (req, postRes) => {
   }
 });
 
-//SELECT deadline - NOW() FROM projects where projectid = 1
+// Get all dependencies for a feature
+app.post("/api/bugCount", async (req, postRes) => {
+  try {
+    console.log(req.body);
 
+    const allBugs = await pool.query(
+      "select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = $1",
+      [req.body.projectid]
+    );
+
+    postRes.json(allBugs.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+/*-- Number of bugs for a particular project (critical)
+select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 1;
+
+-- Number of bugs for a particular project (major)
+select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 2;
+
+-- Number of bugs for a particular project (minor)
+select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 3;*/
+
+//SELECT deadline - NOW() FROM projects where projectid = 1
 app.post("/api/timeLeft", async (req, postRes) => {
   try {
     // console.log(req.body);

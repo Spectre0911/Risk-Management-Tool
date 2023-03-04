@@ -19,6 +19,7 @@ import LineGraph from "./Line";
 import { useNavigate } from "react-router-dom";
 import { TimeLeft } from "../services/TimeLeft";
 import { AllFeatures } from "../services/AllFeatures";
+import { BugCount } from "../services/BugCounts";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -37,7 +38,7 @@ const ProjectDashboard = () => {
   ];
 
   const labelsBugs = ["Critical", "Major", "Minor"];
-  const dataBugs = [10, 4, 1];
+  const [dataBugs, setDataBugs] = useState([10, 4, 1]);
   const backgroundColorBugs = [
     "rgba(215,20,50,1)",
     "rgba(255,128,0,1)",
@@ -45,7 +46,7 @@ const ProjectDashboard = () => {
   ];
 
   const labelsFeatures = ["Core", "Optional", "Aesthetic"];
-  const [dataFeatures, setDataFeatures] = useState([8, 14, 12]);
+  const [dataFeatures, setDataFeatures] = useState([0, 0, 0]);
   const backgroundColorFeatures = [
     "rgba(255,0,0,1)",
     "rgba(255,128,0,1)",
@@ -133,18 +134,43 @@ const ProjectDashboard = () => {
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
-    console.log(projectId);
+    // console.log(projectId);
     // Set the amount of time left: THERE IS AN ISSUEHERE
     TimeLeft({
-      projectid: 1,
+      projectid: projectId,
     }).then((data) => {
       console.log(data[0]);
       setDataTime([data[0].remaining.days, data[0].completed.days]);
     });
 
+    BugCount({
+      projectid: projectId,
+    }).then((data) => {
+      console.log("Bugs: ");
+      if (data != null) {
+        console.log(data);
+        const counts = {
+          1: 0,
+          2: 0,
+          3: 0,
+        };
+
+        // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
+        data
+          .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
+          .reduce((acc, obj) => {
+            // Increment the count for the priority of the current object
+            acc[obj.priority]++;
+            return acc;
+          }, counts); // Use the counts object as the initial value of the reduce function
+
+        setDataBugs([counts[1], counts[2], counts[3]]);
+      }
+    });
+
     // Get the outstanding features
     AllFeatures({
-      projectid: 1,
+      projectid: projectId,
     }).then((data) => {
       if (data != null) {
         console.log(data);
@@ -164,7 +190,6 @@ const ProjectDashboard = () => {
           }, counts); // Use the counts object as the initial value of the reduce function
 
         setDataFeatures([counts[1], counts[2], counts[3]]);
-        console.log(counts); // Output the counts object      // setDataTime([data[0].remaining.days, data[0].completed.days]);
       }
     });
     let fetchData = [];
@@ -308,7 +333,11 @@ const ProjectDashboard = () => {
               cutOut={63}
             />
             <div className="donutText">
-              <p>21</p>
+              <p>
+                {dataBugs.reduce(function (a, b) {
+                  return a + b;
+                })}
+              </p>
             </div>
           </div>
         </div>
