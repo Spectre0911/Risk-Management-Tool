@@ -38,43 +38,28 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
-const Table = () => {
+const Table = (props) => {
   var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  const [contacts, setContacts] = useState([
-    {
-      featureId: "1",
-      featureName: "Add sidebar",
-      startTime: "12/11/2022",
-      endTime: "30/02/2023",
-      progress: 20,
-      risk: 10,
-    },
-    {
-      featureId: "2",
-      featureName: "Add sidebar",
-      startTime: "12/11/2022",
-      endTime: "30/02/2023",
-      progress: 20,
-      risk: 10,
-    },
-  ]);
+  const [contacts, setContacts] = useState([]);
   useEffect(() => {
-    AllFeatures({ projectid: 1 }).then((data) => {
-      console.log("Feature data:");
-      console.log(data);
-      const updatedContacts = data.map((item) => {
-        return {
-          featureid: item.featureid,
-          featureName: item.featurename,
-          startTime: new Date(item.starttime).toLocaleDateString("en-GB"),
-          endTime: new Date(item.endtime).toLocaleDateString("en-GB"),
-          progress: item.progress,
-          risk: 0,
-        };
-      });
-      console.log("IN HERE");
+    AllFeatures({ projectid: props.projectid }).then((data) => {
+      console.log(props.projectid);
+      let updatedContacts = [];
+      if (data != null) {
+        updatedContacts = data.map((item) => {
+          return {
+            featureid: item.featureid,
+            featureName: item.featurename,
+            startTime: new Date(item.starttime).toLocaleDateString("en-GB"),
+            endTime: new Date(item.endtime).toLocaleDateString("en-GB"),
+            progress: item.progress,
+            risk: 0,
+          };
+        });
+      }
+      console.log("Updating data");
       setData(updatedContacts);
     });
   }, []);

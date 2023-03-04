@@ -19,6 +19,7 @@ import LineGraph from "./Line";
 import { useNavigate } from "react-router-dom";
 import { TimeLeft } from "../services/TimeLeft";
 import { AllFeatures } from "../services/AllFeatures";
+import { BugCount } from "../services/BugCounts";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -37,7 +38,7 @@ const ProjectDashboard = () => {
   ];
 
   const labelsBugs = ["Critical", "Major", "Minor"];
-  const [dataBugs, setDataBugs] = useState([0, 0, 0]);
+  const dataBugs = [10, 4, 1];
   const backgroundColorBugs = [
     "rgba(215,20,50,1)",
     "rgba(255,128,0,1)",
@@ -45,7 +46,7 @@ const ProjectDashboard = () => {
   ];
 
   const labelsFeatures = ["Core", "Optional", "Aesthetic"];
-  const [dataFeatures, setDataFeatures] = useState([1, 0, 0]);
+  const [dataFeatures, setDataFeatures] = useState([8, 14, 12]);
   const backgroundColorFeatures = [
     "rgba(255,0,0,1)",
     "rgba(255,128,0,1)",
@@ -133,36 +134,63 @@ const ProjectDashboard = () => {
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
+    // console.log(projectId);
     // Set the amount of time left: THERE IS AN ISSUEHERE
     TimeLeft({
-      projectid: 1,
+      projectid: projectId,
     }).then((data) => {
       console.log(data[0]);
       setDataTime([data[0].remaining.days, data[0].completed.days]);
     });
 
+    BugCount({
+      projectid: projectId,
+    }).then((data) => {
+      console.log("Bugs: ");
+      if (data != null) {
+        console.log(data);
+        const counts = {
+          1: 0,
+          2: 0,
+          3: 0,
+        };
+
+        // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
+        data
+          .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
+          .reduce((acc, obj) => {
+            // Increment the count for the priority of the current object
+            acc[obj.priority]++;
+            return acc;
+          }, counts); // Use the counts object as the initial value of the reduce function
+
+        setDataBugs([counts[1], counts[2], counts[3]]);
+      }
+    });
+
     // Get the outstanding features
     AllFeatures({
-      projectid: 1,
+      projectid: projectId,
     }).then((data) => {
-      console.log(data);
-      const counts = {
-        1: 0,
-        2: 0,
-        3: 0,
-      };
+      if (data != null) {
+        console.log(data);
+        const counts = {
+          1: 0,
+          2: 0,
+          3: 0,
+        };
 
-      // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
-      data
-        .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
-        .reduce((acc, obj) => {
-          // Increment the count for the priority of the current object
-          acc[obj.priority]++;
-          return acc;
-        }, counts); // Use the counts object as the initial value of the reduce function
+        // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
+        data
+          .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
+          .reduce((acc, obj) => {
+            // Increment the count for the priority of the current object
+            acc[obj.priority]++;
+            return acc;
+          }, counts); // Use the counts object as the initial value of the reduce function
 
-      setDataFeatures([counts[1], counts[2], counts[3]]);
-      console.log(counts); // Output the counts object      // setDataTime([data[0].remaining.days, data[0].completed.days]);
+        setDataFeatures([counts[1], counts[2], counts[3]]);
+      }
     });
     let fetchData = [];
     (async () => {
@@ -278,7 +306,8 @@ const ProjectDashboard = () => {
   return (
     <div className="main">
       <div className="grid">
-        <p className="projectTitleId">Project number {projectId}
+        <p className="projectTitleId">
+          Project number {projectId}
           <button
             onClick={handleAddShow}
             className="projectFilterInput viewProject closeProject"
@@ -322,7 +351,11 @@ const ProjectDashboard = () => {
                 cutOut={60}
               />}
             <div className="donutText">
-              <p>{dataBugs.reduce((acc, val) => acc + val, 0)}</p>
+              <p>
+                {dataBugs.reduce(function (a, b) {
+                  return a + b;
+                })}
+              </p>
             </div>
           </div>
         </div>
@@ -370,7 +403,7 @@ const ProjectDashboard = () => {
 
         <div className="infoBox2 projectTable feature">
           <div className="metricTitle2">Features</div>
-          <Table />
+          <Table projectid={projectId} />
         </div>
 
         <div className="infoBox2">
@@ -452,7 +485,7 @@ const ProjectDashboard = () => {
           </div>
           <div className="ganttContainer">
             {/* <GanttChart viewMode={ganttViewState}/> */}
-            <NewGantt viewMode={ganttViewState} />
+            <NewGantt viewMode={ganttViewState} projectid={projectId} />
           </div>
         </div>
 
