@@ -7,16 +7,88 @@ import Select from "react-select";
 import ProjectComponent from './projectComponent';
 
 const ManagedProjects = () => {
+
+    const data = [{
+        projectId:"1",
+        projectName:"CS261 Coursework",
+        projectDescription:"Group coursework run by James Archbold",
+        progress:70,
+        teamMembers: [{
+            name:"Jack Arnold",
+            imagePath: "jane.jpg"
+            },
+            {
+            name:"Jane Arnold",
+            imagePath: "jane.jpg"
+        }],
+        startDate: "12/10/22",
+        endDate: "12/12/22",
+        tasksPending:"2",
+        risk: 50
+    },
+    {
+        projectId:"1",
+        projectName:"CS261 Coursework",
+        projectDescription:"Group coursework run by James Archbold",
+        progress:70,
+        teamMembers: [{
+            name:"Jack Arnold",
+            imagePath: "jane.jpg"
+            },
+            {
+            name:"Jane Arnold",
+            imagePath: "jane.jpg"
+        }],
+        startDate: "12/10/22",
+        endDate: "12/12/22",
+        tasksPending:"2",
+        risk: 50
+    },
+    {
+        projectId:"1",
+        projectName:"CS261 Coursework",
+        projectDescription:"Group coursework run by James Archbold",
+        progress:70,
+        teamMembers: [{
+            name:"Jack Arnold",
+            imagePath: "jane.jpg"
+            },
+            {
+            name:"Jane Arnold",
+            imagePath: "jane.jpg"
+        }],
+        startDate: "12/10/22",
+        endDate: "12/12/22",
+        tasksPending:"2",
+        risk: 50
+    },
+{
+        projectId:"1",
+        projectName:"CS261 Coursework",
+        projectDescription:"Group coursework run by James Archbold",
+        progress:70,
+        teamMembers: [{
+            name:"Jack Arnold",
+            imagePath: "jane.jpg"
+            },
+            {
+            name:"Jane Arnold",
+            imagePath: "jane.jpg"
+        }],
+        startDate: "12/10/22",
+        endDate: "12/12/22",
+        tasksPending:"2",
+        risk: 50
+    }]
     return (
-        <div className='viewProjectsPage'>
-            <div className="pageTitle">
-                <p>Managed Projects</p>
-            </div>
-            <div className='viewProjectGrid'>
-                <ProjectComponent projectName="cs261 coursework" description="Group coursework run by James Archbold" status="1"/>
-                <ProjectComponent name="jack1" num="2"/>
-                <ProjectComponent name="jac2" num="3"/>
-                <ProjectComponent name="jac3" num="2"/>
+        <div className="viewProjectsPage">
+            <p className="projectTitleId">Managed Projects</p>
+            <div className="viewProjectGrid">
+                {data.map((project,index) =>{
+                    return(
+                    <ProjectComponent data={project}/>
+                    )
+                })}
             </div>
         </div>
     );

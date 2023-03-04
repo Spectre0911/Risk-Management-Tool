@@ -12,6 +12,7 @@ import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import {BsGraphUp} from 'react-icons/bs';
 import {IoIosBug} from 'react-icons/io'
+import {AiOutlineTeam} from 'react-icons/ai'
 import {AiOutlineFundProjectionScreen} from 'react-icons/ai'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
@@ -49,11 +50,11 @@ const AdminSidebar = ({projectId, teamMember}) => {
                 </MenuItem >}
 
                 {!projectId && <MenuItem className="menuItem" icon={<MdManageAccounts />} onClick={() => navigate(`/managedprojects`)}>
-                    {'Managed Projcts'}
+                    {'Managed Projects'}
                 </MenuItem >}
 
-                {!projectId && <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/dashboard/productList`)}>
-                    {'Developed Projects'}
+                {!projectId && <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/tasks`)}>
+                    {'Tasks'}
                 </MenuItem >}
  
                 {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineFundProjectionScreen />} onClick={() => navigate(`/projects/${projectId}`)}>
@@ -75,6 +76,16 @@ const AdminSidebar = ({projectId, teamMember}) => {
                 {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projects/${projectId}/bugs/${projectId}`)}>
                     {'Bugs'}
                 </MenuItem >}
+
+                {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineTeam />} onClick={() => navigate(`/projects/${projectId}/teammembers/${projectId}`)}>
+                    {'Team members'}
+                </MenuItem >}
+
+                {(teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineTeam />} onClick={() => navigate(`/projectstm/${projectId}/teammembers/${projectId}`)}>
+                    {'Team members'}
+                </MenuItem >}
+
+                
 
                 {(teamMember&&projectId) && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projectstm/${projectId}/bugs/${projectId}`)}>
                     {'Bugs'}

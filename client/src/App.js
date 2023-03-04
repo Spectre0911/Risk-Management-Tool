@@ -33,7 +33,7 @@ function App() {
               <Routes>
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<SignUp />} />
-                <Route path="/" element={<Admin />} />
+                <Route path="/*" element={<Admin />} />
                 <Route
                   path="/projects/:projectId/*"
                   element={<ProjectContainer />}
@@ -42,6 +42,7 @@ function App() {
                   path="/projectstm/:projectId/*"
                   element={<ProjectTmContainer />}
                 />
+                {/* <Route path="/managedprojects" element={<ManagedProjects />} /> */}
 
                 {/* <Route path="/ganttChart" element={<GanttChart />} /> */}
               </Routes>

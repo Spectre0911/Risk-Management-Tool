@@ -4,7 +4,6 @@ import { connect } from "react-redux"
 import AdminSidebar from '../../components/AdminSidebar';
 import "./index.css"
 import Dashboard from '../dashboard';
-import ManagedProjects from '../managedProjects';
 import Bugs from '../bugs';
 import Modal from 'react-bootstrap/Modal';
 import {GrClose} from 'react-icons/gr';
@@ -13,6 +12,9 @@ import ProjectDashboard from '../projectDashboard';
 import TaskDashboard from '../viewTask';
 import GithubIntegrator from '../githubSuite';
 import ProjectContainer from '../projectDashboard/ProjectManagerContainer';
+import ManagedProjects from '../managedProjects';
+import Tasks from '../tasks';
+
 const Admin = () => {
   const [isOpen, setIsOpen] = useState(false);
   const toggleOverlay = () =>{
@@ -59,7 +61,9 @@ const Admin = () => {
             </div>
             {/* <Dashboard /> */}
           <Routes>
-              <Route exact path="/" element={<Dashboard />} />
+              <Route path="/" exact element={<Dashboard />} />
+              <Route path="/managedprojects" exact element={<ManagedProjects />} />
+              <Route path="/Tasks" exact element={<Tasks />} />
           </Routes>
         </div>
       </div>
