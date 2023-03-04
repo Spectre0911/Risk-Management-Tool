@@ -178,6 +178,7 @@ app.post("/api/createFeature", async (req, res) => {
 // Get all features
 app.post("/api/features", async (req, postRes) => {
   try {
+    console.log(req.body);
     const allFeatures = await pool.query(
       "SELECT * FROM features WHERE projectid = $1",
       [req.body.projectid]
@@ -185,6 +186,7 @@ app.post("/api/features", async (req, postRes) => {
     if (allFeatures.rows.length == 0) {
       return postRes.json(null);
     } else {
+      console.log(allFeatures.rows);
       postRes.json(allFeatures.rows);
     }
   } catch (err) {

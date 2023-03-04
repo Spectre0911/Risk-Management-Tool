@@ -46,10 +46,6 @@ const ProjectTable = () => {
   ]);
   useEffect(() => {
     const doFetch = async () => {
-      const response = await fetch("https://randomuser.me/api/?results=100");
-      const body = await response.json();
-      console.log("Project Table: ");
-      console.log(email);
       AllProjects(email).then((data) => {
         const updatedContacts = data.map((item) => {
           return {
@@ -62,7 +58,6 @@ const ProjectTable = () => {
             risk: 0,
           };
         });
-        console.log("IN HERE");
         setData(updatedContacts);
       });
 
