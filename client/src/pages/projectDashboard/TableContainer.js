@@ -62,7 +62,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
   };
 
   const onChangeInSelect = (event) => {
-    setPageSize(10);
+    setPageSize(5);
   };
 
   const onChangeInInput = (event) => {
@@ -71,7 +71,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
   };
 
   useEffect(() => {
-    setPageSize(7);
+    setPageSize(5);
   }, []);
 
   const [isOpen, setIsOpen] = useState(false);
