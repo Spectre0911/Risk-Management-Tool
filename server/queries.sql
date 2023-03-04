@@ -38,7 +38,7 @@ select count(*) from bugs inner join features on bugs.featureid = features.featu
 select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 3;
 
 -- Total tasks (for individual user)
-select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here> and devid = <userid here>) as totaltasks;
+select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where devid = <userid here>) as totaltasks;
 
 -- Total tasks (for whole project)
 select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here>) as totaltasks;

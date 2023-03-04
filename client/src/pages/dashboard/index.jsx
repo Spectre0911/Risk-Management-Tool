@@ -14,10 +14,12 @@ import { loginAction } from "../../actions";
 import "./index.css";
 import ProjectTable from "./ProjectTable";
 import Table from "./Table";
+import { TasksToComplete } from "../services/TasksToComplete";
 const Dashboard = () => {
   const [activeProjects, setActiveProjects] = useState(0);
   const [activeNotifications, setActiveNotifications] = useState(0);
-  
+  const [tasksToComplete, setTasksToComplete] = useState(0);
+
   const login = useSelector((state) => state.email);
   ActiveProjects({
     email: login.email,
@@ -25,6 +27,9 @@ const Dashboard = () => {
   NotificationCount({
     email: login.email,
   }).then((data) => setActiveNotifications(data));
+  TasksToComplete({ email: login.email }).then((data) =>
+    setTasksToComplete(data)
+  );
   useEffect(() => {
     console.log(login);
   });
@@ -32,7 +37,6 @@ const Dashboard = () => {
     <div className="main">
       <div className="grid">
         <div className="infoBox">
-          
           <div className="metricTitle dashboard">Active projects</div>
           <div className="metricNumber">{activeProjects}</div>
           <div className="metricCircleBackground metricBlueBackground">
@@ -44,7 +48,7 @@ const Dashboard = () => {
 
         <div className="infoBox">
           <div className="metricTitle dashboard">Tasks to complete</div>
-          <div className="metricNumber">14</div>
+          <div className="metricNumber">{tasksToComplete}</div>
           <div className="metricCircleBackground metricBlueBackground">
             <div className="metricIcon metricBlueIcon">
               <BiTask />
