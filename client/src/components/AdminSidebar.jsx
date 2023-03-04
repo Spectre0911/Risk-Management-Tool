@@ -49,11 +49,11 @@ const AdminSidebar = ({projectId, teamMember}) => {
                 </MenuItem >}
 
                 {!projectId && <MenuItem className="menuItem" icon={<MdManageAccounts />} onClick={() => navigate(`/managedprojects`)}>
-                    {'Managed Projcts'}
+                    {'Managed Projects'}
                 </MenuItem >}
 
-                {!projectId && <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/dashboard/productList`)}>
-                    {'Developed Projects'}
+                {!projectId && <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/tasks`)}>
+                    {'Tasks'}
                 </MenuItem >}
  
                 {(!teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineFundProjectionScreen />} onClick={() => navigate(`/projects/${projectId}`)}>
