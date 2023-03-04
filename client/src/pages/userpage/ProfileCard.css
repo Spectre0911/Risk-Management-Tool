@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
-* {
+/* * {
 	box-sizing: border-box;
 }
 
@@ -22,7 +22,7 @@ p {
     max-width: 80%;
     text-align: center;
     margin: auto;
-}
+} */
 
 .card-container {
 	background-color: #FFF;

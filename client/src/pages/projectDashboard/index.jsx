@@ -38,7 +38,7 @@ const ProjectDashboard = () => {
   ];
 
   const labelsBugs = ["Critical", "Major", "Minor"];
-  const dataBugs = [10, 4, 1];
+  const [dataBugs, setDataBugs] = useState([10, 4, 1]);
   const backgroundColorBugs = [
     "rgba(215,20,50,1)",
     "rgba(255,128,0,1)",
