@@ -17,6 +17,7 @@ import TaskDashboard from "../viewTask";
 import GithubIntegrator from '../githubSuite';
 import RiskSummary from "../riskSummary";
 import ProjectDashboardTm from ".";
+import UserPage from "../userpage";
 
 const ProjectTmContainer = () => {
   const {projectId} = useParams();
@@ -74,6 +75,7 @@ const ProjectTmContainer = () => {
               <Route path="/viewtasks/:featureId" element={<TaskDashboard/> }/>
               <Route path="/github/:projectId" element={<GithubIntegrator/> }/>
               <Route path="/risks/:projectId" element={<RiskSummary/> }/>
+              <Route path="/teammembers/:projectId" element={<UserPage/> }/>
               </Routes>
         </div>
       </div>

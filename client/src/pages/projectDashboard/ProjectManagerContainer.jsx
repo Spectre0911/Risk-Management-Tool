@@ -18,6 +18,8 @@ import GithubIntegrator from '../githubSuite';
 import RiskSummary from "../riskSummary";
 import ProjectDashboardTm from "../projectDashboardtm";
 import SoftMetrics from "../softmetrics";
+import UserPage from "../userpage";
+
 const ProjectContainer = () => {
   const {projectId} = useParams();
   const navigate = useNavigate();
@@ -75,6 +77,7 @@ const ProjectContainer = () => {
               <Route path="/github/:projectId" element={<GithubIntegrator/> }/>
               <Route path="/risks/:projectId" element={<RiskSummary/> }/>
               <Route path="/softmetrics/:projectId" element={<SoftMetrics/> }/>
+              <Route path="/teammembers/:projectId" element={<UserPage/> }/>
               </Routes>
         </div>
       </div>
