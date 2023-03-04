@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import Gantt from "./Gantt/";
 import Toolbar from "./Toolbar/";
+import './index.css';
 import { getAllDependencies } from "../services/AllDependencies";
 import { CallTopoSort } from "../services/TopoSort";
 import { MinimiseOverlappingTasks } from "../services/MinimiseOverlap";
@@ -139,6 +140,9 @@ const NewGantt = ({ projectid }) => {
   return (
     <div>
       <div className="zoom-bar">
+      <button className="toplogicalOrderButton">
+          Topological ordering
+        </button>
         <Toolbar zoom={currentZoom} onZoomChange={handleZoomChange} />
       </div>
       <div className="gantt-container">

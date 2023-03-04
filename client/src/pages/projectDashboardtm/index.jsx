@@ -130,7 +130,13 @@ const ProjectDashboardTm = () => {
     setTeamMembersList(e);
   }
     
-
+  const checkZero = (array) => {
+    if ((array.reduce((acc, val) => acc + val, 0)) ==0){
+      return 0;
+    }else{
+      return 1;
+    }
+  }
 
   return (
     <div className="main tm">
@@ -140,22 +146,51 @@ const ProjectDashboardTm = () => {
         
         <div className="infoBox project">
           <div className="metricTitle">Tasks left to complete</div>
-            <div className="metricDonutContainer smaller">
-              <DonutChart chartData={dataFeatures} labels={labelsFeatures} border={borderColorRisk} backgroundColor={backgroundColorFeatures} cutOut={60}/>
+          <div className="metricDonutContainer smaller">
+            {checkZero(dataFeatures)? 
+              <DonutChart
+                chartData={dataFeatures}
+                labels={labelsFeatures}
+                border={borderColorRisk}
+                backgroundColor={backgroundColorFeatures}
+                cutOut={60}
+              />
+            :
+            <DonutChart
+                chartData={[1]}
+                labels={["None"]}
+                border={borderColorRisk}
+                backgroundColor={["rgb(50,205,50)"]}
+                cutOut={60}
+              />}
             <div className="donutText">
-              <p>10</p>
+              <p>{dataFeatures.reduce((acc, val) => acc + val, 0)}</p>
             </div>
-            </div>
-          
+          </div>
         </div>
 
         <div className="infoBox project">
           <div className="metricTitle">Bugs</div>
           <div className="metricDonutContainer smaller">
-            <DonutChart chartData={dataBugs} labels={labelsBugs} border={borderColorRisk} backgroundColor={backgroundColorBugs} cutOut={63}/>
-          <div className="donutText">
-            <p>21</p>
-          </div>
+          {checkZero(dataBugs)? 
+            <DonutChart
+              chartData={dataBugs}
+              labels={labelsBugs}
+              border={borderColorRisk}
+              backgroundColor={backgroundColorBugs}
+              cutOut={63}
+            />
+          :
+          <DonutChart
+                chartData={[1]}
+                labels={["None"]}
+                border={borderColorRisk}
+                backgroundColor={["rgb(50,205,50)"]}
+                cutOut={60}
+              />}
+            <div className="donutText">
+              <p>{dataBugs.reduce((acc, val) => acc + val, 0)}</p>
+            </div>
           </div>
         </div>
 

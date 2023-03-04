@@ -46,7 +46,7 @@ const ProjectDashboard = () => {
   ];
 
   const labelsFeatures = ["Core", "Optional", "Aesthetic"];
-  const [dataFeatures, setDataFeatures] = useState([0, 0, 0]);
+  const [dataFeatures, setDataFeatures] = useState([8, 14, 12]);
   const backgroundColorFeatures = [
     "rgba(255,0,0,1)",
     "rgba(255,128,0,1)",
@@ -279,6 +279,15 @@ const ProjectDashboard = () => {
     setCommits(tempCount);
   }, [tempData]);
 
+  
+  const checkZero = (array) => {
+    if ((array.reduce((acc, val) => acc + val, 0)) ==0){
+      return 0;
+    }else{
+      return 1;
+    }
+  }
+
   function fillDates(start, end) {
     var output = [start];
     var date = new Date(start);
@@ -325,6 +334,7 @@ const ProjectDashboard = () => {
         <div className="infoBox project">
           <div className="metricTitle">Bugs</div>
           <div className="metricDonutContainer smaller">
+          {checkZero(dataBugs)? 
             <DonutChart
               chartData={dataBugs}
               labels={labelsBugs}
@@ -332,6 +342,14 @@ const ProjectDashboard = () => {
               backgroundColor={backgroundColorBugs}
               cutOut={63}
             />
+          :
+          <DonutChart
+                chartData={[1]}
+                labels={["None"]}
+                border={borderColorRisk}
+                backgroundColor={["rgb(50,205,50)"]}
+                cutOut={60}
+              />}
             <div className="donutText">
               <p>
                 {dataBugs.reduce(function (a, b) {
@@ -345,13 +363,22 @@ const ProjectDashboard = () => {
         <div className="infoBox project">
           <div className="metricTitle">Outstanding Features</div>
           <div className="metricDonutContainer smaller">
+            {checkZero(dataFeatures)? 
+              <DonutChart
+                chartData={dataFeatures}
+                labels={labelsFeatures}
+                border={borderColorRisk}
+                backgroundColor={backgroundColorFeatures}
+                cutOut={60}
+              />
+            :
             <DonutChart
-              chartData={dataFeatures}
-              labels={labelsFeatures}
-              border={borderColorRisk}
-              backgroundColor={backgroundColorFeatures}
-              cutOut={60}
-            />
+                chartData={[1]}
+                labels={["None"]}
+                border={borderColorRisk}
+                backgroundColor={["rgb(50,205,50)"]}
+                cutOut={60}
+              />}
             <div className="donutText">
               <p>{dataFeatures.reduce((acc, val) => acc + val, 0)}</p>
             </div>

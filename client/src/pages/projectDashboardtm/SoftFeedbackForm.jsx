@@ -122,6 +122,13 @@ const SoftFeedbackForm = ({ handleClose, taskId, close }) => {
     [0,0,0],
   ])
 
+  const [textFeedback, setTextFeedback] = useState("");
+
+  const textFeedbackChange = (e) =>{
+    setTextFeedback(e.target.value);
+    console.log(textFeedback);
+  }
+
   function valueLabelFormat(value) {
     return marks.findIndex((mark) => mark.value === value) ;
   }
@@ -136,6 +143,7 @@ const SoftFeedbackForm = ({ handleClose, taskId, close }) => {
 
   const handleFormSubmit = () =>{
     console.log(values);
+    console.log(textFeedback);
     close();
   }
   return (
@@ -164,7 +172,7 @@ const SoftFeedbackForm = ({ handleClose, taskId, close }) => {
             }}
           >
             <Scrollbars>
-              
+            <p className="feedbackHeading">Please use this form to rate your experience on this particular project so far:</p>
             {questions.map((question, index)=>{
               return(
                 <div className="feedbackFormDiv">
@@ -198,9 +206,22 @@ const SoftFeedbackForm = ({ handleClose, taskId, close }) => {
                     </>
                     )})}
                 </div>
+                
             )})
-              
             }
+
+            <p className="feedbackBoxQuestion">Please enter feedback directly to your project manager:</p>
+            <TextField
+                className="feedbackBox"
+                multiline
+                rows={4}
+                value={textFeedback}
+                onChange={textFeedbackChange}
+                maxRows={4}
+                sx={{
+                  gridColumn: "span 4"
+                }}
+              />
             </Scrollbars>
           </Box>
 
