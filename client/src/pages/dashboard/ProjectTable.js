@@ -19,8 +19,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { SelectColumnFilter } from "./filters";
 import ChangingProgressProvider from "./ChangingProgressProvider";
 import { AllProjects } from "../services/AllProjects";
+import { useSelector } from "react-redux";
 const ProjectTable = () => {
   const [data, setData] = useState([]);
+  const email = useSelector((state) => state.email);
+
   const [contacts, setContacts] = useState([
     {
       projectId: "1",
@@ -45,7 +48,9 @@ const ProjectTable = () => {
     const doFetch = async () => {
       const response = await fetch("https://randomuser.me/api/?results=100");
       const body = await response.json();
-      AllProjects().then((data) => {
+      console.log("Project Table: ");
+      console.log(email);
+      AllProjects(email).then((data) => {
         const updatedContacts = data.map((item) => {
           return {
             projectId: item.projectid,

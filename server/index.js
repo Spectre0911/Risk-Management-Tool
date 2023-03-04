@@ -194,8 +194,10 @@ app.post("/api/features", async (req, postRes) => {
 // Get all projects
 app.post("/api/projects", async (req, postRes) => {
   try {
+    console.log(req.body);
     const allFeatures = await pool.query(
-      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (opened -  NOW()))) / (EXTRACT(DAY FROM (deadline - NOW())))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = 1) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users;"
+      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (opened -  NOW()))) / (EXTRACT(DAY FROM (deadline - NOW())))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users;",
+      [req.body.email]
     );
     if (allFeatures.rows.length == 0) {
       return postRes.json(null);
@@ -320,14 +322,29 @@ app.post("/api/dependencies", async (req, postRes) => {
   }
 });
 
-// Get all dependencies for a feature
+// Get all bugs for a particular project
 app.post("/api/bugCount", async (req, postRes) => {
+  try {
+    const allBugs = await pool.query(
+      "select * from bugs inner join features on bugs.featureid = features.featureid where projectid = $1",
+      [req.body.projectid]
+    );
+    console.log(allBugs.rows);
+    postRes.json(allBugs.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here> and devid = <userid here> and not completed) as tasksleft;
+// Get all task for a particular project
+app.post("/api/taskCount", async (req, postRes) => {
   try {
     console.log(req.body);
 
     const allBugs = await pool.query(
-      "select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = $1",
-      [req.body.projectid]
+      "select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = $1 and devid = (SELECT userid FROM users WHERE email = $2) and not completed) as tasksleft",
+      [req.body.projectid, req.body.email]
     );
 
     postRes.json(allBugs.rows);
@@ -335,15 +352,6 @@ app.post("/api/bugCount", async (req, postRes) => {
     console.error(err.message);
   }
 });
-
-/*-- Number of bugs for a particular project (critical)
-select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 1;
-
--- Number of bugs for a particular project (major)
-select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 2;
-
--- Number of bugs for a particular project (minor)
-select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 3;*/
 
 //SELECT deadline - NOW() FROM projects where projectid = 1
 app.post("/api/timeLeft", async (req, postRes) => {

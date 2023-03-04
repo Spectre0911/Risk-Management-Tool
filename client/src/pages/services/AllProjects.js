@@ -1,4 +1,6 @@
 export const AllProjects = (values) => {
+  console.log("IN ALL PROJECTS");
+  console.log(values);
   return new Promise((resolve, reject) => {
     fetch("http://localhost:5000/api/projects", {
       method: "POST",
