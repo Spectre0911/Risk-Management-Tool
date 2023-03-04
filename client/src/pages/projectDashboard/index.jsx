@@ -160,7 +160,7 @@ const ProjectDashboard = () => {
           .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
           .reduce((acc, obj) => {
             // Increment the count for the priority of the current object
-            acc[obj.priority]++;
+            acc[obj.severity]++;
             return acc;
           }, counts); // Use the counts object as the initial value of the reduce function
 

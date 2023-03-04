@@ -320,30 +320,36 @@ app.post("/api/dependencies", async (req, postRes) => {
   }
 });
 
-// Get all dependencies for a feature
+// Get all bugs for a particular project
 app.post("/api/bugCount", async (req, postRes) => {
   try {
-    console.log(req.body);
-
     const allBugs = await pool.query(
-      "select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = $1",
+      "select * from bugs inner join features on bugs.featureid = features.featureid where projectid = $1",
       [req.body.projectid]
     );
-
+    console.log(allBugs.rows);
     postRes.json(allBugs.rows);
   } catch (err) {
     console.error(err.message);
   }
 });
 
-/*-- Number of bugs for a particular project (critical)
-select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 1;
+//select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here> and devid = <userid here> and not completed) as tasksleft;
+// Get all task for a particular project
+// app.post("/api/taskCount", async (req, postRes) => {
+//   try {
+//     console.log(req.body);
 
--- Number of bugs for a particular project (major)
-select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 2;
+//     const allBugs = await pool.query(
+//       "select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = $1",
+//       [req.body.projectid]
+//     );
 
--- Number of bugs for a particular project (minor)
-select count(*) from bugs inner join features on bugs.featureid = features.featureid where projectid = <projectid here> and priority = 3;*/
+//     postRes.json(allBugs.rows);
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// });
 
 //SELECT deadline - NOW() FROM projects where projectid = 1
 app.post("/api/timeLeft", async (req, postRes) => {
