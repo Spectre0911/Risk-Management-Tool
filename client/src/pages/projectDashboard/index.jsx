@@ -133,6 +133,7 @@ const ProjectDashboard = () => {
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
+    console.log(projectId);
     // Set the amount of time left: THERE IS AN ISSUEHERE
     TimeLeft({
       projectid: 1,
@@ -145,24 +146,26 @@ const ProjectDashboard = () => {
     AllFeatures({
       projectid: 1,
     }).then((data) => {
-      console.log(data);
-      const counts = {
-        1: 0,
-        2: 0,
-        3: 0,
-      };
+      if (data != null) {
+        console.log(data);
+        const counts = {
+          1: 0,
+          2: 0,
+          3: 0,
+        };
 
-      // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
-      data
-        .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
-        .reduce((acc, obj) => {
-          // Increment the count for the priority of the current object
-          acc[obj.priority]++;
-          return acc;
-        }, counts); // Use the counts object as the initial value of the reduce function
+        // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
+        data
+          .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
+          .reduce((acc, obj) => {
+            // Increment the count for the priority of the current object
+            acc[obj.priority]++;
+            return acc;
+          }, counts); // Use the counts object as the initial value of the reduce function
 
-      setDataFeatures([counts[1], counts[2], counts[3]]);
-      console.log(counts); // Output the counts object      // setDataTime([data[0].remaining.days, data[0].completed.days]);
+        setDataFeatures([counts[1], counts[2], counts[3]]);
+        console.log(counts); // Output the counts object      // setDataTime([data[0].remaining.days, data[0].completed.days]);
+      }
     });
     let fetchData = [];
     (async () => {
@@ -269,7 +272,8 @@ const ProjectDashboard = () => {
   return (
     <div className="main">
       <div className="grid">
-        <p className="projectTitleId">Project number {projectId}
+        <p className="projectTitleId">
+          Project number {projectId}
           <button
             onClick={handleAddShow}
             className="projectFilterInput viewProject closeProject"
@@ -343,7 +347,7 @@ const ProjectDashboard = () => {
 
         <div className="infoBox2 projectTable feature">
           <div className="metricTitle2">Features</div>
-          <Table />
+          <Table projectid={projectId} />
         </div>
 
         <div className="infoBox2">
@@ -425,7 +429,7 @@ const ProjectDashboard = () => {
           </div>
           <div className="ganttContainer">
             {/* <GanttChart viewMode={ganttViewState}/> */}
-            <NewGantt viewMode={ganttViewState} />
+            <NewGantt viewMode={ganttViewState} projectid={projectId} />
           </div>
         </div>
 
