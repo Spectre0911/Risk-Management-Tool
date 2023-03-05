@@ -81,15 +81,15 @@ const AdminSidebar = ({projectId, teamMember}) => {
                     {'Team members'}
                 </MenuItem >}
 
-                {(teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineTeam />} onClick={() => navigate(`/projectstm/${projectId}/teammembers/${projectId}`)}>
+                {(teamMember&&projectId) ? <MenuItem className="menuItem" icon={<AiOutlineTeam />} onClick={() => navigate(`/projectstm/${projectId}/teammembers/${projectId}`)}>
                     {'Team members'}
-                </MenuItem >}
+                </MenuItem >: null}
 
                 
 
-                {(teamMember&&projectId) && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projectstm/${projectId}/bugs/${projectId}`)}>
+                {(teamMember&&projectId) ? <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projectstm/${projectId}/bugs/${projectId}`)}>
                     {'Bugs'}
-                </MenuItem >}
+                </MenuItem > : null}
 
                 <MenuItem className="bottomItem" icon={<BiLogOutCircle />} onClick={() => navigate(`/dashboard/productList`)}>
                     {'Log out'}
