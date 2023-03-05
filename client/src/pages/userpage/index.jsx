@@ -11,12 +11,13 @@ import "../projectDashboard/index.css";
 import "../projectDashboard/index.jsx";
 import ProfileCard from "./ProfileCard";
 
-const UserPage = () => {
+const UserPage = (isPm) => {
 
     const DeleteButton = ({ id, handleDeleteShow }) => {
     return (
         <div className="featureDeleteTasksButtonDiv">
-        <button
+          {console.log(isPm)}
+        {isPm.isPm? <button
             type="submit"
             id={id}
             name={id}
@@ -26,7 +27,7 @@ const UserPage = () => {
             style={{width: "50%", position: "absolute", top: "-10px", right:0, left:"90%"}}
         >
             <BsFillXCircleFill />
-        </button>
+        </button>: null}
         </div>
     );
     }
@@ -156,12 +157,15 @@ const teamMembers = [
                               image={member.image}
                               bio={member.bio}
                               skills={member.skills}
+                              isPm={isPm}
                               button={<DeleteButton id={member.id} handleDeleteShow={handleDeleteShow} />} />
                           </div>
                       );
                   })}
               </div>
-          </div><div className="userContainer">
+          </div>
+          {console.log(isPm.isPm)}
+           {isPm.isPm? <div className="userContainer">
                       <p className="userTitle">Recommended Team Members:</p>
                       <button
                           onClick={handleAddShow}
@@ -172,7 +176,7 @@ const teamMembers = [
                           padding: "0px",
                           position: "absolute",
                           right: "20px",
-                          top: "15px",
+                          top: "40px",
                           }}
                       >
                           <IoIosPersonAdd />
@@ -192,7 +196,7 @@ const teamMembers = [
                           );
                       })}
                   </div>
-              </div>
+              </div>: null}
           <Modal
           className="addProfileModal"
           style={{ marginTop: "200px" }}

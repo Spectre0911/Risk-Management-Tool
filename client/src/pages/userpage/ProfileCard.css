@@ -4,6 +4,8 @@
 .UserH3 {
 	margin: 10px 0;
 	color: #0b1852;
+	font-family: 'Montserrat';
+	font-weight: 900;
 }
 
 .UserH6 {
@@ -13,6 +15,7 @@
 }
 
 .UserP {
+	font-family: 'Montserrat' ;
 	font-size: 17px;
 	line-height: 21px;
 	color: #0b1852;
@@ -84,7 +87,8 @@ button.profile-button {
 	border-radius: 2px;
 	color: #fff;
 	display: inline-block;
-	font-size: 12px;
+	font-size: 15px;
+	font-family: 'Montserrat';
 	margin: 0 7px 7px 0;
 	padding: 7px;
 }
