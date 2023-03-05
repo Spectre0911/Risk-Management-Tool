@@ -1,6 +1,6 @@
-export const AllProjects = (values) => {
+export const TasksToComplete = (values) => {
   return new Promise((resolve, reject) => {
-    fetch("http://localhost:5000/api/projects", {
+    fetch("http://localhost:5000/api/tasksToComplete", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

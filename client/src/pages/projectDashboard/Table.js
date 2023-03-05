@@ -45,7 +45,6 @@ const Table = (props) => {
   const [contacts, setContacts] = useState([]);
   useEffect(() => {
     AllFeatures({ projectid: props.projectid }).then((data) => {
-      console.log(props.projectid);
       let updatedContacts = [];
       if (data != null) {
         updatedContacts = data.map((item) => {
@@ -59,8 +58,8 @@ const Table = (props) => {
           };
         });
       }
-      console.log("Updating data");
       setData(updatedContacts);
+      console.log("----------");
     });
   }, []);
 
@@ -220,6 +219,7 @@ const Table = (props) => {
       <TableContainer
         columns={columns}
         data={data}
+        projectid={props.projectid}
         // renderRowSubComponent={renderRowSubComponent}
       />
       <div>
@@ -237,7 +237,10 @@ const Table = (props) => {
             <Modal.Title>Edit Feature</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <FeatureForm handleClose={handleEditClose} featureId={featureId} />
+            <FeatureForm
+              handleClose={handleEditClose}
+              projectid={props.projectid}
+            />
           </Modal.Body>
         </Modal>
 

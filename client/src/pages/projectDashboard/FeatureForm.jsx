@@ -24,7 +24,7 @@ import Dropzone from "react-dropzone";
 import * as yup from "yup";
 import { createGrid } from "@mui/system";
 
-const EditProfileForm = ({ handleClose, featureId }) => {
+const EditProfileForm = ({ handleClose, projectid }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
 
@@ -53,7 +53,7 @@ const EditProfileForm = ({ handleClose, featureId }) => {
           }
         });
     };
-    getAllFeatures({ projectid: 1 });
+    getAllFeatures({ projectid: projectid });
   }, []);
 
   const reportBugSchema = yup.object().shape({
@@ -73,9 +73,8 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    // console.log(dependencies);
     const newValues = {
-      projectid: 1,
+      projectid: projectid,
       featureName: values.name,
       startTime: values.startTime,
       endTime: values.endTime,
@@ -86,11 +85,14 @@ const EditProfileForm = ({ handleClose, featureId }) => {
       difficulty: values.difficulty,
       dependencies: dependencies,
     };
-
+    console.log("New Values (FeatureForm.jsx):");
+    console.log(newValues);
     createFeature(newValues);
   };
 
   const createFeature = (values) => {
+    console.log("CREATING FEATURE, FEATUREFORM.jsx");
+    console.log(projectid);
     fetch("http://localhost:5000/api/createFeature", {
       method: "POST",
       headers: {
