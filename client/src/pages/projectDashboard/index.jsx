@@ -11,7 +11,7 @@ import { GrClose } from "react-icons/gr";
 import { IoIosPersonAdd } from "react-icons/io";
 import NewGantt from "./App.js";
 import Select from "react-select";
-import { Box } from "@mui/material";
+import { Box, useRadioGroup } from "@mui/material";
 // import GanttChart from "../gantt";
 import { Octokit } from "octokit";
 import { RadarChart } from "./radar/RadarChart";
@@ -20,6 +20,8 @@ import { useNavigate } from "react-router-dom";
 import { TimeLeft } from "../services/TimeLeft";
 import { AllFeatures } from "../services/AllFeatures";
 import { BugCount } from "../services/BugCounts";
+import { AllProjectMembers } from "../services/AllProjectMembers";
+import { MemberSkills } from "../services/MemberSkills";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -57,22 +59,22 @@ const ProjectDashboard = () => {
   const [dataTime, setDataTime] = useState([0, 0]);
   const backgroundColorTime = ["rgba(255,0,0,1)", "rgba(255,128,0,1)"];
 
-  const teamMembers = [
+  const [teamMembers, setTeamMembers] = useState([
     {
       id: "1",
-      name: "Jane Arnold",
+      name: "Josh",
       image: "http://localhost:5000/assets/jane.jpg",
       skills: ["Python", "React"],
       suitabilityScore: 0,
     },
     {
       id: "2",
-      name: "Jane Arnold",
+      name: "Jane",
       image: "http://localhost:5000/assets/jane.jpg",
       skills: ["Python", "React"],
       suitabilityScore: 0,
     },
-  ];
+  ]);
 
   const [showDelete, setShowDelete] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
@@ -134,7 +136,41 @@ const ProjectDashboard = () => {
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
-    // console.log(projectId);
+    AllProjectMembers({ projectId: projectId }).then((data) => {
+      if (data != null) {
+        let newData = [];
+        var useridSkillMap = new Map();
+        const memberSkillPromises = data.map((member) => {
+          return MemberSkills({ userid: member.userid }).then((skills) => {
+            let skillArr = [];
+            if (skills != null) {
+              skills.map((skill) => {
+                if (skill.skill != null) {
+                  skillArr.push(skill.skill);
+                }
+              });
+            }
+            useridSkillMap.set(member.userid, skillArr);
+            console.log("Members skills: ");
+            console.log(useridSkillMap.get(member.userid));
+          });
+        });
+
+        Promise.all(memberSkillPromises).then(() => {
+          console.log(useridSkillMap);
+          data.forEach((member) =>
+            newData.push({
+              ...member,
+              skills: useridSkillMap.get(member.userid),
+            })
+          );
+          setTeamMembers(newData);
+        });
+      }
+    });
+
+    // In this updated code, the memberSkillPromises array is created by calling map on the data array, and each element is a promise returned by MemberSkills. The promises are returned from the map function, and then `Promise
+
     // Set the amount of time left: THERE IS AN ISSUEHERE
     TimeLeft({
       projectid: projectId,
@@ -456,8 +492,7 @@ const ProjectDashboard = () => {
                   </div>
                   <div className="projectDashboardSkillMatchTitle">
                     <p>
-                      <b className="projectDashboardBold">Bio:</b> Hi, my name
-                      is Jane and I am a software developer
+                      <b className="projectDashboardBold">Bio:</b> {member.bio}
                     </p>
                   </div>
                   <div className="featureDeleteTasksButtonDiv">
