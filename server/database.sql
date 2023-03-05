@@ -66,6 +66,9 @@ create table features (
     completed   boolean not null default false,
     difficulty  integer not null check (difficulty >=1 and difficulty <= 10),
     priority    integer not null check (priority >= 1 and priority <= 3),
+    -- 1 = core, 2 = optional, 3 = aesthetic
+    status      integer not null check (status >= 1 and status <= 3),
+    -- 1 = completed, 2 = in progress, 3 = delayed
     currentrisk integer not null check (currentrisk >= 0 and currentrisk <= 100),
     progress    integer not null check (progress >= 0 and progress <= 100),
     members     integer not null check (members >= 0) default 0,
@@ -83,7 +86,8 @@ create table tasks (
     starttime   timestamp not null check (starttime >= current_date),
     endtime     timestamp not null,
     check (endtime > starttime),
-    completed   boolean not null default false,
+    status      integer not null check (status >= 1 and status <= 3),
+    -- 1 = completed, 2 = in progress, 3 = delayed
     primary key (taskid),
     foreign key (featureid) references features(featureid) on delete cascade,
     foreign key (devid) references users(userid)
