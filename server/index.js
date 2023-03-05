@@ -239,6 +239,36 @@ app.post("/api/notifications", async (req, postRes) => {
   }
 });
 
+// Get location specific notifications
+app.post("/api/locationNotifications", async (req, postRes) => {
+  try {
+    console.log("locationNotifications");
+    console.log(req.body);
+    const userId = await pool.query(
+      "SELECT userid FROM users WHERE email = $1;",
+      [req.body.email]
+    );
+    console.log(userId.rows[0]);
+    const allNotifications = await pool.query(
+      "SELECT notifid, location, (SELECT projectname projects where projectid = $1) as projectname, title, message  FROM notifications WHERE userid = $2 and notiftype = $3 and location = $4",
+      [
+        req.body.projectid,
+        userId.rows[0].userid,
+        req.body.type,
+        req.body.location,
+      ]
+    );
+    console.log(allNotifications.rows);
+    if (allNotifications.rows.length == 0) {
+      return postRes.json("0");
+    } else {
+      postRes.json(allNotifications.rows[0].count);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.post("/api/minimize-overlapping-tasks", async (req, res) => {
   const projectid = req.body.projectid;
   let tasks = await pool.query(
