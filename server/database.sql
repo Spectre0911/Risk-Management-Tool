@@ -36,9 +36,8 @@ drop table if exists risks;
 create table risks (
     projectid integer not null,
     riskdate  timestamp not null,
-    risk      integer not null check (currentrisk >= 0 and currentrisk <= 100),
+    risk      integer not null check (risk >= 0 and risk <= 100),
     risktype  integer not null check (risktype >= 1 and risktype <= 20),
-
     primary key (projectid, riskdate),
     foreign key (projectid) references projects(projectid) on delete cascade
 );
@@ -143,7 +142,7 @@ create table feedback (
 
 drop table if exists sktypes cascade;
 create table sktypes (
-    sktype varchar(50) not null,
+    sktype varchar(50) not null unique,
     primary key (sktype)
 );
 
@@ -164,7 +163,7 @@ create table userskill (
     primary key (userid, skill),
     foreign key (userid) references users(userid) on delete cascade,
     foreign key (skill) references skills(skill) on delete cascade,
-    foreign key (sktype) references skills(sktype) on delete cascade
+    foreign key (sktype) references sktypes(sktype) on delete cascade
 );
 
 drop table if exists projectskill;
@@ -175,7 +174,7 @@ create table projectskill (
     primary key (projectid, skill),
     foreign key (projectid) references projects(projectid) on delete cascade,
     foreign key (skill) references skills(skill) on delete cascade,
-    foreign key (sktype) references skills(sktype) on delete cascade
+    foreign key (sktype) references sktypes(sktype) on delete cascade
 );
 
 
