@@ -60,3 +60,6 @@ select taskname, description, starttime, endtime from tasks where projectid = <p
 
 -- List uncompleted tasks (for whole project)
 select taskname, description, starttime, endtime from tasks where projectid = <projectid here> and not completed;
+
+-- Tasks summary for user
+select projectname, featurename, taskname, features.priority, tasks.status, extract(day from (tasks.endtime - current_date)) as daysleft from projects natural join (features inner join tasks on featureid) as featuretask where devid = <userid here>;
