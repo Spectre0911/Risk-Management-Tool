@@ -1,7 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import Gantt from "./Gantt/";
 import Toolbar from "./Toolbar/";
-import './index.css';
+import "./index.css";
 import { getAllDependencies } from "../services/AllDependencies";
 import { CallTopoSort } from "../services/TopoSort";
 import { MinimiseOverlappingTasks } from "../services/MinimiseOverlap";
@@ -25,7 +25,7 @@ const NewGantt = ({ projectid }) => {
 
   useEffect(() => {
     getAllFeatures({ projectid: projectid });
-    sortTopologically({ projectid: projectid });
+    // sortTopologically({ projectid: projectid });
   }, []);
 
   const getAllFeatures = (values) => {
@@ -95,6 +95,7 @@ const NewGantt = ({ projectid }) => {
       });
   };
   const sortTopologically = (values) => {
+    console.log("SORTING 1");
     var outputList = [];
     fetch("http://localhost:5000/api/features", {
       method: "POST",
@@ -127,7 +128,7 @@ const NewGantt = ({ projectid }) => {
             .then(() => {
               CallTopoSort({
                 dependencies: featureDepMap,
-                projectid: 1,
+                projectid: projectid,
               });
             })
             .catch((error) => {
@@ -140,7 +141,12 @@ const NewGantt = ({ projectid }) => {
   return (
     <div>
       <div className="zoom-bar">
-      <button className="toplogicalOrderButton">
+        <button
+          className="toplogicalOrderButton"
+          onClick={() => {
+            sortTopologically({ projectid: projectid });
+          }}
+        >
           Topological ordering
         </button>
         <Toolbar zoom={currentZoom} onZoomChange={handleZoomChange} />
