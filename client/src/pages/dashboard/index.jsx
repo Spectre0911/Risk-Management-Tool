@@ -17,7 +17,9 @@ import Table from "./Table";
 import { TasksToComplete } from "../services/TasksToComplete";
 const Dashboard = () => {
   const [activeProjects, setActiveProjects] = useState(0);
-  const [activeNotifications, setActiveNotifications] = useState(0);
+  const [notifications, setActiveNotifications] = useState(0);
+  const [warnings, setActiveWarnings] = useState(0);
+
   const [tasksToComplete, setTasksToComplete] = useState(0);
 
   const login = useSelector((state) => state.email);
@@ -26,13 +28,16 @@ const Dashboard = () => {
   }).then((data) => setActiveProjects(data));
   NotificationCount({
     email: login.email,
+    type: 1,
   }).then((data) => setActiveNotifications(data));
+  NotificationCount({
+    email: login.email,
+    type: 2,
+  }).then((data) => setActiveWarnings(data));
   TasksToComplete({ email: login.email }).then((data) =>
     setTasksToComplete(data)
   );
-  useEffect(() => {
-    console.log(login);
-  });
+
   return (
     <div className="main">
       <div className="grid">
@@ -58,7 +63,7 @@ const Dashboard = () => {
 
         <div className="infoBox">
           <div className="metricTitle dashboard">Notifications</div>
-          <div className="metricNumber">{activeNotifications}</div>
+          <div className="metricNumber">{notifications}</div>
           <div className="metricCircleBackground metricBlueBackground">
             <div className="metricIcon metricBlueIcon">
               <FaBell />
@@ -68,7 +73,7 @@ const Dashboard = () => {
 
         <div className="infoBox">
           <div className="metricTitle dashboard">Warnings</div>
-          <div className="metricNumber">2</div>
+          <div className="metricNumber">{warnings}</div>
           <div className="metricCircleBackground metricRedBackground">
             <div className="metricIcon metricRedIcon">
               <AiFillWarning />

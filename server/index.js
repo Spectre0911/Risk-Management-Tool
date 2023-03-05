@@ -162,6 +162,8 @@ app.post("/api/createFeature", async (req, res) => {
       dependencyIds.push(depID.rows[0]);
     }
 
+    // Get all information about a user
+
     // Insert dependencies into dependency table
     for (let k = 0; k < dependencyLength; k++) {
       const insertDependency = await pool.query(
@@ -215,14 +217,48 @@ app.post("/api/projects", async (req, postRes) => {
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {
   try {
+    console.log("notifications");
+    console.log(req.body);
     const userId = await pool.query(
       "SELECT userid FROM users WHERE email = $1;",
       [req.body.email]
     );
+    console.log(userId.rows[0]);
     const allNotifications = await pool.query(
-      "SELECT COUNT(*) FROM notifications WHERE userid = $1",
-      [userId.rows[0].count]
+      "SELECT COUNT(*) FROM notifications WHERE userid = $1 and notiftype = $2",
+      [userId.rows[0].userid, req.body.type]
     );
+    console.log(allNotifications.rows);
+    if (allNotifications.rows.length == 0) {
+      return postRes.json("0");
+    } else {
+      postRes.json(allNotifications.rows[0].count);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Get location specific notifications
+app.post("/api/locationNotifications", async (req, postRes) => {
+  try {
+    console.log("locationNotifications");
+    console.log(req.body);
+    const userId = await pool.query(
+      "SELECT userid FROM users WHERE email = $1;",
+      [req.body.email]
+    );
+    console.log(userId.rows[0]);
+    const allNotifications = await pool.query(
+      "SELECT notifid, location, (SELECT projectname projects where projectid = $1) as projectname, title, message  FROM notifications WHERE userid = $2 and notiftype = $3 and location = $4",
+      [
+        req.body.projectid,
+        userId.rows[0].userid,
+        req.body.type,
+        req.body.location,
+      ]
+    );
+    console.log(allNotifications.rows);
     if (allNotifications.rows.length == 0) {
       return postRes.json("0");
     } else {
@@ -281,6 +317,23 @@ app.post("/api/tasksToComplete", async (req, postRes) => {
     } else {
       postRes.json(projectCount.rows[0].count);
     }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/api/user", async (req, postRes) => {
+  try {
+    const userId = await pool.query(
+      "SELECT userid FROM users WHERE email = $1;",
+      [req.body.email.email]
+    );
+
+    const userInfo = await pool.query(
+      "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
+      [userId.rows[0].userid]
+    );
+    postRes.json(userInfo.rows[0]);
   } catch (err) {
     console.error(err.message);
   }
