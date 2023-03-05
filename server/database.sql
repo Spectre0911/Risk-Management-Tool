@@ -144,41 +144,29 @@ create table feedback (
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
-drop table if exists sktypes cascade;
-create table sktypes (
-    sktype varchar(50) not null unique,
-    primary key (sktype)
-);
-
 drop table if exists skills cascade;
 create table skills (
     skill  varchar(50) not null,
-    sktype varchar(50) not null,
-    primary key (skill),
-    foreign key (sktype) references sktypes(sktype) on delete cascade
+    primary key (skill)
 );
 
 drop table if exists userskill;
 create table userskill (
     userid  integer not null,
     skill   varchar(50) not null,
-    sktype  varchar(50) not null,
     sklevel integer not null check (sklevel > 0 and sklevel <= 10),
     primary key (userid, skill),
     foreign key (userid) references users(userid) on delete cascade,
-    foreign key (skill) references skills(skill) on delete cascade,
-    foreign key (sktype) references sktypes(sktype) on delete cascade
+    foreign key (skill) references skills(skill) on delete cascade
 );
 
 drop table if exists projectskill;
 create table projectskill (
     projectid integer not null,
     skill     varchar(50) not null,
-    sktype    varchar(50) not null,
     primary key (projectid, skill),
     foreign key (projectid) references projects(projectid) on delete cascade,
-    foreign key (skill) references skills(skill) on delete cascade,
-    foreign key (sktype) references sktypes(sktype) on delete cascade
+    foreign key (skill) references skills(skill) on delete cascade
 );
 
 
