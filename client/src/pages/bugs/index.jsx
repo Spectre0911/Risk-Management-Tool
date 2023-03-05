@@ -20,6 +20,7 @@ import Bug from './bug';
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 import BugReportForm from './bugReportForm';
+import BugAssignForm from './bugAssignForm';
 const Bugs = () => {
     const {projectId} = useParams();
     const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +36,33 @@ const Bugs = () => {
     const handleShow = () => {
         setShow(true);
         console.log(show);
+    }
+
+    const bugData = [{
+        bugId:"1",
+        bugName:"Log out button",
+        bugLocation: "Admin Sidebar",
+        bugDescription: "The logout button is not working",
+        bugReportDate:"2023-03-14",
+        bugSeverity:"High",
+        bugPriority:"Med",
+        ReportedByUser:{name:"Jane Arnold",imagePath:"jane.jpg"},
+        AssignedToUser:{name:"Jane Arnold",imagePath:"jane.jpg"}
+    },{
+        bugId:"2",
+        bugName:"Log in button",
+        bugLocation: "Admin Sidebar",
+        bugDescription: "The login button is not working",
+        bugReportDate:"2023-03-14",
+        bugSeverity:"High",
+        bugPriority:"High",
+        ReportedByUser:{name:"Jane Arnold",imagePath:"jane.jpg"},
+        AssignedToUser:{name:"Jane Arnold",imagePath:"jane.jpg"}
+    }]
+    
+    const deleteBug = (bugId) =>{
+        console.log("delete this");
+        console.log(bugId);
     }
 
     return (
@@ -59,16 +87,15 @@ const Bugs = () => {
                     <Modal.Body>
                     
                         <BugReportForm handleClose={handleClose}/>
-
+                        
                     </Modal.Body>
                 </Modal>
             </div>
-
-            <Bug/>
-            <Bug/>
-            <Bug/>
-            <Bug/>
-            <Bug/>
+            {bugData.map((bug,index)=>{
+                return(
+                <Bug data={bug} deleteBug={deleteBug} key={bug.bugId}/>
+                )
+            })}
         </div>
     );
 };

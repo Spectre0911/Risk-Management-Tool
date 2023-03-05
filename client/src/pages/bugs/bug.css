@@ -42,21 +42,23 @@
 .bugSeverityLevel{
     display: inline-block;
     vertical-align: middle;
-    background-color: red;
     padding: 3px;
     border-radius: 5px;
     color: white;
     margin-bottom: 5px;
 }
 
+.bugSeverityLevel.high{
+    background-color: rgb(247, 21, 5) !important;
+}
+
+
 .bugSeverityLevel.med{
-    display: inline-block;
-    vertical-align: middle;
     background-color: rgb(247, 170, 5) !important;
-    padding: 3px;
-    border-radius: 5px;
-    color: white;
-    margin-bottom: 5px;
+}
+
+.bugSeverityLevel.low{
+    background-color: rgb(247, 170, 5) !important;
 }
 
 .bugSeverity{

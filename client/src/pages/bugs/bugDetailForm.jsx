@@ -20,7 +20,7 @@ import Bug from "./bug";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 
-const BugReportForm = ({ handleClose }) => {
+const BugDetailForm = ({ handleClose, bugId, data }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
 
@@ -32,10 +32,10 @@ const BugReportForm = ({ handleClose }) => {
   });
 
   const initialValuesRegister = {
-    bugName: "",
-    bugDate: "",
-    bugDescription: "",
-    bugLocation: ""
+    bugName: data.bugName,
+    bugDate: data.bugReportDate,
+    bugDescription: data.bugDescription,
+    bugLocation: data.bugLocation
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
@@ -60,7 +60,17 @@ const BugReportForm = ({ handleClose }) => {
     { value: "3", label: "Low" },
   ];
 
-  const [priority, setPriority] = useState({ value: "1", label: "High" });
+  const translatePriority = (priority) =>{
+    if (priority=="High"){
+      return { value: "1", label: "High" }
+    }else if (priority=="Med"){
+      return { value: "2", label: "Med" }
+    }else if (priority=="Low"){
+      return{ value: "3", label: "Low" }
+    }
+  }
+
+  const [priority, setPriority] = useState(translatePriority(data.bugPriority));
 
   const handlePriorityChange = (e) => {
     setPriority(e);
@@ -73,7 +83,7 @@ const BugReportForm = ({ handleClose }) => {
     { value: "3", label: "Low" },
   ];
 
-  const [severity, setSeverity] = useState({ value: "1", label: "High" });
+  const [severity, setSeverity] = useState(translatePriority(data.bugSeverity));
 
   const handleSeverityChange = (e) => {
     setSeverity(e);
@@ -215,7 +225,7 @@ const BugReportForm = ({ handleClose }) => {
                 p: "1rem",
               }}
             >
-              {"Report Bug"}
+              {"Save"}
             </Button>
 
             <Button
@@ -236,4 +246,4 @@ const BugReportForm = ({ handleClose }) => {
   );
 };
 
-export default BugReportForm;
+export default BugDetailForm;
