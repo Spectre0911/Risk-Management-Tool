@@ -14,6 +14,7 @@ import { loginAction } from "../../actions";
 import "./index.css";
 import ProjectTable from "./ProjectTable";
 import Table from "./Table";
+import Notification from "./notification";
 import { TasksToComplete } from "../services/TasksToComplete";
 const Dashboard = () => {
   const [activeProjects, setActiveProjects] = useState(0);
@@ -37,6 +38,17 @@ const Dashboard = () => {
   TasksToComplete({ email: login.email }).then((data) =>
     setTasksToComplete(data)
   );
+
+  const notificationData = [{
+    notifType:"warning",
+    title:"Risk alert!",
+    description:"Risk on CS261 project is increasing"
+  },
+  {
+    notifType:"info",
+    title:"Risk alert!",
+    description:"Risk on CS261 project is increasing"
+  }];
 
   return (
     <div className="main">
@@ -89,68 +101,16 @@ const Dashboard = () => {
         <div className="infoBox2">
           <Scrollbars>
             <div className="metricTitle2" style={{ marginBottom: "20px" }}>
-              Notificationss
+                  Notificationss
             </div>
-
-            <div className="notificationBox">
-              <div className="notificationIcon">
-                <AiFillWarning />
-              </div>
-
-              <div className="NotificationText">
-                <p>Risk alert!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>
-                  Risk on CS261 project is increasingRisk on CS261 project is
-                  increasingRisk on CS261 project is increasing.
-                </p>
-              </div>
-            </div>
-
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsBriefcaseFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>Added to new project!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>Yuo have been added to a new project</p>
-              </div>
-            </div>
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsBriefcaseFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>Added to new project!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>Yuo have been added to a new project</p>
-              </div>
-            </div>
-
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsBriefcaseFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>Added to new project!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>Yuo have been added to a new project</p>
-              </div>
-            </div>
+            {notificationData.map((notif, index)=>{
+              return(
+              <Notification data={notif}/>
+            )})}
+            
           </Scrollbars>
         </div>
+
       </div>
 
       <div className="infoBox2 projectTable">
@@ -160,82 +120,17 @@ const Dashboard = () => {
 
       <div className="infoBox2">
         <Scrollbars>
-          <div className="metricTitle2" style={{ marginBottom: "20px" }}>
-            Notificationss
-          </div>
-
-          <div className="notificationBox">
-            <div className="notificationIcon">
-              <AiFillWarning />
-            </div>
-
-            <div className="NotificationText">
-              <p>Risk alert!</p>
-            </div>
-
-            <div className="NotificationDescription">
-              <p>
-                Risk on CS261 project is increasingRisk on CS261 project is
-                increasingRisk on CS261 project is increasing.
-              </p>
-            </div>
-          </div>
-
-          <div className="notificationBox">
-            <div className="notificationIcon blueIcon">
-              <BsBriefcaseFill />
-            </div>
-
-            <div className="NotificationText">
-              <p>Added to new project!</p>
-            </div>
-
-            <div className="NotificationDescription">
-              <p>You have been added to a new project</p>
-            </div>
-          </div>
-          <div className="notificationBox">
-            <div className="notificationIcon blueIcon">
-              <BsBriefcaseFill />
-            </div>
-
-            <div className="NotificationText">
-              <p>Added to new project!</p>
-            </div>
-
-            <div className="NotificationDescription">
-              <p>Yuo have been added to a new project</p>
-            </div>
-          </div>
-
-          <div className="notificationBox">
-            <div className="notificationIcon blueIcon">
-              <BsBriefcaseFill />
-            </div>
-
-            <div className="NotificationText">
-              <p>Added to new project!</p>
-            </div>
-
-            <div className="NotificationDescription">
-              <p>Yuo have been added to a new project</p>
-            </div>
-          </div>
+        <div className="metricTitle2" style={{ marginBottom: "20px" }}>
+              Notificationss
+        </div>
+        {notificationData.map((notif, index)=>{
+          return(
+          <Notification data={notif}/>
+        )})}
+        
         </Scrollbars>
       </div>
 
-      {/* <div className='icon'>
-                    <FaBell />
-                </div>
-                <div className="number">`
-                    <p>50</p>
-                </div>
-                <div className="metric">
-                    <p>Notifications</p>
-                </div> */}
-      {/* <ProjectComponent/>
-            <ProjectComponent/>
-            <ProjectComponent/> */}
     </div>
   );
 };
