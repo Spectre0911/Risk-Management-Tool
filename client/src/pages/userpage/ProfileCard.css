@@ -48,6 +48,8 @@ button.primary {
 	border: 1px solid #03BFCB;
 	border-radius: 3px;
 	color: #231E39;
+	top:0;
+	left:0;
 	font-family: Montserrat, sans-serif;
 	font-weight: 500;
 	padding: 10px 25px;
@@ -57,6 +59,12 @@ button.primary.ghost {
 	background-color: transparent;
 	color: #02899C;
 }
+
+button.profile-button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+  }
 
 .skills {
 	background-color: #5873ca;
@@ -79,4 +87,14 @@ button.primary.ghost {
 	font-size: 12px;
 	margin: 0 7px 7px 0;
 	padding: 7px;
+}
+
+.removeTeamMember {
+	width: 40px !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    height: 35px !important;
+    padding-bottom: 20px !important;
 }

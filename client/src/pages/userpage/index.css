@@ -21,9 +21,39 @@
     display: inline-block;
 }
 
+.button-wrapper {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* other styles ... */
+  }
+  
+
 .spacer{
     margin-top: 50px;
 }
+
+.removeTeamMember {
+	width: 40px !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    height: 35px !important;
+    padding-bottom: 20px !important;
+    }
+
+.addTeamMember {
+    width: 40px !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: green;
+    height: 35px !important;
+    padding-bottom: 20px !important;
+    }
 
 /* p{
     text-align: left;

@@ -2,12 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./ProfileCard.css";
 import Button from "react-bootstrap/Button";
-import { BsFillPlusCircleFill } from "react-icons/bs";
+import "./index.jsx"
+import { BsFillPlusCircleFill, BsFillXCircleFill } from "react-icons/bs";
 
-const ProfileCard = ({ name, bio, image, skills, isMember }) => {
-  const buttonClassName = isMember ? "removeButton" : "addButton";
+const ProfileCard = ({ name, bio, image, skills, button }) => {
   return (
     <div className="card-container">
+      {button}
       <img className="round" src={image} alt={`${name}'s profile`} />
       <h3 className="UserH3">{name}</h3>
       <p className="UserP">{bio}</p>

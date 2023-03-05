@@ -3,6 +3,8 @@ import {IoIosPersonAdd} from "react-icons/io";
 import {GrClose} from "react-icons/gr";
 import {Modal, Button} from "react-bootstrap";
 import { Box } from "@mui/material";
+import { BsFillXCircleFill } from 'react-icons/bs';
+import {BsFillPlusCircleFill} from "react-icons/bs";
 import Select from "react-select";
 import "./index.css";
 import "../projectDashboard/index.css";
@@ -10,6 +12,40 @@ import "../projectDashboard/index.jsx";
 import ProfileCard from "./ProfileCard";
 
 const UserPage = () => {
+
+    const DeleteButton = ({ id, handleDeleteShow }) => {
+    return (
+        <div className="featureDeleteTasksButtonDiv">
+        <button
+            type="submit"
+            id={id}
+            name={id}
+            value={id}
+            onClick={handleDeleteShow}
+            className="featureDeleteTasksButton removeTeamMember"
+            style={{width: "50%", position: "absolute", top: 0, right:0, left:"90%"}}
+        >
+            <BsFillXCircleFill />
+        </button>
+        </div>
+    );
+    }
+
+    const AddButton = ({ id, handleAddShow }) => {
+        return (
+            <button
+            type="submit"
+            id={id}
+            name={id}
+            value={id}
+            onClick={handleAddShow}
+            className="featureEditButton addTeamMember"
+            style={{width: "50%", position: "absolute", top: 0, right:0, left:"90%"}}
+            >
+            <BsFillPlusCircleFill />
+            </button>
+        );
+        }
 
     const [showDelete, setShowDelete] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
@@ -98,12 +134,15 @@ const teamMembers = [
             <div>
                 {teamMembers.map((member) => {
                     return (
+                        <div>
                         <ProfileCard
                             key={member.id}
                             name={member.name}
                             image={member.image}
                             bio={member.bio}
-                            skills={member.skills} />
+                            skills={member.skills}
+                            button={<DeleteButton id={member.id} handleDeleteShow={handleDeleteShow} />} />
+                        </div>
                     );
                 })}
             </div>
@@ -132,13 +171,14 @@ const teamMembers = [
                                 name={member.name}
                                 image={member.image}
                                 bio={member.bio}
-                                skills={member.skills} />
+                                skills={member.skills}
+                                button={<AddButton id={member.id} handleDeleteShow={handleAddShow} />} />
                             </div>
                         );
                     })}
                 </div>
             </div>
-            <Modal
+        <Modal
         className="addProfileModal"
         style={{ marginTop: "200px" }}
         fade={false}
@@ -199,7 +239,51 @@ const teamMembers = [
           </Box>
         </Modal.Body>
       </Modal>
-            </>
+
+      <Modal
+        className="addProfileModal"
+        style={{ marginTop: "200px" }}
+        fade={false}
+        show={showDelete}
+        onHide={handleDeleteClose}
+      >
+        <Modal.Header>
+          <div className="bugFormClose" onClick={handleDeleteClose}>
+            <GrClose />
+          </div>
+          <Modal.Title>Remove team member</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you would like to remove this user from the team?</p>
+          <Box>
+            <Button
+              className="bugCancelButton"
+              fullWidth
+              sx={{
+                m: "2rem 1rem",
+                p: "1rem",
+              }}
+              style={{ marginLeft: "10px" }}
+              onClick={deleteFeature}
+            >
+              {"Remove"}
+            </Button>
+
+            <Button
+              className="bugAddButton"
+              fullWidth
+              onClick={handleDeleteClose}
+              sx={{
+                m: "2rem 1rem",
+                p: "1rem",
+              }}
+            >
+              {"Cancel"}
+            </Button>
+          </Box>
+        </Modal.Body>
+      </Modal>
+    </>
     );
 }
 
