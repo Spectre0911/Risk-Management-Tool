@@ -326,20 +326,42 @@ app.post("/api/minimize-overlapping-tasks", async (req, res) => {
 
   res.json(sortedTasks);
 });
+// Get notification data:
+
+app.post("/api/notificationInfo", async (req, postRes) => {
+  try {
+    const userId = await pool.query(
+      "SELECT userid FROM users WHERE email = $1;",
+      [req.body.email]
+    );
+    const allNotifications = await pool.query(
+      "SELECT * FROM notifications WHERE userid = $1);",
+      [userId]
+    );
+    if (allNotifications.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      // console.log(allFeatures.rows);
+      postRes.json(allNotifications.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 app.post("/api/dependencies", async (req, postRes) => {
   try {
     // console.log(req.body);
 
-    const allFeatures = await pool.query(
+    const dependencies = await pool.query(
       "SELECT featurename, featureid FROM features INNER JOIN (SELECT depid from featuredep WHERE featureid = $1) as o1 on features.featureid = o1.depid;",
       [req.body.featureid]
     );
-    if (allFeatures.rows.length == 0) {
+    if (dependencies.rows.length == 0) {
       return postRes.json(null);
     } else {
       // console.log(allFeatures.rows);
-      postRes.json(allFeatures.rows);
+      postRes.json(dependencies.rows);
     }
   } catch (err) {
     console.error(err.message);

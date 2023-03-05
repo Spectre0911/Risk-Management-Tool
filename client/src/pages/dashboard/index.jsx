@@ -24,31 +24,41 @@ const Dashboard = () => {
   const [tasksToComplete, setTasksToComplete] = useState(0);
 
   const login = useSelector((state) => state.email);
-  ActiveProjects({
-    email: login.email,
-  }).then((data) => setActiveProjects(data));
-  NotificationCount({
-    email: login.email,
-    type: 1,
-  }).then((data) => setActiveNotifications(data));
-  NotificationCount({
-    email: login.email,
-    type: 2,
-  }).then((data) => setActiveWarnings(data));
-  TasksToComplete({ email: login.email }).then((data) =>
-    setTasksToComplete(data)
-  );
 
-  const notificationData = [{
-    notifType:"warning",
-    title:"Risk alert!",
-    description:"Risk on CS261 project is increasing"
-  },
-  {
-    notifType:"info",
-    title:"Risk alert!",
-    description:"Risk on CS261 project is increasing"
-  }];
+  useEffect(() => {
+    // Get all active projects
+    ActiveProjects({
+      email: login.email,
+    }).then((data) => setActiveProjects(data));
+    // Get the number of notifications
+    NotificationCount({
+      email: login.email,
+      type: 1,
+    }).then((data) => setActiveNotifications(data));
+    // Get the number of warnings
+    NotificationCount({
+      email: login.email,
+      type: 2,
+    }).then((data) => setActiveWarnings(data));
+    // Get the number of tasks to complete
+    TasksToComplete({ email: login.email }).then((data) =>
+      setTasksToComplete(data)
+    );
+  }, []);
+
+  // This is going to be location 1
+  const [notificationData, setNotifications] = useState([
+    {
+      notifType: "warning",
+      title: "Risk alert!",
+      description: "Risk on CS261 project is increasing",
+    },
+    {
+      notifType: "info",
+      title: "Risk alert!",
+      description: "Risk on CS261 project is increasing",
+    },
+  ]);
 
   return (
     <div className="main">
@@ -101,16 +111,13 @@ const Dashboard = () => {
         <div className="infoBox2">
           <Scrollbars>
             <div className="metricTitle2" style={{ marginBottom: "20px" }}>
-                  Notificationss
+              Notificationss
             </div>
-            {notificationData.map((notif, index)=>{
-              return(
-              <Notification data={notif}/>
-            )})}
-            
+            {notificationData.map((notif, index) => {
+              return <Notification data={notif} />;
+            })}
           </Scrollbars>
         </div>
-
       </div>
 
       <div className="infoBox2 projectTable">
@@ -120,17 +127,14 @@ const Dashboard = () => {
 
       <div className="infoBox2">
         <Scrollbars>
-        <div className="metricTitle2" style={{ marginBottom: "20px" }}>
-              Notificationss
-        </div>
-        {notificationData.map((notif, index)=>{
-          return(
-          <Notification data={notif}/>
-        )})}
-        
+          <div className="metricTitle2" style={{ marginBottom: "20px" }}>
+            Notificationss
+          </div>
+          {notificationData.map((notif, index) => {
+            return <Notification data={notif} />;
+          })}
         </Scrollbars>
       </div>
-
     </div>
   );
 };
