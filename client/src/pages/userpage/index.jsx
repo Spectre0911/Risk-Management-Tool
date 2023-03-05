@@ -23,7 +23,7 @@ const UserPage = () => {
             value={id}
             onClick={handleDeleteShow}
             className="featureDeleteTasksButton removeTeamMember"
-            style={{width: "50%", position: "absolute", top: 0, right:0, left:"90%"}}
+            style={{width: "50%", position: "absolute", top: "-10px", right:0, left:"90%"}}
         >
             <BsFillXCircleFill />
         </button>
@@ -38,9 +38,9 @@ const UserPage = () => {
             id={id}
             name={id}
             value={id}
-            onClick={handleAddShow}
-            className="featureEditButton addTeamMember"
-            style={{width: "50%", position: "absolute", top: 0, right:0, left:"90%"}}
+            onClick={handleAddUser}
+            className="featureDeleteTasksButton addTeamMember"
+            style={{width: "50%", position: "absolute", top: "20px", right:0, left:"90%"}}
             >
             <BsFillPlusCircleFill />
             </button>
@@ -49,6 +49,7 @@ const UserPage = () => {
 
     const [showDelete, setShowDelete] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
+    const [showAddUser, setShowAddUser] = useState(false);
     const [removeUserId, setRemoveUserId] = useState();
   
     const handleDeleteClose = () => {
@@ -62,12 +63,23 @@ const UserPage = () => {
     const handleAddClose = () => {
       setShowAdd(false);
     };
+
     const handleAddShow = (e) => {
       console.log("2dd");
       setShowAdd(true);
     };
+
+    const handleAddUser = (e) => {
+        console.log("2dd");
+        setShowAddUser(true);
+      };
+    
+    const handleAddUserClose = (e) => {
+        console.log("2dd");
+        setShowAddUser(false);
+        };
   
-    const deleteFeature = (e) => {
+    const deleteUser = (e) => {
       console.log("delete this");
       console.log(removeUserId);
       setShowDelete(false);
@@ -172,7 +184,7 @@ const teamMembers = [
                                 image={member.image}
                                 bio={member.bio}
                                 skills={member.skills}
-                                button={<AddButton id={member.id} handleDeleteShow={handleAddShow} />} />
+                                button={<AddButton id={member.id} handleDeleteShow={handleAddUser} />} />
                             </div>
                         );
                     })}
@@ -240,6 +252,8 @@ const teamMembers = [
         </Modal.Body>
       </Modal>
 
+
+
       <Modal
         className="addProfileModal"
         style={{ marginTop: "200px" }}
@@ -264,7 +278,7 @@ const teamMembers = [
                 p: "1rem",
               }}
               style={{ marginLeft: "10px" }}
-              onClick={deleteFeature}
+              onClick={deleteUser}
             >
               {"Remove"}
             </Button>
@@ -283,6 +297,54 @@ const teamMembers = [
           </Box>
         </Modal.Body>
       </Modal>
+
+      <Modal
+        className="addProfileModal"
+        style={{ marginTop: "200px" }}
+        fade={false}
+        show={showAddUser}
+        onHide={handleAddUserClose}
+      >
+        <Modal.Header>
+          <div className="bugFormClose" onClick={handleDeleteClose}>
+            <GrClose />
+          </div>
+          <Modal.Title>Add team member</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure you would like to add this user to the team?</p>
+          <Box>
+            <Button
+              className="confirmButton"
+              fullWidth
+              sx={{
+                m: "2rem 1rem",
+                p: "1rem",
+              }}
+              style={{ marginLeft: "10px" }}
+              onClick={addTeamMember}
+            >
+              {"Add"}
+            </Button>
+
+            <Button
+              className="bugAddButton"
+              fullWidth
+              onClick={handleAddUserClose}
+              sx={{
+                m: "2rem 1rem",
+                p: "1rem",
+              }}
+            >
+              {"Cancel"}
+            </Button>
+          </Box>
+        </Modal.Body>
+      </Modal>
+
+
+
+
     </>
     );
 }
