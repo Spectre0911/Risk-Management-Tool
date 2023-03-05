@@ -17,8 +17,61 @@
     font-family: 'Montserrat';
     font-size: 30px;
     font-weight: 800;
-    padding-top: 20px;
+    padding-top: 15px;
     display: inline-block;
+}
+
+.button-wrapper {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    /* other styles ... */
+  }
+  
+
+.spacer{
+    margin-top: 50px;
+}
+
+.removeTeamMember {
+	width: 40px !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    height: 35px !important;
+    padding-bottom: 20px !important;
+    }
+
+.addTeamMember {
+    width: 40px !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    background-color: green;
+    height: 35px !important;
+    padding-bottom: 20px !important;
+    }
+
+.addTeamMember:hover {
+    background-color: #4CAF50;
+    }
+
+.confirmButton{
+    margin-top: 20px;
+    position: relative;
+    float: right;
+    color: white;
+    background-color: green;
+    margin-right: 10px;
+}
+
+.confirmButton:hover{
+    color: white;
+    transition: 0.5s;
+    background-color: darkgreen;
 }
 
 /* p{
