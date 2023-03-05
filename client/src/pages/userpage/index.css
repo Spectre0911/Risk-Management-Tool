@@ -17,8 +17,12 @@
     font-family: 'Montserrat';
     font-size: 30px;
     font-weight: 800;
-    padding-top: 20px;
+    padding-top: 15px;
     display: inline-block;
+}
+
+.spacer{
+    margin-top: 50px;
 }
 
 /* p{
