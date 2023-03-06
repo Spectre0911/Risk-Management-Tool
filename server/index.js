@@ -245,17 +245,17 @@ app.post("/api/locationNotifications", async (req, postRes) => {
       "SELECT userid FROM users WHERE email = $1;",
       [req.body.email]
     );
-    console.log(userId.rows[0]);
     const allNotifications = await pool.query(
-      "SELECT notifid, location, projectid, title, message as description  FROM notifications WHERE userid = $1 and notiftype = $2 and location = $3",
-      [userId.rows[0].userid, req.body.notifType, req.body.location]
+      "SELECT notifid, location, projectid, title, message as description, notiftype  FROM notifications WHERE userid = $1 and location = $2",
+      [userId.rows[0].userid, req.body.location]
     );
+    // console.log(allNotifications.rows);
+
     // console.log(allNotifications.rows);
     if (allNotifications.rows.length == 0) {
       return postRes.json("0");
     } else {
-      console.log("In here");
-      postRes.json(allNotifications.rows);
+      return postRes.json(allNotifications.rows);
     }
   } catch (err) {
     console.error(err.message);
@@ -269,7 +269,6 @@ app.post("/api/projectMembers", async (req, postRes) => {
       "SELECT userid, CONCAT(firstname, ' ', lastname) as name, bio FROM users NATURAL JOIN userproject WHERE projectid = $1;",
       [req.body.projectId]
     );
-
     if (projectMembers.rows.length == 0) {
       return postRes.json(null);
     } else {
@@ -280,15 +279,14 @@ app.post("/api/projectMembers", async (req, postRes) => {
   }
 });
 
-// Get all skills for a team member
+// Get all skills for a team member on id
 app.post("/api/memberSkills", async (req, postRes) => {
   try {
-    const skils = await pool.query(
+    const skills = await pool.query(
       "SELECT * from userskill WHERE userid = $1;",
       [req.body.userid]
     );
-
-    if (skils.rows.length == 0) {
+    if (skills.rows.length == 0) {
       return postRes.json([
         {
           userid: req.body.userid,
@@ -298,7 +296,43 @@ app.post("/api/memberSkills", async (req, postRes) => {
         },
       ]);
     } else {
-      postRes.json(skils.rows);
+      postRes.json(skills.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Get all possible skills
+app.post("/api/skills", async (req, postRes) => {
+  try {
+    const skills = await pool.query(
+      "SELECT skill as value, skill as label, '0' as experience from skills;"
+    );
+
+    postRes.json(skills.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/api/adminSkills", async (req, postRes) => {
+  try {
+    console.log(req.body.email);
+    const skills = await pool.query(
+      "SELECT skill as value, skill as label, sklevel as experience from userskill WHERE userid = (SELECT userid FROM users where email = $1);",
+      [req.body.email.email]
+    );
+    if (skills.rows.length == 0) {
+      return postRes.json([
+        {
+          value: "null",
+          label: "null",
+          experience: 0,
+        },
+      ]);
+    } else {
+      postRes.json(skills.rows);
     }
   } catch (err) {
     console.error(err.message);

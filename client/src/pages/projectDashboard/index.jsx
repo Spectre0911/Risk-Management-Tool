@@ -22,6 +22,7 @@ import { AllFeatures } from "../services/AllFeatures";
 import { BugCount } from "../services/BugCounts";
 import { AllProjectMembers } from "../services/AllProjectMembers";
 import { MemberSkills } from "../services/MemberSkills";
+import { MdCardMembership } from "react-icons/md";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -105,7 +106,6 @@ const ProjectDashboard = () => {
     setShowAdd(true);
   };
 
-
   const deleteFeature = (e) => {
     console.log("delete this");
     console.log(removeUserId);
@@ -142,9 +142,9 @@ const ProjectDashboard = () => {
   });
 
   const outcomeOptions = [
-  { value: "1", label: "Success" },
-  { value: "2", label: "Failure" },
-  ]
+    { value: "1", label: "Success" },
+    { value: "2", label: "Failure" },
+  ];
 
   const [outcome, setOutcome] = useState([]);
   const handleOutcomeChange = (e) => {
@@ -152,20 +152,24 @@ const ProjectDashboard = () => {
     console.log(outcome);
   };
 
-
-  const endProject = () =>{
+  const endProject = () => {
     console.log("end project");
-  }
+  };
   //Fetching github commit data
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
     AllProjectMembers({ projectId: projectId }).then((data) => {
+      console.log("Fetching project members");
       if (data != null) {
+        console.log(data);
         let newData = [];
         var useridSkillMap = new Map();
         const memberSkillPromises = data.map((member) => {
+          console.log(member);
           return MemberSkills({ userid: member.userid }).then((skills) => {
+            console.log(skills);
+
             let skillArr = [];
             if (skills != null) {
               skills.map((skill) => {
@@ -175,8 +179,8 @@ const ProjectDashboard = () => {
               });
             }
             useridSkillMap.set(member.userid, skillArr);
-            console.log("Members skills: ");
-            console.log(useridSkillMap.get(member.userid));
+            // console.log("Members skills: ");
+            // console.log(useridSkillMap.get(member.userid));
           });
         });
 
@@ -188,6 +192,7 @@ const ProjectDashboard = () => {
               skills: useridSkillMap.get(member.userid),
             })
           );
+          console.log(newData);
           setTeamMembers(newData);
         });
       }
@@ -199,16 +204,13 @@ const ProjectDashboard = () => {
     TimeLeft({
       projectid: projectId,
     }).then((data) => {
-      console.log(data[0]);
       setDataTime([data[0].remaining.days, data[0].completed.days]);
     });
 
     BugCount({
       projectid: projectId,
     }).then((data) => {
-      console.log("Bugs: ");
       if (data != null) {
-        console.log(data);
         const counts = {
           1: 0,
           2: 0,
@@ -233,7 +235,6 @@ const ProjectDashboard = () => {
       projectid: projectId,
     }).then((data) => {
       if (data != null) {
-        console.log(data);
         const counts = {
           1: 0,
           2: 0,
@@ -729,9 +730,6 @@ const ProjectDashboard = () => {
           </Box>
         </Modal.Body>
       </Modal>
-
-
-
 
       <Modal
         className="addProfileModal"

@@ -12,6 +12,8 @@ import { BsBriefcaseFill } from "react-icons/bs";
 import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
 import { GetUser } from "../services/GetUser";
+import { AdminSkills } from "../services/AdminSkills";
+import { AllSkills } from "../services/AllSkills";
 import { useSelector } from "react-redux";
 import {
   Box,
@@ -33,19 +35,24 @@ const EditProfileForm = ({ handleClose }) => {
   const [userEmail, setUserEmail] = useState(
     useSelector((state) => state.email)
   );
-  const options = [
+  const [options, setSkillOptions] = useState([
     // Need to fetch options
     { value: "Python", label: "Python", experience: "0" },
     { value: "Front-End", label: "Front-End", experience: "0" },
     { value: "Backend", label: "Backend", experience: "0" },
-  ];
+  ]);
 
   const [skills, setSkills] = useState([
     { value: "Python", label: "Python", experience: "0" },
     { value: "React", label: "React", experience: "0" },
   ]);
   const [skillExperience, setSkillExperience] = useState([]);
-  const [initialValuesRegister, setInitialValueRegister] = useState({});
+  const [initialValuesRegister, setInitialValueRegister] = useState({
+    name: "",
+    email: "",
+    bio: "",
+    gitHubToken: "",
+  });
 
   const reportBugSchema = yup.object().shape({
     name: yup.string().required("required"),
@@ -58,16 +65,25 @@ const EditProfileForm = ({ handleClose }) => {
     console.log("SETTING");
     GetUser({
       email: userEmail,
-    }).then((data) =>
+    }).then((data) => {
+      console.log(data);
       setInitialValueRegister({
-        name: data.name,
-        email: data.email,
-        bio: data.bio,
-        gitHubToken: data.gitHubToken,
-      })
-    );
+        name: data.name || "",
+        email: data.email || "",
+        bio: data.bio || "",
+        gitHubToken: data.githubtoken || "",
+      });
+      console.log(initialValuesRegister);
+    });
+    AdminSkills({ email: userEmail }).then((data) => {
+      console.log(data);
+      setSkills(data);
+    });
 
-    console.log(initialValuesRegister);
+    AllSkills({ email: userEmail }).then((data) => {
+      console.log(data);
+      setSkillOptions(data);
+    });
   }, []);
 
   const uploadImage = (e) => {
@@ -91,7 +107,9 @@ const EditProfileForm = ({ handleClose }) => {
   };
 
   const handleSkillChange = (e) => {
-    setSkills(e);
+    var tempSkills = [...skills];
+    tempSkills.push(e);
+    setSkills(tempSkills);
   };
   const handleExperienceChange = (e, key) => {
     var tempSkills = [...skills];
@@ -104,6 +122,7 @@ const EditProfileForm = ({ handleClose }) => {
       onSubmit={handleFormSubmit}
       initialValues={initialValuesRegister}
       validationSchema={reportBugSchema}
+      enableReinitialize={true}
     >
       {({
         values,
