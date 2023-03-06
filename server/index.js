@@ -247,8 +247,8 @@ app.post("/api/locationNotifications", async (req, postRes) => {
     );
     console.log(userId.rows[0]);
     const allNotifications = await pool.query(
-      "SELECT notifid, location, projectid, title, message as description  FROM notifications WHERE userid = $1 and notiftype = $2 and location = $3",
-      [userId.rows[0].userid, req.body.notifType, req.body.location]
+      "SELECT notifid, location, projectid, title, message as description, notiftype  FROM notifications WHERE userid = $1 and location = $2",
+      [userId.rows[0].userid, req.body.location]
     );
     // console.log(allNotifications.rows);
     if (allNotifications.rows.length == 0) {

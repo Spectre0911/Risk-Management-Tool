@@ -55,28 +55,34 @@ const Dashboard = () => {
 
     LocationNotifications({
       email: login.email,
-      notifType: 1,
       location: 1,
     }).then((data) => {
       let newNotifications = [];
       data.map((notification) => {
-        newNotifications.push({ ...notification, notifType: "warning" });
+        console.log(notification);
+        let notifType = "warning";
+        if (notification.notiftype == 2) {
+          notifType = "info";
+        }
+        // let notifType = notification.notifType === 1 ? "warning" : "info";
+        newNotifications.push({ ...notification, notifType: notifType });
       });
+
       console.log(newNotifications);
-      setNotifications(notificationData.concat(newNotifications));
+      setNotifications(newNotifications);
     });
-    LocationNotifications({
-      email: login.email,
-      notifType: 2,
-      location: 1,
-    }).then((data) => {
-      let newWarning = [];
-      data.map((notification) => {
-        newWarning.push({ ...notification, notifType: "info" });
-      });
-      console.log(newWarning);
-      setNotifications(notificationData.concat(newWarning));
-    });
+    // LocationNotifications({
+    //   email: login.email,
+    //   notifType: 2,
+    //   location: 1,
+    // }).then((data) => {
+    //   let newWarning = [];
+    //   data.map((notification) => {
+    //     newWarning.push({ ...notification, notifType: "info" });
+    //   });
+    //   console.log(newWarning);
+    //   setNotifications(notificationData.concat(newWarning));
+    // });
   }, []);
 
   return (
