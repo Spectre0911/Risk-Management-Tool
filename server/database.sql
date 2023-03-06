@@ -121,7 +121,6 @@ create table bugs (
 drop table if exists notifications;
 create table notifications (
     notifid   serial not null,
-    location  integer not null check (location >= 0 and location <= 5),
     userid    integer not null,
     projectid integer not null,
     notiftype integer not null check (notiftype = 1 or notiftype = 2), -- 1 = regular notification, 2 = warning
@@ -132,6 +131,7 @@ create table notifications (
     foreign key (userid) references users(userid) on delete cascade,
     foreign key (projectid) references projects(projectid) on delete cascade
 );
+
 
 drop table if exists feedback;
 create table feedback (
@@ -148,7 +148,7 @@ create table feedback (
 
 drop table if exists skills cascade;
 create table skills (
-    skill  varchar(50) not null,
+    skill varchar(50) not null,
     primary key (skill)
 );
 
@@ -259,6 +259,22 @@ $$ language plpgsql;
 create trigger newdep before insert on featuredep
 for each statement
     execute procedure checkdep();
+
+-- Create a notification when a member is added to the team for a project
+create or replace function membernotif() returns trigger as $$
+declare
+    name varchar(50);
+    counter integer := 1;
+begin
+    select projectname from projects where projectid = new.projectid into name;
+    insert into notifications (notifid, userid, projectid, notiftype, title, message, seen) values (default, new.userid, new.projectid, 1, 'Added to project', name, default);
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger addmember after insert on userproject
+for each statement
+    execute procedure membernotif();
 
 -- Update project's current risk in projects when new data added to risks
 create or replace function newrisk() returns trigger as $$
