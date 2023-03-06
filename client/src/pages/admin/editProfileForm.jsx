@@ -76,6 +76,7 @@ const EditProfileForm = ({ handleClose }) => {
       console.log(initialValuesRegister);
     });
     AdminSkills({ email: userEmail }).then((data) => {
+      console.log("ADMIN SKILLS");
       console.log(data);
       setSkills(data);
     });
@@ -107,9 +108,7 @@ const EditProfileForm = ({ handleClose }) => {
   };
 
   const handleSkillChange = (e) => {
-    var tempSkills = [...skills];
-    tempSkills.push(e);
-    setSkills(tempSkills);
+    setSkills(e);
   };
   const handleExperienceChange = (e, key) => {
     var tempSkills = [...skills];
