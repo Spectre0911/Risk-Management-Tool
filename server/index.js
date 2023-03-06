@@ -322,6 +322,12 @@ app.post("/api/updateUser", async (req, postRes) => {
     console.log(req.body);
     const firstNameLastName = req.body.values.name.split(" ");
     console.log(firstNameLastName);
+    // Update user table
+
+    const userId = await pool.query(
+      "SELECT userid FROM users WHERE email = $1;",
+      [req.body.userEmail.email]
+    );
     await pool.query(
       "UPDATE USERS SET firstname = $1, lastname = $2, email = $3, githubtoken = $4, bio = $6 WHERE email = $5",
       [
@@ -333,6 +339,19 @@ app.post("/api/updateUser", async (req, postRes) => {
         req.body.values.bio,
       ]
     );
+    // Delete all exisiting skills in the table
+    await pool.query("DELETE FROM userskill WHERE userid = $1", [
+      userId.rows[0].userid,
+    ]);
+
+    // Update user skills table
+    const skills = req.body.skills;
+    skills.map(async (skill) => {
+      await pool.query(
+        "INSERT INTO userskill (userid, skill, sklevel) VALUES ($1, $2, $3)",
+        [userId.rows[0].userid, skill.value, skill.experience]
+      );
+    });
 
     // postRes.json(skills.rows);
   } catch (err) {
