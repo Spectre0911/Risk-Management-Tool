@@ -12,6 +12,7 @@ import { BsBriefcaseFill } from "react-icons/bs";
 import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
 import { GetUser } from "../services/GetUser";
+import { MemberSkills } from "../services/MemberSkills";
 import { useSelector } from "react-redux";
 import {
   Box,
@@ -45,7 +46,12 @@ const EditProfileForm = ({ handleClose }) => {
     { value: "React", label: "React", experience: "0" },
   ]);
   const [skillExperience, setSkillExperience] = useState([]);
-  const [initialValuesRegister, setInitialValueRegister] = useState({});
+  const [initialValuesRegister, setInitialValueRegister] = useState({
+    name: "",
+    email: "",
+    bio: "",
+    gitHubToken: "",
+  });
 
   const reportBugSchema = yup.object().shape({
     name: yup.string().required("required"),
@@ -58,16 +64,19 @@ const EditProfileForm = ({ handleClose }) => {
     console.log("SETTING");
     GetUser({
       email: userEmail,
-    }).then((data) =>
+    }).then((data) => {
+      console.log(data);
       setInitialValueRegister({
         name: data.name,
         email: data.email,
         bio: data.bio,
-        gitHubToken: data.gitHubToken,
-      })
-    );
-
-    console.log(initialValuesRegister);
+        gitHubToken: data.githubtoken,
+      });
+      console.log(initialValuesRegister);
+    });
+    MemberSkills({ email: userEmail }).then((data) => {
+      console.log(data);
+    });
   }, []);
 
   const uploadImage = (e) => {
@@ -104,6 +113,7 @@ const EditProfileForm = ({ handleClose }) => {
       onSubmit={handleFormSubmit}
       initialValues={initialValuesRegister}
       validationSchema={reportBugSchema}
+      enableReinitialize={true}
     >
       {({
         values,

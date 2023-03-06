@@ -245,17 +245,17 @@ app.post("/api/locationNotifications", async (req, postRes) => {
       "SELECT userid FROM users WHERE email = $1;",
       [req.body.email]
     );
-    console.log(userId.rows[0]);
     const allNotifications = await pool.query(
       "SELECT notifid, location, projectid, title, message as description, notiftype  FROM notifications WHERE userid = $1 and location = $2",
       [userId.rows[0].userid, req.body.location]
     );
     // console.log(allNotifications.rows);
+
+    // console.log(allNotifications.rows);
     if (allNotifications.rows.length == 0) {
       return postRes.json("0");
     } else {
-      console.log("In here");
-      postRes.json(allNotifications.rows);
+      return postRes.json(allNotifications.rows);
     }
   } catch (err) {
     console.error(err.message);
@@ -283,12 +283,15 @@ app.post("/api/projectMembers", async (req, postRes) => {
 // Get all skills for a team member
 app.post("/api/memberSkills", async (req, postRes) => {
   try {
-    const skils = await pool.query(
-      "SELECT * from userskill WHERE userid = $1;",
-      [req.body.userid]
+    const userId = await pool.query(
+      "SELECT userid FROM users WHERE email = $1;",
+      [req.body.email.email]
     );
-
-    if (skils.rows.length == 0) {
+    const skills = await pool.query(
+      "SELECT * from userskill WHERE userid = $1;",
+      [userId.rows[0].userid]
+    );
+    if (skills.rows.length == 0) {
       return postRes.json([
         {
           userid: req.body.userid,
@@ -298,7 +301,7 @@ app.post("/api/memberSkills", async (req, postRes) => {
         },
       ]);
     } else {
-      postRes.json(skils.rows);
+      postRes.json(skills.rows);
     }
   } catch (err) {
     console.error(err.message);

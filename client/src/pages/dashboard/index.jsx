@@ -57,6 +57,7 @@ const Dashboard = () => {
       email: login.email,
       location: 1,
     }).then((data) => {
+      console.log(data);
       let newNotifications = [];
       data.map((notification) => {
         console.log(notification);
