@@ -37,6 +37,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import { propTypes } from "react-progressbar-semicircle";
 
 const Table = () => {
   var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
@@ -53,7 +54,7 @@ const Table = () => {
           projectId: "1",
           projectName: "CS261",
           taskPriority: "Core",
-          featureName:"Dashboard",
+          featureName: "Dashboard",
           taskStatus: "Completed",
           taskName: "Add sidebar",
           startTime: "12/11/2022",
@@ -67,7 +68,7 @@ const Table = () => {
           projectName: "CS261",
           taskPriority: "Aesthetic",
           taskStatus: "In Progress",
-          featureName:"Dashboard",
+          featureName: "Dashboard",
           taskName: "Add sidebar",
           startTime: "12/11/2022",
           endTime: "30/02/2023",
@@ -80,7 +81,7 @@ const Table = () => {
           projectName: "CS261",
           taskPriority: "Aesthetic",
           taskStatus: "Delayed",
-          featureName:"Dashboard",
+          featureName: "Dashboard",
           taskName: "Add sidebar",
           daysLeft: "2",
         },
@@ -106,13 +107,10 @@ const Table = () => {
     setShowEdit(true);
   };
 
-
-
-
-  const markTaskAsComplete = (e) =>{
+  const markTaskAsComplete = (e) => {
     console.log("mark task as complete");
     console.log(e.target.value);
-  }
+  };
   // const renderRowSubComponent = (row) => {
   //   const name = "k";
   //   console.log("ee");
@@ -143,8 +141,8 @@ const Table = () => {
           return (
             <div>
               <b>{cell.row.original.projectName}</b>
-             </div>
-          )
+            </div>
+          );
         },
       },
       {
@@ -169,14 +167,16 @@ const Table = () => {
         filterable: false,
         Cell: ({ cell }) => {
           return (
-            <div className={`taskPriority 
-                ${cell.row.original.taskPriority==`Core`? "red":""}
-                ${cell.row.original.taskPriority==`Aesthetic`? "yellow":""}
-                ${cell.row.original.taskPriority==`Optional`? "green":""}
-                `}>
-                {cell.row.original.taskPriority}
-             </div>
-          )
+            <div
+              className={`taskPriority 
+                ${cell.row.original.taskPriority == `Core` ? "red" : ""}
+                ${cell.row.original.taskPriority == `Aesthetic` ? "yellow" : ""}
+                ${cell.row.original.taskPriority == `Optional` ? "green" : ""}
+                `}
+            >
+              {cell.row.original.taskPriority}
+            </div>
+          );
         },
       },
       {
@@ -187,14 +187,16 @@ const Table = () => {
         filterable: false,
         Cell: ({ cell }) => {
           return (
-            <div className={`taskPriority 
-                ${cell.row.original.taskStatus==`Delayed`? "red":""}
-                ${cell.row.original.taskStatus==`In Progress`? "yellow":""}
-                ${cell.row.original.taskStatus==`Completed`? "green":""}
-                `}>
-                {cell.row.original.taskStatus}
-             </div>
-          )
+            <div
+              className={`taskPriority 
+                ${cell.row.original.taskStatus == `Delayed` ? "red" : ""}
+                ${cell.row.original.taskStatus == `In Progress` ? "yellow" : ""}
+                ${cell.row.original.taskStatus == `Completed` ? "green" : ""}
+                `}
+            >
+              {cell.row.original.taskStatus}
+            </div>
+          );
         },
       },
       {
@@ -240,8 +242,7 @@ const Table = () => {
           );
         },
       },
-      
-    
+
       // {
       // id: 'expander', // 'id' is required
       // Cell: ({ row }) => (
@@ -260,7 +261,7 @@ const Table = () => {
         data={data}
         // renderRowSubComponent={renderRowSubComponent}
       />
-      
+
       <div>
         <Modal
           className="addProfileModal"
@@ -279,8 +280,6 @@ const Table = () => {
             <TaskForm handleClose={handleEditClose} taskId={taskId} />
           </Modal.Body>
         </Modal>
-
-      
       </div>
     </div>
   );

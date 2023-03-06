@@ -127,7 +127,6 @@ app.post("/api/login", async (req, postResult) => {
 // Create feature
 app.post("/api/createFeature", async (req, res) => {
   try {
-    console.log(req.body);
     // Insert the feature into the database
     const createFeature = await pool.query(
       "INSERT INTO features (projectid, featurename, starttime, endtime, completed, priority, currentrisk, progress, difficulty) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
@@ -223,12 +222,11 @@ app.post("/api/notifications", async (req, postRes) => {
       "SELECT userid FROM users WHERE email = $1;",
       [req.body.email]
     );
-    console.log(userId.rows[0]);
+
     const allNotifications = await pool.query(
       "SELECT COUNT(*) FROM notifications WHERE userid = $1 and notiftype = $2",
       [userId.rows[0].userid, req.body.type]
     );
-    console.log(allNotifications.rows);
     if (allNotifications.rows.length == 0) {
       return postRes.json("0");
     } else {
@@ -243,26 +241,21 @@ app.post("/api/notifications", async (req, postRes) => {
 app.post("/api/locationNotifications", async (req, postRes) => {
   try {
     // console.log("locationNotifications");
-    // console.log(req.body);
     const userId = await pool.query(
       "SELECT userid FROM users WHERE email = $1;",
       [req.body.email]
     );
     console.log(userId.rows[0]);
     const allNotifications = await pool.query(
-      "SELECT notifid, location, (SELECT projectname projects where projectid = $1) as projectname, title, message  FROM notifications WHERE userid = $2 and notiftype = $3 and location = $4",
-      [
-        req.body.projectid,
-        userId.rows[0].userid,
-        req.body.type,
-        req.body.location,
-      ]
+      "SELECT notifid, location, projectid, title, message as description  FROM notifications WHERE userid = $1 and notiftype = $2 and location = $3",
+      [userId.rows[0].userid, req.body.notifType, req.body.location]
     );
-    console.log(allNotifications.rows);
+    // console.log(allNotifications.rows);
     if (allNotifications.rows.length == 0) {
       return postRes.json("0");
     } else {
-      postRes.json(allNotifications.rows[0].count);
+      console.log("In here");
+      postRes.json(allNotifications.rows);
     }
   } catch (err) {
     console.error(err.message);
@@ -277,7 +270,6 @@ app.post("/api/projectMembers", async (req, postRes) => {
       [req.body.projectId]
     );
 
-    console.log(projectMembers.rows);
     if (projectMembers.rows.length == 0) {
       return postRes.json(null);
     } else {
@@ -326,20 +318,44 @@ app.post("/api/minimize-overlapping-tasks", async (req, res) => {
 
   res.json(sortedTasks);
 });
+// Get notification data:
+
+// app.post("/api/notificationInfo", async (req, postRes) => {
+//   try {
+//     console.log(req.body);
+//     const userId = await pool.query(
+//       "SELECT userid FROM users WHERE email = $1;",
+//       [req.body.email]
+//     );
+//     console.log(userId.rows);
+//     const allNotifications = await pool.query(
+//       "SELECT * FROM notifications WHERE userid = $1;",
+//       [userId]
+//     );
+//     if (allNotifications.rows.length == 0) {
+//       return postRes.json(null);
+//     } else {
+//       // console.log(allFeatures.rows);
+//       postRes.json(allNotifications.rows);
+//     }
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// });
 
 app.post("/api/dependencies", async (req, postRes) => {
   try {
     // console.log(req.body);
 
-    const allFeatures = await pool.query(
+    const dependencies = await pool.query(
       "SELECT featurename, featureid FROM features INNER JOIN (SELECT depid from featuredep WHERE featureid = $1) as o1 on features.featureid = o1.depid;",
       [req.body.featureid]
     );
-    if (allFeatures.rows.length == 0) {
+    if (dependencies.rows.length == 0) {
       return postRes.json(null);
     } else {
       // console.log(allFeatures.rows);
-      postRes.json(allFeatures.rows);
+      postRes.json(dependencies.rows);
     }
   } catch (err) {
     console.error(err.message);
@@ -524,7 +540,6 @@ app.post("/api/topoSort", async (req, res) => {
       );
 
       if (latestEndTime.rows.length == 0) {
-        console.log("Updating to project start time");
         latestEndTime = await pool.query(
           "SELECT featurename, starttime as endtime from features WHERE projectid = $1 ORDER BY starttime ASC LIMIT 1;",
           [req.body.projectid]

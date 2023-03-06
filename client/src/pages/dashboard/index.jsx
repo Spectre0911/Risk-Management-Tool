@@ -16,6 +16,8 @@ import ProjectTable from "./ProjectTable";
 import Table from "./Table";
 import Notification from "./notification";
 import { TasksToComplete } from "../services/TasksToComplete";
+import { NotificationInfo } from "../services/NotificationInfo";
+import { LocationNotifications } from "../services/LocationNotifcations";
 const Dashboard = () => {
   const [activeProjects, setActiveProjects] = useState(0);
   const [notifications, setActiveNotifications] = useState(0);
@@ -24,31 +26,58 @@ const Dashboard = () => {
   const [tasksToComplete, setTasksToComplete] = useState(0);
 
   const login = useSelector((state) => state.email);
-  ActiveProjects({
-    email: login.email,
-  }).then((data) => setActiveProjects(data));
-  NotificationCount({
-    email: login.email,
-    type: 1,
-  }).then((data) => setActiveNotifications(data));
-  NotificationCount({
-    email: login.email,
-    type: 2,
-  }).then((data) => setActiveWarnings(data));
-  TasksToComplete({ email: login.email }).then((data) =>
-    setTasksToComplete(data)
-  );
 
-  const notificationData = [{
-    notifType:"warning",
-    title:"Risk alert!",
-    description:"Risk on CS261 project is increasing"
-  },
-  {
-    notifType:"info",
-    title:"Risk alert!",
-    description:"Risk on CS261 project is increasing"
-  }];
+  // This is going to be location 1
+  const [notificationData, setNotifications] = useState([]);
+
+  useEffect(() => {
+    // Get all active projects
+    ActiveProjects({
+      email: login.email,
+    }).then((data) => setActiveProjects(data));
+    // Get the number of notifications
+    NotificationCount({
+      email: login.email,
+      type: 1,
+    }).then((data) => setActiveNotifications(data));
+    // Get the number of warnings
+    NotificationCount({
+      email: login.email,
+      type: 2,
+    }).then((data) => setActiveWarnings(data));
+    // Get the number of tasks to complete
+    TasksToComplete({ email: login.email }).then((data) =>
+      setTasksToComplete(data)
+    );
+    // Get all the notifications
+    // console.log("NOTIFICATION INGO");
+    //userid = $2 and notiftype = $3 and location = $4
+
+    LocationNotifications({
+      email: login.email,
+      notifType: 1,
+      location: 1,
+    }).then((data) => {
+      let newNotifications = [];
+      data.map((notification) => {
+        newNotifications.push({ ...notification, notifType: "warning" });
+      });
+      console.log(newNotifications);
+      setNotifications(notificationData.concat(newNotifications));
+    });
+    LocationNotifications({
+      email: login.email,
+      notifType: 2,
+      location: 1,
+    }).then((data) => {
+      let newWarning = [];
+      data.map((notification) => {
+        newWarning.push({ ...notification, notifType: "info" });
+      });
+      console.log(newWarning);
+      setNotifications(notificationData.concat(newWarning));
+    });
+  }, []);
 
   return (
     <div className="main">
@@ -101,16 +130,13 @@ const Dashboard = () => {
         <div className="infoBox2">
           <Scrollbars>
             <div className="metricTitle2" style={{ marginBottom: "20px" }}>
-                  Notificationss
+              Notificationss
             </div>
-            {notificationData.map((notif, index)=>{
-              return(
-              <Notification data={notif}/>
-            )})}
-            
+            {notificationData.map((notif, index) => {
+              return <Notification data={notif} />;
+            })}
           </Scrollbars>
         </div>
-
       </div>
 
       <div className="infoBox2 projectTable">
@@ -120,17 +146,14 @@ const Dashboard = () => {
 
       <div className="infoBox2">
         <Scrollbars>
-        <div className="metricTitle2" style={{ marginBottom: "20px" }}>
-              Notificationss
-        </div>
-        {notificationData.map((notif, index)=>{
-          return(
-          <Notification data={notif}/>
-        )})}
-        
+          <div className="metricTitle2" style={{ marginBottom: "20px" }}>
+            Notifications
+          </div>
+          {notificationData.map((notif, index) => {
+            return <Notification data={notif} />;
+          })}
         </Scrollbars>
       </div>
-
     </div>
   );
 };

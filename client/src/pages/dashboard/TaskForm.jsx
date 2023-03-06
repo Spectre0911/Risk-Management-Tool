@@ -11,6 +11,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { BsBriefcaseFill } from "react-icons/bs";
 import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
+import { NotificationInfo } from "../services/NotificationInfo";
 import {
   Box,
   TextField,
@@ -275,7 +276,6 @@ const TaskForm = ({ handleClose, taskId }) => {
 
           {/* BUTTONS */}
           <Box>
-
             <Button
               className="bugCancelButton"
               fullWidth
