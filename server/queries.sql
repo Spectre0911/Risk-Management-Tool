@@ -62,4 +62,4 @@ select taskname, description, starttime, endtime from tasks where projectid = <p
 select taskname, description, starttime, endtime from tasks where projectid = <projectid here> and not completed;
 
 -- Tasks summary for user
-select projectname, featurename, taskname, features.priority, tasks.status, extract(day from (tasks.endtime - current_date)) as daysleft from projects natural join (features inner join tasks on featureid) as featuretask where devid = <userid here>;
+select projectname, featurename, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft from projects natural join ((select featureid, featurename, projectname from features) as featureinfo inner join tasks on features.featureid = tasks.featureid) as featuretask where devid = <userid here>;
