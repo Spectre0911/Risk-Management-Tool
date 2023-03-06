@@ -24,6 +24,7 @@ import { AllProjectMembers } from "../services/AllProjectMembers";
 import { MemberSkills } from "../services/MemberSkills";
 import { MdCardMembership } from "react-icons/md";
 import { OrderedUsers } from "../services/OrderedUsers";
+import { AddTeamMember } from "../services/AddTeamMember";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -114,7 +115,8 @@ const ProjectDashboard = () => {
   };
 
   const addTeamMember = (e) => {
-    console.log(teamMembersList);
+    AddTeamMember({ projectid: projectId, userid: teamMembersList.value });
+    // console.log(teamMembersList);
   };
 
   const changeGanttViewState = (e) => {

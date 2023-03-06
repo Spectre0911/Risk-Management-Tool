@@ -151,7 +151,7 @@ app.post("/api/addTeamMember", async (req, res) => {
     // console.log(req.body);
 
     const add = await pool.query(
-      "INSERT INTO projectuser (userid, projectid, role, ismanager) VALUES($1, $2, 'TM', false) RETURNING *",
+      "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES($1, $2, 'TM', false) RETURNING *",
       [req.body.userid, req.body.projectid]
     );
 
