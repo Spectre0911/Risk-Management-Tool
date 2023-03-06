@@ -13,6 +13,7 @@ import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
 import { GetUser } from "../services/GetUser";
 import { AdminSkills } from "../services/AdminSkills";
+import { AllSkills } from "../services/AllSkills";
 import { useSelector } from "react-redux";
 import {
   Box,
@@ -34,12 +35,12 @@ const EditProfileForm = ({ handleClose }) => {
   const [userEmail, setUserEmail] = useState(
     useSelector((state) => state.email)
   );
-  const options = [
+  const [options, setSkillOptions] = useState([
     // Need to fetch options
-    { value: "", label: "Python", experience: "0" },
-    { value: "", label: "Front-End", experience: "0" },
-    { value: "", label: "Backend", experience: "0" },
-  ];
+    { value: "Python", label: "Python", experience: "0" },
+    { value: "Front-End", label: "Front-End", experience: "0" },
+    { value: "Backend", label: "Backend", experience: "0" },
+  ]);
 
   const [skills, setSkills] = useState([
     { value: "Python", label: "Python", experience: "0" },
@@ -78,6 +79,11 @@ const EditProfileForm = ({ handleClose }) => {
       console.log(data);
       setSkills(data);
     });
+
+    AllSkills({ email: userEmail }).then((data) => {
+      console.log(data);
+      setSkillOptions(data);
+    });
   }, []);
 
   const uploadImage = (e) => {
@@ -101,7 +107,9 @@ const EditProfileForm = ({ handleClose }) => {
   };
 
   const handleSkillChange = (e) => {
-    setSkills(e);
+    var tempSkills = [...skills];
+    tempSkills.push(e);
+    setSkills(tempSkills);
   };
   const handleExperienceChange = (e, key) => {
     var tempSkills = [...skills];

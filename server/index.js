@@ -303,6 +303,19 @@ app.post("/api/memberSkills", async (req, postRes) => {
   }
 });
 
+// Get all possible skills
+app.post("/api/skills", async (req, postRes) => {
+  try {
+    const skills = await pool.query(
+      "SELECT skill as value, skill as label, '0' as experience from skills;"
+    );
+
+    postRes.json(skills.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.post("/api/adminSkills", async (req, postRes) => {
   try {
     console.log(req.body.email);
