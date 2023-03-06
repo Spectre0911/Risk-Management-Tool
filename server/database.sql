@@ -86,6 +86,8 @@ create table tasks (
     starttime   timestamp not null check (starttime >= current_date),
     endtime     timestamp not null,
     check (endtime > starttime),
+    priority    integer not null check (priority >= 1 and priority <= 3),
+    -- 1 = core, 2 = optional, 3 = aesthetic
     status      integer not null check (status >= 1 and status <= 3),
     -- 1 = completed, 2 = in progress, 3 = delayed
     primary key (taskid),
