@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import "./index.jsx"
 import { BsFillPlusCircleFill, BsFillXCircleFill } from "react-icons/bs";
 
-const ProfileCard = ({ name, bio, image, skills, button }) => {
+const ProfileCard = ({ name, bio, image, skills, button, isPm }) => {
   return (
     <div className="card-container">
       {button}

@@ -77,6 +77,7 @@ const ProjectDashboard = () => {
   ]);
 
   const [showDelete, setShowDelete] = useState(false);
+  const [showEndProject, setShowEndProject] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [ganttViewState, setGanttViewState] = useState("Days");
   const [removeUserId, setRemoveUserId] = useState();
@@ -89,6 +90,13 @@ const ProjectDashboard = () => {
     setShowDelete(true);
   };
 
+  const handleEndProjectClose = () => {
+    setShowEndProject(false);
+  };
+  const handleEndProjecShow = (e) => {
+    setShowEndProject(true);
+  };
+
   const handleAddClose = () => {
     setShowAdd(false);
   };
@@ -96,6 +104,7 @@ const ProjectDashboard = () => {
     console.log("2dd");
     setShowAdd(true);
   };
+
 
   const deleteFeature = (e) => {
     console.log("delete this");
@@ -132,6 +141,21 @@ const ProjectDashboard = () => {
     auth: "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",
   });
 
+  const outcomeOptions = [
+  { value: "1", label: "Success" },
+  { value: "2", label: "Failure" },
+  ]
+
+  const [outcome, setOutcome] = useState([]);
+  const handleOutcomeChange = (e) => {
+    setOutcome(e);
+    console.log(outcome);
+  };
+
+
+  const endProject = () =>{
+    console.log("end project");
+  }
   //Fetching github commit data
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
@@ -344,7 +368,7 @@ const ProjectDashboard = () => {
         <p className="projectTitleId">
           Project number {projectId}
           <button
-            onClick={handleAddShow}
+            onClick={handleEndProjecShow}
             className="projectFilterInput viewProject closeProject"
           >
             Close Project
@@ -658,7 +682,7 @@ const ProjectDashboard = () => {
           <Modal.Title>Add team member</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Please select the team member you would like to add:</p>
+          <p>Add a team member</p>
           <p
             style={{
               gridColumn: "span 1",
@@ -689,6 +713,71 @@ const ProjectDashboard = () => {
               onClick={addTeamMember}
             >
               {"Add"}
+            </Button>
+
+            <Button
+              className="bugAddButton"
+              fullWidth
+              onClick={handleDeleteClose}
+              sx={{
+                m: "2rem 1rem",
+                p: "1rem",
+              }}
+            >
+              {"Cancel"}
+            </Button>
+          </Box>
+        </Modal.Body>
+      </Modal>
+
+
+
+
+      <Modal
+        className="addProfileModal"
+        style={{ marginTop: "200px" }}
+        fade={false}
+        show={showEndProject}
+        onHide={handleEndProjectClose}
+      >
+        <Modal.Header>
+          <div className="bugFormClose" onClick={handleEndProjectClose}>
+            <GrClose />
+          </div>
+          <Modal.Title>End project</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Was this project a success or failure?</p>
+          <p
+            style={{
+              gridColumn: "span 1",
+              margin: "auto",
+              paddingRight: "2px",
+            }}
+          >
+            Select outcome
+          </p>
+          <Select
+            id="teamMembers"
+            name="teamMembers"
+            options={outcomeOptions}
+            onChange={handleOutcomeChange}
+            className="defineDependenciesBox"
+            sx={{ gridColumn: "span 3", width: "70%" }}
+            value={outcome}
+          />
+          <Box>
+            <Button
+              className="bugCancelButton"
+              fullWidth
+              sx={{
+                m: "2rem 1rem",
+                p: "1rem",
+              }}
+              style={{ marginLeft: "10px" }}
+              onClick={endProject}
+            >
+              {"End Project"}
             </Button>
 
             <Button

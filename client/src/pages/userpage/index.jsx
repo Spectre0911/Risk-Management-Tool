@@ -11,12 +11,13 @@ import "../projectDashboard/index.css";
 import "../projectDashboard/index.jsx";
 import ProfileCard from "./ProfileCard";
 
-const UserPage = () => {
+const UserPage = (isPm) => {
 
     const DeleteButton = ({ id, handleDeleteShow }) => {
     return (
         <div className="featureDeleteTasksButtonDiv">
-        <button
+          {console.log(isPm)}
+        {isPm.isPm? <button
             type="submit"
             id={id}
             name={id}
@@ -26,7 +27,7 @@ const UserPage = () => {
             style={{width: "50%", position: "absolute", top: "-10px", right:0, left:"90%"}}
         >
             <BsFillXCircleFill />
-        </button>
+        </button>: null}
         </div>
     );
     }
@@ -138,209 +139,216 @@ const teamMembers = [
 
     return (
         <>
-        <div className="spacer"></div>
-        <div className="userContainer">
-            <div className="userTitle">
-                <p>Current Team Members:</p>
-            </div>
-            <div>
-                {teamMembers.map((member) => {
-                    return (
-                        <div>
-                        <ProfileCard
-                            key={member.id}
-                            name={member.name}
-                            image={member.image}
-                            bio={member.bio}
-                            skills={member.skills}
-                            button={<DeleteButton id={member.id} handleDeleteShow={handleDeleteShow} />} />
-                        </div>
-                    );
-                })}
-            </div>
-        </div><div className="userContainer">
-                    <p className="userTitle">Recommended Team Members:</p>
-                    <button
-                        onClick={handleAddShow}
-                        className="projectFilterInput viewProject addFeatureButton"
-                        style={{
-                        height: "35px",
-                        width: "40px",
-                        padding: "0px",
-                        position: "absolute",
-                        right: "20px",
-                        top: "15px",
-                        }}
-                    >
-                        <IoIosPersonAdd />
-                    </button>
-                <div>
-                    {recommendedMembers.map((member) => {
-                        return (
-                            <div>
-                            <ProfileCard
-                                key={member.id}
-                                name={member.name}
-                                image={member.image}
-                                bio={member.bio}
-                                skills={member.skills}
-                                button={<AddButton id={member.id} handleDeleteShow={handleAddUser} />} />
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-        <Modal
-        className="addProfileModal"
-        style={{ marginTop: "200px" }}
-        fade={false}
-        show={showAdd}
-        onHide={handleAddClose}
-      >
-        <Modal.Header>
-          <div className="bugFormClose" onClick={handleAddClose}>
-            <GrClose />
-          </div>
-          <Modal.Title>Add team member</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Please select the team member you would like to add:</p>
-          <p
-            style={{
-              gridColumn: "span 1",
-              margin: "auto",
-              paddingRight: "2px",
-            }}
-          >
-            Select team member:
+        <div className="spacer">
+          <p className="projectTitleId">
+            Team members
           </p>
-          <Select
-            id="teamMembers"
-            name="teamMembers"
-            options={teamMembersOptions}
-            onChange={handleTeamMemberChange}
-            className="defineDependenciesBox"
-            sx={{ gridColumn: "span 3", width: "70%" }}
-            value={teamMembersList}
-          />
-          <Box>
-            <Button
-              className="bugCancelButton"
-              fullWidth
-              sx={{
-                m: "2rem 1rem",
-                p: "1rem",
-              }}
-              style={{ marginLeft: "10px" }}
-              onClick={addTeamMember}
-            >
-              {"Add"}
-            </Button>
-
-            <Button
-              className="bugAddButton"
-              fullWidth
-              onClick={handleDeleteClose}
-              sx={{
-                m: "2rem 1rem",
-                p: "1rem",
-              }}
-            >
-              {"Cancel"}
-            </Button>
-          </Box>
-        </Modal.Body>
-      </Modal>
-
-
-
-      <Modal
-        className="addProfileModal"
-        style={{ marginTop: "200px" }}
-        fade={false}
-        show={showDelete}
-        onHide={handleDeleteClose}
-      >
-        <Modal.Header>
-          <div className="bugFormClose" onClick={handleDeleteClose}>
-            <GrClose />
+          <div className="userContainer">
+              <div className="userTitle">
+                  <p>Current Team Members:</p>
+              </div>
+              <div>
+                  {teamMembers.map((member) => {
+                      return (
+                          <div>
+                          <ProfileCard
+                              key={member.id}
+                              name={member.name}
+                              image={member.image}
+                              bio={member.bio}
+                              skills={member.skills}
+                              isPm={isPm}
+                              button={<DeleteButton id={member.id} handleDeleteShow={handleDeleteShow} />} />
+                          </div>
+                      );
+                  })}
+              </div>
           </div>
-          <Modal.Title>Remove team member</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you would like to remove this user from the team?</p>
-          <Box>
-            <Button
-              className="bugCancelButton"
-              fullWidth
-              sx={{
-                m: "2rem 1rem",
-                p: "1rem",
+          {console.log(isPm.isPm)}
+           {isPm.isPm? <div className="userContainer">
+                      <p className="userTitle">Recommended Team Members:</p>
+                      <button
+                          onClick={handleAddShow}
+                          className="projectFilterInput viewProject addFeatureButton"
+                          style={{
+                          height: "35px",
+                          width: "40px",
+                          padding: "0px",
+                          position: "absolute",
+                          right: "20px",
+                          top: "40px",
+                          }}
+                      >
+                          <IoIosPersonAdd />
+                      </button>
+                  <div>
+                      {recommendedMembers.map((member) => {
+                          return (
+                              <div>
+                              <ProfileCard
+                                  key={member.id}
+                                  name={member.name}
+                                  image={member.image}
+                                  bio={member.bio}
+                                  skills={member.skills}
+                                  button={<AddButton id={member.id} handleDeleteShow={handleAddUser} />} />
+                              </div>
+                          );
+                      })}
+                  </div>
+              </div>: null}
+          <Modal
+          className="addProfileModal"
+          style={{ marginTop: "200px" }}
+          fade={false}
+          show={showAdd}
+          onHide={handleAddClose}
+        >
+          <Modal.Header>
+            <div className="bugFormClose" onClick={handleAddClose}>
+              <GrClose />
+            </div>
+            <Modal.Title>Add team member</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Please select the team member you would like to add:</p>
+            <p
+              style={{
+                gridColumn: "span 1",
+                margin: "auto",
+                paddingRight: "2px",
               }}
-              style={{ marginLeft: "10px" }}
-              onClick={deleteUser}
             >
-              {"Remove"}
-            </Button>
+              Select team member:
+            </p>
+            <Select
+              id="teamMembers"
+              name="teamMembers"
+              options={teamMembersOptions}
+              onChange={handleTeamMemberChange}
+              className="defineDependenciesBox"
+              sx={{ gridColumn: "span 3", width: "70%" }}
+              value={teamMembersList}
+            />
+            <Box>
+              <Button
+                className="bugCancelButton"
+                fullWidth
+                sx={{
+                  m: "2rem 1rem",
+                  p: "1rem",
+                }}
+                style={{ marginLeft: "10px" }}
+                onClick={addTeamMember}
+              >
+                {"Add"}
+              </Button>
 
-            <Button
-              className="bugAddButton"
-              fullWidth
-              onClick={handleDeleteClose}
-              sx={{
-                m: "2rem 1rem",
-                p: "1rem",
-              }}
-            >
-              {"Cancel"}
-            </Button>
-          </Box>
-        </Modal.Body>
-      </Modal>
+              <Button
+                className="bugAddButton"
+                fullWidth
+                onClick={handleDeleteClose}
+                sx={{
+                  m: "2rem 1rem",
+                  p: "1rem",
+                }}
+              >
+                {"Cancel"}
+              </Button>
+            </Box>
+          </Modal.Body>
+        </Modal>
 
-      <Modal
-        className="addProfileModal"
-        style={{ marginTop: "200px" }}
-        fade={false}
-        show={showAddUser}
-        onHide={handleAddUserClose}
-      >
-        <Modal.Header>
-          <div className="bugFormClose" onClick={handleDeleteClose}>
-            <GrClose />
-          </div>
-          <Modal.Title>Add team member</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Are you sure you would like to add this user to the team?</p>
-          <Box>
-            <Button
-              className="confirmButton"
-              fullWidth
-              sx={{
-                m: "2rem 1rem",
-                p: "1rem",
-              }}
-              style={{ marginLeft: "10px" }}
-              onClick={addTeamMember}
-            >
-              {"Add"}
-            </Button>
 
-            <Button
-              className="bugAddButton"
-              fullWidth
-              onClick={handleAddUserClose}
-              sx={{
-                m: "2rem 1rem",
-                p: "1rem",
-              }}
-            >
-              {"Cancel"}
-            </Button>
-          </Box>
-        </Modal.Body>
-      </Modal>
+
+        <Modal
+          className="addProfileModal"
+          style={{ marginTop: "200px" }}
+          fade={false}
+          show={showDelete}
+          onHide={handleDeleteClose}
+        >
+          <Modal.Header>
+            <div className="bugFormClose" onClick={handleDeleteClose}>
+              <GrClose />
+            </div>
+            <Modal.Title>Remove team member</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Are you sure you would like to remove this user from the team?</p>
+            <Box>
+              <Button
+                className="bugCancelButton"
+                fullWidth
+                sx={{
+                  m: "2rem 1rem",
+                  p: "1rem",
+                }}
+                style={{ marginLeft: "10px" }}
+                onClick={deleteUser}
+              >
+                {"Remove"}
+              </Button>
+
+              <Button
+                className="bugAddButton"
+                fullWidth
+                onClick={handleDeleteClose}
+                sx={{
+                  m: "2rem 1rem",
+                  p: "1rem",
+                }}
+              >
+                {"Cancel"}
+              </Button>
+            </Box>
+          </Modal.Body>
+        </Modal>
+
+        <Modal
+          className="addProfileModal"
+          style={{ marginTop: "200px" }}
+          fade={false}
+          show={showAddUser}
+          onHide={handleAddUserClose}
+        >
+          <Modal.Header>
+            <div className="bugFormClose" onClick={handleDeleteClose}>
+              <GrClose />
+            </div>
+            <Modal.Title>Add team member</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Are you sure you would like to add this user to the team?</p>
+            <Box>
+              <Button
+                className="confirmButton"
+                fullWidth
+                sx={{
+                  m: "2rem 1rem",
+                  p: "1rem",
+                }}
+                style={{ marginLeft: "10px" }}
+                onClick={addTeamMember}
+              >
+                {"Add"}
+              </Button>
+
+              <Button
+                className="bugAddButton"
+                fullWidth
+                onClick={handleAddUserClose}
+                sx={{
+                  m: "2rem 1rem",
+                  p: "1rem",
+                }}
+              >
+                {"Cancel"}
+              </Button>
+            </Box>
+          </Modal.Body>
+        </Modal>
+      </div>
 
 
 

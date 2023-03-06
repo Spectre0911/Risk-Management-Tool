@@ -1,0 +1,61 @@
+.guideTitle{
+    font-size: 40px;
+    font-family: 'Montserrat';
+    font-weight: 900;
+    margin-bottom: -10px;
+    margin-top: 30px;
+    text-align: center;
+}
+
+.guideImage{
+    border-radius: 20px;
+    margin-bottom: 20px;
+    height: 250px;
+    width: 400px;
+    max-width: unset !important;
+    max-height: unset !important;
+}
+
+.guideModal > .modal-dialog > .modal-content{
+    height: 750px;
+    width: 700px;
+    left: -100px;
+}
+
+.guideCaption{
+    font-family: 'Montserrat';
+    color: black;
+}
+
+.arrowButtonLeft{
+    left: 90px;
+    position: relative;
+    width: 100px;
+}
+
+.arrowButtonRight{
+    right: 90px;
+    position: relative;
+    width: 100px;   
+}
+
+.helpButton{
+    position: absolute !important;
+    bottom: 70px;
+    left: 150px;
+    background-color: #5873ca !important;
+    width: 50px !important;
+    margin-left: 20px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    color: white;
+}
+
+.helpButton>.ps-menu-button{
+    width: 50px !important;
+}
+.helpButton>.ps-menu-button:hover{
+    width: 50px !important;
+    transition: 0.6s;
+    background-color: #2b244e !important;
+}
