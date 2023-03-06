@@ -481,12 +481,50 @@ app.post("/api/user", async (req, postRes) => {
 
 // Get information for all users
 app.post("/api/orderedUsers", async (req, postRes) => {
+  let projectSkillSet = [];
+  let intersectionUserCount = new Map();
+
   try {
-    console.log("ORDERED USERS");
+    // Get all the skills required for the project
     const projectSkills = await pool.query(
       "SELECT * FROM projectskill WHERE projectid = $1",
-      [req.body.projectid]
+      [req.body.projectId]
     );
+    projectSkills.rows.map((skill) => {
+      projectSkillSet.push(skill.skill);
+    });
+    projectSkillSet = new Set(projectSkillSet);
+    // Get all the users from the db
+    const allUsers = await pool.query("SELECT * FROM users");
+    await Promise.all(
+      allUsers.rows.map(async (user) => {
+        let userSkillSet = [];
+        // Get all skills from the users users id
+        const userSkills = await pool.query(
+          "SELECT * FROM userskill WHERE userid = $1",
+          [user.userid]
+        );
+        await Promise.all(
+          userSkills.rows.map((skill) => {
+            userSkillSet.push(skill.skill);
+          })
+        );
+        userSkillSet = new Set(userSkillSet);
+        let intersection = new Set(
+          [...projectSkillSet].filter((x) => userSkillSet.has(x))
+        );
+
+        intersectionUserCount.set(
+          { value: user.userid, label: user.firstname + " " + user.lastname },
+          intersection.size
+        );
+      })
+    );
+    intersectionUserCount = new Map(
+      Array.from(intersectionUserCount).sort((a, b) => b[1] - a[1])
+    );
+    console.log(Array.from(intersectionUserCount.keys()));
+    postRes.json(Array.from(intersectionUserCount.keys()));
   } catch (err) {
     console.error(err.message);
   }
