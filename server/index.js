@@ -94,6 +94,21 @@ app.post("/api/createAccount", async (req, res) => {
   }
 });
 
+app.post("/api/addTeamMember", async (req, res) => {
+  try {
+    // console.log(req.body);
+
+    const add = await pool.query(
+      "INSERT INTO projectuser (userid, projectid, role, ismanager) VALUES($1, $2, 'TM', false) RETURNING *",
+      [req.body.userid, req.body.projectid]
+    );
+
+    res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.post("/api/login", async (req, postResult) => {
   try {
     const actualPassword = pool.query(
@@ -319,9 +334,9 @@ app.post("/api/skills", async (req, postRes) => {
 // Update a users information
 app.post("/api/updateUser", async (req, postRes) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const firstNameLastName = req.body.values.name.split(" ");
-    console.log(firstNameLastName);
+    // console.log(firstNameLastName);
     // Update user table
 
     const userId = await pool.query(
@@ -361,7 +376,7 @@ app.post("/api/updateUser", async (req, postRes) => {
 
 app.post("/api/adminSkills", async (req, postRes) => {
   try {
-    console.log(req.body.email);
+    // console.log(req.body.email);
     const skills = await pool.query(
       "SELECT skill as value, skill as label, sklevel as experience from userskill WHERE userid = (SELECT userid FROM users where email = $1);",
       [req.body.email.email]
@@ -461,6 +476,7 @@ app.post("/api/tasksToComplete", async (req, postRes) => {
   }
 });
 
+// Get information relating to a user
 app.post("/api/user", async (req, postRes) => {
   try {
     const userId = await pool.query(
@@ -473,6 +489,57 @@ app.post("/api/user", async (req, postRes) => {
       [userId.rows[0].userid]
     );
     postRes.json(userInfo.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Get information for all users
+app.post("/api/orderedUsers", async (req, postRes) => {
+  let projectSkillSet = [];
+  let intersectionUserCount = new Map();
+
+  try {
+    // Get all the skills required for the project
+    const projectSkills = await pool.query(
+      "SELECT * FROM projectskill WHERE projectid = $1",
+      [req.body.projectId]
+    );
+    projectSkills.rows.map((skill) => {
+      projectSkillSet.push(skill.skill);
+    });
+    projectSkillSet = new Set(projectSkillSet);
+    // Get all the users from the db
+    const allUsers = await pool.query("SELECT * FROM users");
+    await Promise.all(
+      allUsers.rows.map(async (user) => {
+        let userSkillSet = [];
+        // Get all skills from the users users id
+        const userSkills = await pool.query(
+          "SELECT * FROM userskill WHERE userid = $1",
+          [user.userid]
+        );
+        await Promise.all(
+          userSkills.rows.map((skill) => {
+            userSkillSet.push(skill.skill);
+          })
+        );
+        userSkillSet = new Set(userSkillSet);
+        let intersection = new Set(
+          [...projectSkillSet].filter((x) => userSkillSet.has(x))
+        );
+
+        intersectionUserCount.set(
+          { value: user.userid, label: user.firstname + " " + user.lastname },
+          intersection.size
+        );
+      })
+    );
+    intersectionUserCount = new Map(
+      Array.from(intersectionUserCount).sort((a, b) => b[1] - a[1])
+    );
+    // console.log(Array.from(intersectionUserCount.keys()));
+    postRes.json(Array.from(intersectionUserCount.keys()));
   } catch (err) {
     console.error(err.message);
   }

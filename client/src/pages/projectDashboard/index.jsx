@@ -23,6 +23,7 @@ import { BugCount } from "../services/BugCounts";
 import { AllProjectMembers } from "../services/AllProjectMembers";
 import { MemberSkills } from "../services/MemberSkills";
 import { MdCardMembership } from "react-icons/md";
+import { OrderedUsers } from "../services/OrderedUsers";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -120,11 +121,11 @@ const ProjectDashboard = () => {
     setGanttViewState(e.target.value);
   };
 
-  const teamMembersOptions = [
+  const [teamMembersOptions, setTeamMemberOptions] = useState([
     { value: "1", label: "Joshua" },
     { value: "2", label: "Morgan" },
     { value: "3", label: "Sanjula" },
-  ];
+  ]);
 
   const [teamMembersList, setTeamMembersList] = useState([]);
   const handleTeamMemberChange = (e) => {
@@ -159,6 +160,12 @@ const ProjectDashboard = () => {
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
+    OrderedUsers({ projectId: projectId }).then((data) => {
+      console.log("------");
+      console.log(data);
+      console.log("------");
+      setTeamMemberOptions(data);
+    });
     AllProjectMembers({ projectId: projectId }).then((data) => {
       console.log("Fetching project members");
       if (data != null) {
