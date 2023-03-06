@@ -15,6 +15,7 @@ import { GetUser } from "../services/GetUser";
 import { AdminSkills } from "../services/AdminSkills";
 import { AllSkills } from "../services/AllSkills";
 import { useSelector } from "react-redux";
+import { UpdateUser } from "../services/UpdateUser";
 import {
   Box,
   TextField,
@@ -96,12 +97,7 @@ const EditProfileForm = ({ handleClose }) => {
     console.log(skills);
     console.log(values);
     try {
-      const body = { values };
-      const response = await fetch("http://localhost:5000/addbug", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      UpdateUser({ userEmail, skills: skills, values });
     } catch (err) {
       console.error(err.message);
     }

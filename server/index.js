@@ -316,6 +316,30 @@ app.post("/api/skills", async (req, postRes) => {
   }
 });
 
+// Update a users information
+app.post("/api/updateUser", async (req, postRes) => {
+  try {
+    console.log(req.body);
+    const firstNameLastName = req.body.values.name.split(" ");
+    console.log(firstNameLastName);
+    await pool.query(
+      "UPDATE USERS SET firstname = $1, lastname = $2, email = $3, githubtoken = $4, bio = $6 WHERE email = $5",
+      [
+        firstNameLastName[0],
+        firstNameLastName[1],
+        req.body.values.email,
+        req.body.values.gitHubToken,
+        req.body.userEmail.email,
+        req.body.values.bio,
+      ]
+    );
+
+    // postRes.json(skills.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.post("/api/adminSkills", async (req, postRes) => {
   try {
     console.log(req.body.email);
