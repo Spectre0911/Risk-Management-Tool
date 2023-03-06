@@ -269,7 +269,6 @@ app.post("/api/projectMembers", async (req, postRes) => {
       "SELECT userid, CONCAT(firstname, ' ', lastname) as name, bio FROM users NATURAL JOIN userproject WHERE projectid = $1;",
       [req.body.projectId]
     );
-
     if (projectMembers.rows.length == 0) {
       return postRes.json(null);
     } else {
@@ -280,16 +279,12 @@ app.post("/api/projectMembers", async (req, postRes) => {
   }
 });
 
-// Get all skills for a team member
+// Get all skills for a team member on id
 app.post("/api/memberSkills", async (req, postRes) => {
   try {
-    const userId = await pool.query(
-      "SELECT userid FROM users WHERE email = $1;",
-      [req.body.email.email]
-    );
     const skills = await pool.query(
       "SELECT * from userskill WHERE userid = $1;",
-      [userId.rows[0].userid]
+      [req.body.userid]
     );
     if (skills.rows.length == 0) {
       return postRes.json([
@@ -298,6 +293,29 @@ app.post("/api/memberSkills", async (req, postRes) => {
           skill: null,
           sktype: null,
           sklevel: 0,
+        },
+      ]);
+    } else {
+      postRes.json(skills.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+app.post("/api/adminSkills", async (req, postRes) => {
+  try {
+    console.log(email);
+    const skills = await pool.query(
+      "SELECT skill as value, skill as label, sklevel as experience from userskill WHERE userid = (SELECT userid FROM users where email = $1);",
+      [req.body.email]
+    );
+    if (skills.rows.length == 0) {
+      return postRes.json([
+        {
+          value: "",
+          label: "",
+          experience: "",
         },
       ]);
     } else {

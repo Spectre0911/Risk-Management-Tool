@@ -36,9 +36,9 @@ const EditProfileForm = ({ handleClose }) => {
   );
   const options = [
     // Need to fetch options
-    { value: "Python", label: "Python", experience: "0" },
-    { value: "Front-End", label: "Front-End", experience: "0" },
-    { value: "Backend", label: "Backend", experience: "0" },
+    { value: "", label: "Python", experience: "0" },
+    { value: "", label: "Front-End", experience: "0" },
+    { value: "", label: "Backend", experience: "0" },
   ];
 
   const [skills, setSkills] = useState([
@@ -67,15 +67,15 @@ const EditProfileForm = ({ handleClose }) => {
     }).then((data) => {
       console.log(data);
       setInitialValueRegister({
-        name: data.name,
-        email: data.email,
-        bio: data.bio,
-        gitHubToken: data.githubtoken,
+        name: data.name || "",
+        email: data.email || "",
+        bio: data.bio || "",
+        gitHubToken: data.githubtoken || "",
       });
       console.log(initialValuesRegister);
     });
     MemberSkills({ email: userEmail }).then((data) => {
-      console.log(data);
+      setSkills(data);
     });
   }, []);
 
