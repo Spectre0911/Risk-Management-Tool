@@ -461,6 +461,7 @@ app.post("/api/tasksToComplete", async (req, postRes) => {
   }
 });
 
+// Get information relating to a user
 app.post("/api/user", async (req, postRes) => {
   try {
     const userId = await pool.query(
@@ -473,6 +474,19 @@ app.post("/api/user", async (req, postRes) => {
       [userId.rows[0].userid]
     );
     postRes.json(userInfo.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Get information for all users
+app.post("/api/orderedUsers", async (req, postRes) => {
+  try {
+    console.log("ORDERED USERS");
+    const projectSkills = await pool.query(
+      "SELECT * FROM projectskill WHERE projectid = $1",
+      [req.body.projectid]
+    );
   } catch (err) {
     console.error(err.message);
   }
