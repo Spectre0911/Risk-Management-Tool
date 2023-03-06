@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import {AiOutlineWarning} from 'react-icons/ai'
 import "./AdminSidebar.css";
+import Guide from './Guide';
 
 const AdminSidebar = ({projectId, teamMember}) => {
     const [collapsed, setCollapsed] = useState(false);
@@ -50,7 +51,7 @@ const AdminSidebar = ({projectId, teamMember}) => {
                 </MenuItem >}
 
                 {!projectId && <MenuItem className="menuItem" icon={<MdManageAccounts />} onClick={() => navigate(`/managedprojects`)}>
-                    {'Managed Projects'}
+                    {'Projects'}
                 </MenuItem >}
 
                 {!projectId && <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/tasks`)}>
@@ -90,6 +91,8 @@ const AdminSidebar = ({projectId, teamMember}) => {
                 {(teamMember&&projectId) ? <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projectstm/${projectId}/bugs/${projectId}`)}>
                     {'Bugs'}
                 </MenuItem > : null}
+
+                <Guide />
 
                 <MenuItem className="bottomItem" icon={<BiLogOutCircle />} onClick={() => navigate(`/dashboard/productList`)}>
                     {'Log out'}
