@@ -1,4 +1,4 @@
-export const CreateProject = (values) => {
+export const AddTeamMember = (values) => {
   console.log(values);
   fetch("http://localhost:5000/api/addTeamMember", {
     method: "POST",
