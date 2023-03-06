@@ -12,7 +12,7 @@ import { BsBriefcaseFill } from "react-icons/bs";
 import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
 import { GetUser } from "../services/GetUser";
-import { MemberSkills } from "../services/MemberSkills";
+import { AdminSkills } from "../services/AdminSkills";
 import { useSelector } from "react-redux";
 import {
   Box,
@@ -74,7 +74,8 @@ const EditProfileForm = ({ handleClose }) => {
       });
       console.log(initialValuesRegister);
     });
-    MemberSkills({ email: userEmail }).then((data) => {
+    AdminSkills({ email: userEmail }).then((data) => {
+      console.log(data);
       setSkills(data);
     });
   }, []);

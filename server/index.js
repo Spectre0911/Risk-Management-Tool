@@ -305,17 +305,17 @@ app.post("/api/memberSkills", async (req, postRes) => {
 
 app.post("/api/adminSkills", async (req, postRes) => {
   try {
-    console.log(email);
+    console.log(req.body.email);
     const skills = await pool.query(
       "SELECT skill as value, skill as label, sklevel as experience from userskill WHERE userid = (SELECT userid FROM users where email = $1);",
-      [req.body.email]
+      [req.body.email.email]
     );
     if (skills.rows.length == 0) {
       return postRes.json([
         {
-          value: "",
-          label: "",
-          experience: "",
+          value: "null",
+          label: "null",
+          experience: 0,
         },
       ]);
     } else {
