@@ -1,4 +1,4 @@
-export const NotificationCount = (values) => {
+export const NotificationInfo = (values) => {
   return new Promise((resolve, reject) => {
     fetch("http://localhost:5000/api/notificationInfo", {
       method: "POST",
