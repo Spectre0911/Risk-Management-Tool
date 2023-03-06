@@ -266,7 +266,7 @@ app.post("/api/projects", async (req, postRes) => {
   try {
     // console.log(req.body);
     const allFeatures = await pool.query(
-      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (opened -  NOW()))) / (EXTRACT(DAY FROM (deadline - NOW())))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users;",
+      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (opened -  NOW()))) / (EXTRACT(DAY FROM (deadline - NOW())))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
       [req.body.email]
     );
     if (allFeatures.rows.length == 0) {
@@ -278,8 +278,20 @@ app.post("/api/projects", async (req, postRes) => {
     console.error(err.message);
   }
 });
-// Get all bugs
+// End project
+app.post("/api/endProject", async (req, postRes) => {
+  try {
+    // console.log(req.body);
+    await pool.query(
+      "UPDATE projects SET closed = true WHERE projectid = $1 ",
+      [req.body.projectid]
+    );
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
+// Get all bugs
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {
   try {

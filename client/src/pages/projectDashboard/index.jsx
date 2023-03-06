@@ -25,6 +25,7 @@ import { MemberSkills } from "../services/MemberSkills";
 import { MdCardMembership } from "react-icons/md";
 import { OrderedUsers } from "../services/OrderedUsers";
 import { AddTeamMember } from "../services/AddTeamMember";
+import { EndProject } from "../services/EndProject";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -157,6 +158,8 @@ const ProjectDashboard = () => {
 
   const endProject = () => {
     console.log("end project");
+
+    EndProject({ projectid: projectId });
   };
   //Fetching github commit data
   const [tempData, setTempData] = useState([]);
