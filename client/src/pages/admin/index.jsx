@@ -14,8 +14,6 @@ import GithubIntegrator from '../githubSuite';
 import ProjectContainer from '../projectDashboard/ProjectManagerContainer';
 import ManagedProjects from '../managedProjects';
 import Tasks from '../tasks';
-import {BsQuestionCircleFill} from 'react-icons/bs';
-import Guide from '../components/guide';
 
 const Admin = () => {
   const [isOpen, setIsOpen] = useState(false);
