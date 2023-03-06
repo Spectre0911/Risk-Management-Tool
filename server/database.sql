@@ -123,6 +123,7 @@ create table notifications (
     notifid   serial not null,
     userid    integer not null,
     projectid integer not null,
+    location  integer not null check (location >= 1 and location <= 5),
     notiftype integer not null check (notiftype = 1 or notiftype = 2), -- 1 = regular notification, 2 = warning
     title     varchar(50) not null,
     message   varchar(300) not null,
@@ -267,7 +268,7 @@ declare
     counter integer := 1;
 begin
     select projectname from projects where projectid = new.projectid into name;
-    insert into notifications (notifid, userid, projectid, notiftype, title, message, seen) values (default, new.userid, new.projectid, 1, 'Added to project', name, default);
+    insert into notifications (notifid, userid, projectid, location, notiftype, title, message, seen) values (default, new.userid, new.projectid, 1, 1, 'Added to project', name, default);
     return new;
 end;
 $$ language plpgsql;
