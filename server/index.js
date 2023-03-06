@@ -94,6 +94,21 @@ app.post("/api/createAccount", async (req, res) => {
   }
 });
 
+app.post("/api/addTeamMember", async (req, res) => {
+  try {
+    // console.log(req.body);
+
+    const add = await pool.query(
+      "INSERT INTO projectuser (userid, projectid, role, ismanager) VALUES($1, $2, 'TM', false) RETURNING *",
+      [req.body.userid, req.body.projectid]
+    );
+
+    res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 app.post("/api/login", async (req, postResult) => {
   try {
     const actualPassword = pool.query(
@@ -319,9 +334,9 @@ app.post("/api/skills", async (req, postRes) => {
 // Update a users information
 app.post("/api/updateUser", async (req, postRes) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const firstNameLastName = req.body.values.name.split(" ");
-    console.log(firstNameLastName);
+    // console.log(firstNameLastName);
     // Update user table
 
     const userId = await pool.query(
@@ -361,7 +376,7 @@ app.post("/api/updateUser", async (req, postRes) => {
 
 app.post("/api/adminSkills", async (req, postRes) => {
   try {
-    console.log(req.body.email);
+    // console.log(req.body.email);
     const skills = await pool.query(
       "SELECT skill as value, skill as label, sklevel as experience from userskill WHERE userid = (SELECT userid FROM users where email = $1);",
       [req.body.email.email]
@@ -523,7 +538,7 @@ app.post("/api/orderedUsers", async (req, postRes) => {
     intersectionUserCount = new Map(
       Array.from(intersectionUserCount).sort((a, b) => b[1] - a[1])
     );
-    console.log(Array.from(intersectionUserCount.keys()));
+    // console.log(Array.from(intersectionUserCount.keys()));
     postRes.json(Array.from(intersectionUserCount.keys()));
   } catch (err) {
     console.error(err.message);
