@@ -267,7 +267,9 @@ declare
     counter integer := 1;
 begin
     select projectname from projects where projectid = new.projectid into name;
-    insert into notifications (notifid, userid, projectid, location, notiftype, title, message, seen) values (default, new.userid, new.projectid, 1, 1, 'Added to project', name, default);
+    if not (new.ismanager) then
+        insert into notifications (notifid, userid, projectid, location, notiftype, title, message, seen) values (default, new.userid, new.projectid, 1, 1, 'Added to project', name, default);
+    end if;
     return new;
 end;
 $$ language plpgsql;
