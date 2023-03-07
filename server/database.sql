@@ -172,7 +172,6 @@ create table projectskill (
     foreign key (skill) references skills(skill) on delete cascade
 );
 
-
 create or replace function nullifyuser() returns trigger as $$
 begin
     update tasks set devid = null where devid = old.userid;
@@ -182,7 +181,7 @@ end;
 $$ language plpgsql;
 
 create trigger userdeleted after delete on users
-for each statement
+for each row
     execute procedure nullifyuser();
 
 -- Check that feature's start times and deadlines compatible with those of the project
@@ -209,7 +208,7 @@ end;
 $$ language plpgsql;
 
 create trigger newfeature before insert on features
-for each statement
+for each row
     execute procedure featuretimes();
 
 -- Check that task's start times and deadlines compatible with those of the feature
@@ -236,7 +235,7 @@ end;
 $$ language plpgsql;
 
 create trigger newtask before insert on tasks
-for each statement
+for each row
     execute procedure tasktimes();
 
 -- Check that dependency deadlines are compatible
@@ -258,7 +257,7 @@ end;
 $$ language plpgsql;
 
 create trigger newdep before insert on featuredep
-for each statement
+for each row
     execute procedure checkdep();
 
 -- Create a notification when a member is added to the team for a project
@@ -274,7 +273,7 @@ end;
 $$ language plpgsql;
 
 create trigger addmember after insert on userproject
-for each statement
+for each row
     execute procedure membernotif();
 
 -- Update project's current risk in projects when new data added to risks
@@ -286,7 +285,7 @@ end;
 $$ language plpgsql;
 
 create trigger addrisk after insert on risks
-for each statement
+for each row
     execute procedure newrisk();
 
 insert into skills (skill) values
