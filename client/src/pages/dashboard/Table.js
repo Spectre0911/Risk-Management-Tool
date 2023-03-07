@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { TasksToComplete } from "../services/TasksToComplete";
 import {
   Container,
   Card,
@@ -37,13 +38,14 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import { propTypes } from "react-progressbar-semicircle";
+import { useSelector } from "react-redux";
 
 const Table = () => {
   var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const login = useSelector((state) => state.email);
+
   const [contacts, setContacts] = useState([
     {
       taskId: "1",
@@ -84,6 +86,8 @@ const Table = () => {
     },
   ]);
   useEffect(() => {
+    console.log(login);
+    TasksToComplete({ email: login.login }).then((data) => setData(data));
     setData(contacts);
   }, []);
 
