@@ -15,7 +15,7 @@ import { Link } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import { GrClose } from "react-icons/gr";
 import FeatureForm from "./FeatureForm";
-const TableContainer = ({ columns, data, renderRowSubComponent }) => {
+const TableContainer = ({ columns, data, renderRowSubComponent, fetchProjectFunction }) => {
   const navigate = useNavigate();
   const {
     getTableProps,
@@ -69,7 +69,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
   };
 
   useEffect(() => {
-    setPageSize(7);
+    setPageSize(5);
   }, []);
 
   const [showAdd, setShowAdd] = useState(false);
@@ -231,7 +231,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
           <Modal.Title>Create Project</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <FeatureForm handleClose={handleAddClose} />
+          <FeatureForm fetchProjectFunction={fetchProjectFunction} handleClose={handleAddClose} />
         </Modal.Body>
       </Modal>
     </Fragment>

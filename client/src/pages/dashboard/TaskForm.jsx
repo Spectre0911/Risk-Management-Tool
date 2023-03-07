@@ -215,7 +215,7 @@ const TaskForm = ({ handleClose, taskId }) => {
                     paddingRight: "20px",
                   }}
                 >
-                  Dependencies {dependencyOptions.length}:
+                  Dependencies:
                 </p>
 
                 <Select

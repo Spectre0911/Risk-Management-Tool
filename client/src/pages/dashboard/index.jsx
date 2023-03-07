@@ -131,7 +131,7 @@ const Dashboard = () => {
 
         <div className="infoBox2 projectTable">
           <div className="metricTitle2">Project Summary</div>
-          <ProjectTable />
+          <ProjectTable setActiveProjects={setActiveProjects} />
         </div>
 
         <div className="infoBox2">
