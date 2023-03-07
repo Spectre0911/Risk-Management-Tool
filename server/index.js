@@ -145,6 +145,53 @@ app.post("/api/createAccount", async (req, res) => {
     console.error(err.message);
   }
 });
+// Get project name
+app.post("/api/projectName", async (req, res) => {
+  try {
+    console.log(req.body);
+
+    const createAccount = await pool.query(
+      "SELECT name FROM projects WHERE projectid = $1",
+      [req.body.projectid]
+    );
+
+    res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Create bug
+app.post("/api/createBug", async (req, res) => {
+  try {
+    // console.log(req.body);
+
+    const createAccount = await pool.query(
+      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity) VALUES()",
+      [req.body.email, req.body.firstName, req.body.lastName, saltPassword]
+    );
+
+    res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Login / Signup
+app.post("/api/createBug", async (req, res) => {
+  try {
+    // console.log(req.body);
+
+    const createAccount = await pool.query(
+      "INSERT INTO bugs (featureid, devid, bugname, bugdesc, priority, severity)",
+      [req.body.email, req.body.firstName, req.body.lastName, saltPassword]
+    );
+
+    res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 app.post("/api/addTeamMember", async (req, res) => {
   try {
@@ -196,7 +243,7 @@ app.post("/api/createFeature", async (req, res) => {
   try {
     // Insert the feature into the database
     const createFeature = await pool.query(
-      "INSERT INTO features (projectid, featurename, starttime, endtime, completed, priority, currentrisk, progress, difficulty) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+      "INSERT INTO features (projectid, featurename, starttime, endtime, completed, priority, currentrisk, progress, difficulty, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, 1) RETURNING *",
       [
         req.body.projectid,
         req.body.featureName,
@@ -266,7 +313,7 @@ app.post("/api/projects", async (req, postRes) => {
   try {
     // console.log(req.body);
     const allFeatures = await pool.query(
-      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (opened -  NOW()))) / (EXTRACT(DAY FROM (deadline - NOW())))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
+      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (NOW() - opened ))) / (EXTRACT(DAY FROM (deadline - opened)))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
       [req.body.email]
     );
     if (allFeatures.rows.length == 0) {
@@ -282,10 +329,9 @@ app.post("/api/projects", async (req, postRes) => {
 app.post("/api/endProject", async (req, postRes) => {
   try {
     // console.log(req.body);
-    await pool.query(
-      "UPDATE projects SET closed = true WHERE projectid = $1 ",
-      [req.body.projectid]
-    );
+    await pool.query("DELETE FROM projects WHERE projectid = $1;", [
+      req.body.projectid,
+    ]);
   } catch (err) {
     console.error(err.message);
   }

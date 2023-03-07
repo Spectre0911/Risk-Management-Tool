@@ -63,22 +63,7 @@ const ProjectDashboard = () => {
   const [dataTime, setDataTime] = useState([0, 0]);
   const backgroundColorTime = ["rgba(255,0,0,1)", "rgba(255,128,0,1)"];
 
-  const [teamMembers, setTeamMembers] = useState([
-    {
-      id: "1",
-      name: "Josh",
-      image: "http://localhost:5000/assets/jane.jpg",
-      skills: ["Python", "React"],
-      suitabilityScore: 0,
-    },
-    {
-      id: "2",
-      name: "Jane",
-      image: "http://localhost:5000/assets/jane.jpg",
-      skills: ["Python", "React"],
-      suitabilityScore: 0,
-    },
-  ]);
+  const [teamMembers, setTeamMembers] = useState([]);
 
   const [showDelete, setShowDelete] = useState(false);
   const [showEndProject, setShowEndProject] = useState(false);
