@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 
 import bcrypt from "bcryptjs";
 import path from "path";
+import { create } from "domain";
 // import { reverse } from "dns";
 // import { user } from "pg/lib/defaults.js";
 
@@ -14,7 +15,7 @@ const cors = require("cors");
 const pool = require("./db.cjs");
 const multer = require("multer");
 const topoSort = require("toposort"); // you will need to install this package
-const fs = require('fs');
+const fs = require("fs");
 
 //middleware
 app.use(cors());
@@ -27,40 +28,37 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 //ROUTES//
 // Route for uploading an image
 const upload = multer({
-  dest: "/public/assets"
+  dest: "../client/public/assets",
   // you might also want to set some limits: https://github.com/expressjs/multer#limits
 });
 
-
 const handleError = (err, res) => {
   console.log(err);
-  res
-    .status(500)
-    .contentType("text/plain")
-    .end("Oops! Something went wrong!");
+  res.status(500).contentType("text/plain").end("Oops! Something went wrong!");
 };
 
-
-app.post("/upload",
+app.post(
+  "/upload",
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
     console.log(req);
     const tempPath = req.file.path;
     const targetPath = path.join(__dirname, "public/assets/");
-    
+
     if (path.extname(req.file.originalname).toLowerCase() === ".png") {
       console.log(tempPath);
       console.log(targetPath);
-      fs.rename(tempPath, path.join(targetPath,req.file.originalname), err => {
-        if (err) return handleError(err, res);
-        console.log(tempPath);
-        res
-          .status(200)
-          .contentType("text/plain")
-          .end("File uploaded!");
-      });
+      fs.rename(
+        tempPath,
+        path.join(targetPath, req.file.originalname),
+        (err) => {
+          if (err) return handleError(err, res);
+          console.log(tempPath);
+          res.status(200).contentType("text/plain").end("File uploaded!");
+        }
+      );
     } else {
-      fs.unlink(tempPath, err => {
+      fs.unlink(tempPath, (err) => {
         if (err) return handleError(err, res);
 
         res
@@ -71,10 +69,6 @@ app.post("/upload",
     }
   }
 );
-
-
-
-
 
 //create a todo
 
@@ -137,7 +131,76 @@ app.post("/api/createAccount", async (req, res) => {
     const saltPassword = bcrypt.hashSync(req.body.password, uniqueSalt);
     const createAccount = await pool.query(
       "INSERT INTO users (email, firstname, lastname, pfppath ,password) VALUES($1, $2, $3, $4, $5) RETURNING *",
-      [req.body.email, req.body.firstName, req.body.lastName, req.body.pfpPath, saltPassword]
+      [
+        req.body.email,
+        req.body.firstName,
+        req.body.lastName,
+        req.body.pfpPath,
+        saltPassword,
+      ]
+    );
+
+    res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+// Get project name
+app.post("/api/projectName", async (req, res) => {
+  try {
+    console.log(req.body);
+
+    const createAccount = await pool.query(
+      "SELECT name FROM projects WHERE projectid = $1",
+      [req.body.projectid]
+    );
+
+    res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Get project name
+app.post("/api/taskToComplete", async (req, res) => {
+  try {
+    console.log(req.body);
+
+    const createAccount = await pool.query(
+      "SELECT projectname, featurename, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft from projects inner join ((select featureid, featurename, projectid from features) as featureinfo inner join tasks on featureinfo.featureid = tasks.featureid) as featuretask on projects.projectid = featuretask.projectid where devid = (SELECT userid FROM users WHERE email = $1);",
+      [req.body.email]
+    );
+    // console.log(createAccount.rows);
+    res.json(createAccount.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Create bug
+app.post("/api/createBug", async (req, res) => {
+  try {
+    // console.log(req.body);
+
+    const createAccount = await pool.query(
+      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity) VALUES()",
+      [req.body.email, req.body.firstName, req.body.lastName, saltPassword]
+    );
+
+    res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Login / Signup
+app.post("/api/createBug", async (req, res) => {
+  try {
+    // console.log(req.body);
+
+    const createAccount = await pool.query(
+      "INSERT INTO bugs (featureid, devid, bugname, bugdesc, priority, severity)",
+      [req.body.email, req.body.firstName, req.body.lastName, saltPassword]
     );
 
     res.json("finished");
@@ -151,7 +214,7 @@ app.post("/api/addTeamMember", async (req, res) => {
     // console.log(req.body);
 
     const add = await pool.query(
-      "INSERT INTO projectuser (userid, projectid, role, ismanager) VALUES($1, $2, 'TM', false) RETURNING *",
+      "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES($1, $2, 'TM', false) RETURNING *",
       [req.body.userid, req.body.projectid]
     );
 
@@ -196,7 +259,7 @@ app.post("/api/createFeature", async (req, res) => {
   try {
     // Insert the feature into the database
     const createFeature = await pool.query(
-      "INSERT INTO features (projectid, featurename, starttime, endtime, completed, priority, currentrisk, progress, difficulty) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *",
+      "INSERT INTO features (projectid, featurename, starttime, endtime, completed, priority, currentrisk, progress, difficulty, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, 1) RETURNING *",
       [
         req.body.projectid,
         req.body.featureName,
@@ -266,7 +329,7 @@ app.post("/api/projects", async (req, postRes) => {
   try {
     // console.log(req.body);
     const allFeatures = await pool.query(
-      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (opened -  NOW()))) / (EXTRACT(DAY FROM (deadline - NOW())))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users;",
+      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (NOW() - opened ))) / (EXTRACT(DAY FROM (deadline - opened)))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
       [req.body.email]
     );
     if (allFeatures.rows.length == 0) {
@@ -278,8 +341,19 @@ app.post("/api/projects", async (req, postRes) => {
     console.error(err.message);
   }
 });
-// Get all bugs
+// End project
+app.post("/api/endProject", async (req, postRes) => {
+  try {
+    // console.log(req.body);
+    await pool.query("DELETE FROM projects WHERE projectid = $1;", [
+      req.body.projectid,
+    ]);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
+// Get all bugs
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {
   try {
@@ -500,28 +574,6 @@ app.post("/api/dependencies", async (req, postRes) => {
     } else {
       // console.log(allFeatures.rows);
       postRes.json(dependencies.rows);
-    }
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-//select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where devid = <userid here>) as totaltasks;
-app.post("/api/tasksToComplete", async (req, postRes) => {
-  try {
-    const userId = await pool.query(
-      "SELECT userid FROM users WHERE email = $1;",
-      [req.body.email]
-    );
-    // console.log(userId.rows[0]);
-    const projectCount = await pool.query(
-      "select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where devid = $1) as totaltasks;",
-      [userId.rows[0].userid]
-    );
-    // console.log(projectCount.rows[0].count);
-    if (projectCount.rows.length == 0) {
-      return postRes.json(0);
-    } else {
-      postRes.json(projectCount.rows[0].count);
     }
   } catch (err) {
     console.error(err.message);

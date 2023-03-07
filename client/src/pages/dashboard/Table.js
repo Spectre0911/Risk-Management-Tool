@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { TasksToComplete } from "../services/TasksToComplete";
 import {
   Container,
   Card,
@@ -28,6 +29,7 @@ import FeatureForm from "./FeatureForm";
 import TaskForm from "./TaskForm";
 import Modal from "react-bootstrap/Modal";
 import { GrClose } from "react-icons/gr";
+import { EndProject } from "../services/EndProject";
 import {
   Box,
   TextField,
@@ -36,60 +38,57 @@ import {
   useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Button } from "react-bootstrap";
-import { propTypes } from "react-progressbar-semicircle";
+import { useSelector } from "react-redux";
 
 const Table = () => {
   var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
   const navigate = useNavigate();
   const [data, setData] = useState([]);
+  const login = useSelector((state) => state.email);
+
+  const [contacts, setContacts] = useState([
+    {
+      taskId: "1",
+      featureId: "1",
+      projectId: "1",
+      projectName: "CS261",
+      taskPriority: "Core",
+      featureName: "Dashboard",
+      taskStatus: "Completed",
+      taskName: "Add sidebar",
+      startTime: "12/11/2022",
+      endTime: "30/02/2023",
+      daysLeft: "2",
+    },
+    {
+      taskId: "2",
+      featureId: "1",
+      projectId: "1",
+      projectName: "CS261",
+      taskPriority: "Aesthetic",
+      taskStatus: "In Progress",
+      featureName: "Dashboard",
+      taskName: "Add sidebar",
+      startTime: "12/11/2022",
+      endTime: "30/02/2023",
+      daysLeft: "2",
+    },
+    {
+      taskId: "3",
+      featureId: "1",
+      projectId: "1",
+      projectName: "CS261",
+      taskPriority: "Aesthetic",
+      taskStatus: "Delayed",
+      featureName: "Dashboard",
+      taskName: "Add sidebar",
+      daysLeft: "2",
+    },
+  ]);
   useEffect(() => {
-    const doFetch = async () => {
-      const response = await fetch("https://randomuser.me/api/?results=100");
-      const body = await response.json();
-      const contacts = [
-        {
-          taskId: "1",
-          featureId: "1",
-          projectId: "1",
-          projectName: "CS261",
-          taskPriority: "Core",
-          featureName: "Dashboard",
-          taskStatus: "Completed",
-          taskName: "Add sidebar",
-          startTime: "12/11/2022",
-          endTime: "30/02/2023",
-          daysLeft: "2",
-        },
-        {
-          taskId: "2",
-          featureId: "1",
-          projectId: "1",
-          projectName: "CS261",
-          taskPriority: "Aesthetic",
-          taskStatus: "In Progress",
-          featureName: "Dashboard",
-          taskName: "Add sidebar",
-          startTime: "12/11/2022",
-          endTime: "30/02/2023",
-          daysLeft: "2",
-        },
-        {
-          taskId: "3",
-          featureId: "1",
-          projectId: "1",
-          projectName: "CS261",
-          taskPriority: "Aesthetic",
-          taskStatus: "Delayed",
-          featureName: "Dashboard",
-          taskName: "Add sidebar",
-          daysLeft: "2",
-        },
-      ];
-      // console.log(contacts);
-      setData(contacts);
-    };
-    doFetch();
+    console.log(login);
+    TasksToComplete({ email: login.login }).then((data) => setData(data));
+    setData(contacts);
   }, []);
 
   const viewTasks = (e) => {

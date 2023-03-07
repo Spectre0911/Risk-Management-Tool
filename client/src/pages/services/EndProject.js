@@ -1,6 +1,6 @@
-export const AddTeamMember = (values) => {
+export const EndProject = (values) => {
   console.log(values);
-  fetch("http://localhost:5000/api/addTeamMember", {
+  fetch("http://localhost:5000/api/endProject", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

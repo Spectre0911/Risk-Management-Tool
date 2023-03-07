@@ -24,6 +24,8 @@ import { AllProjectMembers } from "../services/AllProjectMembers";
 import { MemberSkills } from "../services/MemberSkills";
 import { MdCardMembership } from "react-icons/md";
 import { OrderedUsers } from "../services/OrderedUsers";
+import { AddTeamMember } from "../services/AddTeamMember";
+import { EndProject } from "../services/EndProject";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -61,22 +63,7 @@ const ProjectDashboard = () => {
   const [dataTime, setDataTime] = useState([0, 0]);
   const backgroundColorTime = ["rgba(255,0,0,1)", "rgba(255,128,0,1)"];
 
-  const [teamMembers, setTeamMembers] = useState([
-    {
-      id: "1",
-      name: "Josh",
-      image: "http://localhost:5000/assets/jane.jpg",
-      skills: ["Python", "React"],
-      suitabilityScore: 0,
-    },
-    {
-      id: "2",
-      name: "Jane",
-      image: "http://localhost:5000/assets/jane.jpg",
-      skills: ["Python", "React"],
-      suitabilityScore: 0,
-    },
-  ]);
+  const [teamMembers, setTeamMembers] = useState([]);
 
   const [showDelete, setShowDelete] = useState(false);
   const [showEndProject, setShowEndProject] = useState(false);
@@ -114,7 +101,8 @@ const ProjectDashboard = () => {
   };
 
   const addTeamMember = (e) => {
-    console.log(teamMembersList);
+    AddTeamMember({ projectid: projectId, userid: teamMembersList.value });
+    // console.log(teamMembersList);
   };
 
   const changeGanttViewState = (e) => {
@@ -155,6 +143,8 @@ const ProjectDashboard = () => {
 
   const endProject = () => {
     console.log("end project");
+
+    EndProject({ projectid: projectId });
   };
   //Fetching github commit data
   const [tempData, setTempData] = useState([]);

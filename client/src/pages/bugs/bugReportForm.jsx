@@ -35,7 +35,7 @@ const BugReportForm = ({ handleClose }) => {
     bugName: "",
     bugDate: "",
     bugDescription: "",
-    bugLocation: ""
+    bugLocation: "",
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
@@ -44,11 +44,6 @@ const BugReportForm = ({ handleClose }) => {
     console.log(severity);
     try {
       const body = { values };
-      const response = await fetch("http://localhost:5000/addbug", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
     } catch (err) {
       console.error(err.message);
     }
@@ -66,7 +61,6 @@ const BugReportForm = ({ handleClose }) => {
     setPriority(e);
   };
 
-
   const severityOptions = [
     { value: "1", label: "High" },
     { value: "2", label: "Med" },
@@ -78,9 +72,6 @@ const BugReportForm = ({ handleClose }) => {
   const handleSeverityChange = (e) => {
     setSeverity(e);
   };
-
-
-
 
   return (
     <Formik
@@ -151,14 +142,11 @@ const BugReportForm = ({ handleClose }) => {
                   value={values.bugLocation}
                   name="bugLocation"
                   error={
-                    Boolean(touched.bugLocation) &&
-                    Boolean(errors.bugLocation)
+                    Boolean(touched.bugLocation) && Boolean(errors.bugLocation)
                   }
                   helperText={touched.bugLocation && errors.bugLocation}
                   sx={{ gridColumn: "span 4" }}
                 />
-
-
 
                 <p
                   style={{
@@ -199,7 +187,6 @@ const BugReportForm = ({ handleClose }) => {
                   sx={{ gridColumn: "span 3", width: "70%" }}
                   value={severity}
                 />
-
               </>
             }
           </Box>
