@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 
 import bcrypt from "bcryptjs";
 import path from "path";
+import { create } from "domain";
 // import { reverse } from "dns";
 // import { user } from "pg/lib/defaults.js";
 
@@ -156,6 +157,22 @@ app.post("/api/projectName", async (req, res) => {
     );
 
     res.json("finished");
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Get project name
+app.post("/api/taskToComplete", async (req, res) => {
+  try {
+    console.log(req.body);
+
+    const createAccount = await pool.query(
+      "SELECT projectname, featurename, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft from projects inner join ((select featureid, featurename, projectid from features) as featureinfo inner join tasks on featureinfo.featureid = tasks.featureid) as featuretask on projects.projectid = featuretask.projectid where devid = (SELECT userid FROM users WHERE email = $1);",
+      [req.body.email]
+    );
+    // console.log(createAccount.rows);
+    res.json(createAccount.rows);
   } catch (err) {
     console.error(err.message);
   }
@@ -558,28 +575,6 @@ app.post("/api/dependencies", async (req, postRes) => {
     } else {
       // console.log(allFeatures.rows);
       postRes.json(dependencies.rows);
-    }
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-//select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where devid = <userid here>) as totaltasks;
-app.post("/api/tasksToComplete", async (req, postRes) => {
-  try {
-    const userId = await pool.query(
-      "SELECT userid FROM users WHERE email = $1;",
-      [req.body.email]
-    );
-    // console.log(userId.rows[0]);
-    const projectCount = await pool.query(
-      "select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where devid = $1) as totaltasks;",
-      [userId.rows[0].userid]
-    );
-    // console.log(projectCount.rows[0].count);
-    if (projectCount.rows.length == 0) {
-      return postRes.json(0);
-    } else {
-      postRes.json(projectCount.rows[0].count);
     }
   } catch (err) {
     console.error(err.message);
