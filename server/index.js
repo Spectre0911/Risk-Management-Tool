@@ -15,7 +15,7 @@ const cors = require("cors");
 const pool = require("./db.cjs");
 const multer = require("multer");
 const topoSort = require("toposort"); // you will need to install this package
-const fs = require('fs');
+const fs = require("fs");
 
 //middleware
 app.use(cors());
@@ -28,40 +28,37 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 //ROUTES//
 // Route for uploading an image
 const upload = multer({
-  dest: "/public/assets"
+  dest: "../client/public/assets",
   // you might also want to set some limits: https://github.com/expressjs/multer#limits
 });
 
-
 const handleError = (err, res) => {
   console.log(err);
-  res
-    .status(500)
-    .contentType("text/plain")
-    .end("Oops! Something went wrong!");
+  res.status(500).contentType("text/plain").end("Oops! Something went wrong!");
 };
 
-
-app.post("/upload",
+app.post(
+  "/upload",
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
     console.log(req);
     const tempPath = req.file.path;
     const targetPath = path.join(__dirname, "public/assets/");
-    
+
     if (path.extname(req.file.originalname).toLowerCase() === ".png") {
       console.log(tempPath);
       console.log(targetPath);
-      fs.rename(tempPath, path.join(targetPath,req.file.originalname), err => {
-        if (err) return handleError(err, res);
-        console.log(tempPath);
-        res
-          .status(200)
-          .contentType("text/plain")
-          .end("File uploaded!");
-      });
+      fs.rename(
+        tempPath,
+        path.join(targetPath, req.file.originalname),
+        (err) => {
+          if (err) return handleError(err, res);
+          console.log(tempPath);
+          res.status(200).contentType("text/plain").end("File uploaded!");
+        }
+      );
     } else {
-      fs.unlink(tempPath, err => {
+      fs.unlink(tempPath, (err) => {
         if (err) return handleError(err, res);
 
         res
@@ -72,10 +69,6 @@ app.post("/upload",
     }
   }
 );
-
-
-
-
 
 //create a todo
 
@@ -138,7 +131,13 @@ app.post("/api/createAccount", async (req, res) => {
     const saltPassword = bcrypt.hashSync(req.body.password, uniqueSalt);
     const createAccount = await pool.query(
       "INSERT INTO users (email, firstname, lastname, pfppath ,password) VALUES($1, $2, $3, $4, $5) RETURNING *",
-      [req.body.email, req.body.firstName, req.body.lastName, req.body.pfpPath, saltPassword]
+      [
+        req.body.email,
+        req.body.firstName,
+        req.body.lastName,
+        req.body.pfpPath,
+        saltPassword,
+      ]
     );
 
     res.json("finished");
