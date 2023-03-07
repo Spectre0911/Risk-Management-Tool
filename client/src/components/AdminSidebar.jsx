@@ -46,9 +46,9 @@ const AdminSidebar = ({projectId, teamMember}) => {
                     {'Dashboard'}
                 </MenuItem >
 
-                {!projectId && <MenuItem className="menuItem" icon={<FaBell />} onClick={() => navigate(`/managedprojects`)}>
+                {/* {!projectId && <MenuItem className="menuItem" icon={<FaBell />} onClick={() => navigate(`/managedprojects`)}>
                     {'Notifications'}
-                </MenuItem >}
+                </MenuItem >} */}
 
                 {!projectId && <MenuItem className="menuItem" icon={<MdManageAccounts />} onClick={() => navigate(`/managedprojects`)}>
                     {'Projects'}

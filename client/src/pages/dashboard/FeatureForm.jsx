@@ -28,7 +28,7 @@ import * as yup from "yup";
 import { createGrid } from "@mui/system";
 // import { useSelector } from "react-redux";
 
-const EditProfileForm = ({ handleClose, featureId }) => {
+const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
   const [userEmail, setUserEmail] = useState(
@@ -76,7 +76,9 @@ const EditProfileForm = ({ handleClose, featureId }) => {
       email: email,
     };
     CreateProject(newValues);
-    // createFeature(newValues);
+    handleClose();
+    await new Promise(resolve => setTimeout(resolve, 500));
+    fetchProjectFunction();
   };
 
   const handleSkillsRequiredChange = (e) => {
@@ -92,12 +94,12 @@ const EditProfileForm = ({ handleClose, featureId }) => {
     { value: "2", label: "Optional" },
     { value: "3", label: "Aesthetic" },
   ];
-
-  const [skillsRequiredOptions, setSkills] = useState([
-    { value: "1", label: "React" },
-    { value: "2", label: "Databases" },
-    { value: "3", label: "Backend" },
-  ]);
+  const [skillsRequiredOptions, setSkills] = useState([]);
+  // const [skillsRequiredOptions, setSkills] = useState([
+  //   { value: "1", label: "React" },
+  //   { value: "2", label: "Databases" },
+  //   { value: "3", label: "Backend" },
+  // ]);
 
   const teamMembersOptions = [
     { value: "1", label: "jc@gmail.com" },
