@@ -91,7 +91,27 @@ const BugDetailForm = ({ handleClose, bugId, data }) => {
     setSeverity(e);
   };
 
+  const [teamMembers, setTeamMembers] = useState([{ value: "1", label: "jc@gmail.com" }]);
 
+  const handleTeamMemberChange = (e) => {
+    setTeamMembers(e);
+  };
+
+  const teamMembersOptions = [
+    { value: "1", label: "jc@gmail.com" },
+    { value: "2", label: "mk@gmail.com" },
+    { value: "3", label: "sh@gmail.com" },
+  ];
+
+  const [feature, setFeature] = useState([{ value: "1", label: "login page" }]);
+  const featureOptions =[
+    { value: "1", label: "login page" },
+    { value: "2", label: "logout page" },
+  ]
+
+  const handleFeatureChange = (e) => {
+    setFeature(e);
+  };
 
 
   return (
@@ -170,7 +190,45 @@ const BugDetailForm = ({ handleClose, bugId, data }) => {
                   sx={{ gridColumn: "span 4" }}
                 />
 
+<p
+                style={{
+                  gridColumn: "span 1",
+                  margin: "auto",
+                  paddingRight: "2px",
+                }}
+                >
+                  Team Members:
+                </p>
+                <Select
+                  id="teamMembers"
+                  name="teamMembers"
+                  options={teamMembersOptions}
+                  onChange={handleTeamMemberChange}
+                  onBlur={handleBlur}
+                  className="defineDependenciesBox"
+                  sx={{ gridColumn: "span 3", width: "70%" }}
+                  value={teamMembers}
+                />
 
+                <p
+                style={{
+                  gridColumn: "span 1",
+                  margin: "auto",
+                  paddingRight: "2px",
+                }}
+                >
+                  Feature:
+                </p>
+                <Select
+                  id="feature"
+                  name="feature"
+                  options={featureOptions}
+                  onChange={handleFeatureChange}
+                  onBlur={handleBlur}
+                  className="defineDependenciesBox"
+                  sx={{ gridColumn: "span 3", width: "70%" }}
+                  value={feature}
+                />
 
                 <p
                   style={{
