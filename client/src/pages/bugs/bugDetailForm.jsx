@@ -38,6 +38,8 @@ const BugDetailForm = ({ handleClose, bugId, data }) => {
     bugLocation: data.bugLocation
   };
 
+  
+
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log(values);
     console.log(priority);
