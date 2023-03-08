@@ -150,17 +150,6 @@ const Dashboard = () => {
         <div className="metricTitle2">Task Summary</div>
         <Table />
       </div>
-
-      <div className="infoBox2">
-        <Scrollbars>
-          <div className="metricTitle2" style={{ marginBottom: "20px" }}>
-            Notifications
-          </div>
-          {notificationData.map((notif, index) => {
-            return <Notification data={notif} />;
-          })}
-        </Scrollbars>
-      </div>
     </div>
   );
 };
