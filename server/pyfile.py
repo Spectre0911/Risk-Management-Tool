@@ -114,15 +114,15 @@ def get_replacement (projectId):
     delay = 0
 
     for change in dates_changed:
-        if (dates_chnaged - opened).days > 5:
-            delay += (dates_chnaged - opened).days/duration
+        if (dates_changed - opened).days > 5:
+            delay += (dates_changed - opened).days/duration
     
     return delay
 
 def get_change_features (projectId):
     cursorObj = conn.cursor()
     
-    cursorObj.execute("SELECT SUM(priority) FROM featureChange WHERE featureChange.projectid = %s", (projectid,))
+    cursorObj.execute("SELECT SUM(priority) FROM featureChange WHERE featureChange.projectid = %s", (projectId,))
     change_score = cursorObj.fetchall()[0][0]
 
     return change_score

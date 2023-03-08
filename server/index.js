@@ -177,38 +177,6 @@ app.post("/api/taskToComplete", async (req, res) => {
   }
 });
 
-// Create bug
-app.post("/api/createBug", async (req, res) => {
-  try {
-    // console.log(req.body);
-
-    const createAccount = await pool.query(
-      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity) VALUES()",
-      [req.body.email, req.body.firstName, req.body.lastName, saltPassword]
-    );
-
-    res.json("finished");
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-// Login / Signup
-app.post("/api/createBug", async (req, res) => {
-  try {
-    // console.log(req.body);
-
-    const createAccount = await pool.query(
-      "INSERT INTO bugs (featureid, devid, bugname, bugdesc, priority, severity)",
-      [req.body.email, req.body.firstName, req.body.lastName, saltPassword]
-    );
-
-    res.json("finished");
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
 app.post("/api/addTeamMember", async (req, res) => {
   try {
     // console.log(req.body);
@@ -293,7 +261,7 @@ app.post("/api/createFeature", async (req, res) => {
         req.body.difficulty,
       ]
     );
-    
+
     // recording the change in features
     const recordChange = await pool.query(
       "INSERT INTO featureChange (projectid, changeDate) VALUES ($1, $2)",
@@ -339,9 +307,9 @@ app.post("/api/deleteFeature", async (req, res) => {
     const deleteFeature = await pool.query(
       "DELETE FROM features WHERE feature.featureid = $1",
       [req.body.featureId]
-    )
+    );
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
   }
 });
 
@@ -394,6 +362,23 @@ app.post("/api/endProject", async (req, postRes) => {
 });
 
 // Get all bugs
+app.post("/api/allBugs", async (req, postRes) => {
+  try {
+    const allBugs = await pool.query(
+      "SELECT bugid, featureid, devid, bugname, bugdesc, priority, severity FROM ((SELECT projectid, featureid FROM (projects NATURAL JOIN features) as projectFeatures) as pf NATURAL JOIN bugs) WHERE projectid = $1;",
+      [req.body.projectid]
+    );
+
+    if (allBugs.rows.length == 0) {
+      return postRes.json([]);
+    } else {
+      postRes.json(allBugs.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {
   try {
@@ -446,15 +431,37 @@ app.post("/api/locationNotifications", async (req, postRes) => {
 // Get all members for a project
 app.post("/api/projectMembers", async (req, postRes) => {
   try {
+    // console.log(req.body);
     const projectMembers = await pool.query(
       "SELECT userid, CONCAT(firstname, ' ', lastname) as name, bio FROM users NATURAL JOIN userproject WHERE projectid = $1;",
       [req.body.projectId]
     );
     if (projectMembers.rows.length == 0) {
-      return postRes.json(null);
+      return postRes.json([]);
     } else {
       postRes.json(projectMembers.rows);
     }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// create Bug
+app.post("/api/createBug", async (req, postRes) => {
+  console.log("CREATING BUG");
+  try {
+    console.log(req.body);
+    const createBug = await pool.query(
+      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity) VALUES ($1, $2, $3, $4, $5, $6)",
+      [
+        req.body.featureid,
+        req.body.devid,
+        req.body.bugName,
+        req.body.bugDescription,
+        req.body.priority,
+        req.body.severity,
+      ]
+    );
   } catch (err) {
     console.error(err.message);
   }
@@ -620,24 +627,51 @@ app.post("/api/dependencies", async (req, postRes) => {
   }
 });
 
-// Get information relating to a user
+// Get information relating to a user for an email
 app.post("/api/user", async (req, postRes) => {
   try {
-    const userId = await pool.query(
-      "SELECT userid FROM users WHERE email = $1;",
-      [req.body.email.email]
-    );
+    if (req.body.email != null) {
+      console.log("Getting info for email");
+      const userId = await pool.query(
+        "SELECT userid FROM users WHERE email = $1;",
+        [req.body.email.email]
+      );
+      const userInfo = await pool.query(
+        "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
+        [userId.rows[0].userid]
+      );
+      postRes.json(userInfo.rows[0]);
+    } else {
+      console.log("Getting info for id");
 
-    const userInfo = await pool.query(
-      "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
-      [userId.rows[0].userid]
-    );
-    postRes.json(userInfo.rows[0]);
+      const userInfo = await pool.query(
+        "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
+        [req.body.userid]
+      );
+      postRes.json(userInfo.rows[0]);
+    }
   } catch (err) {
     console.error(err.message);
   }
 });
 
+// // Get information relating to a user for an id
+// app.post("/api/user", async (req, postRes) => {
+//   try {
+//     const userId = await pool.query(
+//       "SELECT userid FROM users WHERE email = $1;",
+//       [req.body.email.email]
+//     );
+
+//     const userInfo = await pool.query(
+//       "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
+//       [userId.rows[0].userid]
+//     );
+//     postRes.json(userInfo.rows[0]);
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// });
 // Get information for all users
 app.post("/api/orderedUsers", async (req, postRes) => {
   let projectSkillSet = [];
@@ -768,16 +802,17 @@ app.post("/api/taskCount", async (req, postRes) => {
   try {
     // console.log(req.body);
 
-    const allBugs = await pool.query(
+    const taskCount = await pool.query(
       "select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = $1 and devid = (SELECT userid FROM users WHERE email = $2) and not completed) as tasksleft",
       [req.body.projectid, req.body.email]
     );
 
-    postRes.json(allBugs.rows);
+    postRes.json(taskCount.rows);
   } catch (err) {
     console.error(err.message);
   }
 });
+// Add task
 
 //SELECT deadline - NOW() FROM projects where projectid = 1
 app.post("/api/timeLeft", async (req, postRes) => {
@@ -850,7 +885,7 @@ app.post("/api/topoSort", async (req, res) => {
   }
 });
 
-app.post("/api/overallrisk", async (req,res) =>{
+app.post("/api/overallrisk", async (req, res) => {
   try {
     // This variable contains the data
     // you want to send
@@ -872,22 +907,22 @@ app.post("/api/overallrisk", async (req,res) =>{
     };
 
     var sendrequest = await request(options)
-    // The parsedBody contains the data
-    // sent back from the Flask server
-    .then(function (parsedBody) {
+      // The parsedBody contains the data
+      // sent back from the Flask server
+      .then(function (parsedBody) {
         console.log(parsedBody);
 
         // You can do something with
         // returned data
         let result;
         result = parsedBody["result"];
-        return result
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
+        return result;
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
   }
 });
 
