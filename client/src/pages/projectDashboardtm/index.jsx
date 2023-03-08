@@ -2,6 +2,7 @@ import React, { Component, useState, useEffect } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Scrollbars } from "react-custom-scrollbars";
+import { TimeLeft } from "../services/TimeLeft";
 import Table from "./Table";
 import "./index.css";
 import { height } from "@mui/system";
@@ -133,6 +134,12 @@ const ProjectDashboardTm = () => {
     }
   };
   useEffect(() => {
+    TimeLeft({
+      projectid: projectId,
+    }).then((data) => {
+      console.log(data);
+      setDataTime([data[0].remaining.days, data[0].completed.days]);
+    });
     BugCount({
       projectid: projectId,
     }).then((data) => {
@@ -224,7 +231,7 @@ const ProjectDashboardTm = () => {
               cutOut={60}
             />
             <div className="donutText">
-              <p>5 days</p>
+              <p>{dataTime[0]}</p>
             </div>
           </div>
         </div>

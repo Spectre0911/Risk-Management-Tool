@@ -165,17 +165,33 @@ app.post("/api/projectName", async (req, res) => {
   }
 });
 
-// Get project name
+// Get all tasks to complete
 app.post("/api/taskToComplete", async (req, res) => {
   try {
     console.log(req.body);
 
-    const createAccount = await pool.query(
+    const getTasks = await pool.query(
       "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1);",
       [req.body.email]
     );
     // console.log(createAccount.rows);
-    res.json(createAccount.rows);
+    res.json(getTasks.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Get all tasks to complete for a project id
+app.post("/api/taskToCompletePID", async (req, res) => {
+  try {
+    console.log(req.body);
+
+    const tasksToComplete = await pool.query(
+      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1) AND projects.projectid = $2;",
+      [req.body.email]
+    );
+    // console.log(createAccount.rows);
+    res.json(tasksToComplete.rows);
   } catch (err) {
     console.error(err.message);
   }
@@ -825,7 +841,7 @@ app.post("/api/timeLeft", async (req, postRes) => {
     // console.log(req.body);
 
     const timeLeft = await pool.query(
-      "SELECT deadline - NOW() as remaining, deadline - (Now()-opened) as completed FROM projects where projectid = $1;",
+      "SELECT deadline - NOW() as remaining, (Now()-opened) as completed FROM projects where projectid = $1;",
       [req.body.projectid]
     );
     if (timeLeft.rows.length == 0) {
