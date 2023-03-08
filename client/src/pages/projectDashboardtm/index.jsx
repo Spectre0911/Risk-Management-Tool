@@ -25,7 +25,10 @@ import { gantt } from "dhtmlx-gantt";
 // import GanttChart from "../gantt";
 import { Octokit } from "octokit";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 import SoftFeedbackForm from "./SoftFeedbackForm";
+
+import { TasksToCompletePID } from "../services/TasksToCompletePID";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -52,7 +55,7 @@ const ProjectDashboardTm = () => {
   ];
 
   const labelsFeatures = ["Core", "Optional", "Aesthetic"];
-  const dataFeatures = [8, 14, 12];
+  const [dataTasks, setDataTasks] = useState([8, 14, 12]);
   const backgroundColorFeatures = [
     "rgba(255,0,0,1)",
     "rgba(255,128,0,1)",
@@ -62,6 +65,7 @@ const ProjectDashboardTm = () => {
   const labelsTime = ["Remaining", "Completed"];
   const [dataTime, setDataTime] = useState([0, 0]);
   const backgroundColorTime = ["rgba(255,0,0,1)", "rgba(255,128,0,1)"];
+  const email = useSelector((state) => state.email);
 
   const teamMembers = [
     {
@@ -134,10 +138,28 @@ const ProjectDashboardTm = () => {
     }
   };
   useEffect(() => {
+    TasksToCompletePID({ email: email.email, projectid: projectId }).then(
+      (data) => {
+        console.log(data);
+        const counts = {
+          1: 0,
+          2: 0,
+          3: 0,
+        };
+
+        // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
+        data.reduce((acc, obj) => {
+          // Increment the count for the priority of the current object
+          acc[obj.priority]++;
+          return acc;
+        }, counts); // Use the counts object as the initial value of the reduce function
+        setDataTasks([counts[1], counts[2], counts[3]]);
+      }
+    );
+
     TimeLeft({
       projectid: projectId,
     }).then((data) => {
-      console.log(data);
       setDataTime([data[0].remaining.days, data[0].completed.days]);
     });
     BugCount({
@@ -171,9 +193,9 @@ const ProjectDashboardTm = () => {
         <div className="infoBox project">
           <div className="metricTitle">Tasks left to complete</div>
           <div className="metricDonutContainer smaller">
-            {checkZero(dataFeatures) ? (
+            {checkZero(dataTasks) ? (
               <DonutChart
-                chartData={dataFeatures}
+                chartData={dataTasks}
                 labels={labelsFeatures}
                 border={borderColorRisk}
                 backgroundColor={backgroundColorFeatures}
@@ -189,7 +211,7 @@ const ProjectDashboardTm = () => {
               />
             )}
             <div className="donutText">
-              <p>{dataFeatures.reduce((acc, val) => acc + val, 0)}</p>
+              <p>{dataTasks.reduce((acc, val) => acc + val, 0)}</p>
             </div>
           </div>
         </div>
