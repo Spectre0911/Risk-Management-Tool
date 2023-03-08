@@ -331,7 +331,7 @@ const ProjectDashboardTm = () => {
           </div>
           <div className="ganttContainer">
             {/* <GanttChart viewMode={ganttViewState}/> */}
-            <NewGantt viewMode={ganttViewState} />
+            <NewGantt viewMode={ganttViewState} projectid={projectId} />
           </div>
         </div>
       </div>
