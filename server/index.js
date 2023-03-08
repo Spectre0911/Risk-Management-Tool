@@ -344,7 +344,7 @@ app.post("/api/endProject", async (req, postRes) => {
 app.post("/api/allBugs", async (req, postRes) => {
   try {
     const allBugs = await pool.query(
-      "SELECT * FROM bugs WHERE projectid = $1",
+      "SELECT bugid, featureid, devid, bugname, bugdesc, priority, severity FROM ((SELECT projectid, featureid FROM (projects NATURAL JOIN features) as projectFeatures) as pf NATURAL JOIN bugs) WHERE projectid = $1;",
       [req.body.projectid]
     );
 
@@ -606,24 +606,51 @@ app.post("/api/dependencies", async (req, postRes) => {
   }
 });
 
-// Get information relating to a user
+// Get information relating to a user for an email
 app.post("/api/user", async (req, postRes) => {
   try {
-    const userId = await pool.query(
-      "SELECT userid FROM users WHERE email = $1;",
-      [req.body.email.email]
-    );
+    if (req.body.email != null) {
+      console.log("Getting info for email");
+      const userId = await pool.query(
+        "SELECT userid FROM users WHERE email = $1;",
+        [req.body.email.email]
+      );
+      const userInfo = await pool.query(
+        "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
+        [userId.rows[0].userid]
+      );
+      postRes.json(userInfo.rows[0]);
+    } else {
+      console.log("Getting info for id");
 
-    const userInfo = await pool.query(
-      "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
-      [userId.rows[0].userid]
-    );
-    postRes.json(userInfo.rows[0]);
+      const userInfo = await pool.query(
+        "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
+        [req.body.userid]
+      );
+      postRes.json(userInfo.rows[0]);
+    }
   } catch (err) {
     console.error(err.message);
   }
 });
 
+// // Get information relating to a user for an id
+// app.post("/api/user", async (req, postRes) => {
+//   try {
+//     const userId = await pool.query(
+//       "SELECT userid FROM users WHERE email = $1;",
+//       [req.body.email.email]
+//     );
+
+//     const userInfo = await pool.query(
+//       "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
+//       [userId.rows[0].userid]
+//     );
+//     postRes.json(userInfo.rows[0]);
+//   } catch (err) {
+//     console.error(err.message);
+//   }
+// });
 // Get information for all users
 app.post("/api/orderedUsers", async (req, postRes) => {
   let projectSkillSet = [];
@@ -754,12 +781,12 @@ app.post("/api/taskCount", async (req, postRes) => {
   try {
     // console.log(req.body);
 
-    const allBugs = await pool.query(
+    const taskCount = await pool.query(
       "select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = $1 and devid = (SELECT userid FROM users WHERE email = $2) and not completed) as tasksleft",
       [req.body.projectid, req.body.email]
     );
 
-    postRes.json(allBugs.rows);
+    postRes.json(taskCount.rows);
   } catch (err) {
     console.error(err.message);
   }

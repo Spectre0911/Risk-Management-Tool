@@ -7,6 +7,7 @@ import { Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 import { AllBugs } from "../services/AllBugs";
+import { GetUser } from "../services/GetUser";
 import { Formik, Form, Field } from "formik";
 import {
   Box,
@@ -64,7 +65,31 @@ const Bugs = () => {
     },
   ]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    AllBugs({ projectid: projectId }).then((data) => {
+      let newBugs = [];
+      const promises = data.map((bug) => {
+        return GetUser({ userid: bug.devid }).then((assignedToName) => {
+          let newBug = {
+            bugId: bug.bugid.toString(),
+            bugName: bug.bugname,
+            bugLocation: "Random Location",
+            bugDescription: bug.bugdesc || "Default",
+            bugReportDate: new Date().toISOString().slice(0, 10),
+            bugPriority: ["Low", "Medium", "High"][parseInt(bug.severity) - 1],
+            bugSeverity: ["Low", "Medium", "High"][parseInt(bug.priority) - 1],
+            ReportedByUser: { name: "Jane Arnold", imagePath: "jane.jpg" },
+            AssignedToUser: { name: assignedToName, imagePath: "jane.jpg" },
+          };
+          return newBug;
+        });
+      });
+      Promise.all(promises).then((newBugs) => {
+        console.log(newBugs);
+        setBugData(newBugs);
+      });
+    });
+  }, []);
 
   const deleteBug = (bugId) => {
     console.log("delete this");
