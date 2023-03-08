@@ -183,8 +183,8 @@ app.post("/api/createBug", async (req, res) => {
     // console.log(req.body);
 
     const createAccount = await pool.query(
-      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity) VALUES()",
-      [req.body.email, req.body.firstName, req.body.lastName, saltPassword]
+      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity) VALUES((SELECT featureid FROM project WHERE projectid = $1 LIMIT 1), $1, $2, $)",
+      [req.body.projectid, req.body.devid, req.body.description]
     );
 
     res.json("finished");
@@ -757,6 +757,7 @@ app.post("/api/taskCount", async (req, postRes) => {
     console.error(err.message);
   }
 });
+// Add task
 
 //SELECT deadline - NOW() FROM projects where projectid = 1
 app.post("/api/timeLeft", async (req, postRes) => {
