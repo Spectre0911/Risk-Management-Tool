@@ -49,7 +49,7 @@ const Table = (props) => {
       if (data != null) {
         updatedContacts = data.map((item) => {
           return {
-            featureid: item.featureid,
+            featureId: item.featureid,
             featureName: item.featurename,
             startTime: new Date(item.starttime).toLocaleDateString("en-GB"),
             endTime: new Date(item.endtime).toLocaleDateString("en-GB"),

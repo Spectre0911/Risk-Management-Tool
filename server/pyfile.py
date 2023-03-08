@@ -116,15 +116,16 @@ def get_replacement (projectId):
     for change in dates_changed:
         if (change - opened).days > 10:
             replacement_score += (change - opened).days/duration
-    
+            
     return replacement_score
 
 def get_change_features (projectId):
     cursorObj = conn.cursor()
     
+
     cursorObj.execute("SELECT SUM(priority) FROM (featureChange NATURAL JOIN projects) AS newTable WHERE newTable.projectid = %s and EXTRACT(DAYS from (newTable.dateChanged - newTable.opened))::INTEGER > %s", (projectId, 10))
     change_score = cursorObj.fetchall()[0][0]/100
-
+    
     return change_score
 
 #print(predict())
