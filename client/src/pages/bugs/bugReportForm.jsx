@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { FaBell } from "react-icons/fa";
@@ -7,6 +7,9 @@ import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import Select from "react-select";
 import { Formik, Form, Field } from "formik";
+import { AllFeatures } from "../services/AllFeatures";
+import { AllProjectMembers } from "../services/AllProjectMembers";
+import { CreateBug } from "../services/CreateBug";
 import {
   Box,
   TextField,
@@ -20,7 +23,7 @@ import Bug from "./bug";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 
-const BugReportForm = ({ handleClose }) => {
+const BugReportForm = ({ handleClose, projectid }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
 
@@ -39,11 +42,17 @@ const BugReportForm = ({ handleClose }) => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    console.log(values);
-    console.log(priority);
-    console.log(severity);
     try {
-      const body = { values };
+      console.log(feature);
+      console.log(teamMembers);
+      const body = {
+        ...values,
+        priority: priority.value,
+        severity: severity.value,
+        featureid: feature.value,
+        devid: teamMembers.value,
+      };
+      CreateBug(body);
     } catch (err) {
       console.error(err.message);
     }
@@ -79,26 +88,52 @@ const BugReportForm = ({ handleClose }) => {
     setTeamMembers(e);
   };
 
-  const teamMembersOptions = [
+  const [teamMembersOptions, setTeamMemberOptions] = useState([
     { value: "1", label: "jc@gmail.com" },
     { value: "2", label: "mk@gmail.com" },
     { value: "3", label: "sh@gmail.com" },
-  ];
+  ]);
 
   const [feature, setFeature] = useState([]);
-  const featureOptions =[
+  const [featureOptions, setFeatureOptions] = useState([
     { value: "1", label: "login page" },
     { value: "2", label: "logout page" },
-  ]
+  ]);
 
   const handleFeatureChange = (e) => {
     setFeature(e);
   };
+
+  useEffect(() => {
+    console.log(projectid);
+    AllFeatures({ projectid: parseInt(projectid) }).then((data) => {
+      let newFeatures = [];
+      data.map((feature) => {
+        newFeatures.push({
+          value: feature.featureid.toString(),
+          label: feature.featurename,
+        });
+      });
+      setFeatureOptions(newFeatures);
+    });
+    AllProjectMembers({ projectId: parseInt(projectid) }).then((data) => {
+      let newMembers = [];
+      data.map((member) => {
+        newMembers.push({
+          value: member.userid.toString(),
+          label: member.name,
+        });
+      });
+      setTeamMemberOptions(newMembers);
+    });
+  }, []);
+
   return (
     <Formik
       onSubmit={handleFormSubmit}
       initialValues={initialValuesRegister}
       validationSchema={reportBugSchema}
+      enableReinitialize={true}
     >
       {({
         values,
@@ -144,11 +179,11 @@ const BugReportForm = ({ handleClose }) => {
                 />
 
                 <p
-                style={{
-                  gridColumn: "span 1",
-                  margin: "auto",
-                  paddingRight: "2px",
-                }}
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "2px",
+                  }}
                 >
                   Team Members:
                 </p>
@@ -163,12 +198,12 @@ const BugReportForm = ({ handleClose }) => {
                   value={teamMembers}
                 />
 
-<p
-                style={{
-                  gridColumn: "span 1",
-                  margin: "auto",
-                  paddingRight: "2px",
-                }}
+                <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "2px",
+                  }}
                 >
                   Feature:
                 </p>
@@ -182,7 +217,6 @@ const BugReportForm = ({ handleClose }) => {
                   sx={{ gridColumn: "span 3", width: "70%" }}
                   value={feature}
                 />
-
 
                 <TextField
                   label="Description"
