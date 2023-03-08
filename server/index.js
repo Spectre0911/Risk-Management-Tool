@@ -143,6 +143,13 @@ app.post("/api/createFeature", async (req, res) => {
         req.body.difficulty,
       ]
     );
+    
+    // recording the change in features
+    const recordChange = await pool.query(
+      "INSERT INTO featureChange (projectid, changeDate) VALUES ($1, $2)",
+      [req.body.projectid, Date.now()]
+    );
+
     // Get the feature id
     const featureId = await pool.query(
       "SELECT featureid FROM features WHERE projectid = $1 AND featurename = $2",
@@ -172,6 +179,17 @@ app.post("/api/createFeature", async (req, res) => {
   } catch (err) {
     console.log("error");
     console.error(err.message);
+  }
+});
+
+app.post("/api/deleteFeature", async (req, res) => {
+  try {
+    const deleteFeature = await pool.query(
+      "DELETE FROM features WHERE feature.featureid = $1",
+      [req.body.featureId]
+    )
+  } catch (err) {
+    console.log(err.message)
   }
 });
 
