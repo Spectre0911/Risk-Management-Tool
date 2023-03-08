@@ -218,9 +218,30 @@ app.post("/api/addTeamMember", async (req, res) => {
       [req.body.userid, req.body.projectid]
     );
 
+    const recordAdd = await pool.query(
+      "INSERT INTO replacements (projectid, dateChanged, changeType) VALUES($1, $2, $3)",
+      [req.body.projectid, Date.now(), 1]
+    )
+
     res.json("finished");
   } catch (err) {
     console.error(err.message);
+  }
+});
+
+app.post("/api/removeTeamMember", async(req, res) => {
+  try {
+    const remove = await pool.query(
+      "DELETE FROM userproject WHERE userproject.userid = $1, userproject.projectid = $2",
+      [req.body.userid, req.body.projectid]
+    );
+
+    const recordRemove = await pool.query(
+      "INSERT INTO replacements (projectid, dateChanged, changeType) VALUES($1, $2, $3)",
+      [req.body.projectid, Date.now(), 0]
+    );
+  } catch (err) {
+    console.log(err.message)
   }
 });
 
