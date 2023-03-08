@@ -373,6 +373,23 @@ app.post("/api/endProject", async (req, postRes) => {
 });
 
 // Get all bugs
+app.post("/api/allBugs", async (req, postRes) => {
+  try {
+    const allBugs = await pool.query(
+      "SELECT * FROM bugs WHERE projectid = $1",
+      [req.body.projectid]
+    );
+
+    if (allBugs.rows.length == 0) {
+      return postRes.json([]);
+    } else {
+      postRes.json(allBugs.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {
   try {
@@ -425,7 +442,7 @@ app.post("/api/locationNotifications", async (req, postRes) => {
 // Get all members for a project
 app.post("/api/projectMembers", async (req, postRes) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const projectMembers = await pool.query(
       "SELECT userid, CONCAT(firstname, ' ', lastname) as name, bio FROM users NATURAL JOIN userproject WHERE projectid = $1;",
       [req.body.projectId]
