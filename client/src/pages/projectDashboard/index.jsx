@@ -176,8 +176,6 @@ const ProjectDashboard = () => {
               });
             }
             useridSkillMap.set(member.userid, skillArr);
-            // console.log("Members skills: ");
-            // console.log(useridSkillMap.get(member.userid));
           });
         });
 
