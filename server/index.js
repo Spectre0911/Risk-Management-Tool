@@ -117,6 +117,8 @@ app.post("/api/createProject", async (req, postRes) => {
       "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES((SELECT userid FROM users WHERE email = $1), $2, 'PM', True);",
       [req.body.email.email, projectid]
     );
+    res.sendStatus(200);
+
   } catch (err) {
     console.log("ERROR");
     console.error(err.message);
@@ -144,6 +146,7 @@ app.post("/api/createAccount", async (req, res) => {
     // console.log("registered");
   } catch (err) {
     console.error(err.message);
+    res.sendStatus(400);
   }
 });
 // Get project name
@@ -204,7 +207,7 @@ app.post("/api/createBug", async (req, res) => {
       [req.body.email, req.body.firstName, req.body.lastName, saltPassword]
     );
 
-    res.json("finished");
+    res.statusCode(200);
   } catch (err) {
     console.error(err.message);
   }
@@ -246,6 +249,7 @@ app.post("/api/login", async (req, postResult) => {
               console.log("Incorrect password or email");
             }
             postResult.json({ loggedIn: loggedInVal, email: emailVal });
+
           });
         }
       }
