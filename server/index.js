@@ -126,7 +126,6 @@ app.post("/api/createProject", async (req, postRes) => {
 // Login / Signup
 app.post("/api/createAccount", async (req, res) => {
   try {
-    // console.log(req.body);
     const uniqueSalt = bcrypt.genSaltSync(10);
     const saltPassword = bcrypt.hashSync(req.body.password, uniqueSalt);
     const createAccount = await pool.query(
@@ -140,7 +139,9 @@ app.post("/api/createAccount", async (req, res) => {
       ]
     );
 
-    res.json("finished");
+    // res.json("finished");
+    res.sendStatus(200);
+    // console.log("registered");
   } catch (err) {
     console.error(err.message);
   }
