@@ -272,7 +272,7 @@ app.post("/api/createFeature", async (req, res) => {
         req.body.difficulty,
       ]
     );
-    
+
     // recording the change in features
     const recordChange = await pool.query(
       "INSERT INTO featureChange (projectid, changeDate) VALUES ($1, $2)",
@@ -318,9 +318,9 @@ app.post("/api/deleteFeature", async (req, res) => {
     const deleteFeature = await pool.query(
       "DELETE FROM features WHERE feature.featureid = $1",
       [req.body.featureId]
-    )
+    );
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
   }
 });
 
@@ -425,12 +425,13 @@ app.post("/api/locationNotifications", async (req, postRes) => {
 // Get all members for a project
 app.post("/api/projectMembers", async (req, postRes) => {
   try {
+    console.log(req.body);
     const projectMembers = await pool.query(
       "SELECT userid, CONCAT(firstname, ' ', lastname) as name, bio FROM users NATURAL JOIN userproject WHERE projectid = $1;",
       [req.body.projectId]
     );
     if (projectMembers.rows.length == 0) {
-      return postRes.json(null);
+      return postRes.json([]);
     } else {
       postRes.json(projectMembers.rows);
     }
@@ -830,7 +831,7 @@ app.post("/api/topoSort", async (req, res) => {
   }
 });
 
-app.post("/api/overallrisk", async (req,res) =>{
+app.post("/api/overallrisk", async (req, res) => {
   try {
     // This variable contains the data
     // you want to send
@@ -852,22 +853,22 @@ app.post("/api/overallrisk", async (req,res) =>{
     };
 
     var sendrequest = await request(options)
-    // The parsedBody contains the data
-    // sent back from the Flask server
-    .then(function (parsedBody) {
+      // The parsedBody contains the data
+      // sent back from the Flask server
+      .then(function (parsedBody) {
         console.log(parsedBody);
 
         // You can do something with
         // returned data
         let result;
         result = parsedBody["result"];
-        return result
-    })
-    .catch(function (err) {
-      console.log(err);
-    });
+        return result;
+      })
+      .catch(function (err) {
+        console.log(err);
+      });
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
   }
 });
 

@@ -38,7 +38,7 @@ const Bugs = () => {
     console.log(show);
   };
 
-  const bugData = [
+  const [bugData, setBugData] = useState([
     {
       bugId: "1",
       bugName: "Log out button",
@@ -61,7 +61,9 @@ const Bugs = () => {
       ReportedByUser: { name: "Jane Arnold", imagePath: "jane.jpg" },
       AssignedToUser: { name: "Jane Arnold", imagePath: "jane.jpg" },
     },
-  ];
+  ]);
+
+  useEffect(() => {}, []);
 
   const deleteBug = (bugId) => {
     console.log("delete this");
@@ -93,7 +95,7 @@ const Bugs = () => {
             <Modal.Title>Report Bug</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <BugReportForm handleClose={handleClose} />
+            <BugReportForm handleClose={handleClose} projectid={projectId} />
           </Modal.Body>
         </Modal>
       </div>
