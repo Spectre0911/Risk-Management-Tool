@@ -41,19 +41,15 @@ app.post(
   "/upload",
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
-    console.log(req);
     const tempPath = req.file.path;
     const targetPath = path.join(__dirname, "public/assets/");
 
     if (path.extname(req.file.originalname).toLowerCase() === ".png") {
-      console.log(tempPath);
-      console.log(targetPath);
       fs.rename(
         tempPath,
         path.join(targetPath, req.file.originalname),
         (err) => {
           if (err) return handleError(err, res);
-          console.log(tempPath);
           res.status(200).contentType("text/plain").end("File uploaded!");
         }
       );
@@ -152,7 +148,7 @@ app.post("/api/createAccount", async (req, res) => {
 // Get project name
 app.post("/api/projectName", async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
 
     const createAccount = await pool.query(
       "SELECT name FROM projects WHERE projectid = $1",
@@ -168,7 +164,7 @@ app.post("/api/projectName", async (req, res) => {
 // Get all tasks to complete
 app.post("/api/taskToComplete", async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
 
     const getTasks = await pool.query(
       "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1);",
@@ -808,7 +804,7 @@ app.post("/api/bugCount", async (req, postRes) => {
       "select * from bugs inner join features on bugs.featureid = features.featureid where projectid = $1",
       [req.body.projectid]
     );
-    console.log(allBugs.rows);
+    // console.log(allBugs.rows);
     postRes.json(allBugs.rows);
   } catch (err) {
     console.error(err.message);
@@ -929,7 +925,7 @@ app.post("/api/overallrisk", async (req, res) => {
       // The parsedBody contains the data
       // sent back from the Flask server
       .then(function (parsedBody) {
-        console.log(parsedBody);
+        // console.log(parsedBody);
 
         // You can do something with
         // returned data

@@ -278,7 +278,7 @@ const ProjectDashboardTm = () => {
 
         <div className="infoBox2 projectTable feature">
           <div className="metricTitle2">Tasks</div>
-          <Table />
+          <Table projectid={projectId} />
         </div>
 
         <div className="infoBox2">
