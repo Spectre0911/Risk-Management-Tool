@@ -193,6 +193,7 @@ app.post("/api/features", async (req, postRes) => {
     console.error(err.message);
   }
 });
+
 // Get all projects
 app.post("/api/projects", async (req, postRes) => {
   try {
@@ -448,51 +449,46 @@ app.post("/api/topoSort", async (req, res) => {
   }
 });
 
-// async function predict(test_array) {
-//   // This variable contains the data
-//   // you want to send
-//   var data = {
-//     array: test_array,
-//   };
+app.post("/api/overallrisk", async (req,res) =>{
+  try {
+    // This variable contains the data
+    // you want to send
+    var data = {
+      projectid: req.body.projectid,
+    };
 
-//   // preparing the post request
-//   var options = {
-//     method: "POST",
+    // preparing the post request
+    var options = {
+      method: "POST",
 
-//     // http:flaskserverurl:port/route
-//     uri: "http://127.0.0.1:5000/predict",
-//     body: data,
+      // http:flaskserverurl:port/route
+      uri: "http://127.0.0.1:5000/predictoveralscore",
+      body: data,
 
-//     // Automatically stringifies
-//     // the body to JSON
-//     json: true,
-//   };
+      // Automatically stringifies
+      // the body to JSON
+      json: true,
+    };
 
-//   var sendrequest = await request(options)
-//     // The parsedBody contains the data
-//     // sent back from the Flask server
-//     .then(function (parsedBody) {
-//       console.log(parsedBody);
+    var sendrequest = await request(options)
+    // The parsedBody contains the data
+    // sent back from the Flask server
+    .then(function (parsedBody) {
+        console.log(parsedBody);
 
-//       // You can do something with
-//       // returned data
-//       let result;
-//       result = parsedBody["result"];
-//       console.log("The probability of project success: ", result);
-//     })
-//     .catch(function (err) {
-//       console.log(err);
-//     });
-// }
-
-// var test_input_1 = [
-//   [0.51342282, 0.84380054, 0.7717033, 0.34, 0.624, 0.68704923],
-// ];
-// var test_input_2 = [
-//   [0.67676768, 0.03678401, 0.70619826, 0.21, 0.212, 0.32635373],
-// ];
-// predict(test_input_1);
-// predict(test_input_2);
+        // You can do something with
+        // returned data
+        let result;
+        result = parsedBody["result"];
+        return result
+    })
+    .catch(function (err) {
+      console.log(err);
+    });
+  } catch (err) {
+    console.log(err.message)
+  }
+});
 
 app.listen(5000, () => {
   console.log("server has started on port 5000");

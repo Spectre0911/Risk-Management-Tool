@@ -32,6 +32,14 @@ create table projects (
     primary key (projectid)
 );
 
+drop table if exists replacements;
+create table replacements (
+    projectid serial not null,
+    dateChanged timestamp not null,
+    changeType INTEGER not null, -- 0 for removing the team member; 1 for adding a new member
+    foreign key (projectid) references projects(projectid) on delete cascade
+);
+
 drop table if exists risks;
 create table risks (
     projectid integer not null,
@@ -76,6 +84,13 @@ create table features (
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
+drop table if exists featureChange;
+create table featureChange (
+    projectid serial not null,
+    changeDate TIMESTAMP not null,
+    foreign key (projectid) references projects(projectid) on delete cascade
+);
+
 drop table if exists tasks;
 create table tasks (
     taskid      serial not null,
@@ -113,7 +128,7 @@ create table bugs (
     severity  integer not null check (severity >= 1 and severity <= 3),
     primary key (bugid),
     foreign key (featureid) references features(featureid) on delete cascade,
-    foreign key (devid) references users(userid)
+    foreign key (devid) references users(userid) 
 );
 
 drop table if exists notifications;
@@ -144,41 +159,29 @@ create table feedback (
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
-drop table if exists sktypes cascade;
-create table sktypes (
-    sktype varchar(50) not null unique,
-    primary key (sktype)
-);
-
 drop table if exists skills cascade;
 create table skills (
     skill  varchar(50) not null,
-    sktype varchar(50) not null,
-    primary key (skill),
-    foreign key (sktype) references sktypes(sktype) on delete cascade
+    primary key (skill)
 );
 
 drop table if exists userskill;
 create table userskill (
     userid  integer not null,
     skill   varchar(50) not null,
-    sktype  varchar(50) not null,
     sklevel integer not null check (sklevel > 0 and sklevel <= 10),
     primary key (userid, skill),
     foreign key (userid) references users(userid) on delete cascade,
-    foreign key (skill) references skills(skill) on delete cascade,
-    foreign key (sktype) references sktypes(sktype) on delete cascade
+    foreign key (skill) references skills(skill) on delete cascade
 );
 
 drop table if exists projectskill;
 create table projectskill (
     projectid integer not null,
     skill     varchar(50) not null,
-    sktype    varchar(50) not null,
     primary key (projectid, skill),
     foreign key (projectid) references projects(projectid) on delete cascade,
-    foreign key (skill) references skills(skill) on delete cascade,
-    foreign key (sktype) references sktypes(sktype) on delete cascade
+    foreign key (skill) references skills(skill) on delete cascade
 );
 
 
@@ -282,17 +285,14 @@ create trigger addrisk after insert on risks
 for each statement
     execute procedure newrisk();
 
-insert into sktypes (sktype) values
-    ('Programming languages'), ('Web development'), ('Database management'), ('Software development methodologies'), ('Version control'), ('Cloud computing'), ('Operating systems'), ('Networking and security'), ('Mobile app development'), ('AI and machine learning');
-
-insert into skills (skill, sktype) values
-    ('Java', 'Programming languages'), ('Python', 'Programming languages'), ('C++', 'Programming languages'), ('JavaScript', 'Programming languages'), ('C#', 'Programming languages'), ('Ruby', 'Programming languages'), ('Swift', 'Programming languages'), ('Go', 'Programming languages'), ('Kotlin', 'Programming languages'), ('PHP', 'Programming languages'), ('TypeScript', 'Programming languages'), ('Scala', 'Programming languages'), ('Assembly', 'Programming languages'), ('R', 'Programming languages'),
-    ('HTML', 'Web development'), ('CSS', 'Web development'), ('JavaScript frameworks', 'Web development'), ('Node.js', 'Web development'), ('RESTful API design and development', 'Web development'), ('Database integration', 'Web development'), ('Web security', 'Web development'), ('Responsive design and cross-browser compatibility', 'Web development'), ('Server-side languages', 'Web development'), ('Deployment and hosting', 'Web development'), ('CMS', 'Web development'), ('Debugging and problem-solving', 'Web development'),
-    ('SQL', 'Database management'), ('NoSQL databases', 'Database management'), ('Data modelling and normalization', 'Database management'), ('Database administration', 'Database management'), ('Data warehousing', 'Database management'), ('Indexing and query optimization', 'Database management'), ('Backup and recovery', 'Database management'), ('Security and access control', 'Database management'), ('Data migration', 'Database management'), ('ETL processes', 'Database management'),
-    ('Agile', 'Software development methodologies'), ('Waterfall', 'Software development methodologies'), ('Lean', 'Software development methodologies'), ('DevOps', 'Software development methodologies'), ('Test-Driven Development (TDD)', 'Software development methodologies'), ('Behaviour-Driven Development (BDD)', 'Software development methodologies'), ('Feature-Driven Development (FDD)', 'Software development methodologies'), ('Spiral', 'Software development methodologies'), ('Rapid Application Development (RAD)', 'Software development methodologies'), ('Extreme Programming (XP)', 'Software development methodologies'), ('Hybrid', 'Software development methodologies'),
-    ('Git', 'Version control'), ('SVN (Apache subversion)', 'Version control'), ('Mercurial', 'Version control'), ('Source control management concepts', 'Version control'), ('Command line interface usage', 'Version control'), ('Distributed version control systems', 'Version control'), ('Collaborative development practices', 'Version control'), ('Code reviews and issue tracking', 'Version control'), ('Conflict resolution', 'Version control'),
-    ('Cloud platforms', 'Cloud computing'), ('Virtualization technologies', 'Cloud computing'), ('Infrastructure as Code (IAC) tools', 'Cloud computing'), ('Container orchestration', 'Cloud computing'), ('Serverless computing', 'Cloud computing'), ('Networking and security', 'Cloud computing'), ('Database and storage services', 'Cloud computing'), ('Monitoring and logging', 'Cloud computing'), ('Automation and configuration management', 'Cloud computing'), ('Cost optimization and management', 'Cloud computing'),
-    ('Windows administration', 'Operating systems'), ('Linux administration', 'Operating systems'), ('MacOS administration', 'Operating systems'), ('Command line usage', 'Operating systems'), ('Network configuration and troubleshooting', 'Operating systems'), ('User and group management', 'Operating systems'), ('File system management and backup', 'Operating systems'), ('Security and acccess control', 'Operating systems'), ('Process and resource management', 'Operating systems'), ('Virtualization', 'Operating systems'), ('Package management and software installation', 'Operating systems'), ('Scripting and automation', 'Operating systems'),
-    ('Networking protocols', 'Networking and security'), ('Router and switch configuration', 'Networking and security'), ('Firewall administration', 'Networking and security'), ('VPN setup', 'Networking and security'), ('Network security', 'Networking and security'), ('Web application security', 'Networking and security'), ('Intrusion detection and prevention', 'Networking and security'), ('Security information and event management', 'Networking and security'), ('Disaster recovery', 'Networking and security'), ('Compliance and regulatory requirements', 'Networking and security'),
-    ('iOS development', 'Mobile app development'), ('Android development', 'Mobile app development'), ('Cross-platform development frameworks', 'Mobile app development'), ('Mobile UI and UX design', 'Mobile app development'), ('RESTful API integration', 'Mobile app development'), ('Database design and integration', 'Mobile app development'), ('Mobile security', 'Mobile app development'), ('Push notifications', 'Mobile app development'), ('In-app purchases', 'Mobile app development'), ('Compatibility and testing', 'Mobile app development'),
-    ('Mathematical foundations', 'AI and machine learning'), ('Deep learning frameworks', 'AI and machine learning'), ('Natural language processing (NLP)', 'AI and machine learning'), ('Computer vision', 'AI and machine learning'), ('Reinforcement learning', 'AI and machine learning'), ('Model selection and evaluation', 'AI and machine learning'), ('Data pre-processing and feature engineering', 'AI and machine learning'), ('Cloud computing for AI and ML', 'AI and machine learning'), ('Experimentation and iteration in model development', 'AI and machine learning');
+insert into skills (skill) values
+    ('Java'), ('Python'), ('C++'), ('JavaScript'), ('C#'), ('Ruby'), ('Swift'), ('Go'), ('Kotlin'), ('PHP'), ('TypeScript'), ('Scala'), ('Assembly'), ('R'),
+    ('HTML'), ('CSS'), ('JavaScript frameworks'), ('Node.js'), ('RESTful API design and development'), ('Database integration'), ('Web security'), ('Responsive design and cross-browser compatibility'), ('Server-side languages'), ('Deployment and hosting'), ('CMS'), ('Debugging and problem-solving'),
+    ('SQL'), ('NoSQL databases'), ('Data modelling and normalization'), ('Database administration'), ('Data warehousing'), ('Indexing and query optimization'), ('Backup and recovery'), ('Security and access control'), ('Data migration'), ('ETL processes'),
+    ('Agile'), ('Waterfall'), ('Lean'), ('DevOps'), ('Test-Driven Development (TDD)'), ('Behaviour-Driven Development (BDD)'), ('Feature-Driven Development (FDD)'), ('Spiral'), ('Rapid Application Development (RAD)'), ('Extreme Programming (XP)'), ('Hybrid'),
+    ('Git'), ('SVN (Apache subversion)'), ('Mercurial'), ('Source control management concepts'), ('Command line interface usage'), ('Distributed version control systems'), ('Collaborative development practices'), ('Code reviews and issue tracking'), ('Conflict resolution'),
+    ('Cloud platforms'), ('Virtualization technologies'), ('Infrastructure as Code (IAC) tools'), ('Container orchestration'), ('Serverless computing'), ('Networking and security'), ('Database and storage services'), ('Monitoring and logging'), ('Automation and configuration management'), ('Cost optimization and management'),
+    ('Windows administration'), ('Linux administration'), ('MacOS administration'), ('Command line usage'), ('Network configuration and troubleshooting'), ('User and group management'), ('File system management and backup'), ('Security and acccess control'), ('Process and resource management'), ('Virtualization'), ('Package management and software installation'), ('Scripting and automation'),
+    ('Networking protocols'), ('Router and switch configuration'), ('Firewall administration'), ('VPN setup'), ('Network security'), ('Web application security'), ('Intrusion detection and prevention'), ('Security information and event management'), ('Disaster recovery'), ('Compliance and regulatory requirements'),
+    ('iOS development'), ('Android development'), ('Cross-platform development frameworks'), ('Mobile UI and UX design'), ('RESTful API integration'), ('Database design and integration'), ('Mobile security'), ('Push notifications'), ('In-app purchases'), ('Compatibility and testing'),
+    ('Mathematical foundations'), ('Deep learning frameworks'), ('Natural language processing (NLP)'), ('Computer vision'), ('Reinforcement learning'), ('Model selection and evaluation'), ('Data pre-processing and feature engineering'), ('Cloud computing for AI and ML'), ('Experimentation and iteration in model development');
