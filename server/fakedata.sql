@@ -14,7 +14,7 @@ insert into users (userid, email, firstname, lastname, password, pfppath, github
     (10, 'dlangston9@biblegateway.com', 'Dom', 'Langston', '93efcd4f7d413b510a9a4f7f64e67c0d365c22a717927fd3d397d01371f2a939', 'http://dummyimage.com/105x100.png/dddddd/000000', '62f00308862e86fd5e61c8ea0de0e375da6d6f5ad7a80eb3ae059209341851a2', 'Open-source multimedia conglomeration');
 
 insert into projects (projectid, projectname, closed, opened, deadline, brief, budget) values
-    (1, 'Voyatouch', default, '2024-04-28 23:13:52', '2024-09-01 17:16:53', 'Face to face modular matrices', 943673),
+    (1, 'Voyatouch', default, '2024-02-28 23:13:52', '2024-08-01 17:16:53', 'Face to face modular matrices', 943673),
     (2, 'Latlux', default, '2024-03-16 08:25:23', '2024-05-04 09:37:19', 'Centralized bifurcated productivity', 234844),
     (3, 'Stringtough', default, '2024-02-20 01:04:07', '2024-08-28 06:08:47', 'Cross-group didactic local area network', 84275),
     (4, 'Bitchip', default, '2024-06-30 05:24:41', '2024-07-13 13:14:26', 'Reverse-engineered radical implementation', 607954),
@@ -38,13 +38,13 @@ VALUES
 
 INSERT INTO features (featureid, projectid, featurename, featuredesc, starttime, endtime, completed, difficulty, priority, status, currentrisk, progress, members)
 VALUES 
-    (1,1, 'User Management', 'Implement user management functionality for the website', '2023-03-10 09:00:00', '2023-03-17 18:00:00', false, 6, 1, 2, 20, 60, 2),
-    (2,1, 'Payment Gateway', 'Integrate payment gateway for online transactions', '2023-03-20 09:00:00', '2023-04-02 18:00:00', false, 8, 2, 2, 40, 30, 1),
-    (3,2, 'Social Media Sharing', 'Add social media sharing functionality to the website', '2023-03-15 10:00:00', '2023-03-22 18:00:00', false, 5, 1, 2, 30, 50, 3),
-    (4,3, 'Product Catalog', 'Create product catalog for the online store', '2023-03-10 09:00:00', '2023-03-25 18:00:00', false, 9, 2, 2, 50, 70, 2),
-    (5,3, 'Search Functionality', 'Add search functionality to the website', '2023-03-30 09:00:00', '2023-04-06 18:00:00', false, 4, 3, 2, 10, 20, 1),
-    (6,4, 'Database Optimization', 'Optimize database for faster queries', '2023-03-15 09:00:00', '2023-03-25 18:00:00', false, 7, 1, 2, 25, 60, 2),
-    (7,4, 'UI Improvements', 'Improve user interface design based on feedback', '2023-04-01 09:00:00', '2023-04-10 18:00:00', false, 3, 3, 2, 5, 40, 1);
+    (1,1, 'User Management', 'Implement user management functionality for the website', '2024-03-10 09:00:00', '2024-03-17 18:00:00', false, 6, 1, 2, 20, 60, 2),
+    (2,1, 'Payment Gateway', 'Integrate payment gateway for online transactions', '2024-03-20 09:00:00', '2024-04-02 18:00:00', false, 8, 2, 2, 40, 30, 1);
+    --(3,2, 'Social Media Sharing', 'Add social media sharing functionality to the website', '2024-03-15 10:00:00', '2024-03-22 18:00:00', false, 5, 1, 2, 30, 50, 3),
+    --(4,3, 'Product Catalog', 'Create product catalog for the online store', '2024-03-10 09:00:00', '2024-03-25 18:00:00', false, 9, 2, 2, 50, 70, 2),
+    --(5,3, 'Search Functionality', 'Add search functionality to the website', '2024-03-30 09:00:00', '2024-04-06 18:00:00', false, 4, 3, 2, 10, 20, 1),
+    --(6,4, 'Database Optimization', 'Optimize database for faster queries', '2024-03-15 09:00:00', '2024-03-25 18:00:00', false, 7, 1, 2, 25, 60, 2),
+    --(7,4, 'UI Improvements', 'Improve user interface design based on feedback', '2024-04-01 09:00:00', '2024-04-10 18:00:00', false, 3, 3, 2, 5, 40, 1);
 
 insert into tasks (taskid, featureid, devid, taskname, description, earlytime, latetime, completed) values
     (1, 8, default, 'Devolved global structure', 'Progressive zero tolerance definition', '2024-07-21 15:23:19', '2024-11-23 21:22:56', default),
@@ -260,6 +260,48 @@ INSERT INTO projectskill (projectid, skill) VALUES
 (1, 'Experimentation and iteration in model development');
 
 
+INSERT INTO replacements (projectid, dateChanged, changeType) VALUES
+    (1, '2024-05-20 12:00:00', 0),
+    (2, '2024-03-23 13:30:00', 1),
+    (3, '2022-02-26 10:45:00', 0),
+    (4, '2024-07-04 16:15:00', 1),
+    (5, '2024-02-27 08:00:00', 0),
+    (2, '2024-03-25 09:30:00', 1),
+    (4, '2024-07-07 14:45:00', 0),
+    (3, '2024-02-28 11:15:00', 1),
+    (1, '2024-04-30 07:00:00', 0),
+    (5, '2024-02-28 16:30:00', 1),
+    (3, '2024-02-29 12:45:00', 0),
+    (2, '2024-03-25 08:15:00', 1),
+    (4, '2024-07-05 17:00:00', 0),
+    (4, '2024-07-01 10:30:00', 1),
+    (2, '2024-03-22 13:45:00', 0),
+    (1, '2024-04-30 11:15:00', 1),
+    (4, '2024-06-30 07:00:00', 0),
+    (3, '2024-02-28 16:30:00', 1),
+    (1, '2024-05-03 12:45:00', 0),
+    (4, '2024-07-06 08:15:00', 1),
+    (5, '2024-02-27 17:00:00', 0),
+    (1, '2024-04-30 10:30:00', 1),
+    (2, '2024-03-23 13:45:00', 0),
+    (4, '2024-07-06 11:15:00', 1),
+    (5, '2024-02-25 07:00:00', 0),
+    (2, '2024-03-26 16:30:00', 1),
+    (1, '2024-05-05 12:45:00', 0),
+    (4, '2024-07-04 08:15:00', 1),
+    (5, '2024-02-29 17:00:00', 0),
+    (2, '2024-03-30 10:30:00', 1),
+    (4, '2024-07-08 13:45:00', 0),
+    (2, '2024-03-22 11:15:00', 1),
+    (4, '2024-07-11 07:00:00', 0);
+    
 
+INSERT INTO featureChange (projectid, priority, dateChanged) VALUES
+    (1, 1,'2024-05-13 07:00:00'),
+    (1, 2,'2024-05-10 07:00:00'),
+    (1, 3,'2024-05-09 07:00:00'),
+    (1, 2,'2024-05-12 07:00:00'),
+    (1, 4,'2024-05-14 07:00:00'),
+    (1, 2,'2024-05-16 07:00:00');
 
 

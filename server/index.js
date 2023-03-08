@@ -296,8 +296,8 @@ app.post("/api/createFeature", async (req, res) => {
     
     // recording the change in features
     const recordChange = await pool.query(
-      "INSERT INTO featureChange (projectid, changeDate) VALUES ($1, $2)",
-      [req.body.projectid, Date.now()]
+      "INSERT INTO featureChange (projectid, priority, dateChanged) VALUES ($1, $2)",
+      [req.body.projectid, req.body.priority, Date.now()]
     );
 
     // Get the feature id

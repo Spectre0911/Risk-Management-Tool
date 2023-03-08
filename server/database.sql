@@ -87,7 +87,8 @@ create table features (
 drop table if exists featureChange;
 create table featureChange (
     projectid serial not null,
-    changeDate TIMESTAMP not null,
+    priority integer not null,
+    dateChanged timestamp not null,
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
