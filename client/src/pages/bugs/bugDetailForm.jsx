@@ -20,7 +20,7 @@ import Bug from "./bug";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 
-const BugReportForm = ({ handleClose }) => {
+const BugDetailForm = ({ handleClose, bugId, data }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
 
@@ -32,11 +32,13 @@ const BugReportForm = ({ handleClose }) => {
   });
 
   const initialValuesRegister = {
-    bugName: "",
-    bugDate: "",
-    bugDescription: "",
-    bugLocation: "",
+    bugName: data.bugName,
+    bugDate: data.bugReportDate,
+    bugDescription: data.bugDescription,
+    bugLocation: data.bugLocation
   };
+
+  
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log(values);
@@ -44,6 +46,11 @@ const BugReportForm = ({ handleClose }) => {
     console.log(severity);
     try {
       const body = { values };
+      const response = await fetch("http://localhost:5000/addbug", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
     } catch (err) {
       console.error(err.message);
     }
@@ -55,11 +62,22 @@ const BugReportForm = ({ handleClose }) => {
     { value: "3", label: "Low" },
   ];
 
-  const [priority, setPriority] = useState({ value: "1", label: "High" });
+  const translatePriority = (priority) =>{
+    if (priority=="High"){
+      return { value: "1", label: "High" }
+    }else if (priority=="Med"){
+      return { value: "2", label: "Med" }
+    }else if (priority=="Low"){
+      return{ value: "3", label: "Low" }
+    }
+  }
+
+  const [priority, setPriority] = useState(translatePriority(data.bugPriority));
 
   const handlePriorityChange = (e) => {
     setPriority(e);
   };
+
 
   const severityOptions = [
     { value: "1", label: "High" },
@@ -67,13 +85,13 @@ const BugReportForm = ({ handleClose }) => {
     { value: "3", label: "Low" },
   ];
 
-  const [severity, setSeverity] = useState({ value: "1", label: "High" });
+  const [severity, setSeverity] = useState(translatePriority(data.bugSeverity));
 
   const handleSeverityChange = (e) => {
     setSeverity(e);
   };
 
-  const [teamMembers, setTeamMembers] = useState([]);
+  const [teamMembers, setTeamMembers] = useState([{ value: "1", label: "jc@gmail.com" }]);
 
   const handleTeamMemberChange = (e) => {
     setTeamMembers(e);
@@ -85,7 +103,7 @@ const BugReportForm = ({ handleClose }) => {
     { value: "3", label: "sh@gmail.com" },
   ];
 
-  const [feature, setFeature] = useState([]);
+  const [feature, setFeature] = useState([{ value: "1", label: "login page" }]);
   const featureOptions =[
     { value: "1", label: "login page" },
     { value: "2", label: "logout page" },
@@ -94,6 +112,8 @@ const BugReportForm = ({ handleClose }) => {
   const handleFeatureChange = (e) => {
     setFeature(e);
   };
+
+
   return (
     <Formik
       onSubmit={handleFormSubmit}
@@ -142,48 +162,6 @@ const BugReportForm = ({ handleClose }) => {
                   helperText={touched.bugDate && errors.bugDate}
                   sx={{ gridColumn: "span 2" }}
                 />
-
-                <p
-                style={{
-                  gridColumn: "span 1",
-                  margin: "auto",
-                  paddingRight: "2px",
-                }}
-                >
-                  Team Members:
-                </p>
-                <Select
-                  id="teamMembers"
-                  name="teamMembers"
-                  options={teamMembersOptions}
-                  onChange={handleTeamMemberChange}
-                  onBlur={handleBlur}
-                  className="defineDependenciesBox"
-                  sx={{ gridColumn: "span 3", width: "70%" }}
-                  value={teamMembers}
-                />
-
-<p
-                style={{
-                  gridColumn: "span 1",
-                  margin: "auto",
-                  paddingRight: "2px",
-                }}
-                >
-                  Feature:
-                </p>
-                <Select
-                  id="feature"
-                  name="feature"
-                  options={featureOptions}
-                  onChange={handleFeatureChange}
-                  onBlur={handleBlur}
-                  className="defineDependenciesBox"
-                  sx={{ gridColumn: "span 3", width: "70%" }}
-                  value={feature}
-                />
-
-
                 <TextField
                   label="Description"
                   onBlur={handleBlur}
@@ -205,10 +183,51 @@ const BugReportForm = ({ handleClose }) => {
                   value={values.bugLocation}
                   name="bugLocation"
                   error={
-                    Boolean(touched.bugLocation) && Boolean(errors.bugLocation)
+                    Boolean(touched.bugLocation) &&
+                    Boolean(errors.bugLocation)
                   }
                   helperText={touched.bugLocation && errors.bugLocation}
                   sx={{ gridColumn: "span 4" }}
+                />
+
+<p
+                style={{
+                  gridColumn: "span 1",
+                  margin: "auto",
+                  paddingRight: "2px",
+                }}
+                >
+                  Team Members:
+                </p>
+                <Select
+                  id="teamMembers"
+                  name="teamMembers"
+                  options={teamMembersOptions}
+                  onChange={handleTeamMemberChange}
+                  onBlur={handleBlur}
+                  className="defineDependenciesBox"
+                  sx={{ gridColumn: "span 3", width: "70%" }}
+                  value={teamMembers}
+                />
+
+                <p
+                style={{
+                  gridColumn: "span 1",
+                  margin: "auto",
+                  paddingRight: "2px",
+                }}
+                >
+                  Feature:
+                </p>
+                <Select
+                  id="feature"
+                  name="feature"
+                  options={featureOptions}
+                  onChange={handleFeatureChange}
+                  onBlur={handleBlur}
+                  className="defineDependenciesBox"
+                  sx={{ gridColumn: "span 3", width: "70%" }}
+                  value={feature}
                 />
 
                 <p
@@ -250,6 +269,7 @@ const BugReportForm = ({ handleClose }) => {
                   sx={{ gridColumn: "span 3", width: "70%" }}
                   value={severity}
                 />
+
               </>
             }
           </Box>
@@ -265,7 +285,7 @@ const BugReportForm = ({ handleClose }) => {
                 p: "1rem",
               }}
             >
-              {"Report Bug"}
+              {"Save"}
             </Button>
 
             <Button
@@ -286,4 +306,4 @@ const BugReportForm = ({ handleClose }) => {
   );
 };
 
-export default BugReportForm;
+export default BugDetailForm;

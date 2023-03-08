@@ -101,6 +101,8 @@ create table tasks (
     starttime   timestamp not null check (starttime >= current_date),
     endtime     timestamp not null,
     check (endtime > starttime),
+    priority    integer not null check (priority >= 1 and priority <= 3),
+    -- 1 = core, 2 = optional, 3 = aesthetic
     status      integer not null check (status >= 1 and status <= 3),
     -- 1 = completed, 2 = in progress, 3 = delayed
     primary key (taskid),
@@ -134,9 +136,9 @@ create table bugs (
 drop table if exists notifications;
 create table notifications (
     notifid   serial not null,
-    location  integer not null check (location >= 0 and location <= 5),
     userid    integer not null,
     projectid integer not null,
+    location  integer not null check (location >= 1 and location <= 5),
     notiftype integer not null check (notiftype = 1 or notiftype = 2), -- 1 = regular notification, 2 = warning
     title     varchar(50) not null,
     message   varchar(300) not null,
@@ -145,6 +147,7 @@ create table notifications (
     foreign key (userid) references users(userid) on delete cascade,
     foreign key (projectid) references projects(projectid) on delete cascade
 );
+
 
 drop table if exists feedback;
 create table feedback (
@@ -161,7 +164,8 @@ create table feedback (
 
 drop table if exists skills cascade;
 create table skills (
-    skill  varchar(50) not null,
+
+    skill varchar(50) not null,
     primary key (skill)
 );
 
@@ -184,7 +188,6 @@ create table projectskill (
     foreign key (skill) references skills(skill) on delete cascade
 );
 
-
 create or replace function nullifyuser() returns trigger as $$
 begin
     update tasks set devid = null where devid = old.userid;
@@ -194,7 +197,7 @@ end;
 $$ language plpgsql;
 
 create trigger userdeleted after delete on users
-for each statement
+for each row
     execute procedure nullifyuser();
 
 -- Check that feature's start times and deadlines compatible with those of the project
@@ -221,7 +224,7 @@ end;
 $$ language plpgsql;
 
 create trigger newfeature before insert on features
-for each statement
+for each row
     execute procedure featuretimes();
 
 -- Check that task's start times and deadlines compatible with those of the feature
@@ -248,7 +251,7 @@ end;
 $$ language plpgsql;
 
 create trigger newtask before insert on tasks
-for each statement
+for each row
     execute procedure tasktimes();
 
 -- Check that dependency deadlines are compatible
@@ -270,8 +273,26 @@ end;
 $$ language plpgsql;
 
 create trigger newdep before insert on featuredep
-for each statement
+for each row
     execute procedure checkdep();
+
+-- Create a notification when a member is added to the team for a project
+create or replace function membernotif() returns trigger as $$
+declare
+    name varchar(50);
+    counter integer := 1;
+begin
+    select projectname from projects where projectid = new.projectid into name;
+    if not (new.ismanager) then
+        insert into notifications (notifid, userid, projectid, location, notiftype, title, message, seen) values (default, new.userid, new.projectid, 1, 1, 'Added to project', name, default);
+    end if;
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger addmember after insert on userproject
+for each row
+    execute procedure membernotif();
 
 -- Update project's current risk in projects when new data added to risks
 create or replace function newrisk() returns trigger as $$
@@ -282,7 +303,7 @@ end;
 $$ language plpgsql;
 
 create trigger addrisk after insert on risks
-for each statement
+for each row
     execute procedure newrisk();
 
 insert into skills (skill) values

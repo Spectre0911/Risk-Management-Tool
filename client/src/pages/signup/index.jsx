@@ -38,7 +38,7 @@ const SignupPage = () => {
   });
 
   const onSubmit = (values) => {
-    console.log(values);
+    values.pfpPath = image.name;
     // This will not check if there is an issue with singup
     fetch("http://localhost:5000/api/createAccount", {
       method: "POST",
@@ -47,7 +47,22 @@ const SignupPage = () => {
       },
       body: JSON.stringify(values),
     });
+
+
+    let form = new FormData();
+    form.append('file', image);
+    fetch("http://localhost:5000/upload", {
+      method: "POST",
+      body: form,
+    });
   };
+
+  const [image, setImage] = useState("");
+  const changeImage = (e) =>{
+    setImage(e.currentTarget.files[0]);
+    console.log(image);
+    
+  }
 
   return (
     <body className="waveBg">
@@ -151,6 +166,7 @@ const SignupPage = () => {
                   className={`loginForm-control ${
                     errors.avatar && touched.avatar ? "is-invalid" : ""
                   }`}
+                  onChange={changeImage}
                 />
                 <ErrorMessage name="avatar" component="div" className="error" />
               </div>

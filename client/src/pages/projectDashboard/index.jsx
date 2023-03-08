@@ -11,7 +11,7 @@ import { GrClose } from "react-icons/gr";
 import { IoIosPersonAdd } from "react-icons/io";
 import NewGantt from "./App.js";
 import Select from "react-select";
-import { Box } from "@mui/material";
+import { Box, useRadioGroup } from "@mui/material";
 // import GanttChart from "../gantt";
 import { Octokit } from "octokit";
 import { RadarChart } from "./radar/RadarChart";
@@ -20,6 +20,12 @@ import { useNavigate } from "react-router-dom";
 import { TimeLeft } from "../services/TimeLeft";
 import { AllFeatures } from "../services/AllFeatures";
 import { BugCount } from "../services/BugCounts";
+import { AllProjectMembers } from "../services/AllProjectMembers";
+import { MemberSkills } from "../services/MemberSkills";
+import { MdCardMembership } from "react-icons/md";
+import { OrderedUsers } from "../services/OrderedUsers";
+import { AddTeamMember } from "../services/AddTeamMember";
+import { EndProject } from "../services/EndProject";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -57,24 +63,10 @@ const ProjectDashboard = () => {
   const [dataTime, setDataTime] = useState([0, 0]);
   const backgroundColorTime = ["rgba(255,0,0,1)", "rgba(255,128,0,1)"];
 
-  const teamMembers = [
-    {
-      id: "1",
-      name: "Jane Arnold",
-      image: "http://localhost:5000/assets/jane.jpg",
-      skills: ["Python", "React"],
-      suitabilityScore: 0,
-    },
-    {
-      id: "2",
-      name: "Jane Arnold",
-      image: "http://localhost:5000/assets/jane.jpg",
-      skills: ["Python", "React"],
-      suitabilityScore: 0,
-    },
-  ];
+  const [teamMembers, setTeamMembers] = useState([]);
 
   const [showDelete, setShowDelete] = useState(false);
+  const [showEndProject, setShowEndProject] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [ganttViewState, setGanttViewState] = useState("Days");
   const [removeUserId, setRemoveUserId] = useState();
@@ -85,6 +77,13 @@ const ProjectDashboard = () => {
   const handleDeleteShow = (e) => {
     setRemoveUserId(e.target.value);
     setShowDelete(true);
+  };
+
+  const handleEndProjectClose = () => {
+    setShowEndProject(false);
+  };
+  const handleEndProjecShow = (e) => {
+    setShowEndProject(true);
   };
 
   const handleAddClose = () => {
@@ -102,18 +101,19 @@ const ProjectDashboard = () => {
   };
 
   const addTeamMember = (e) => {
-    console.log(teamMembersList);
+    AddTeamMember({ projectid: projectId, userid: teamMembersList.value });
+    // console.log(teamMembersList);
   };
 
   const changeGanttViewState = (e) => {
     setGanttViewState(e.target.value);
   };
 
-  const teamMembersOptions = [
+  const [teamMembersOptions, setTeamMemberOptions] = useState([
     { value: "1", label: "Joshua" },
     { value: "2", label: "Morgan" },
     { value: "3", label: "Sanjula" },
-  ];
+  ]);
 
   const [teamMembersList, setTeamMembersList] = useState([]);
   const handleTeamMemberChange = (e) => {
@@ -130,25 +130,84 @@ const ProjectDashboard = () => {
     auth: "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",
   });
 
+  const outcomeOptions = [
+    { value: "1", label: "Success" },
+    { value: "2", label: "Failure" },
+  ];
+
+  const [outcome, setOutcome] = useState([]);
+  const handleOutcomeChange = (e) => {
+    setOutcome(e);
+    console.log(outcome);
+  };
+
+  const endProject = () => {
+    console.log("end project");
+
+    EndProject({ projectid: projectId });
+  };
   //Fetching github commit data
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
-    // console.log(projectId);
+    OrderedUsers({ projectId: projectId }).then((data) => {
+      console.log("------");
+      console.log(data);
+      console.log("------");
+      setTeamMemberOptions(data);
+    });
+    AllProjectMembers({ projectId: projectId }).then((data) => {
+      console.log("Fetching project members");
+      if (data != null) {
+        console.log(data);
+        let newData = [];
+        var useridSkillMap = new Map();
+        const memberSkillPromises = data.map((member) => {
+          console.log(member);
+          return MemberSkills({ userid: member.userid }).then((skills) => {
+            console.log(skills);
+
+            let skillArr = [];
+            if (skills != null) {
+              skills.map((skill) => {
+                if (skill.skill != null) {
+                  skillArr.push(skill.skill);
+                }
+              });
+            }
+            useridSkillMap.set(member.userid, skillArr);
+            // console.log("Members skills: ");
+            // console.log(useridSkillMap.get(member.userid));
+          });
+        });
+
+        Promise.all(memberSkillPromises).then(() => {
+          console.log(useridSkillMap);
+          data.forEach((member) =>
+            newData.push({
+              ...member,
+              skills: useridSkillMap.get(member.userid),
+            })
+          );
+          console.log(newData);
+          setTeamMembers(newData);
+        });
+      }
+    });
+
+    // In this updated code, the memberSkillPromises array is created by calling map on the data array, and each element is a promise returned by MemberSkills. The promises are returned from the map function, and then `Promise
+
     // Set the amount of time left: THERE IS AN ISSUEHERE
     TimeLeft({
       projectid: projectId,
     }).then((data) => {
-      console.log(data[0]);
       setDataTime([data[0].remaining.days, data[0].completed.days]);
     });
 
     BugCount({
       projectid: projectId,
     }).then((data) => {
-      console.log("Bugs: ");
       if (data != null) {
-        console.log(data);
         const counts = {
           1: 0,
           2: 0,
@@ -173,7 +232,6 @@ const ProjectDashboard = () => {
       projectid: projectId,
     }).then((data) => {
       if (data != null) {
-        console.log(data);
         const counts = {
           1: 0,
           2: 0,
@@ -308,7 +366,7 @@ const ProjectDashboard = () => {
         <p className="projectTitleId">
           Project number {projectId}
           <button
-            onClick={handleAddShow}
+            onClick={handleEndProjecShow}
             className="projectFilterInput viewProject closeProject"
           >
             Close Project
@@ -456,8 +514,7 @@ const ProjectDashboard = () => {
                   </div>
                   <div className="projectDashboardSkillMatchTitle">
                     <p>
-                      <b className="projectDashboardBold">Bio:</b> Hi, my name
-                      is Jane and I am a software developer
+                      <b className="projectDashboardBold">Bio:</b> {member.bio}
                     </p>
                   </div>
                   <div className="featureDeleteTasksButtonDiv">
@@ -623,7 +680,7 @@ const ProjectDashboard = () => {
           <Modal.Title>Add team member</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Please select the team member you would like to add:</p>
+          <p>Add a team member</p>
           <p
             style={{
               gridColumn: "span 1",
@@ -654,6 +711,68 @@ const ProjectDashboard = () => {
               onClick={addTeamMember}
             >
               {"Add"}
+            </Button>
+
+            <Button
+              className="bugAddButton"
+              fullWidth
+              onClick={handleDeleteClose}
+              sx={{
+                m: "2rem 1rem",
+                p: "1rem",
+              }}
+            >
+              {"Cancel"}
+            </Button>
+          </Box>
+        </Modal.Body>
+      </Modal>
+
+      <Modal
+        className="addProfileModal"
+        style={{ marginTop: "200px" }}
+        fade={false}
+        show={showEndProject}
+        onHide={handleEndProjectClose}
+      >
+        <Modal.Header>
+          <div className="bugFormClose" onClick={handleEndProjectClose}>
+            <GrClose />
+          </div>
+          <Modal.Title>End project</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Was this project a success or failure?</p>
+          <p
+            style={{
+              gridColumn: "span 1",
+              margin: "auto",
+              paddingRight: "2px",
+            }}
+          >
+            Select outcome
+          </p>
+          <Select
+            id="teamMembers"
+            name="teamMembers"
+            options={outcomeOptions}
+            onChange={handleOutcomeChange}
+            className="defineDependenciesBox"
+            sx={{ gridColumn: "span 3", width: "70%" }}
+            value={outcome}
+          />
+          <Box>
+            <Button
+              className="bugCancelButton"
+              fullWidth
+              sx={{
+                m: "2rem 1rem",
+                p: "1rem",
+              }}
+              style={{ marginLeft: "10px" }}
+              onClick={endProject}
+            >
+              {"End Project"}
             </Button>
 
             <Button

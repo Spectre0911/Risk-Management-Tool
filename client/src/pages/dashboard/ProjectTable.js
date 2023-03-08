@@ -17,10 +17,11 @@ import TableContainer from "./ProjectTableContainer";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SelectColumnFilter } from "./filters";
+import { ActiveProjects } from "../services/ProjectCount";
 import ChangingProgressProvider from "./ChangingProgressProvider";
 import { AllProjects } from "../services/AllProjects";
 import { useSelector } from "react-redux";
-const ProjectTable = () => {
+const ProjectTable = ({setActiveProjects}) => {
   const [data, setData] = useState([]);
   const email = useSelector((state) => state.email);
 
@@ -44,25 +45,31 @@ const ProjectTable = () => {
       risk: 10,
     },
   ]);
-  useEffect(() => {
-    const doFetch = async () => {
-      AllProjects(email).then((data) => {
-        const updatedContacts = data.map((item) => {
-          return {
-            projectId: item.projectid,
-            projectName: item.projectname,
-            projectManager: item.projectmanager,
-            deadline: new Date(item.deadline).toLocaleDateString("en-GB"),
-            closed: item.closed.toString(),
-            progress: Math.floor(item.progress),
-            risk: 0,
-          };
-        });
-        setData(updatedContacts);
-      });
 
-      // console.log(contacts);
-    };
+
+  const doFetch = async () => {
+    AllProjects(email).then((data) => {
+      setData(data.map((item) => {
+        return {
+          projectId: item.projectid,
+          projectName: item.projectname,
+          projectManager: item.projectmanager,
+          deadline: new Date(item.deadline).toLocaleDateString("en-GB"),
+          closed: item.closed.toString(),
+          progress: Math.floor(item.progress),
+          risk: 0,
+        };
+      }));
+      setActiveProjects(data.length);
+    }
+    
+    );
+
+  };
+
+
+
+  useEffect(() => {
     doFetch();
   }, []);
 
@@ -162,11 +169,15 @@ const ProjectTable = () => {
   );
 
   return (
+    <div>
     <TableContainer
       columns={columns}
       data={data}
       renderRowSubComponent={renderRowSubComponent}
+      fetchProjectFunction={doFetch}
     />
+    {console.log(data)}
+    </div>
   );
 };
 

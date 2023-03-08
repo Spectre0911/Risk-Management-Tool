@@ -1,7 +1,5 @@
 -- Active projects
-select count(*) from userproject where userid = <userid here>;
-
--- Tasks to complete
+select count(*) from userproject where userid = <userid here>; -- Tasks to complete
 select count(*) from tasks where devid = <userid here>;
 
 -- Notifications
@@ -62,4 +60,4 @@ select taskname, description, starttime, endtime from tasks where projectid = <p
 select taskname, description, starttime, endtime from tasks where projectid = <projectid here> and not completed;
 
 -- Tasks summary for user
-select projectname, featurename, taskname, features.priority, tasks.status, extract(day from (tasks.endtime - current_date)) as daysleft from projects natural join (features inner join tasks on featureid) as featuretask where devid = <userid here>;
+select projectname, featurename, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft from projects inner join ((select featureid, featurename, projectid from features) as featureinfo inner join tasks on featureinfo.featureid = tasks.featureid) as featuretask on projects.projectid = featuretask.projectid where devid = <userid here>;

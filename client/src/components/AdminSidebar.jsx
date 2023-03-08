@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import {AiOutlineWarning} from 'react-icons/ai'
 import "./AdminSidebar.css";
+import Guide from './Guide';
 
 const AdminSidebar = ({projectId, teamMember}) => {
     const [collapsed, setCollapsed] = useState(false);
@@ -45,12 +46,12 @@ const AdminSidebar = ({projectId, teamMember}) => {
                     {'Dashboard'}
                 </MenuItem >
 
-                {!projectId && <MenuItem className="menuItem" icon={<FaBell />} onClick={() => navigate(`/managedprojects`)}>
+                {/* {!projectId && <MenuItem className="menuItem" icon={<FaBell />} onClick={() => navigate(`/managedprojects`)}>
                     {'Notifications'}
-                </MenuItem >}
+                </MenuItem >} */}
 
                 {!projectId && <MenuItem className="menuItem" icon={<MdManageAccounts />} onClick={() => navigate(`/managedprojects`)}>
-                    {'Managed Projects'}
+                    {'Projects'}
                 </MenuItem >}
 
                 {!projectId && <MenuItem className="menuItem" icon={<BsCodeSlash />} onClick={() => navigate(`/tasks`)}>
@@ -81,15 +82,17 @@ const AdminSidebar = ({projectId, teamMember}) => {
                     {'Team members'}
                 </MenuItem >}
 
-                {(teamMember&&projectId) && <MenuItem className="menuItem" icon={<AiOutlineTeam />} onClick={() => navigate(`/projectstm/${projectId}/teammembers/${projectId}`)}>
+                {(teamMember&&projectId) ? <MenuItem className="menuItem" icon={<AiOutlineTeam />} onClick={() => navigate(`/projectstm/${projectId}/teammembers/${projectId}`)}>
                     {'Team members'}
-                </MenuItem >}
+                </MenuItem >: null}
 
                 
 
-                {(teamMember&&projectId) && <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projectstm/${projectId}/bugs/${projectId}`)}>
+                {(teamMember&&projectId) ? <MenuItem className="menuItem" icon={<IoIosBug />} onClick={() => navigate(`/projectstm/${projectId}/bugs/${projectId}`)}>
                     {'Bugs'}
-                </MenuItem >}
+                </MenuItem > : null}
+
+                <Guide />
 
                 <MenuItem className="bottomItem" icon={<BiLogOutCircle />} onClick={() => navigate(`/dashboard/productList`)}>
                     {'Log out'}

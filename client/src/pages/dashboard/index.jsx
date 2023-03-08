@@ -14,25 +14,78 @@ import { loginAction } from "../../actions";
 import "./index.css";
 import ProjectTable from "./ProjectTable";
 import Table from "./Table";
+import Notification from "./notification";
 import { TasksToComplete } from "../services/TasksToComplete";
+import { NotificationInfo } from "../services/NotificationInfo";
+import { LocationNotifications } from "../services/LocationNotifcations";
 const Dashboard = () => {
   const [activeProjects, setActiveProjects] = useState(0);
-  const [activeNotifications, setActiveNotifications] = useState(0);
+  const [notifications, setActiveNotifications] = useState(0);
+  const [warnings, setActiveWarnings] = useState(0);
+
   const [tasksToComplete, setTasksToComplete] = useState(0);
 
   const login = useSelector((state) => state.email);
-  ActiveProjects({
-    email: login.email,
-  }).then((data) => setActiveProjects(data));
-  NotificationCount({
-    email: login.email,
-  }).then((data) => setActiveNotifications(data));
-  TasksToComplete({ email: login.email }).then((data) =>
-    setTasksToComplete(data)
-  );
+
+  // This is going to be location 1
+  const [notificationData, setNotifications] = useState([]);
+
   useEffect(() => {
-    console.log(login);
-  });
+    // Get all active projects
+    ActiveProjects({
+      email: login.email,
+    }).then((data) => setActiveProjects(data));
+    // Get the number of notifications
+    NotificationCount({
+      email: login.email,
+      type: 1,
+    }).then((data) => setActiveNotifications(data));
+    // Get the number of warnings
+    NotificationCount({
+      email: login.email,
+      type: 2,
+    }).then((data) => setActiveWarnings(data));
+    // Get the number of tasks to complete
+    TasksToComplete({ email: login.email }).then((data) =>
+      setTasksToComplete(data)
+    );
+    // Get all the notifications
+    // console.log("NOTIFICATION INGO");
+    //userid = $2 and notiftype = $3 and location = $4
+
+    LocationNotifications({
+      email: login.email,
+      location: 1,
+    }).then((data) => {
+      console.log(data);
+      let newNotifications = [];
+      data.map((notification) => {
+        console.log(notification);
+        let notifType = "warning";
+        if (notification.notiftype == 2) {
+          notifType = "info";
+        }
+        // let notifType = notification.notifType === 1 ? "warning" : "info";
+        newNotifications.push({ ...notification, notifType: notifType });
+      });
+
+      console.log(newNotifications);
+      setNotifications(newNotifications);
+    });
+    // LocationNotifications({
+    //   email: login.email,
+    //   notifType: 2,
+    //   location: 1,
+    // }).then((data) => {
+    //   let newWarning = [];
+    //   data.map((notification) => {
+    //     newWarning.push({ ...notification, notifType: "info" });
+    //   });
+    //   console.log(newWarning);
+    //   setNotifications(notificationData.concat(newWarning));
+    // });
+  }, []);
+
   return (
     <div className="main">
       <div className="grid">
@@ -58,7 +111,7 @@ const Dashboard = () => {
 
         <div className="infoBox">
           <div className="metricTitle dashboard">Notifications</div>
-          <div className="metricNumber">{activeNotifications}</div>
+          <div className="metricNumber">{notifications}</div>
           <div className="metricCircleBackground metricBlueBackground">
             <div className="metricIcon metricBlueIcon">
               <FaBell />
@@ -68,7 +121,7 @@ const Dashboard = () => {
 
         <div className="infoBox">
           <div className="metricTitle dashboard">Warnings</div>
-          <div className="metricNumber">2</div>
+          <div className="metricNumber">{warnings}</div>
           <div className="metricCircleBackground metricRedBackground">
             <div className="metricIcon metricRedIcon">
               <AiFillWarning />
@@ -78,7 +131,7 @@ const Dashboard = () => {
 
         <div className="infoBox2 projectTable">
           <div className="metricTitle2">Project Summary</div>
-          <ProjectTable />
+          <ProjectTable setActiveProjects={setActiveProjects} />
         </div>
 
         <div className="infoBox2">
@@ -86,64 +139,9 @@ const Dashboard = () => {
             <div className="metricTitle2" style={{ marginBottom: "20px" }}>
               Notificationss
             </div>
-
-            <div className="notificationBox">
-              <div className="notificationIcon">
-                <AiFillWarning />
-              </div>
-
-              <div className="NotificationText">
-                <p>Risk alert!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>
-                  Risk on CS261 project is increasingRisk on CS261 project is
-                  increasingRisk on CS261 project is increasing.
-                </p>
-              </div>
-            </div>
-
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsBriefcaseFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>Added to new project!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>Yuo have been added to a new project</p>
-              </div>
-            </div>
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsBriefcaseFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>Added to new project!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>Yuo have been added to a new project</p>
-              </div>
-            </div>
-
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsBriefcaseFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>Added to new project!</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>Yuo have been added to a new project</p>
-              </div>
-            </div>
+            {notificationData.map((notif, index) => {
+              return <Notification data={notif} />;
+            })}
           </Scrollbars>
         </div>
       </div>
@@ -152,85 +150,6 @@ const Dashboard = () => {
         <div className="metricTitle2">Task Summary</div>
         <Table />
       </div>
-
-      <div className="infoBox2">
-        <Scrollbars>
-          <div className="metricTitle2" style={{ marginBottom: "20px" }}>
-            Notificationss
-          </div>
-
-          <div className="notificationBox">
-            <div className="notificationIcon">
-              <AiFillWarning />
-            </div>
-
-            <div className="NotificationText">
-              <p>Risk alert!</p>
-            </div>
-
-            <div className="NotificationDescription">
-              <p>
-                Risk on CS261 project is increasingRisk on CS261 project is
-                increasingRisk on CS261 project is increasing.
-              </p>
-            </div>
-          </div>
-
-          <div className="notificationBox">
-            <div className="notificationIcon blueIcon">
-              <BsBriefcaseFill />
-            </div>
-
-            <div className="NotificationText">
-              <p>Added to new project!</p>
-            </div>
-
-            <div className="NotificationDescription">
-              <p>You have been added to a new project</p>
-            </div>
-          </div>
-          <div className="notificationBox">
-            <div className="notificationIcon blueIcon">
-              <BsBriefcaseFill />
-            </div>
-
-            <div className="NotificationText">
-              <p>Added to new project!</p>
-            </div>
-
-            <div className="NotificationDescription">
-              <p>Yuo have been added to a new project</p>
-            </div>
-          </div>
-
-          <div className="notificationBox">
-            <div className="notificationIcon blueIcon">
-              <BsBriefcaseFill />
-            </div>
-
-            <div className="NotificationText">
-              <p>Added to new project!</p>
-            </div>
-
-            <div className="NotificationDescription">
-              <p>Yuo have been added to a new project</p>
-            </div>
-          </div>
-        </Scrollbars>
-      </div>
-
-      {/* <div className='icon'>
-                    <FaBell />
-                </div>
-                <div className="number">`
-                    <p>50</p>
-                </div>
-                <div className="metric">
-                    <p>Notifications</p>
-                </div> */}
-      {/* <ProjectComponent/>
-            <ProjectComponent/>
-            <ProjectComponent/> */}
     </div>
   );
 };

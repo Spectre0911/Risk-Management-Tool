@@ -77,7 +77,7 @@ const ProjectContainer = () => {
               <Route path="/github/:projectId" element={<GithubIntegrator/> }/>
               <Route path="/risks/:projectId" element={<RiskSummary/> }/>
               <Route path="/softmetrics/:projectId" element={<SoftMetrics/> }/>
-              <Route path="/teammembers/:projectId" element={<UserPage/> }/>
+              <Route path="/teammembers/:projectId" element={<UserPage isPm={1}/> }/>
               </Routes>
         </div>
       </div>
