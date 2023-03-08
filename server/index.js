@@ -177,38 +177,6 @@ app.post("/api/taskToComplete", async (req, res) => {
   }
 });
 
-// Create bug
-app.post("/api/createBug", async (req, res) => {
-  try {
-    // console.log(req.body);
-
-    const createAccount = await pool.query(
-      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity) VALUES((SELECT featureid FROM project WHERE projectid = $1 LIMIT 1), $1, $2, $)",
-      [req.body.projectid, req.body.devid, req.body.description]
-    );
-
-    res.json("finished");
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
-// Login / Signup
-app.post("/api/createBug", async (req, res) => {
-  try {
-    // console.log(req.body);
-
-    const createAccount = await pool.query(
-      "INSERT INTO bugs (featureid, devid, bugname, bugdesc, priority, severity)",
-      [req.body.email, req.body.firstName, req.body.lastName, saltPassword]
-    );
-
-    res.json("finished");
-  } catch (err) {
-    console.error(err.message);
-  }
-});
-
 app.post("/api/addTeamMember", async (req, res) => {
   try {
     // console.log(req.body);
@@ -452,6 +420,27 @@ app.post("/api/projectMembers", async (req, postRes) => {
     } else {
       postRes.json(projectMembers.rows);
     }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// create Bug
+app.post("/api/createBug", async (req, postRes) => {
+  console.log("CREATING BUG");
+  try {
+    console.log(req.body);
+    const createBug = await pool.query(
+      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity) VALUES ($1, $2, $3, $4, $5, $6)",
+      [
+        req.body.featureid,
+        req.body.devid,
+        req.body.bugName,
+        req.body.bugDescription,
+        req.body.priority,
+        req.body.severity,
+      ]
+    );
   } catch (err) {
     console.error(err.message);
   }

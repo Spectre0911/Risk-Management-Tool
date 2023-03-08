@@ -9,6 +9,7 @@ import Select from "react-select";
 import { Formik, Form, Field } from "formik";
 import { AllFeatures } from "../services/AllFeatures";
 import { AllProjectMembers } from "../services/AllProjectMembers";
+import { CreateBug } from "../services/CreateBug";
 import {
   Box,
   TextField,
@@ -41,11 +42,17 @@ const BugReportForm = ({ handleClose, projectid }) => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    console.log(values);
-    console.log(priority);
-    console.log(severity);
     try {
-      const body = { values };
+      console.log(feature);
+      console.log(teamMembers);
+      const body = {
+        ...values,
+        priority: priority.value,
+        severity: severity.value,
+        featureid: feature.value,
+        devid: teamMembers.value,
+      };
+      CreateBug(body);
     } catch (err) {
       console.error(err.message);
     }

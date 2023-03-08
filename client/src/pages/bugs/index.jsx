@@ -6,6 +6,7 @@ import { GrClose } from "react-icons/gr";
 import { Button } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
+import { AllBugs } from "../services/AllBugs";
 import { Formik, Form, Field } from "formik";
 import {
   Box,
