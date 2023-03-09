@@ -76,8 +76,26 @@ const Table = () => {
     },
   ]);
   useEffect(() => {
-    // console.log(login);
-    // TasksToComplete({ email: login.login }).then((data) => setData(data));
+    console.log(login);
+    TasksToComplete({ email: login.email }).then((data) => {
+      let newTasks = [];
+      data.map((task) => {
+        let newTask = {
+          taskId: task.taskid.toString(),
+          taskName: task.taskname,
+          featureId: task.featureid.toString(),
+          projectId: task.projectid.toString(),
+          projectName: task.projectname,
+          taskPriority: ["Core", "Optional", "Aesthetic"][task.priority - 1],
+          taskStatus: "In Progress",
+          featureName: task.featurename,
+          daysLeft: task.daysleft,
+        };
+        console.log(newTask);
+        newTasks.push(newTask);
+      });
+      setData(newTasks);
+    });
     // setData(contacts);
   }, []);
 
@@ -100,7 +118,6 @@ const Table = () => {
     console.log("mark task as complete");
     console.log(e.target.value);
   };
-
 
   const columns = useMemo(
     () => [
@@ -134,7 +151,7 @@ const Table = () => {
       //   Cell: ({ cell }) => {
       //     return (
       //       <div
-      //         className={`taskPriority 
+      //         className={`taskPriority
       //           ${cell.row.original.taskPriority == `Core` ? "red" : ""}
       //           ${cell.row.original.taskPriority == `Aesthetic` ? "yellow" : ""}
       //           ${cell.row.original.taskPriority == `Optional` ? "green" : ""}
@@ -154,7 +171,7 @@ const Table = () => {
       //   Cell: ({ cell }) => {
       //     return (
       //       <div
-      //         className={`taskPriority 
+      //         className={`taskPriority
       //           ${cell.row.original.taskStatus == `Delayed` ? "red" : ""}
       //           ${cell.row.original.taskStatus == `In Progress` ? "yellow" : ""}
       //           ${cell.row.original.taskStatus == `Completed` ? "green" : ""}

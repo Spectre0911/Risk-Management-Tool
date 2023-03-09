@@ -25,12 +25,13 @@ model = joblib.load(filename)
 @app.route('/predictoveralscore', methods = ['POST']) 
 def predict():
     #recieve the post request
-    data = request.get_json() 
+    #data = request.get_json() 
     
     #get the project id
-    projectid = data['projectid']
+    #projectid = data['projectid']
 
     #get the necessary features
+    projectid = 1
     skillset_per_workload = skillset_workload(projectid)
     delay = get_delay(projectid)
     bugs = get_bugs(projectid)
@@ -39,8 +40,8 @@ def predict():
     success_story = 0.5
 
     #merge all the features into one numpy array
-    in_data = np.array([skillset_per_workload, success_story, delay, change_features, bugs, replacement_score])
-
+    in_data = np.array([skillset_per_workload, success_story, delay, change_features, bugs, replacement_score]).reshape(1,-1)
+    print(in_data)
     #feed the input to the model
     result = model.predict(in_data)
   
@@ -52,6 +53,7 @@ def predict():
                        "employee_replacement" : replacement_score,
                        "features_changed" : change_features,
                        "success_story" : success_story})
+    #return result
 
 def skillset_workload (projectId):
     cursorObj = conn.cursor()
@@ -66,18 +68,18 @@ def skillset_workload (projectId):
     #get all the skills that each employee, working on that project, possesses
     cursorObj.execute("SELECT skill, sklevel FROM (userskill NATURAL JOIN userProject) AS newTable WHERE newTable.projectid = %s", (projectId,))
     skill_years = cursorObj.fetchall()
-    print(skill_years)
+
     #calculate the score for the skillset
     for skill_year in skill_years:
         if skills_required_by_project.get(skill_year[0]):
             skillset_score += skill_year[1]
-    print(skillset_score)
+
     #get durations of each feature from that project
     #discuss it with groupmates
-    cursorObj.execute("SELECT extract(days from (endtime - starttime))::INTEGER FROM features WHERE features.projectid = %s", (projectId,))
+    cursorObj.execute("SELECT extract(days from (endtime - starttime))::INTEGER FROM features WHERE projectid = %s", (projectId,))
     durations = cursorObj.fetchall()
+
     durations = [item[0] for item in durations]
-    print(durations)
     workload = sum(durations)
 
     return skillset_score/workload
@@ -86,8 +88,8 @@ def skillset_workload (projectId):
 def get_delay (projectId):
     cursorObj = conn.cursor()
 
-    cursorObj.execute("SELECT SUM(EXTRACT(DAYS FROM (NOW() - endtime))/20::INTEGER) FROM features WHERE EXTRACT(SECOND from (NOW() - endtime))::INTEGER < 0")
-    delay = cursorObj.fetchall()[0][0]
+    cursorObj.execute("SELECT SUM(EXTRACT(DAYS FROM (NOW() - endtime))::INTEGER)/20 FROM features WHERE EXTRACT(SECOND from (NOW() - endtime))::INTEGER < 0")
+    delay = int(cursorObj.fetchall()[0][0])
 
     return -delay
 
@@ -99,33 +101,34 @@ def get_bugs (projectId):
 
     return num_bugs
 
-
 def get_replacement (projectId):
     cursorObj = conn.cursor()
 
     cursorObj.execute("SELECT dateChanged FROM replacements WHERE replacements.changeType = %s", (0,))
-    dates_changed = cursorObj.fetchAll()
+    dates_changed = cursorObj.fetchall()
     dates_changed = [item[0] for item in dates_changed]
 
     cursorObj.execute("SELECT opened, deadline FROM projects WHERE projectid = %s", (projectId,))
     (opened, deadline) = cursorObj.fetchall()[0]
     duration = (deadline - opened).days
-
-    delay = 0
+    replacement_score = 0
 
     for change in dates_changed:
-        if (dates_changed - opened).days > 5:
-            delay += (dates_changed - opened).days/duration
-    
-    return delay
+        if (change - opened).days > 10:
+            replacement_score += (change - opened).days/duration
+            
+    return replacement_score
 
 def get_change_features (projectId):
     cursorObj = conn.cursor()
     
-    cursorObj.execute("SELECT SUM(priority) FROM featureChange WHERE featureChange.projectid = %s", (projectId,))
-    change_score = cursorObj.fetchall()[0][0]
 
+    cursorObj.execute("SELECT SUM(priority) FROM (featureChange NATURAL JOIN projects) AS newTable WHERE newTable.projectid = %s and EXTRACT(DAYS from (newTable.dateChanged - newTable.opened))::INTEGER > %s", (projectId, 10))
+    change_score = cursorObj.fetchall()[0][0]/100
+    
     return change_score
+
+#print(predict())
 
 if __name__ == "__main__":
     app.run(port=5001)

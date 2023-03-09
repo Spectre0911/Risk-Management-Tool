@@ -46,9 +46,9 @@ const Dashboard = () => {
       type: 2,
     }).then((data) => setActiveWarnings(data));
     // Get the number of tasks to complete
-    TasksToComplete({ email: login.email }).then((data) =>
-      setTasksToComplete(data)
-    );
+    TasksToComplete({ email: login.email }).then((data) => {
+      setTasksToComplete(data.length);
+    });
     // Get all the notifications
     // console.log("NOTIFICATION INGO");
     //userid = $2 and notiftype = $3 and location = $4
@@ -57,10 +57,10 @@ const Dashboard = () => {
       email: login.email,
       location: 1,
     }).then((data) => {
+      console.log("Notifications");
       console.log(data);
       let newNotifications = [];
       data.map((notification) => {
-        console.log(notification);
         let notifType = "warning";
         if (notification.notiftype == 2) {
           notifType = "info";
@@ -69,7 +69,6 @@ const Dashboard = () => {
         newNotifications.push({ ...notification, notifType: notifType });
       });
 
-      console.log(newNotifications);
       setNotifications(newNotifications);
     });
     // LocationNotifications({

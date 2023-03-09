@@ -85,7 +85,8 @@ create table features (
 drop table if exists featureChange;
 create table featureChange (
     projectid serial not null,
-    changeDate TIMESTAMP not null,
+    priority integer not null,
+    dateChanged timestamp not null,
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
@@ -123,6 +124,7 @@ create table bugs (
     featureid integer not null,
     devid     integer default null,
     bugname   varchar(50) not null,
+    location  varchar(50) not null,
     bugdesc   varchar(300),
     priority  integer not null check (priority >= 1 and priority <= 3),
     severity  integer not null check (severity >= 1 and severity <= 3),
