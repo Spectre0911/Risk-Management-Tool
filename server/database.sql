@@ -138,6 +138,7 @@ create table feedback (
     userid     integer not null,
     projectid  integer not null,
     fbdate     timestamp not null,
+    fbtype     integer not null check (fbtype >= 1 and fbtype <= 10),
     fbquestion varchar(200) not null,
     fbscore    integer not null check (fbscore >= 0 and fbscore <= 100),
     primary key (fbid),
