@@ -108,6 +108,7 @@ create table bugs (
     featureid integer not null,
     devid     integer default null,
     bugname   varchar(50) not null,
+    location  varchar(50) not null,
     bugdesc   varchar(300),
     priority  integer not null check (priority >= 1 and priority <= 3),
     severity  integer not null check (severity >= 1 and severity <= 3),
