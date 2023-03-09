@@ -54,7 +54,6 @@ drop table if exists userproject;
 create table userproject (
     userid    integer not null,
     projectid integer not null,
-    role      varchar(50) not null,
     ismanager boolean not null default false,
     primary key (userid, projectid),
     foreign key (userid) references users(userid) on delete cascade,
@@ -66,7 +65,6 @@ create table features (
     featureid   serial not null,
     projectid   integer not null,
     featurename varchar(50) not null,
-    unique (projectid, featurename),
     featuredesc varchar(300),
     starttime   timestamp not null check (starttime >= current_date),
     endtime     timestamp not null,
@@ -147,7 +145,6 @@ create table notifications (
     foreign key (userid) references users(userid) on delete cascade,
     foreign key (projectid) references projects(projectid) on delete cascade
 );
-
 
 drop table if exists feedback;
 create table feedback (
