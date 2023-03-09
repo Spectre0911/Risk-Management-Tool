@@ -865,9 +865,11 @@ app.post("/api/softSkillsScore", async (req, postRes) => {
   try {
     console.log(req.body);
     const communicationScore = await pool.query(
-      "SELECT projectid, SUM(fbscore) FROM feedback WHERE fbtype = $1 AND projectid = $2 GROUP BY projectid;",
+      "SELECT projectid, AVG(fbscore) FROM feedback WHERE fbtype = $1 AND projectid = $2 GROUP BY projectid;",
       [req.body.fbtype, req.body.projectid]
     );
+    console.log(communicationScore.rows);
+
     postRes.json(communicationScore.rows);
   } catch (err) {
     console.error(err.message);

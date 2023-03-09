@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { BsFillExclamationTriangleFill } from "react-icons/bs";
 import { BsFillChatSquareTextFill } from "react-icons/bs";
 import { Scrollbars } from "react-custom-scrollbars";
@@ -6,6 +6,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 import "./index.css";
 import MultiLineChart from "./MultiLineChart";
 import HalfDoughnutChart from "./HalfDoughnutChart";
+import { SoftSkillScore } from "../services/SoftSkillScore";
 
 import {
   Box,
@@ -15,10 +16,26 @@ import {
   useTheme,
 } from "@mui/material";
 
-const SoftMetrics = () => {
+const SoftMetrics = ({ projectid }) => {
   const [communicationScore, setCommunicationScore] = useState([0]);
+  const [projectUnderstanding, setProjectUnderstanding] = useState([0]);
+  const [teamCohesion, setTeamCohesion] = useState([0]);
+  const [confidenceInSkillSet, setConfidenceInSkillSet] = useState([0]);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    SoftSkillScore({ fbtype: 1, projectid: projectid }).then((data) => {
+      setCommunicationScore(parseInt(data[0].avg));
+    });
+    SoftSkillScore({ fbtype: 2, projectid: projectid }).then((data) => {
+      setProjectUnderstanding(parseInt(data[0].avg));
+    });
+    SoftSkillScore({ fbtype: 3, projectid: projectid }).then((data) => {
+      setTeamCohesion(parseInt(data[0].avg));
+    });
+    SoftSkillScore({ fbtype: 4, projectid: projectid }).then((data) => {
+      setConfidenceInSkillSet(parseInt(data[0].avg));
+    });
+  }, []);
 
   return (
     <div className="main">
@@ -101,9 +118,12 @@ const SoftMetrics = () => {
         <div className="infoBox project" style={{ marginBottom: "50px" }}>
           <div className="metricTitle">Communication</div>
           <div className="metricHalfDonutContainer">
-            <HalfDoughnutChart data1={3.5} label="Communication" />
+            <HalfDoughnutChart
+              data1={communicationScore}
+              label="Communication"
+            />
             <div className="donutText halfdonutRisk">
-              <p>3.5</p>
+              <p>{communicationScore}</p>
             </div>
           </div>
         </div>
@@ -111,9 +131,12 @@ const SoftMetrics = () => {
         <div className="infoBox project">
           <div className="metricTitle">Project Understanding</div>
           <div className="metricHalfDonutContainer">
-            <HalfDoughnutChart data1={4.1} label="Effective Decisions" />
+            <HalfDoughnutChart
+              data1={projectUnderstanding}
+              label="Effective Decisions"
+            />
             <div className="donutText halfdonutRisk">
-              <p>4.1</p>
+              <p>{projectUnderstanding}</p>
             </div>
           </div>
         </div>
@@ -121,9 +144,9 @@ const SoftMetrics = () => {
         <div className="infoBox project">
           <div className="metricTitle">Team Cohesion</div>
           <div className="metricHalfDonutContainer">
-            <HalfDoughnutChart data1={3.8} label="Core Values" />
+            <HalfDoughnutChart data1={teamCohesion} label="Core Values" />
             <div className="donutText halfdonutRisk">
-              <p>3.8</p>
+              <p>{teamCohesion}</p>
             </div>
           </div>
         </div>
@@ -131,9 +154,12 @@ const SoftMetrics = () => {
         <div className="infoBox project">
           <div className="metricTitle">Confidence in Skillset</div>
           <div className="metricHalfDonutContainer">
-            <HalfDoughnutChart data1={4.4} label="Confidence in Skillsets" />
+            <HalfDoughnutChart
+              data1={confidenceInSkillSet}
+              label="Confidence in Skillsets"
+            />
             <div className="donutText halfdonutRisk">
-              <p>4.4</p>
+              <p>{confidenceInSkillSet}</p>
             </div>
           </div>
         </div>

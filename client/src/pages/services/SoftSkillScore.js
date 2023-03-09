@@ -1,6 +1,6 @@
-export const OverallRisk = (values) => {
+export const SoftSkillScore = (values) => {
   return new Promise((resolve, reject) => {
-    fetch("http://localhost:5000/api/softSkillScore", {
+    fetch("http://localhost:5000/api/softSkillsScore", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
