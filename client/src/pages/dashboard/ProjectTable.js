@@ -21,7 +21,7 @@ import { ActiveProjects } from "../services/ProjectCount";
 import ChangingProgressProvider from "./ChangingProgressProvider";
 import { AllProjects } from "../services/AllProjects";
 import { useSelector } from "react-redux";
-const ProjectTable = ({setActiveProjects}) => {
+const ProjectTable = ({ setActiveProjects }) => {
   const [data, setData] = useState([]);
   const email = useSelector((state) => state.email);
 
@@ -48,28 +48,27 @@ const ProjectTable = ({setActiveProjects}) => {
     },
   ]);
 
-
   const doFetch = async () => {
     AllProjects(email).then((data) => {
-      setData(data.map((item) => {
-        return {
-          projectId: item.projectid,
-          projectName: item.projectname,
-          projectManager: item.projectmanager,
-          deadline: new Date(item.deadline).toLocaleDateString("en-GB"),
-          closed: item.closed.toString(),
-          progress: Math.floor(item.progress),
-          risk: 0,
-        };
-      }));
+      console.log(data);
+      setData(
+        data.map((item) => {
+          return {
+            projectId: item.projectid,
+            projectName: item.projectname,
+            projectManager: item.projectmanager,
+            endDate: new Date(item.deadline).toLocaleDateString("en-GB"),
+            startDate: new Date(item.opened).toLocaleDateString("en-GB"),
+
+            closed: item.closed.toString(),
+            progress: Math.floor(item.progress),
+            risk: 0,
+          };
+        })
+      );
       setActiveProjects(data.length);
-    }
-    
-    );
-
+    });
   };
-
-
 
   useEffect(() => {
     doFetch();
@@ -146,6 +145,14 @@ const ProjectTable = ({setActiveProjects}) => {
         disableFilters: true,
         filterable: false,
       },
+
+      {
+        Header: "Status",
+        accessor: "status",
+        filterable: false,
+        disableFilters: true,
+        filterable: false,
+      },
       {
         Header: "Risk",
         accessor: "risk",
@@ -172,13 +179,13 @@ const ProjectTable = ({setActiveProjects}) => {
 
   return (
     <div>
-    <TableContainer
-      columns={columns}
-      data={contacts}
-      renderRowSubComponent={renderRowSubComponent}
-      fetchProjectFunction={doFetch}
-    />
-    {console.log(data)}
+      <TableContainer
+        columns={columns}
+        data={data}
+        renderRowSubComponent={renderRowSubComponent}
+        fetchProjectFunction={doFetch}
+      />
+      {console.log(data)}
     </div>
   );
 };

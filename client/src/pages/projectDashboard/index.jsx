@@ -26,6 +26,7 @@ import { MdCardMembership } from "react-icons/md";
 import { OrderedUsers } from "../services/OrderedUsers";
 import { AddTeamMember } from "../services/AddTeamMember";
 import { EndProject } from "../services/EndProject";
+import { OverallRisk } from "../services/OverallRisk";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -33,7 +34,7 @@ const ProjectDashboard = () => {
   const navigate = useNavigate();
   const { projectId } = useParams();
   const labelsRisk = ["Budget", "Team", "Time", "Code", "Technical"];
-  const dataRisk = [29, 24, 25, 25, 10];
+  const [dataRisk, setDataRisk] = useState([29, 24, 25, 25, 10]);
   const borderColorRisk = ["rgba(255,206,86,0.2)"];
   const backgroundColorRisk = [
     "rgba(232,99,132,1)",
@@ -151,10 +152,11 @@ const ProjectDashboard = () => {
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
+    // OverallRisk({ projectId: projectId }).then((data) => {
+    //   console.log("OVERALL RISK");
+    //   console.log(data);
+    // });
     OrderedUsers({ projectId: projectId }).then((data) => {
-      // console.log("------");
-      // console.log(data);
-      // console.log("------");
       setTeamMemberOptions(data);
     });
     AllProjectMembers({ projectId: projectId }).then((data) => {
@@ -620,7 +622,6 @@ const ProjectDashboard = () => {
         </div> */}
       </div>
 
-      
       <Modal
         className="addProfileModal"
         style={{ marginTop: "200px" }}

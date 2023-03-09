@@ -39,7 +39,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-
+import { AssignedProjects } from "../services/AssignedProject";
 const Table = () => {
   var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
   const navigate = useNavigate();
@@ -50,7 +50,7 @@ const Table = () => {
     {
       projectId: "1",
       projectName: "CS261",
-      projectManager: "Joshua Castellino",
+      projectManager: "Joshua Castelino",
       startTime: "12/11/2022",
       tasksToDo: "2",
       endTime: "30/02/2023",
@@ -77,6 +77,11 @@ const Table = () => {
   ]);
   useEffect(() => {
     console.log(login);
+    AssignedProjects({ email: login.email }).then((data) => {
+      console.log("ASSIGNED PROJECTS");
+      console.log(data);
+      console.log("---------");
+    });
     TasksToComplete({ email: login.email }).then((data) => {
       let newTasks = [];
       data.map((task) => {
