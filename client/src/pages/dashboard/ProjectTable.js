@@ -146,14 +146,6 @@ const ProjectTable = ({setActiveProjects}) => {
         disableFilters: true,
         filterable: false,
       },
-      
-      {
-        Header: "Status",
-        accessor: "status",
-        filterable: false,
-        disableFilters: true,
-        filterable: false,
-      },
       {
         Header: "Risk",
         accessor: "risk",
