@@ -96,6 +96,7 @@ const ProjectDashboard = () => {
 
   const deleteFeature = (e) => {
     console.log("delete this");
+    console.log("WE ARE DELETING");
     console.log(removeUserId);
     setShowDelete(false);
   };
