@@ -17,6 +17,24 @@ import {
 
 const SoftMetrics = () => {
 
+  const backgroundColorTeamList = {
+    green:['rgba(0, 128, 0,1)','#dbe3de'],
+    red:['rgba(219, 52, 0,1)','#dbe3de'],
+    yellow:['rgba(255,159,64,1)','#dbe3de']
+  };
+
+  const calculateRiskColor = (risk) =>{
+    console.log(risk);
+    if (risk<2){
+      return backgroundColorTeamList.red;
+    }else if (risk<3.5){
+      return backgroundColorTeamList.yellow;
+    }else{
+      return backgroundColorTeamList.green;
+    }
+  }
+
+  const data =[2.4, 4.2, 3.2, 1.2];
   return (
     <div className="main">
       <div className="grid">
@@ -96,9 +114,10 @@ const SoftMetrics = () => {
         
         <div className="metricTitle">Communication</div>
         <div className="metricHalfDonutContainer">
-          <HalfDoughnutChart data1={3.5} label="Communication" />
+          <HalfDoughnutChart data1={data[0]} label="Communication" backgroundColor={(()=>{
+                return(calculateRiskColor(data[0]))})}/>
           <div className="donutText halfdonutRisk">
-            <p>3.5</p>
+            <p>{data[0]}</p>
           </div>
         </div>    
       </div>
@@ -106,9 +125,10 @@ const SoftMetrics = () => {
       <div className="infoBox project">
         <div className="metricTitle">Project Understanding</div>
         <div className="metricHalfDonutContainer">
-          <HalfDoughnutChart data1={4.1} label="Effective Decisions" />
+          <HalfDoughnutChart data1={data[1]} label="Effective Decisions" backgroundColor={(()=>{
+                return(calculateRiskColor(data[1]))})}/>
           <div className="donutText halfdonutRisk">
-            <p>4.1</p>
+            <p>{data[1]}</p>
           </div>
         </div>
       </div>
@@ -116,9 +136,10 @@ const SoftMetrics = () => {
       <div className="infoBox project">
         <div className="metricTitle">Team Cohesion</div>
         <div className="metricHalfDonutContainer">
-          <HalfDoughnutChart data1={3.8} label="Core Values" />
+          <HalfDoughnutChart data1={data[2]} label="Core Values" backgroundColor={(()=>{
+                return(calculateRiskColor(data[2]))})}/>
           <div className="donutText halfdonutRisk">
-            <p>3.8</p>
+            <p>{data[2]}</p>
           </div>
         </div>
       </div>
@@ -126,9 +147,10 @@ const SoftMetrics = () => {
       <div className="infoBox project">
         <div className="metricTitle">Confidence in Skillset</div>
         <div className="metricHalfDonutContainer">
-          <HalfDoughnutChart data1={4.4} label="Confidence in Skillsets" />
+          <HalfDoughnutChart data1={data[3]} label="Confidence in Skillsets" backgroundColor={(()=>{
+                return(calculateRiskColor(data[3]))})}/>
           <div className="donutText halfdonutRisk">
-            <p>4.4</p>
+            <p>{data[3]}</p>
           </div>
         </div>
       </div>

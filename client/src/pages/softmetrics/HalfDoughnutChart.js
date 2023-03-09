@@ -1,14 +1,14 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
-const HalfDoughnutChart = ({ data1, label }) => {
+const HalfDoughnutChart = ({ data1, label, backgroundColor }) => {
   const data = {
     labels: [label, ''],
     datasets: [
       {
         data: [data1, 5 - data1],
-        backgroundColor: ['#3bb35b', '#ccc'],
         borderWidth: 0,
+        backgroundColor: backgroundColor,
       },
     ],
   };
