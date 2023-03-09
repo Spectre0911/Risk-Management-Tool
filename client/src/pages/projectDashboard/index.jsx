@@ -571,7 +571,7 @@ const ProjectDashboard = () => {
           <RadarChart />
         </div>
 
-        <div className="infoBox2 softMetricBox">
+        <div className="infoBox2 githubMetricBox">
           <div
             className="metricTitle2"
             style={{ marginBottom: "20px", paddingTop: "7px" }}
@@ -595,7 +595,7 @@ const ProjectDashboard = () => {
           <LineGraph labels={dates} datavalues={commits} />
         </div>
 
-        <div className="infoBox2 bugs">
+        {/* <div className="infoBox2 bugs">
           <div
             className="metricTitle2"
             style={{ marginBottom: "20px", paddingTop: "7px" }}
@@ -618,10 +618,12 @@ const ProjectDashboard = () => {
           </div>
           <div>
             <p>What should go here???</p>
-            {/* <ProgressBar variant="danger" now={20} /> */}
+            <ProgressBar variant="danger" now={20} />
           </div>
-        </div>
+        </div> */}
       </div>
+
+      
       <Modal
         className="addProfileModal"
         style={{ marginTop: "200px" }}

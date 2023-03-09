@@ -29,18 +29,20 @@ const ProjectTable = ({setActiveProjects}) => {
     {
       projectId: "1",
       projectName: "cs261",
-      projectManager: "Jane Arnold",
-      deadline: "26/12/2022",
+      startDate: "26/12/2022",
+      endDate: "26/02/2023",
       closed: "false",
+      tasksPending: 2,
       progress: 20,
       risk: 10,
     },
     {
       projectId: "2",
       projectName: "cs261",
-      projectManager: "Jane Arnold",
-      deadline: "26/10/2022",
+      startDate: "26/12/2022",
+      endDate: "10/04/2023",
       closed: "false",
+      tasksPending: 3,
       progress: 20,
       risk: 10,
     },
@@ -100,7 +102,7 @@ const ProjectTable = ({setActiveProjects}) => {
   const columns = useMemo(
     () => [
       {
-        Header: "Title",
+        Header: "Project",
         accessor: "projectName",
         filterable: false,
         disableFilters: true,
@@ -124,19 +126,27 @@ const ProjectTable = ({setActiveProjects}) => {
         },
       },
       {
-        Header: "Project Manager",
-        accessor: "projectManager",
+        Header: "Project Start",
+        accessor: "startDate",
         filterable: false,
         disableFilters: true,
         filterable: false,
       },
       {
-        Header: "Deadline",
-        accessor: "deadline",
+        Header: "Tasks pending",
+        accessor: "tasksPending",
         filterable: false,
         disableFilters: true,
         filterable: false,
       },
+      {
+        Header: "Project End",
+        accessor: "endDate",
+        filterable: false,
+        disableFilters: true,
+        filterable: false,
+      },
+      
       {
         Header: "Status",
         accessor: "status",
@@ -172,7 +182,7 @@ const ProjectTable = ({setActiveProjects}) => {
     <div>
     <TableContainer
       columns={columns}
-      data={data}
+      data={contacts}
       renderRowSubComponent={renderRowSubComponent}
       fetchProjectFunction={doFetch}
     />
