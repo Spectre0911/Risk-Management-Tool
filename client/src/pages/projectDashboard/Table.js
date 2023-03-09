@@ -94,6 +94,10 @@ const Table = (props) => {
     setShowDelete(true);
   };
 
+  const complete = (featureId) => {
+    console.log("complete feature", featureId);
+  }
+
   const columns = useMemo(
     () => [
       {
@@ -175,6 +179,26 @@ const Table = (props) => {
         },
       },
       {
+        Header: "Mark as Complete",
+        Cell: ({ cell }) => {
+          // console.log(cell.row.original.featureId);
+          return (
+            <div className="featureViewTasks">
+              <button
+                type="submit"
+                className="completeFeatureButton"
+                value={cell.row.original.featureId}
+                onClick={() =>
+                  complete(cell.row.original.featureId)
+                }
+              >
+                Completed
+              </button>
+            </div>
+          );
+        },
+      },
+      {
         Header: "Edit",
         Cell: ({ cell }) => {
           // console.log(cell.row.original.featureId);
@@ -214,6 +238,24 @@ const Table = (props) => {
     []
   );
 
+  // const tempData = [
+  //   {
+  //     featureId: "1",
+  //     featureName: "Add sidebar",
+  //     startTime: "12/11/2022",
+  //     endTime: "30/02/2023",
+  //     progress: 20,
+  //     risk: 10,
+  //   },
+  //   {
+  //     featureId: "2",
+  //     featureName: "Add sidebar",
+  //     startTime: "12/11/2022",
+  //     endTime: "30/02/2023",
+  //     progress: 20,
+  //     risk: 10,
+  //   },
+  // ];
   return (
     <div>
       <TableContainer
