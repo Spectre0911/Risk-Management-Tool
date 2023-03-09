@@ -26,9 +26,8 @@ loaded_model = pickle.load(open('finalized_model.sav', 'rb'))
 def predict():
     #recieve the post request
     data = request.get_json() 
-    
     #get the project id
-    projectid = data['projectid']
+    projectid = int(data['projectid'])
 
     #get the necessary features
 
@@ -44,7 +43,7 @@ def predict():
     in_data = np.array([skillset_per_workload, success_story, delay, bugs, feedback, change_features, replacement_score]).reshape(1,-1)
     #feed the input to the model
     result = loaded_model.predict(in_data)
-  
+    print(result)
     # Return data in json format 
     return json.dumps({"overall_result": result[0],
                        "skillset" : skillset_per_workload,
@@ -79,6 +78,8 @@ def skillset_workload (projectId):
     #discuss it with groupmates
     cursorObj.execute("SELECT sum(difficulty) FROM features WHERE projectid = %s", (projectId,))
     durations = cursorObj.fetchall()
+    if durations[0][0] == None:
+        return 0
 
     durations = [item[0] for item in durations]
     workload = sum(durations)
@@ -119,8 +120,7 @@ def get_replacement (projectId):
 
     cursorObj.execute("SELECT dateChanged FROM replacements WHERE replacements.changeType = %s", (0,))
     dates_changed = cursorObj.fetchall()
-    
-    if dates_changed[0][0] == None:
+    if len(dates_changed) == 0:
         return 0
 
     dates_changed = [item[0] for item in dates_changed]
@@ -161,7 +161,6 @@ def get_feedback(projectId):
         return 1
     
     return float(result/100)
-
 
 if __name__ == "__main__":
     app.run(port=5001)

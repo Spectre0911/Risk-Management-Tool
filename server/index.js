@@ -192,7 +192,6 @@ app.post("/api/taskToCompletePID", async (req, res) => {
 
 app.post("/api/addTeamMember", async (req, res) => {
   try {
-    console.log(req.body);
 
     const add = await pool.query(
       "INSERT INTO userproject (userid, projectid, ismanager) VALUES($1, $2, false) RETURNING *",
@@ -863,7 +862,6 @@ app.post("/api/insertFeedback", async (req, postRes) => {
 // Retrieve soft skills Score
 app.post("/api/softSkillsScore", async (req, postRes) => {
   try {
-    console.log(req.body);
     const communicationScore = await pool.query(
       "SELECT projectid, AVG(fbscore) FROM feedback WHERE fbtype = $1 AND projectid = $2 GROUP BY projectid;",
       [req.body.fbtype, req.body.projectid]
@@ -952,7 +950,7 @@ app.post("/api/overallrisk", async (req, res) => {
     // This variable contains the data
     // you want to send
     var data = {
-      projectid: req.body.projectid,
+      "projectid": req.body.projectId
     };
 
     // preparing the post request
@@ -984,7 +982,7 @@ app.post("/api/overallrisk", async (req, res) => {
         console.log(err);
       });
   } catch (err) {
-    console.log(err.message);
+    console.log(err);
   }
 });
 
