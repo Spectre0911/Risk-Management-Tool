@@ -53,6 +53,7 @@ const EditProfileForm = ({ handleClose }) => {
     email: "",
     bio: "",
     gitHubToken: "",
+    gitHubName: "",
   });
 
   const reportBugSchema = yup.object().shape({
@@ -60,6 +61,7 @@ const EditProfileForm = ({ handleClose }) => {
     email: yup.string().required("required"),
     bio: yup.string().required("required"),
     gitHubToken: yup.string().required("required"),
+    gitHubName: yup.string().required("required")
   });
 
   useEffect(() => {
@@ -213,7 +215,20 @@ const EditProfileForm = ({ handleClose }) => {
                     Boolean(touched.gitHubToken) && Boolean(errors.gitHubToken)
                   }
                   helperText={touched.gitHubToken && errors.gitHubToken}
-                  sx={{ gridColumn: "span 4" }}
+                  sx={{ gridColumn: "span 2" }}
+                />
+
+                <TextField
+                  label="Github name"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.gitHubName}
+                  name="gitHubName"
+                  error={
+                    Boolean(touched.gitHubName) && Boolean(errors.gitHubName)
+                  }
+                  helperText={touched.gitHubName && errors.gitHubName}
+                  sx={{ gridColumn: "span 2" }}
                 />
 
                 <p style={{ gridColumn: "span 1", margin: "auto" }}>Skills:</p>

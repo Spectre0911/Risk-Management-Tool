@@ -63,6 +63,21 @@
   transition: 0.8s;
 }
 
+.completeFeatureButton {
+  background-color: #01a538;
+  color: white;
+  border-radius: 5px;
+  border: none;
+  padding: 5px;
+  margin-top: 4px;
+}
+
+.completeFeatureButton:hover {
+  background-color: #007a25;
+  transition: 0.8s;
+}
+
+
 .progressNumber.feature {
   width: 26px;
   height: 26px;
@@ -457,6 +472,9 @@
   background-color: #00315f;
   color: white;
   transition: 0.8s;
+}
+.toplogicalOrderButton.max{
+  left: 400px !important;
 }
 /* .gantt{
     width: 100% !important;
