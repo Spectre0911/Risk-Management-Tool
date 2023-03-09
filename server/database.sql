@@ -86,7 +86,7 @@ create table features (
 drop table if exists featureChange;
 create table featureChange (
     projectid serial not null,
-    priority integer not null,
+    priority    integer not null check (priority >= 1 and priority <= 3),
     dateChanged timestamp not null,
     foreign key (projectid) references projects(projectid) on delete cascade
 );
@@ -165,7 +165,6 @@ create table feedback (
 
 drop table if exists skills cascade;
 create table skills (
-
     skill varchar(50) not null,
     primary key (skill)
 );
