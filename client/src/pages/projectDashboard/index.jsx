@@ -166,10 +166,7 @@ const ProjectDashboard = () => {
         let newData = [];
         var useridSkillMap = new Map();
         const memberSkillPromises = data.map((member) => {
-          // console.log(member);
           return MemberSkills({ userid: member.userid }).then((skills) => {
-            // console.log(skills);
-
             let skillArr = [];
             if (skills != null) {
               skills.map((skill) => {

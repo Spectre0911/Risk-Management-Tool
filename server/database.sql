@@ -124,6 +124,7 @@ create table bugs (
     bugid     serial not null,
     featureid integer not null,
     devid     integer default null,
+    assigner  integer default null,
     bugname   varchar(50) not null,
     location  varchar(50) not null,
     bugdesc   varchar(300),
@@ -131,7 +132,9 @@ create table bugs (
     severity  integer not null check (severity >= 1 and severity <= 3),
     primary key (bugid),
     foreign key (featureid) references features(featureid) on delete cascade,
-    foreign key (devid) references users(userid) 
+    foreign key (devid) references users(userid),
+    foreign key (assigner) references users(userid)
+
 );
 
 drop table if exists notifications;

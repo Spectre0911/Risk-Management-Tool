@@ -149,6 +149,14 @@ const NewGantt = ({ projectid }) => {
         >
           Topological ordering
         </button>
+        <button
+          className="toplogicalOrderButton max"
+          onClick={() => {
+            sortTopologically({ projectid: projectid });
+          }}
+        >
+          Maximum 1
+        </button>
         <Toolbar zoom={currentZoom} onZoomChange={handleZoomChange} />
       </div>
       <div className="gantt-container">
