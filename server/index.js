@@ -946,7 +946,7 @@ app.post("/api/overallrisk", async (req, res) => {
         // returned data
         let result;
         result = parsedBody["result"];
-        return result;
+        // return result;
       })
       .catch(function (err) {
         console.log(err);
