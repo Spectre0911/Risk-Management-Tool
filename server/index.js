@@ -844,8 +844,6 @@ app.post("/api/assignedProjects", async (req, postRes) => {
 // INSERT FEEDBACK ()
 app.post("/api/insertFeedback", async (req, postRes) => {
   try {
-    console.log(req.body);
-
     const insertFeedback = await pool.query(
       "INSERT INTO feedback(userid, projectid, fbdate, fbtype, fbquestion, fbscore) VALUES((SELECT userid FROM users WHERE email = $1), $2, $3, $4, $5, $6)",
       [
@@ -857,6 +855,20 @@ app.post("/api/insertFeedback", async (req, postRes) => {
         req.body.fbscore,
       ]
     );
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Retrieve soft skills Score
+app.post("/api/softSkillsScore", async (req, postRes) => {
+  try {
+    console.log(req.body);
+    const communicationScore = await pool.query(
+      "SELECT projectid, SUM(fbscore) FROM feedback WHERE fbtype = $1 AND projectid = $2 GROUP BY projectid;",
+      [req.body.fbtype, req.body.projectid]
+    );
+    postRes.json(communicationScore.rows);
   } catch (err) {
     console.error(err.message);
   }
