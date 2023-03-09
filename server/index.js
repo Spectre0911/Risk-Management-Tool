@@ -110,11 +110,10 @@ app.post("/api/createProject", async (req, postRes) => {
       );
     });
     pool.query(
-      "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES((SELECT userid FROM users WHERE email = $1), $2, 'PM', True);",
+      "INSERT INTO userproject (userid, projectid, ismanager) VALUES((SELECT userid FROM users WHERE email = $1), $2, True);",
       [req.body.email.email, projectid]
     );
-    res.sendStatus(200);
-
+    // res.sendStatus(200);
   } catch (err) {
     console.log("ERROR");
     console.error(err.message);
@@ -248,7 +247,6 @@ app.post("/api/login", async (req, postResult) => {
               console.log("Incorrect password or email");
             }
             postResult.json({ loggedIn: loggedInVal, email: emailVal });
-
           });
         }
       }
@@ -352,7 +350,7 @@ app.post("/api/projects", async (req, postRes) => {
   try {
     // console.log(req.body);
     const allFeatures = await pool.query(
-      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (NOW() - opened ))) / (EXTRACT(DAY FROM (deadline - opened)))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
+      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, opened, deadline, closed, ((EXTRACT(DAY FROM (NOW() - opened ))) / (EXTRACT(DAY FROM (deadline - opened)))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
       [req.body.email]
     );
     if (allFeatures.rows.length == 0) {

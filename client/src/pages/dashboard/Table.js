@@ -50,7 +50,7 @@ const Table = () => {
     {
       projectId: "1",
       projectName: "CS261",
-      projectManager: "Joshua Castellino",
+      projectManager: "Joshua Castelino",
       startTime: "12/11/2022",
       tasksToDo: "2",
       endTime: "30/02/2023",
