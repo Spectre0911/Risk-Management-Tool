@@ -180,8 +180,8 @@ app.post("/api/taskToComplete", async (req, res) => {
 app.post("/api/taskToCompletePID", async (req, res) => {
   try {
     const tasksToComplete = await pool.query(
-      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1) AND projects.projectid = $2;",
-      [req.body.email, req.body.projectid]
+      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1);",
+      [req.body.email]
     );
     // console.log(createAccount.rows);
     res.json(tasksToComplete.rows);
@@ -192,10 +192,10 @@ app.post("/api/taskToCompletePID", async (req, res) => {
 
 app.post("/api/addTeamMember", async (req, res) => {
   try {
-    // console.log(req.body);
+    console.log(req.body);
 
     const add = await pool.query(
-      "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES($1, $2, 'TM', false) RETURNING *",
+      "INSERT INTO userproject (userid, projectid, ismanager) VALUES($1, $2, false) RETURNING *",
       [req.body.userid, req.body.projectid]
     );
 

@@ -25,13 +25,13 @@ model = joblib.load(filename)
 @app.route('/predictoveralscore', methods = ['POST']) 
 def predict():
     #recieve the post request
-    #data = request.get_json() 
+    data = request.get_json() 
     
-    #get the project id
-    #projectid = data['projectid']
+    # get the project id
+    projectid = data['projectid']
 
-    #get the necessary features
-    projectid = 1
+    # get the necessary features
+    # projectid = 1
     skillset_per_workload = skillset_workload(projectid)
     delay = get_delay(projectid)
     bugs = get_bugs(projectid)
