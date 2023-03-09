@@ -1,22 +1,22 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
-* {
-	box-sizing: border-box;
-}
 
-h3 {
+.UserH3 {
 	margin: 10px 0;
 	color: #0b1852;
+	font-family: 'Montserrat';
+	font-weight: 900;
 }
 
-h6 {
+.UserH6 {
 	margin: 5px 0;
 	text-transform: uppercase;
-    color: #0b1852;
+    color: #fff;
 }
 
-p {
-	font-size: 12px;
+.UserP {
+	font-family: 'Montserrat' ;
+	font-size: 17px;
 	line-height: 21px;
 	color: #0b1852;
     max-width: 80%;
@@ -25,10 +25,10 @@ p {
 }
 
 .card-container {
+	box-sizing: border-box;
 	background-color: #FFF;
 	border-radius: 5px;
 	box-shadow: 0px 10px 20px -10px rgba(0,0,0,0.75);
-	color: #B3B8CD;
 	padding-top: 30px;
 	position: relative;
 	width: 350px;
@@ -40,9 +40,10 @@ p {
 }
 
 .card-container .round {
-	border: 1px solid #03BFCB;
+	border: 2px solid #5873ca;
 	border-radius: 50%;
-	padding: 7px;
+	padding: 5px;
+	max-width: 150px;
 }
 
 button.primary {
@@ -50,6 +51,8 @@ button.primary {
 	border: 1px solid #03BFCB;
 	border-radius: 3px;
 	color: #231E39;
+	top:0;
+	left:0;
 	font-family: Montserrat, sans-serif;
 	font-weight: 500;
 	padding: 10px 25px;
@@ -60,8 +63,14 @@ button.primary.ghost {
 	color: #02899C;
 }
 
+button.profile-button {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+  }
+
 .skills {
-	background-color: #e8e8e8;
+	background-color: #5873ca;
 	text-align: left;
 	padding: 15px;
 	margin-top: 30px;
@@ -76,9 +85,20 @@ button.primary.ghost {
 .skills ul li {
 	border: 1px solid #0b1852;
 	border-radius: 2px;
-	color: #0b1852;
+	color: #fff;
 	display: inline-block;
-	font-size: 12px;
+	font-size: 15px;
+	font-family: 'Montserrat';
 	margin: 0 7px 7px 0;
 	padding: 7px;
+}
+
+.removeTeamMember {
+	width: 40px !important;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    height: 35px !important;
+    padding-bottom: 20px !important;
 }

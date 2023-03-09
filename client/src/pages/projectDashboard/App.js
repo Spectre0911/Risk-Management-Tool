@@ -1,40 +1,18 @@
 import React, { Component, useEffect, useState } from "react";
 import Gantt from "./Gantt/";
 import Toolbar from "./Toolbar/";
+import "./index.css";
 import { getAllDependencies } from "../services/AllDependencies";
 import { CallTopoSort } from "../services/TopoSort";
 import { MinimiseOverlappingTasks } from "../services/MinimiseOverlap";
 const data = {
-  data: [
-    {
-      id: 1,
-      text: "Task #1",
-      start_date: "2020-02-12",
-      duration: 3,
-      progress: 0.6,
-    },
-    {
-      id: 2,
-      text: "Task #2",
-      start_date: "2020-02-16",
-      duration: 3,
-      progress: 0.4,
-    },
-  ],
-  links: [{ id: 1, source: 1, target: 2, type: "0" }],
+  data: [{}],
+  links: [],
 };
 
-const NewGantt = () => {
+const NewGantt = ({ projectid }) => {
   const [currentZoom, setZoom] = useState("Days");
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      text: "Task #1",
-      start_date: "2020-02-12",
-      duration: 3,
-      progress: 0.6,
-    },
-  ]);
+  const [tasks, setTasks] = useState([]);
   const [links, setLinks] = useState([{}]);
 
   const handleZoomChange = (zoom) => {
@@ -46,10 +24,8 @@ const NewGantt = () => {
   };
 
   useEffect(() => {
-    getAllFeatures({ projectid: 1 });
-    sortTopologically({ projectid: 1 });
-    // MinimiseOverlappingTasks({ projectid: 1 });
-    // MinimiseOverlappingTasks({ projectid: 1 });
+    getAllFeatures({ projectid: projectid });
+    // sortTopologically({ projectid: projectid });
   }, []);
 
   const getAllFeatures = (values) => {
@@ -119,6 +95,7 @@ const NewGantt = () => {
       });
   };
   const sortTopologically = (values) => {
+    console.log("SORTING 1");
     var outputList = [];
     fetch("http://localhost:5000/api/features", {
       method: "POST",
@@ -151,7 +128,7 @@ const NewGantt = () => {
             .then(() => {
               CallTopoSort({
                 dependencies: featureDepMap,
-                projectid: 1,
+                projectid: projectid,
               });
             })
             .catch((error) => {
@@ -164,6 +141,14 @@ const NewGantt = () => {
   return (
     <div>
       <div className="zoom-bar">
+        <button
+          className="toplogicalOrderButton"
+          onClick={() => {
+            sortTopologically({ projectid: projectid });
+          }}
+        >
+          Topological ordering
+        </button>
         <Toolbar zoom={currentZoom} onZoomChange={handleZoomChange} />
       </div>
       <div className="gantt-container">

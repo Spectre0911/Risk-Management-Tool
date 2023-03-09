@@ -75,7 +75,7 @@ const ProjectTmContainer = () => {
               <Route path="/viewtasks/:featureId" element={<TaskDashboard/> }/>
               <Route path="/github/:projectId" element={<GithubIntegrator/> }/>
               <Route path="/risks/:projectId" element={<RiskSummary/> }/>
-              <Route path="/teammembers/:projectId" element={<UserPage/> }/>
+              <Route path="/teammembers/:projectId" element={<UserPage isPm={0}/> }/>
               </Routes>
         </div>
       </div>

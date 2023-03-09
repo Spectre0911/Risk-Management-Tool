@@ -33,6 +33,14 @@ create table projects (
     primary key (projectid)
 );
 
+drop table if exists replacements;
+create table replacements (
+    projectid serial not null,
+    dateChanged timestamp not null,
+    changeType INTEGER not null, -- 0 for removing the team member; 1 for adding a new member
+    foreign key (projectid) references projects(projectid) on delete cascade
+);
+
 drop table if exists risks;
 create table risks (
     projectid integer not null,
@@ -72,6 +80,14 @@ create table features (
     progress    integer not null check (progress >= 0 and progress <= 100),
     members     integer not null check (members >= 0) default 0,
     primary key (featureid),
+    foreign key (projectid) references projects(projectid) on delete cascade
+);
+
+drop table if exists featureChange;
+create table featureChange (
+    projectid serial not null,
+    priority    integer not null check (priority >= 1 and priority <= 3),
+    dateChanged timestamp not null,
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
@@ -118,6 +134,7 @@ create table bugs (
     foreign key (featureid) references features(featureid) on delete cascade,
     foreign key (devid) references users(userid),
     foreign key (assigner) references users(userid)
+
 );
 
 drop table if exists notifications;

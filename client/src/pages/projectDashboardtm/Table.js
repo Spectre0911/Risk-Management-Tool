@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from "react";
+import { useSelector } from "react-redux";
 import {
   Container,
   Card,
@@ -15,13 +16,7 @@ import {
 import "react-circular-progressbar/dist/styles.css";
 import TableContainer from "./TableContainer";
 import ProgressBar from "react-bootstrap/ProgressBar";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { SelectColumnFilter } from "./filters";
-import ChangingProgressProvider from "./ChangingProgressProvider";
-import TransitionGroup from "react-transition-group/TransitionGroup";
-import CSSTransition from "react-transition-group/CSSTransition";
-import ReactCSSTransitionGroup from "react-transition-group"; // ES6
-import FlipMove from "react-flip-move";
+
 import { MdModeEditOutline } from "react-icons/md";
 import { BsFillTrashFill } from "react-icons/bs";
 import FeatureForm from "./FeatureForm";
@@ -36,54 +31,68 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
-
-const Table = () => {
+import { TasksToCompletePID } from "../services/TasksToCompletePID";
+const Table = ({ projectid }) => {
   var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  useEffect(() => {
-    const doFetch = async () => {
-      const response = await fetch("https://randomuser.me/api/?results=100");
-      const body = await response.json();
-      const contacts = [
-        {
-          taskId: "1",
-          featureId: "1",
-          taskPriority: "Core",
-          featureName:"Dashboard",
-          taskStatus: "Completed",
-          taskName: "Add sidebar",
-          startTime: "12/11/2022",
-          endTime: "30/02/2023",
-          daysLeft: "2",
-        },
-        {
-          taskId: "2",
-          featureId: "1",
-          taskPriority: "Aesthetic",
-          taskStatus: "In Progress",
-          featureName:"Dashboard",
-          taskName: "Add sidebar",
-          startTime: "12/11/2022",
-          endTime: "30/02/2023",
-          daysLeft: "2",
-        },
-        {
-          taskId: "3",
-          featureId: "1",
-          taskPriority: "Aesthetic",
-          taskStatus: "Delayed",
-          featureName:"Dashboard",
-          taskName: "Add sidebar",
-          daysLeft: "2",
-        },
-      ];
-      // console.log(contacts);
-      setData(contacts);
-    };
-    doFetch();
-  }, []);
+  const login = useSelector((state) => state.email);
+  const [tasks, setTasks] = useState([
+    {
+      taskId: "1",
+      featureId: "1",
+      taskPriority: "Core",
+      featureName: "Dashboard",
+      taskStatus: "Completed",
+      taskName: "Add sidebar",
+      startTime: "12/11/2022",
+      endTime: "30/02/2023",
+      daysLeft: "2",
+    },
+    {
+      taskId: "2",
+      featureId: "1",
+      taskPriority: "Aesthetic",
+      taskStatus: "In Progress",
+      featureName: "Dashboard",
+      taskName: "Add sidebar",
+      startTime: "12/11/2022",
+      endTime: "30/02/2023",
+      daysLeft: "2",
+    },
+    {
+      taskId: "3",
+      featureId: "1",
+      taskPriority: "Aesthetic",
+      taskStatus: "Delayed",
+      featureName: "Dashboard",
+      taskName: "Add sidebar",
+      daysLeft: "2",
+    },
+  ]);
 
+  useEffect(() => {
+    TasksToCompletePID({ email: login.email, projectid: projectid }).then(
+      (data) => {
+        let newTasks = [];
+        data.map((task) => {
+          let newTask = {
+            taskId: task.taskid.toString(),
+            taskName: task.taskname,
+            featureId: task.featureid.toString(),
+            projectId: task.projectid.toString(),
+            projectName: task.projectname,
+            taskPriority: ["Core", "Optional", "Aesthetic"][task.priority - 1],
+            taskStatus: "In Progress",
+            featureName: task.featurename,
+            daysLeft: task.daysleft,
+          };
+          newTasks.push(newTask);
+        });
+        setData(newTasks);
+      }
+    );
+  }, []);
   const viewTasks = (e) => {
     // console.log(e.target.value);
   };
@@ -99,13 +108,10 @@ const Table = () => {
     setShowEdit(true);
   };
 
-
-
-
-  const markTaskAsComplete = (e) =>{
+  const markTaskAsComplete = (e) => {
     console.log("mark task as complete");
     console.log(e.target.value);
-  }
+  };
   // const renderRowSubComponent = (row) => {
   //   const name = "k";
   //   console.log("ee");
@@ -148,14 +154,16 @@ const Table = () => {
         filterable: false,
         Cell: ({ cell }) => {
           return (
-            <div className={`taskPriority 
-                ${cell.row.original.taskPriority==`Core`? "red":""}
-                ${cell.row.original.taskPriority==`Aesthetic`? "yellow":""}
-                ${cell.row.original.taskPriority==`Optional`? "green":""}
-                `}>
-                {cell.row.original.taskPriority}
-             </div>
-          )
+            <div
+              className={`taskPriority 
+                ${cell.row.original.taskPriority == `Core` ? "red" : ""}
+                ${cell.row.original.taskPriority == `Aesthetic` ? "yellow" : ""}
+                ${cell.row.original.taskPriority == `Optional` ? "green" : ""}
+                `}
+            >
+              {cell.row.original.taskPriority}
+            </div>
+          );
         },
       },
       {
@@ -166,14 +174,16 @@ const Table = () => {
         filterable: false,
         Cell: ({ cell }) => {
           return (
-            <div className={`taskPriority 
-                ${cell.row.original.taskStatus==`Delayed`? "red":""}
-                ${cell.row.original.taskStatus==`In Progress`? "yellow":""}
-                ${cell.row.original.taskStatus==`Completed`? "green":""}
-                `}>
-                {cell.row.original.taskStatus}
-             </div>
-          )
+            <div
+              className={`taskPriority 
+                ${cell.row.original.taskStatus == `Delayed` ? "red" : ""}
+                ${cell.row.original.taskStatus == `In Progress` ? "yellow" : ""}
+                ${cell.row.original.taskStatus == `Completed` ? "green" : ""}
+                `}
+            >
+              {cell.row.original.taskStatus}
+            </div>
+          );
         },
       },
       {
@@ -203,7 +213,7 @@ const Table = () => {
       {
         Header: "Mark as Complete",
         Cell: ({ cell }) => {
-          if (cell.row.original.taskStatus != "Completed"){
+          if (cell.row.original.taskStatus != "Completed") {
             return (
               <div className="featureViewTasks">
                 <button
@@ -219,8 +229,7 @@ const Table = () => {
           }
         },
       },
-      
-    
+
       // {
       // id: 'expander', // 'id' is required
       // Cell: ({ row }) => (
@@ -257,8 +266,6 @@ const Table = () => {
             <FeatureForm handleClose={handleEditClose} taskId={taskId} />
           </Modal.Body>
         </Modal>
-
-      
       </div>
     </div>
   );

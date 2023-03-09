@@ -10,6 +10,7 @@
 5) Install __requests__ library for python using `pip install requests`
 6) Install __joblib__ library for python using `pip install joblib`
 7) Install __sklearn__ library for python using `pip install -U scikit-learn` for **Windows** and **macOS**, `pip3 install -U scikit-learn` for **Linux**.
+8) Install __pycopg2__ for python using `pip install psycopg2` command. 
 8) In a new terminal, to run the Flask server type `python pyfile.py`
 9) In the terminal run
     - `npm install -g nodemon`

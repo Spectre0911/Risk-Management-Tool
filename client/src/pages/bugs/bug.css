@@ -42,21 +42,23 @@
 .bugSeverityLevel{
     display: inline-block;
     vertical-align: middle;
-    background-color: red;
     padding: 3px;
     border-radius: 5px;
     color: white;
     margin-bottom: 5px;
 }
 
+.bugSeverityLevel.high{
+    background-color: rgb(247, 21, 5) !important;
+}
+
+
 .bugSeverityLevel.med{
-    display: inline-block;
-    vertical-align: middle;
     background-color: rgb(247, 170, 5) !important;
-    padding: 3px;
-    border-radius: 5px;
-    color: white;
-    margin-bottom: 5px;
+}
+
+.bugSeverityLevel.low{
+    background-color: rgb(247, 170, 5) !important;
 }
 
 .bugSeverity{
@@ -104,7 +106,7 @@
 .bugAssignButton{
     padding: 5px 20px;
     margin: 5px;
-    background-color: #ff6767;
+    background-color: #6de769;
     border-radius: 5px;
     border: none;
     font-family: 'Montserrat';
@@ -113,7 +115,7 @@
 .bugAssignButton:hover{
     color: white;
     transition: 0.3s;
-    background-color: #f50000;
+    background-color: #07c700;
 }
 
 .bugTitle{
