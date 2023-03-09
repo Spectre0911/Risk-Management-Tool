@@ -826,7 +826,6 @@ app.post("/api/assignedProjects", async (req, postRes) => {
   }
 });
 // Assigned Project Summary
-// select projectid, projectname, firstname, lastname, opened, taskstodo, deadline, extract(day from (deadline - current_date)) as daysleft from (select * from users natural join userproject natural join projects where ismanager) as managers natural join (select projectid, count(taskid) as taskstodo from tasks inner join features on tasks.featureid = features.featureid group by projectid) as featuretask;
 app.post("/api/assignedProjects", async (req, postRes) => {
   try {
     // console.log(req.body);
@@ -842,7 +841,26 @@ app.post("/api/assignedProjects", async (req, postRes) => {
   }
 });
 
-// Add task
+// INSERT FEEDBACK ()
+app.post("/api/insertFeedback", async (req, postRes) => {
+  try {
+    console.log(req.body);
+
+    const insertFeedback = await pool.query(
+      "INSERT INTO feedback(userid, projectid, fbdate, fbtype, fbquestion, fbscore) VALUES((SELECT userid FROM users WHERE email = $1), $2, $3, $4, $5, $6)",
+      [
+        req.body.email.email,
+        req.body.projectid,
+        req.body.fbdate,
+        req.body.fbtype,
+        req.body.fbquestion,
+        req.body.fbscore,
+      ]
+    );
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 //SELECT deadline - NOW() FROM projects where projectid = 1
 app.post("/api/timeLeft", async (req, postRes) => {

@@ -7,6 +7,8 @@ import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
 import { IconButton, Tooltip } from "@mui/material";
 import { Scrollbars } from "react-custom-scrollbars";
+import { InsertFeedback } from "../services/InsertFeedback";
+import { useSelector } from "react-redux";
 import Slider from "@mui/material/Slider";
 import Select from "react-select";
 import {
@@ -22,8 +24,9 @@ import Dropzone from "react-dropzone";
 import * as yup from "yup";
 import { createGrid } from "@mui/system";
 import "./feedbackform.css";
+import { useSelect } from "@mui/base";
 
-const SoftFeedbackForm = ({ handleClose, taskId, close }) => {
+const SoftFeedbackForm = ({ handleClose, taskId, close, projectid }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
 
@@ -44,6 +47,7 @@ const SoftFeedbackForm = ({ handleClose, taskId, close }) => {
   };
 
   const [value, setValue] = React.useState([1, 5]);
+  const email = useSelector((state) => state.email);
 
   function valuetext(value) {
     // return `${value} ${difficulty[value - 1]}`;
@@ -219,13 +223,24 @@ const SoftFeedbackForm = ({ handleClose, taskId, close }) => {
     setValues(temp);
     console.log(temp);
   };
+  const average = (arr) => arr.reduce((a, b) => a + b, 0) / arr.length;
 
   const handleFormSubmit = () => {
     console.log(values);
-    const averages = values[0].map(
-      (_, i) => values.reduce((acc, curr) => acc + curr[i], 0) / values.length
-    );
-    console.log(averages);
+    let averages = [];
+    for (let j = 0; j < values.length; j++) {
+      averages.push(average(values[j]));
+    }
+    for (let i = 0; i < averages.length; i++) {
+      InsertFeedback({
+        email: email,
+        fbtype: i + 1,
+        fbquestion: "Not Needed",
+        fbscore: averages[i],
+        projectid: projectid,
+        fbdate: new Date().toUTCString(),
+      });
+    }
     close();
   };
   return (

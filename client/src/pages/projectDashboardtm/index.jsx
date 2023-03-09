@@ -394,7 +394,7 @@ const ProjectDashboardTm = () => {
             <Modal.Title>Complete team member feedback</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <SoftFeedbackForm close={handleAddClose} />
+            <SoftFeedbackForm close={handleAddClose} projectid={projectId} />
           </Modal.Body>
         </Modal>
       </div>
