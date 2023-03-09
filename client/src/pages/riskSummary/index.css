@@ -4,11 +4,11 @@
 }}
 
 .infoBox2.riskBox{
-    height:500px;
+    height:350px;
 }
 
 .riskDonutContainer{
-    height:350px;
+    height:250px;
 }
 
 .riskDonutContainerSmaller{
@@ -16,7 +16,7 @@
 }
 
 .riskBox .donutText p {
-    margin-top: -50px;
+    margin-top: -10px;
     font-size: 40px;
 }
 
@@ -28,18 +28,23 @@
 }}
 
 .infoBox2.riskHistoryTrack{
-    height:500px;
+    height:350px;
 }
 
 .riskHistoryTrack .lineGraphContainer {
-    height: 350px;
+    height: 250px;
 }
 
 .infoBox2.riskRecommendation{
-    width: 48% !important;
+    width: 100% !important;
     height: 400px;
 }
 
+@media (min-width: 1350px){
+    .infoBox2.riskRecommendation{
+        width: 48% !important;
+        height: 400px;
+}}
 
 .riskTitle{
     font-weight: 900;
