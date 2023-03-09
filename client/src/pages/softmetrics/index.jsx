@@ -134,12 +134,13 @@ const SoftMetrics = ({ projectid }) => {
       
         <div className="infoBox project"  style={{marginBottom:'50px'}}>
         
-        <div className="metricTitle">Communication</div>
-        <div className="metricHalfDonutContainer">
-          <HalfDoughnutChart data1={communicationScore} label="Communication" backgroundColor={(()=>{
-                return(calculateRiskColor(communicationScore))})}/>
-          <div className="donutText halfdonutRisk">
-            <p>3.5</p>
+          <div className="metricTitle">Communication</div>
+          <div className="metricHalfDonutContainer">
+            <HalfDoughnutChart data1={communicationScore} label="Communication" backgroundColor={(()=>{
+                  return(calculateRiskColor(communicationScore))})}/>
+            <div className="donutText halfdonutRisk">
+              <p>{communicationScore}</p>
+            </div>
           </div>
         </div>
 
@@ -149,9 +150,12 @@ const SoftMetrics = ({ projectid }) => {
           <HalfDoughnutChart data1={projectUnderstanding} label="Effective Decisions" backgroundColor={(()=>{
                 return(calculateRiskColor(projectUnderstanding))})}/>
           <div className="donutText halfdonutRisk">
-            <p>4.1</p>
+            <p>{projectUnderstanding}</p>
           </div>
         </div>
+      </div>
+
+
 
       <div className="infoBox project">
         <div className="metricTitle">Team Cohesion</div>
@@ -159,8 +163,9 @@ const SoftMetrics = ({ projectid }) => {
           <HalfDoughnutChart data1={teamCohesion} label="Core Values" backgroundColor={(()=>{
                 return(calculateRiskColor(teamCohesion))})}/>
           <div className="donutText halfdonutRisk">
-            <p>3.8</p>
+            <p>{teamCohesion}</p>
           </div>
+        </div>
         </div>
 
       <div className="infoBox project">
@@ -169,10 +174,11 @@ const SoftMetrics = ({ projectid }) => {
           <HalfDoughnutChart data1={confidenceInSkillSet} label="Confidence in Skillsets" backgroundColor={(()=>{
                 return(calculateRiskColor(confidenceInSkillSet))})}/>
           <div className="donutText halfdonutRisk">
-            <p>4.4</p>
+            <p>{confidenceInSkillSet}</p>
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };
