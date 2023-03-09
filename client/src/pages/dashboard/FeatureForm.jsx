@@ -49,11 +49,12 @@ const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
   });
 
   const initialValuesRegister = {
-    name: "Project",
-    description: "Description",
-    startTime: "2023-05-24",
-    endTime: "2023-05-25",
-    difficulty: "1",
+    name: "",
+    description: "",
+    startTime: "",
+    endTime: "",
+    difficulty: "",
+    gitHubRepoName:"",
   };
 
   useEffect(() => {
@@ -192,6 +193,28 @@ const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
                   className="defineDependenciesBox"
                   sx={{ gridColumn: "span 3", width: "70%" }}
                   value={teamMembers}
+                />
+
+                <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "2px",
+                  }}
+                >
+                  Github repository name:
+                </p>
+                <TextField
+                  label="Github Repository Name"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.gitHubRepoName}
+                  name="Github repository name"
+                  error={
+                    Boolean(touched.description) && Boolean(errors.description)
+                  }
+                  helperText={touched.description && errors.description}
+                  sx={{ gridColumn: "span 3" }}
                 />
 
                 <TextField

@@ -97,9 +97,6 @@ const GithubIntegrator = () => {
       
       const [data, setData] = useState();
 
-      const owner = 'sanjula-hettiarachchige';
-      const access_token = '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';
-      const headers = {'Authorization':"Token "+access_token};
 
       const octokit = new Octokit({ 
         auth: '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',
