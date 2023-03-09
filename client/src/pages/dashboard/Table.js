@@ -96,7 +96,6 @@ const Table = () => {
           featureName: task.featurename,
           daysLeft: task.daysleft,
         };
-        console.log(newTask);
         newTasks.push(newTask);
       });
       setData(newTasks);

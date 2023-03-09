@@ -254,27 +254,27 @@ create trigger newtask before insert on tasks
 for each row
     execute procedure tasktimes();
 
--- Check that dependency deadlines are compatible
-create or replace function checkdep() returns trigger as $$
-declare
-    featurestart timestamp; -- Start time of feature
-    depdeadline timestamp;  -- Deadline of feature's dependency
-begin
-    select starttime from features where featureid = new.featureid into featurestart;
-    select endtime from features where featureid = new.depid into depdeadline;
+-- -- Check that dependency deadlines are compatible
+-- create or replace function checkdep() returns trigger as $$
+-- declare
+--     featurestart timestamp; -- Start time of feature
+--     depdeadline timestamp;  -- Deadline of feature's dependency
+-- begin
+--     select starttime from features where featureid = new.featureid into featurestart;
+--     select endtime from features where featureid = new.depid into depdeadline;
 
-    -- Feature start time cannot be before its dependency's deadline
-    if (featurestart < depdeadline) then
-        raise exception 'Feature cannot start before its dependency is completed';
-    end if;
+--     -- Feature start time cannot be before its dependency's deadline
+--     if (featurestart < depdeadline) then
+--         raise exception 'Feature cannot start before its dependency is completed';
+--     end if;
     
-    return new;
-end;
-$$ language plpgsql;
+--     return new;
+-- end;
+-- $$ language plpgsql;
 
-create trigger newdep before insert on featuredep
-for each row
-    execute procedure checkdep();
+-- create trigger newdep before insert on featuredep
+-- for each row
+--     execute procedure checkdep();
 
 -- Create a notification when a member is added to the team for a project
 create or replace function membernotif() returns trigger as $$

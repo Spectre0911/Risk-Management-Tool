@@ -277,8 +277,8 @@ app.post("/api/createFeature", async (req, res) => {
 
     // recording the change in features
     const recordChange = await pool.query(
-      "INSERT INTO featureChange (projectid, priority, dateChanged) VALUES ($1, $2)",
-      [req.body.projectid, req.body.priority, Date.now()]
+      "INSERT INTO featureChange (projectid, priority, dateChanged) VALUES ($1, $2, $3)",
+      [req.body.projectid, req.body.priority, new Date().toUTCString()]
     );
 
     // Get the feature id
@@ -813,13 +813,13 @@ app.post("/api/bugCount", async (req, postRes) => {
 // Get all task for a particular project
 app.post("/api/assignedProjects", async (req, postRes) => {
   try {
-    // console.log(req.body);
+    console.log(req.body);
 
     const projects = await pool.query(
       "select projectid, projectname, userid, concat(firstname,' ', lastname), opened, taskstodo, deadline, extract(day from (deadline - current_date)) as daysleft from (select * from users natural join userproject natural join projects where ismanager) as managers natural join (select projectid, count(taskid) as taskstodo from tasks inner join features on tasks.featureid = features.featureid group by projectid) as featuretask WHERE userid = (SELECT userid FROM users WHERE email = $1);",
       [req.body.email]
     );
-
+    console.log(projects.rows);
     postRes.json(projects.rows);
   } catch (err) {
     console.error(err.message);
@@ -951,8 +951,9 @@ app.post("/api/overallrisk", async (req, res) => {
   try {
     // This variable contains the data
     // you want to send
+    console.log(parseInt(req.body.projectId));
     var data = {
-      projectid: req.body.projectid,
+      projectid: parseInt(req.body.projectId),
     };
 
     // preparing the post request
@@ -981,7 +982,7 @@ app.post("/api/overallrisk", async (req, res) => {
         // return result;
       })
       .catch(function (err) {
-        console.log(err);
+        console.log("ERROR");
       });
   } catch (err) {
     console.log(err.message);

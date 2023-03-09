@@ -20,20 +20,20 @@ insert into projects (projectid, projectname, closed, opened, deadline, brief, b
     (4, 'Bitchip', default, '2024-06-30 05:24:41', '2024-07-13 13:14:26', 'Reverse-engineered radical implementation', 607954),
     (5, 'Veribet', default, '2024-02-20 11:08:39', '2024-03-11 08:23:35', 'Persistent multi-tasking protocol', 508067);
 
-INSERT INTO userproject (userid, projectid, role, ismanager)
-VALUES
-    (1, 1, 'Developer', false),
-    (2, 1, 'Developer', false),
-    (3, 1, 'Manager', true),
-    (4, 2, 'Manager', true),
-    (1, 3, 'Developer', false),
-    (2, 3, 'Manager', true),
-    (3, 3, 'Developer', false),
-    (4, 3, 'Developer', false),
-    (1, 4, 'Manager', true),
-    (2, 4, 'Developer', false),
-    (3, 4, 'Developer', false),
-    (4, 4, 'Developer', false);
+-- INSERT INTO userproject (userid, projectid, role, ismanager)
+-- VALUES
+--     (1, 1, 'Developer', false),
+--     (2, 1, 'Developer', false),
+--     (3, 1, 'Manager', true),
+--     (4, 2, 'Manager', true),
+--     (1, 3, 'Developer', false),
+--     (2, 3, 'Manager', true),
+--     (3, 3, 'Developer', false),
+--     (4, 3, 'Developer', false),
+--     (1, 4, 'Manager', true),
+--     (2, 4, 'Developer', false),
+--     (3, 4, 'Developer', false),
+--     (4, 4, 'Developer', false);
 
 
 INSERT INTO features (featureid, projectid, featurename, featuredesc, starttime, endtime, completed, difficulty, priority, status, currentrisk, progress, members)

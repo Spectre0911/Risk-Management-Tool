@@ -26,7 +26,6 @@ model = joblib.load(filename)
 def predict():
     #recieve the post request
     data = request.get_json() 
-    
     # get the project id
     projectid = data['projectid']
 
@@ -122,9 +121,10 @@ def get_replacement (projectId):
 def get_change_features (projectId):
     cursorObj = conn.cursor()
     
-
+    change_score = 0
     cursorObj.execute("SELECT SUM(priority) FROM (featureChange NATURAL JOIN projects) AS newTable WHERE newTable.projectid = %s and EXTRACT(DAYS from (newTable.dateChanged - newTable.opened))::INTEGER > %s", (projectId, 10))
-    change_score = cursorObj.fetchall()[0][0]/100
+    if cursorObj.fetchall()[0] and cursorObj.fetchall()[0][0]:
+        change_score = cursorObj.fetchall()[0][0]/100
     
     return change_score
 

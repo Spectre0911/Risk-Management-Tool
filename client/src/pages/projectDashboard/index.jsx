@@ -152,10 +152,10 @@ const ProjectDashboard = () => {
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
-    // OverallRisk({ projectId: projectId }).then((data) => {
-    //   console.log("OVERALL RISK");
-    //   console.log(data);
-    // });
+    OverallRisk({ projectId: projectId }).then((data) => {
+      console.log("OVERALL RISK");
+      console.log(data);
+    });
     OrderedUsers({ projectId: projectId }).then((data) => {
       setTeamMemberOptions(data);
     });
