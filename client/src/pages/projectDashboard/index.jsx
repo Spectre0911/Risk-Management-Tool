@@ -96,6 +96,7 @@ const ProjectDashboard = () => {
 
   const deleteFeature = (e) => {
     console.log("delete this");
+    console.log("WE ARE DELETING");
     console.log(removeUserId);
     setShowDelete(false);
   };
@@ -151,21 +152,21 @@ const ProjectDashboard = () => {
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
     OrderedUsers({ projectId: projectId }).then((data) => {
-      console.log("------");
-      console.log(data);
-      console.log("------");
+      // console.log("------");
+      // console.log(data);
+      // console.log("------");
       setTeamMemberOptions(data);
     });
     AllProjectMembers({ projectId: projectId }).then((data) => {
-      console.log("Fetching project members");
+      // console.log("Fetching project members");
       if (data != null) {
-        console.log(data);
+        // console.log(data);
         let newData = [];
         var useridSkillMap = new Map();
         const memberSkillPromises = data.map((member) => {
-          console.log(member);
+          // console.log(member);
           return MemberSkills({ userid: member.userid }).then((skills) => {
-            console.log(skills);
+            // console.log(skills);
 
             let skillArr = [];
             if (skills != null) {
@@ -176,20 +177,18 @@ const ProjectDashboard = () => {
               });
             }
             useridSkillMap.set(member.userid, skillArr);
-            // console.log("Members skills: ");
-            // console.log(useridSkillMap.get(member.userid));
           });
         });
 
         Promise.all(memberSkillPromises).then(() => {
-          console.log(useridSkillMap);
+          // console.log(useridSkillMap);
           data.forEach((member) =>
             newData.push({
               ...member,
               skills: useridSkillMap.get(member.userid),
             })
           );
-          console.log(newData);
+          // console.log(newData);
           setTeamMembers(newData);
         });
       }
@@ -201,6 +200,7 @@ const ProjectDashboard = () => {
     TimeLeft({
       projectid: projectId,
     }).then((data) => {
+      console.log(data);
       setDataTime([data[0].remaining.days, data[0].completed.days]);
     });
 
@@ -571,7 +571,7 @@ const ProjectDashboard = () => {
           <RadarChart />
         </div>
 
-        <div className="infoBox2 softMetricBox">
+        <div className="infoBox2 githubMetricBox">
           <div
             className="metricTitle2"
             style={{ marginBottom: "20px", paddingTop: "7px" }}
@@ -595,7 +595,7 @@ const ProjectDashboard = () => {
           <LineGraph labels={dates} datavalues={commits} />
         </div>
 
-        <div className="infoBox2 bugs">
+        {/* <div className="infoBox2 bugs">
           <div
             className="metricTitle2"
             style={{ marginBottom: "20px", paddingTop: "7px" }}
@@ -618,10 +618,12 @@ const ProjectDashboard = () => {
           </div>
           <div>
             <p>What should go here???</p>
-            {/* <ProgressBar variant="danger" now={20} /> */}
+            <ProgressBar variant="danger" now={20} />
           </div>
-        </div>
+        </div> */}
       </div>
+
+      
       <Modal
         className="addProfileModal"
         style={{ marginTop: "200px" }}

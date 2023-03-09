@@ -81,12 +81,12 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
       <div className="projectFilterRow">
         <input
           className="projectFilterInput viewProject"
-          placeholder="Search by task name"
+          placeholder="Search by project name"
           onChange={(e) => setFilter("featureName", e.target.value)}
         />
         <input
           className="projectFilterInput viewProject"
-          placeholder="Search by project name"
+          placeholder="Search by project manager"
           onChange={(e) => setFilter("projectName", e.target.value)}
         />
       </div>
@@ -121,7 +121,11 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
               }
               return (
                 <Fragment key={row.getRowProps().key}>
-                  <tr>
+                  <tr
+                    onClick={() =>
+                        navigate(`/projectstm/${row.original.projectId}`)
+                    }
+                  >
                     {row.cells.map((cell) => {
                       return (
                         <td {...cell.getCellProps()}>{cell.render("Cell")}</td>

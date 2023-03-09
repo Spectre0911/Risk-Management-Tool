@@ -41,19 +41,15 @@ app.post(
   "/upload",
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
-    console.log(req);
     const tempPath = req.file.path;
     const targetPath = path.join(__dirname, "public/assets/");
 
     if (path.extname(req.file.originalname).toLowerCase() === ".png") {
-      console.log(tempPath);
-      console.log(targetPath);
       fs.rename(
         tempPath,
         path.join(targetPath, req.file.originalname),
         (err) => {
           if (err) return handleError(err, res);
-          console.log(tempPath);
           res.status(200).contentType("text/plain").end("File uploaded!");
         }
       );
@@ -117,6 +113,8 @@ app.post("/api/createProject", async (req, postRes) => {
       "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES((SELECT userid FROM users WHERE email = $1), $2, 'PM', True);",
       [req.body.email.email, projectid]
     );
+    res.sendStatus(200);
+
   } catch (err) {
     console.log("ERROR");
     console.error(err.message);
@@ -126,7 +124,6 @@ app.post("/api/createProject", async (req, postRes) => {
 // Login / Signup
 app.post("/api/createAccount", async (req, res) => {
   try {
-    // console.log(req.body);
     const uniqueSalt = bcrypt.genSaltSync(10);
     const saltPassword = bcrypt.hashSync(req.body.password, uniqueSalt);
     const createAccount = await pool.query(
@@ -140,15 +137,18 @@ app.post("/api/createAccount", async (req, res) => {
       ]
     );
 
-    res.json("finished");
+    // res.json("finished");
+    res.sendStatus(200);
+    // console.log("registered");
   } catch (err) {
     console.error(err.message);
+    res.sendStatus(400);
   }
 });
 // Get project name
 app.post("/api/projectName", async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
 
     const createAccount = await pool.query(
       "SELECT name FROM projects WHERE projectid = $1",
@@ -161,17 +161,31 @@ app.post("/api/projectName", async (req, res) => {
   }
 });
 
-// Get project name
+// Get all tasks to complete
 app.post("/api/taskToComplete", async (req, res) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
 
-    const createAccount = await pool.query(
-      "SELECT projectname, featurename, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft from projects inner join ((select featureid, featurename, projectid from features) as featureinfo inner join tasks on featureinfo.featureid = tasks.featureid) as featuretask on projects.projectid = featuretask.projectid where devid = (SELECT userid FROM users WHERE email = $1);",
+    const getTasks = await pool.query(
+      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1);",
       [req.body.email]
     );
     // console.log(createAccount.rows);
-    res.json(createAccount.rows);
+    res.json(getTasks.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Get all tasks to complete for a project id
+app.post("/api/taskToCompletePID", async (req, res) => {
+  try {
+    const tasksToComplete = await pool.query(
+      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1) AND projects.projectid = $2;",
+      [req.body.email, req.body.projectid]
+    );
+    // console.log(createAccount.rows);
+    res.json(tasksToComplete.rows);
   } catch (err) {
     console.error(err.message);
   }
@@ -189,15 +203,15 @@ app.post("/api/addTeamMember", async (req, res) => {
     const recordAdd = await pool.query(
       "INSERT INTO replacements (projectid, dateChanged, changeType) VALUES($1, $2, $3)",
       [req.body.projectid, Date.now(), 1]
-    )
+    );
 
-    res.json("finished");
+    res.statusCode(200);
   } catch (err) {
     console.error(err.message);
   }
 });
 
-app.post("/api/removeTeamMember", async(req, res) => {
+app.post("/api/removeTeamMember", async (req, res) => {
   try {
     const remove = await pool.query(
       "DELETE FROM userproject WHERE userproject.userid = $1, userproject.projectid = $2",
@@ -209,7 +223,7 @@ app.post("/api/removeTeamMember", async(req, res) => {
       [req.body.projectid, Date.now(), 0]
     );
   } catch (err) {
-    console.log(err.message)
+    console.log(err.message);
   }
 });
 
@@ -234,6 +248,7 @@ app.post("/api/login", async (req, postResult) => {
               console.log("Incorrect password or email");
             }
             postResult.json({ loggedIn: loggedInVal, email: emailVal });
+
           });
         }
       }
@@ -419,7 +434,7 @@ app.post("/api/locationNotifications", async (req, postRes) => {
 
     // console.log(allNotifications.rows);
     if (allNotifications.rows.length == 0) {
-      return postRes.json("0");
+      return postRes.json([]);
     } else {
       return postRes.json(allNotifications.rows);
     }
@@ -789,7 +804,7 @@ app.post("/api/bugCount", async (req, postRes) => {
       "select * from bugs inner join features on bugs.featureid = features.featureid where projectid = $1",
       [req.body.projectid]
     );
-    console.log(allBugs.rows);
+    // console.log(allBugs.rows);
     postRes.json(allBugs.rows);
   } catch (err) {
     console.error(err.message);
@@ -820,7 +835,7 @@ app.post("/api/timeLeft", async (req, postRes) => {
     // console.log(req.body);
 
     const timeLeft = await pool.query(
-      "SELECT deadline - NOW() as remaining, deadline - (Now()-opened) as completed FROM projects where projectid = $1;",
+      "SELECT deadline - NOW() as remaining, (Now()-opened) as completed FROM projects where projectid = $1;",
       [req.body.projectid]
     );
     if (timeLeft.rows.length == 0) {
@@ -898,7 +913,7 @@ app.post("/api/overallrisk", async (req, res) => {
       method: "POST",
 
       // http:flaskserverurl:port/route
-      uri: "http://127.0.0.1:5000/predictoveralscore",
+      uri: "http://127.0.0.1:5001/predictoveralscore",
       body: data,
 
       // Automatically stringifies
@@ -910,7 +925,7 @@ app.post("/api/overallrisk", async (req, res) => {
       // The parsedBody contains the data
       // sent back from the Flask server
       .then(function (parsedBody) {
-        console.log(parsedBody);
+        // console.log(parsedBody);
 
         // You can do something with
         // returned data

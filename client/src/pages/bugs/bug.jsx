@@ -39,6 +39,10 @@ const Bug = ({ data, deleteBug, key }) => {
     console.log(show);
   };
 
+  const complete = (bugId) =>{
+    console.log("completed", bugId);
+  }
+
   return (
     <div className="bugContainer">
       <div className="bugLeftPane">
@@ -68,8 +72,11 @@ const Bug = ({ data, deleteBug, key }) => {
           <button className="bugViewButton" onClick={handleEditShow}>
             Details
           </button>
-          <button className="bugAssignButton" onClick={handleShow}>
-            Assign Bug
+          <button className="bugAssignButton" type="submit" onClick={(()=>
+          {
+            complete(data.bugId)
+          })}>
+            Completed
           </button>
         </div>
       </div>

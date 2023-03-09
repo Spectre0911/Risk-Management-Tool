@@ -54,7 +54,6 @@ drop table if exists userproject;
 create table userproject (
     userid    integer not null,
     projectid integer not null,
-    role      varchar(50) not null,
     ismanager boolean not null default false,
     primary key (userid, projectid),
     foreign key (userid) references users(userid) on delete cascade,
@@ -66,7 +65,6 @@ create table features (
     featureid   serial not null,
     projectid   integer not null,
     featurename varchar(50) not null,
-    unique (projectid, featurename),
     featuredesc varchar(300),
     starttime   timestamp not null check (starttime >= current_date),
     endtime     timestamp not null,
@@ -126,6 +124,7 @@ create table bugs (
     featureid integer not null,
     devid     integer default null,
     bugname   varchar(50) not null,
+    location  varchar(50) not null,
     bugdesc   varchar(300),
     priority  integer not null check (priority >= 1 and priority <= 3),
     severity  integer not null check (severity >= 1 and severity <= 3),
@@ -149,13 +148,13 @@ create table notifications (
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
--- look at f3
 drop table if exists feedback;
 create table feedback (
     fbid       serial not null,
     userid     integer not null,
     projectid  integer not null,
     fbdate     timestamp not null,
+    fbtype     real not null check (fbtype >= 1 and fbtype <= 10),
     fbquestion varchar(200) not null,
     fbscore    integer not null check (fbscore >= 0 and fbscore <= 100),
     primary key (fbid),

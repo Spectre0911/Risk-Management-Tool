@@ -89,7 +89,7 @@ const Table = (props) => {
   };
 
   const deleteFeature = (featureDeleteId) => {
-    console.log("delete this");
+    console.log(featureDeleteId);
     // console.log(featureId);
     setShowDelete(true);
   };

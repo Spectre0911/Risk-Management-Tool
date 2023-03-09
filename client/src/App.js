@@ -3,8 +3,8 @@ import "./App.css";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
-//components
-import "@fontsource/montserrat";
+// //components
+// import "@fontsource/montserrat";
 import InputTodo from "./components/InputTodo";
 import ListTodos from "./components/ListTodos";
 import Admin from "./pages/admin";

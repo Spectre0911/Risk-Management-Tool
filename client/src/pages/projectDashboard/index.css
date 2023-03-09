@@ -392,6 +392,29 @@
     margin-top: -39px;
 }
 
+@media (min-width: 1350px){
+  .githubMetricBox {
+      width: 60% !important;
+  }
+}
+
+
+.githubMetricBox{
+  height: 500px;
+  margin-bottom: 50px;
+}
+
+.infoBox2.githubMetricBox >canvas {
+  margin: auto;
+  min-width: 500px !important;
+  min-height: 500px !important;
+  margin-top: -39px;
+}
+
+
+
+
+
 .lineGraphContainer{
     height: 420px;
 }
