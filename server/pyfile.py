@@ -162,8 +162,6 @@ def get_feedback(projectId):
     
     return float(result/100)
 
-print(predict())
-
 
 if __name__ == "__main__":
     app.run(port=5001)
