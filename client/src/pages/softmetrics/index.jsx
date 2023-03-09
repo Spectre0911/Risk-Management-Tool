@@ -54,6 +54,12 @@ const SoftMetrics = ({ projectid }) => {
     }
   }
 
+  const notifications = [{
+    title:"Feedback From Josh",
+    date:"12/12/2023",
+    text:"There is an issue with the server"
+  }]
+
   return (
     <div className="main">
       <div className="grid">
@@ -75,60 +81,22 @@ const SoftMetrics = ({ projectid }) => {
               Notifications
             </div>
 
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsFillChatSquareTextFill />
-              </div>
+            {notifications.map((notif, index)=>{
+              return(
+                <div className="notificationBox">
+                    <div className="notificationIcon blueIcon">
+                    <BsFillChatSquareTextFill />
+                    </div>
 
-              <div className="NotificationText">
-                <p>New Feedback</p>
-              </div>
+                    <div className="NotificationText">
+                      <p>{notif.title}</p>
+                    </div>
 
-              <div className="NotificationDescription">
-                <p>From: John Smith</p>
-              </div>
-            </div>
-
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsFillChatSquareTextFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>New Feedback</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>From: Jane Doe</p>
-              </div>
-            </div>
-            <div className="notificationBox">
-              <div className="notificationIcon blueIcon">
-                <BsFillChatSquareTextFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>New Feedback</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>From: Charis</p>
-              </div>
-            </div>
-
-            <div className="notificationBox">
-              <div className="notificationIcon">
-                <BsFillExclamationTriangleFill />
-              </div>
-
-              <div className="NotificationText">
-                <p>Risk Rising</p>
-              </div>
-
-              <div className="NotificationDescription">
-                <p>Communication risk level is higher than previous week</p>
-              </div>
-            </div>
+                    <div className="NotificationDescription">
+                      <p>{notif.date}</p>
+                      <p>{notif.text}</p>
+                  </div>
+                </div>)})}
           </Scrollbars>
         </div>
       
