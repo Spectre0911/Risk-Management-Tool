@@ -31,6 +31,7 @@ def predict():
     projectid = data['projectid']
 
     #get the necessary features
+
     skillset_per_workload = skillset_workload(projectid)
     delay = get_delay(projectid)
     bugs = get_bugs(projectid)

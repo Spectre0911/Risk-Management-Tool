@@ -29,6 +29,7 @@ create table projects (
     budget      integer not null check (budget > 0),
     currentrisk integer not null default 0,
     check (currentrisk >= 0 and currentrisk <= 100),
+    githubtoken varchar(100) default null,
     primary key (projectid)
 );
 

@@ -110,11 +110,10 @@ app.post("/api/createProject", async (req, postRes) => {
       );
     });
     pool.query(
-      "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES((SELECT userid FROM users WHERE email = $1), $2, 'PM', True);",
+      "INSERT INTO userproject (userid, projectid, ismanager) VALUES((SELECT userid FROM users WHERE email = $1), $2, True);",
       [req.body.email.email, projectid]
     );
-    res.sendStatus(200);
-
+    // res.sendStatus(200);
   } catch (err) {
     console.log("ERROR");
     console.error(err.message);
@@ -181,8 +180,8 @@ app.post("/api/taskToComplete", async (req, res) => {
 app.post("/api/taskToCompletePID", async (req, res) => {
   try {
     const tasksToComplete = await pool.query(
-      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1) AND projects.projectid = $2;",
-      [req.body.email, req.body.projectid]
+      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1);",
+      [req.body.email]
     );
     // console.log(createAccount.rows);
     res.json(tasksToComplete.rows);
@@ -193,10 +192,10 @@ app.post("/api/taskToCompletePID", async (req, res) => {
 
 app.post("/api/addTeamMember", async (req, res) => {
   try {
-    // console.log(req.body);
+    console.log(req.body);
 
     const add = await pool.query(
-      "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES($1, $2, 'TM', false) RETURNING *",
+      "INSERT INTO userproject (userid, projectid, ismanager) VALUES($1, $2, false) RETURNING *",
       [req.body.userid, req.body.projectid]
     );
 
@@ -248,7 +247,6 @@ app.post("/api/login", async (req, postResult) => {
               console.log("Incorrect password or email");
             }
             postResult.json({ loggedIn: loggedInVal, email: emailVal });
-
           });
         }
       }
@@ -352,7 +350,7 @@ app.post("/api/projects", async (req, postRes) => {
   try {
     // console.log(req.body);
     const allFeatures = await pool.query(
-      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, deadline, closed, ((EXTRACT(DAY FROM (NOW() - opened ))) / (EXTRACT(DAY FROM (deadline - opened)))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
+      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, opened, deadline, closed, ((EXTRACT(DAY FROM (NOW() - opened ))) / (EXTRACT(DAY FROM (deadline - opened)))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
       [req.body.email]
     );
     if (allFeatures.rows.length == 0) {
@@ -813,21 +811,70 @@ app.post("/api/bugCount", async (req, postRes) => {
 
 //select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here> and devid = <userid here> and not completed) as tasksleft;
 // Get all task for a particular project
-app.post("/api/taskCount", async (req, postRes) => {
+app.post("/api/assignedProjects", async (req, postRes) => {
   try {
     // console.log(req.body);
 
-    const taskCount = await pool.query(
-      "select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = $1 and devid = (SELECT userid FROM users WHERE email = $2) and not completed) as tasksleft",
-      [req.body.projectid, req.body.email]
+    const projects = await pool.query(
+      "select projectid, projectname, userid, concat(firstname,' ', lastname), opened, taskstodo, deadline, extract(day from (deadline - current_date)) as daysleft from (select * from users natural join userproject natural join projects where ismanager) as managers natural join (select projectid, count(taskid) as taskstodo from tasks inner join features on tasks.featureid = features.featureid group by projectid) as featuretask WHERE userid = (SELECT userid FROM users WHERE email = $1);",
+      [req.body.email]
     );
 
-    postRes.json(taskCount.rows);
+    postRes.json(projects.rows);
   } catch (err) {
     console.error(err.message);
   }
 });
-// Add task
+// Assigned Project Summary
+app.post("/api/assignedProjects", async (req, postRes) => {
+  try {
+    // console.log(req.body);
+
+    const assignedProjects = await pool.query(
+      "select managers.projectid, projectname, firstname, lastname, opened, COALESCE(taskstodo, 0) AS taskstodo,  deadline, extract(day from (deadline - current_date)) as daysleft from (select * from users natural join userproject natural join projects where not ismanager) as managers left outer join (select projectid, count(taskid) as taskstodo from tasks inner join features on tasks.featureid = features.featureid group by projectid) as featuretask on managers.projectid = featuretask.projectid;",
+      [req.body.projectid, req.body.email]
+    );
+
+    postRes.json(assignedProjects.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// INSERT FEEDBACK ()
+app.post("/api/insertFeedback", async (req, postRes) => {
+  try {
+    const insertFeedback = await pool.query(
+      "INSERT INTO feedback(userid, projectid, fbdate, fbtype, fbquestion, fbscore) VALUES((SELECT userid FROM users WHERE email = $1), $2, $3, $4, $5, $6)",
+      [
+        req.body.email.email,
+        req.body.projectid,
+        req.body.fbdate,
+        req.body.fbtype,
+        req.body.fbquestion,
+        req.body.fbscore,
+      ]
+    );
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Retrieve soft skills Score
+app.post("/api/softSkillsScore", async (req, postRes) => {
+  try {
+    console.log(req.body);
+    const communicationScore = await pool.query(
+      "SELECT projectid, AVG(fbscore) FROM feedback WHERE fbtype = $1 AND projectid = $2 GROUP BY projectid;",
+      [req.body.fbtype, req.body.projectid]
+    );
+    console.log(communicationScore.rows);
+
+    postRes.json(communicationScore.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
 
 //SELECT deadline - NOW() FROM projects where projectid = 1
 app.post("/api/timeLeft", async (req, postRes) => {
@@ -931,7 +978,7 @@ app.post("/api/overallrisk", async (req, res) => {
         // returned data
         let result;
         result = parsedBody["result"];
-        return result;
+        // return result;
       })
       .catch(function (err) {
         console.log(err);
