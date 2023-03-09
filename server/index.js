@@ -811,20 +811,37 @@ app.post("/api/bugCount", async (req, postRes) => {
 
 //select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here> and devid = <userid here> and not completed) as tasksleft;
 // Get all task for a particular project
-app.post("/api/taskCount", async (req, postRes) => {
+app.post("/api/assignedProjects", async (req, postRes) => {
   try {
     // console.log(req.body);
 
-    const taskCount = await pool.query(
-      "select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = $1 and devid = (SELECT userid FROM users WHERE email = $2) and not completed) as tasksleft",
-      [req.body.projectid, req.body.email]
+    const projects = await pool.query(
+      "select projectid, projectname, userid, concat(firstname,' ', lastname), opened, taskstodo, deadline, extract(day from (deadline - current_date)) as daysleft from (select * from users natural join userproject natural join projects where ismanager) as managers natural join (select projectid, count(taskid) as taskstodo from tasks inner join features on tasks.featureid = features.featureid group by projectid) as featuretask WHERE userid = (SELECT userid FROM users WHERE email = $1);",
+      [req.body.email]
     );
+
+    postRes.json(projects.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+// Assigned Project Summary
+// select projectid, projectname, firstname, lastname, opened, taskstodo, deadline, extract(day from (deadline - current_date)) as daysleft from (select * from users natural join userproject natural join projects where ismanager) as managers natural join (select projectid, count(taskid) as taskstodo from tasks inner join features on tasks.featureid = features.featureid group by projectid) as featuretask;
+app.post("/api/assignedProjects", async (req, postRes) => {
+  try {
+    // console.log(req.body);
+
+    const taskCount = await pool.query("", [
+      req.body.projectid,
+      req.body.email,
+    ]);
 
     postRes.json(taskCount.rows);
   } catch (err) {
     console.error(err.message);
   }
 });
+
 // Add task
 
 //SELECT deadline - NOW() FROM projects where projectid = 1
