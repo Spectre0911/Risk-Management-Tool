@@ -831,12 +831,12 @@ app.post("/api/assignedProjects", async (req, postRes) => {
   try {
     // console.log(req.body);
 
-    const taskCount = await pool.query("", [
-      req.body.projectid,
-      req.body.email,
-    ]);
+    const assignedProjects = await pool.query(
+      "select managers.projectid, projectname, firstname, lastname, opened, COALESCE(taskstodo, 0) AS taskstodo,  deadline, extract(day from (deadline - current_date)) as daysleft from (select * from users natural join userproject natural join projects where not ismanager) as managers left outer join (select projectid, count(taskid) as taskstodo from tasks inner join features on tasks.featureid = features.featureid group by projectid) as featuretask on managers.projectid = featuretask.projectid;",
+      [req.body.projectid, req.body.email]
+    );
 
-    postRes.json(taskCount.rows);
+    postRes.json(assignedProjects.rows);
   } catch (err) {
     console.error(err.message);
   }
