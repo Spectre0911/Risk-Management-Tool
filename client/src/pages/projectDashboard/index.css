@@ -458,6 +458,9 @@
   color: white;
   transition: 0.8s;
 }
+.toplogicalOrderButton.max{
+  left: 400px !important;
+}
 /* .gantt{
     width: 100% !important;
 } */
