@@ -130,14 +130,14 @@ const Dashboard = () => {
         </div>
 
         <div className="infoBox2 projectTable">
-          <div className="metricTitle2">Project Summary</div>
+          <div className="metricTitle2">Managed Project Summary</div>
           <ProjectTable setActiveProjects={setActiveProjects} />
         </div>
 
-        <div className="infoBox2">
+        <div className="infoBox2 taller">
           <Scrollbars>
             <div className="metricTitle2" style={{ marginBottom: "20px" }}>
-              Notificationss
+              Notifications
             </div>
             {notificationData.map((notif, index) => {
               return <Notification data={notif} />;
@@ -147,7 +147,7 @@ const Dashboard = () => {
       </div>
 
       <div className="infoBox2 projectTable">
-        <div className="metricTitle2">Task Summary</div>
+        <div className="metricTitle2">Assigned Project Summary </div>
         <Table />
       </div>
     </div>

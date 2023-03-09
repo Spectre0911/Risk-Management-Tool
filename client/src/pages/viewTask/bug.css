@@ -101,21 +101,6 @@
     background-color: #5873ca;
 }
 
-.bugAssignButton{
-    padding: 5px 20px;
-    margin: 5px;
-    background-color: #ff6767;
-    border-radius: 5px;
-    border: none;
-    font-family: 'Montserrat';
-}
-
-.bugAssignButton:hover{
-    color: white;
-    transition: 0.3s;
-    background-color: #f50000;
-}
-
 .bugTitle{
     font-family: 'Montserrat';
     font-size: 20px;

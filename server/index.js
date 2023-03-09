@@ -117,6 +117,8 @@ app.post("/api/createProject", async (req, postRes) => {
       "INSERT INTO userproject (userid, projectid, role, ismanager) VALUES((SELECT userid FROM users WHERE email = $1), $2, 'PM', True);",
       [req.body.email.email, projectid]
     );
+    res.sendStatus(200);
+
   } catch (err) {
     console.log("ERROR");
     console.error(err.message);
@@ -126,7 +128,6 @@ app.post("/api/createProject", async (req, postRes) => {
 // Login / Signup
 app.post("/api/createAccount", async (req, res) => {
   try {
-    // console.log(req.body);
     const uniqueSalt = bcrypt.genSaltSync(10);
     const saltPassword = bcrypt.hashSync(req.body.password, uniqueSalt);
     const createAccount = await pool.query(
@@ -140,9 +141,12 @@ app.post("/api/createAccount", async (req, res) => {
       ]
     );
 
-    res.json("finished");
+    // res.json("finished");
+    res.sendStatus(200);
+    // console.log("registered");
   } catch (err) {
     console.error(err.message);
+    res.sendStatus(400);
   }
 });
 // Get project name
@@ -191,7 +195,7 @@ app.post("/api/addTeamMember", async (req, res) => {
       [req.body.projectid, Date.now(), 1]
     )
 
-    res.json("finished");
+    res.statusCode(200);
   } catch (err) {
     console.error(err.message);
   }
@@ -234,6 +238,7 @@ app.post("/api/login", async (req, postResult) => {
               console.log("Incorrect password or email");
             }
             postResult.json({ loggedIn: loggedInVal, email: emailVal });
+
           });
         }
       }
