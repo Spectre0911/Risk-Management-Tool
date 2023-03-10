@@ -366,6 +366,27 @@ app.post("/api/projects", async (req, postRes) => {
     console.error(err.message);
   }
 });
+
+app.post("/api/getImagePath", async (req, postRes) => {
+  try {
+    const pfp = await pool.query(
+      "SELECT pfppath FROM users WHERE email = $1; ",
+      [req.body.email]
+    );
+    if (pfp.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      postRes.json(pfp.rows[0].pfppath);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+
+
+
 // End project
 app.post("/api/endProject", async (req, postRes) => {
   try {
