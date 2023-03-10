@@ -6,7 +6,7 @@ import './Guide.css'
 const images = [
   {
     title: 'Home Dashboard',
-    src: 'https://picsum.photos/600/400?random=1',
+    src: "/assets/images/homeDashboard.png",
     caption: <div>
       <p style={{ whiteSpace: "pre-line" }}>
         {`The first page you will view upon closing this guide is your home dashboard.`}
@@ -21,7 +21,7 @@ const images = [
   },
   {
     title: 'Creating a Project',
-    src: 'https://picsum.photos/600/400?random=2',
+    src: '/assets/images/createProject.png',
     caption: <div>
     <p style={{whiteSpace:"pre-line"}}>{`This is done by clicking the 'Create Project' button, located at the top of your Project Summary on the home dashboard.`}
     <ul>
@@ -34,7 +34,7 @@ const images = [
   },
   {
     title: 'Editing Profile',
-    src: 'https://picsum.photos/600/400?random=3',
+    src: '/assets/images/editProfile.png',
     caption: <div>
       <p style={{whiteSpace:"pre-line"}}>{`By clicking your profile photo in the top right corner, you can edit your profile.`}
       <ul>
@@ -47,7 +47,7 @@ const images = [
   },
   {
     title: 'Project Dashboard- Manager',
-    src: 'https://picsum.photos/600/400?random=4',
+    src: '/assets/images/PMdashboard.png',
     caption: <div>
       <p>{`As PM, the project dashboard provides an overview of all risk factors.`}
       <ul>
@@ -61,7 +61,7 @@ const images = [
   },
   {
     title: 'Creating features & Gantt Chart',
-    src: 'https://picsum.photos/600/400?random=5',
+    src: '/assets/images/createFeature.png',
     caption:<div>
     <p>
       {`New features can be added to the project by clicking the 'Add Feature' button on the Project Manager dashboard.`}
@@ -75,7 +75,7 @@ const images = [
   },
   {
     title: 'Creating Tasks for features',
-    src: 'https://picsum.photos/600/400?random=7',
+    src: '/assets/images/createTask.png',
     caption:<div>
     <p>
       {`Each feature can have tasks added to it, in order to break down workload. This is done by pressing 'View Tasks' for a given feature on the dashboard.`}</p>
@@ -87,7 +87,7 @@ const images = [
   },
   {
     title: 'Soft Metrics Overview',
-    src: 'https://picsum.photos/600/400?random=6',
+    src: '/assets/images/softMetrics.png',
     caption:<div>
      <p>
       {`This section gives a more detailed look into the soft metrics affecting your project, using the data gathered from developers.`}
@@ -101,7 +101,7 @@ const images = [
   },
   {
     title: 'Github Metrics Overview',
-    src: 'https://picsum.photos/600/400?random=7',
+    src: '/assets/images/gitMetrics.png',
     caption:<div>
     <p>{`This page takes its information directly from the project's Github repository`}</p>
     <ul>
@@ -112,7 +112,7 @@ const images = [
   }, 
   {
     title: 'Project Dashboard- Developer',
-    src: 'https://picsum.photos/600/400?random=8',
+    src: '/assets/images/TMdashboard.png',
     caption: <div>
       <p>{`The developer dashboard is similar to the Project Manager dashboard, but with the majority of the risk information removed.`}
       <ul>
@@ -126,7 +126,7 @@ const images = [
   },
   {
     title: 'Developer Questionnaires',
-    src: 'https://picsum.photos/600/400?random=8',
+    src: '/assets/images/devForm.png',
     caption: <div>
       <p>{`At each project milestone, all developers will receieve a notification asking them to complete a questionnaire about the project.`}
       <ul>
@@ -209,7 +209,7 @@ const handleKeyDown = (event) => {
             className="guideImage"
             src={images[page].src}
             alt={images[page].caption}
-            style={{ maxWidth: '55%', maxHeight: '50vh' }}
+            style={{ maxWidth: '65%', maxHeight: '50vh' }}
           />
           <p className="guideCaption" style={{fontSize:'15px', textAlign: 'left', maxWidth:'80%'}}>{images[page].caption}</p>
           <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', position:"absolute", bottom:"20px" }}>

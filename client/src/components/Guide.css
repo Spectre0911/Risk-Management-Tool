@@ -8,11 +8,9 @@
 }
 
 .guideImage{
-    border-radius: 20px;
+    border-radius: 10px;
     margin-bottom: 20px;
-    height: 250px;
-    width: 400px;
-    max-width: unset !important;
+    max-width: 450px;
     max-height: unset !important;
 }
 
