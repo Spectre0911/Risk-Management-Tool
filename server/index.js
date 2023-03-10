@@ -11,7 +11,7 @@ const require = createRequire(import.meta.url);
 var request = require("request-promise"); // to connect to the ML server
 const express = require("express");
 const app = express();
-const cors = require("cors");
+var cors = require('cors')
 const pool = require("./db.cjs");
 const multer = require("multer");
 const topoSort = require("toposort"); // you will need to install this package
@@ -28,7 +28,7 @@ app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 //ROUTES//
 // Route for uploading an image
 const upload = multer({
-  dest: "../client/public/assets",
+  dest: "../server/public/assets",
   // you might also want to set some limits: https://github.com/expressjs/multer#limits
 });
 
@@ -41,10 +41,11 @@ app.post(
   "/upload",
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
+    try{
     const tempPath = req.file.path;
     const targetPath = path.join(__dirname, "public/assets/");
 
-    if (path.extname(req.file.originalname).toLowerCase() === ".png") {
+    if (true) {
       fs.rename(
         tempPath,
         path.join(targetPath, req.file.originalname),
@@ -63,6 +64,10 @@ app.post(
           .end("Only .png files are allowed!");
       });
     }
+  }catch(err){
+    console.log(err);
+  }
+
   }
 );
 

@@ -65,11 +65,11 @@ const EditProfileForm = ({ handleClose, projectid }) => {
   });
 
   const initialValuesRegister = {
-    name: "Task",
-    description: "Description",
-    startTime: "2023-05-24",
-    endTime: "2023-05-24",
-    difficulty: "1",
+    name: "",
+    description: "",
+    startTime: "",
+    endTime: "",
+    difficulty: "",
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
