@@ -42,10 +42,10 @@ def predict():
     #merge all the features into one numpy array
     in_data = np.array([skillset_per_workload, success_story, delay, bugs, feedback, change_features, replacement_score]).reshape(1,-1)
     #feed the input to the model
-    result = loaded_model.predict(in_data)
+    result = loaded_model.predict_proba(in_data).T[1][0]
     print(result)
     # Return data in json format 
-    return json.dumps({"overall_result": result[0],
+    return json.dumps({"overall_result": result,
                        "skillset" : skillset_per_workload,
                        "code_quality" : bugs,
                        "delay" : delay,
