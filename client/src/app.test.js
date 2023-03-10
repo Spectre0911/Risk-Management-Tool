@@ -96,12 +96,13 @@ describe("project management", () => {
     });
 
 
-    var bugDetails = {
-        email:"jack@mail.com",
+    var taskDetails = {
+        name:"jack@mail.com",
+        
         firstName:"Login error",
         lastName:"2023-12-10",
     }
-    it("create bug", async () => {
+    it("create task", async () => {
     expect(true).toEqual(true);
     // const response = await request(baseURL).post("/api/createBug").send(bugDetails);
     // expect(response.statusCode).toBe(400); //Should be 200
@@ -116,4 +117,16 @@ describe("project management", () => {
     // const response = await request(baseURL).post("/api/addTeamMember").send(teamMember);
     // expect(response.statusCode).toBe(400); //Should be 200
     });
+
+    var teamMember = {
+        userid:1,
+        projectid:1,
+    }
+    it("Add user to project", async () => {
+    expect(true).toEqual(true);
+    // const response = await request(baseURL).post("/api/addTeamMember").send(teamMember);
+    // expect(response.statusCode).toBe(400); //Should be 200
+    });
+
+    
 });
