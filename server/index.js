@@ -197,7 +197,6 @@ app.post("/api/taskToCompletePID", async (req, res) => {
 
 app.post("/api/addTeamMember", async (req, res) => {
   try {
-
     const add = await pool.query(
       "INSERT INTO userproject (userid, projectid, ismanager) VALUES($1, $2, false) RETURNING *",
       [req.body.userid, req.body.projectid]
@@ -335,7 +334,7 @@ app.post("/api/features", async (req, postRes) => {
   try {
     // console.log(req.body);
     const allFeatures = await pool.query(
-      "SELECT * FROM features WHERE projectid = $1",
+      "SELECT * FROM features WHERE projectid = $1 and completed = false",
       [req.body.projectid]
     );
     if (allFeatures.rows.length == 0) {
@@ -344,6 +343,20 @@ app.post("/api/features", async (req, postRes) => {
       // console.log(allFeatures.rows);
       postRes.json(allFeatures.rows);
     }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Complete a feature
+
+app.post("/api/completeFeature", async (req, postRes) => {
+  try {
+    console.log(req.body);
+    await pool.query(
+      "UPDATE features SET completed = true WHERE featureid = $1",
+      [req.body.featureId]
+    );
   } catch (err) {
     console.error(err.message);
   }
@@ -976,7 +989,7 @@ app.post("/api/overallrisk", async (req, res) => {
     // This variable contains the data
     // you want to send
     var data = {
-      "projectid": req.body.projectId
+      projectid: req.body.projectId,
     };
 
     // preparing the post request

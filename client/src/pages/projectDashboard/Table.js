@@ -37,6 +37,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import { CompleteFeature } from "../services/CompleteFeature";
 
 const Table = (props) => {
   var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
@@ -96,7 +97,8 @@ const Table = (props) => {
 
   const complete = (featureId) => {
     console.log("complete feature", featureId);
-  }
+    CompleteFeature({ featureId: featureId });
+  };
 
   const columns = useMemo(
     () => [
@@ -188,9 +190,7 @@ const Table = (props) => {
                 type="submit"
                 className="completeFeatureButton"
                 value={cell.row.original.featureId}
-                onClick={() =>
-                  complete(cell.row.original.featureId)
-                }
+                onClick={() => complete(cell.row.original.featureId)}
               >
                 Completed
               </button>
