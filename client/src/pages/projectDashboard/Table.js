@@ -257,7 +257,7 @@ const Table = (props) => {
       endTime: "18/02/2023",
       progress: 20,
       risk: 10,
-      totalTasks: 0,
+      totalTasks: 2,
       completedTasks: 1,
     },
     {
@@ -267,7 +267,7 @@ const Table = (props) => {
       endTime: "17/02/2023",
       progress: 20,
       risk: 10,
-      totalTasks: 0,
+      totalTasks: 2,
       completedTasks: 1,
     },
   ];

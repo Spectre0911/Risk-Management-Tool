@@ -34,7 +34,7 @@ const ProjectTable = ({ setActiveProjects }) => {
       closed: "false",
       tasksPending: 2,
       progress: 80,
-      risk: 30,
+      risk: 74,
     },
     {
       projectId: "2",

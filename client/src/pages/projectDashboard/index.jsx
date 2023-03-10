@@ -400,7 +400,7 @@ const ProjectDashboard = () => {
               cutOut={60}
             />
             <div className="donutText risk">
-              <p>7.8/10</p>
+              <p>7.4/10</p>
             </div>
           </div>
         </div>
