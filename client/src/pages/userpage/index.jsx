@@ -117,7 +117,7 @@ const teamMembers = [
     },
     { 
       id: "3",
-      name:"Sylvia Hague",
+      name:"Sylvia Lewis",
       image:"http://localhost:5000/assets/sylvia.jpg",
       bio:"Sylvia here. I'm an animal lover and love tech!",
       skills:["React","PHP"],
