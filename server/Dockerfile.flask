@@ -1,0 +1,12 @@
+FROM python:3.9.6-alpine
+WORKDIR /app
+COPY server/pyfile.py .
+COPY server/logisticregression.sav .
+COPY server/requirements.txt .
+RUN pip install flask
+RUN pip install requests
+RUN pip install joblib
+RUN pip install -U scikit-learn
+RUN pip install psycopg2
+EXPOSE 5432
+CMD ["python", "pyfile.py"]
