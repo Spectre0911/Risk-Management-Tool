@@ -5,6 +5,7 @@ import { FaBell } from "react-icons/fa";
 import { BsBriefcaseFill } from "react-icons/bs";
 import { BiTask } from "react-icons/bi";
 import { AiFillWarning } from "react-icons/ai";
+import { AiFillGithub } from "react-icons/ai";
 import { Scrollbars } from "react-custom-scrollbars";
 import { ActiveProjects } from "../services/ProjectCount";
 import { NotificationCount } from "../services/NotificationCount";
@@ -25,9 +26,13 @@ const Notification = (data) => {
         <div>
           <div className="notificationBox">
             
-          <div className={`notificationIcon ${data.data.notifType=="info" && "blueIcon"}`}>
+          <div className={`notificationIcon 
+            ${data.data.notifType=="info" && "blueIcon"}
+            ${data.data.notifType=="github" && "greenIcon"}`
+            }>
             {data.data.notifType=="warning" && <AiFillWarning />}
             {data.data.notifType=="info" && <BsBriefcaseFill />}
+            {data.data.notifType=="github" && <AiFillGithub />}
           </div>
 
             <div className="NotificationText">

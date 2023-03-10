@@ -33,8 +33,8 @@ Chart.register([Legend]);
 const ProjectDashboard = () => {
   const navigate = useNavigate();
   const { projectId } = useParams();
-  const labelsRisk = ["Budget", "Team", "Time", "Code", "Technical"];
-  const [dataRisk, setDataRisk] = useState([29, 24, 25, 25, 10]);
+  const labelsRisk = ["Team", "Time", "Code", "Technical"];
+  const [dataRisk, setDataRisk] = useState([29, 25, 25, 10]);
   const borderColorRisk = ["rgba(255,206,86,0.2)"];
   const backgroundColorRisk = [
     "rgba(232,99,132,1)",
@@ -45,7 +45,7 @@ const ProjectDashboard = () => {
   ];
 
   const labelsBugs = ["Critical", "Major", "Minor"];
-  const [dataBugs, setDataBugs] = useState([10, 4, 1]);
+  const [dataBugs, setDataBugs] = useState([2, 1, 2]);
   const backgroundColorBugs = [
     "rgba(215,20,50,1)",
     "rgba(255,128,0,1)",
@@ -53,7 +53,7 @@ const ProjectDashboard = () => {
   ];
 
   const labelsFeatures = ["Core", "Optional", "Aesthetic"];
-  const [dataFeatures, setDataFeatures] = useState([0, 0, 0]);
+  const [dataFeatures, setDataFeatures] = useState([2, 0, 1]);
   const backgroundColorFeatures = [
     "rgba(255,0,0,1)",
     "rgba(255,128,0,1)",
@@ -61,10 +61,10 @@ const ProjectDashboard = () => {
   ];
 
   const labelsTime = ["Remaining", "Completed"];
-  const [dataTime, setDataTime] = useState([0, 0]);
+  const [dataTime, setDataTime] = useState([10, 20]);
   const backgroundColorTime = ["rgba(255,0,0,1)", "rgba(255,128,0,1)"];
 
-  const [teamMembers, setTeamMembers] = useState([]);
+  // const [teamMembers, setTeamMembers] = useState([]);
 
   const [showDelete, setShowDelete] = useState(false);
   const [showEndProject, setShowEndProject] = useState(false);
@@ -151,104 +151,122 @@ const ProjectDashboard = () => {
   //Fetching github commit data
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
+  const teamMembers = [
+    {
+      id: "1",
+      name: "Jonathan Hague",
+      image: "http://localhost:5000/assets/jonathan.jpg",
+      skills: ["Python", "SQL"],
+      suitabilityScore: 4.3,
+      bio:"Hey! I'm Jonathan and I'm a foodie!"
+    },
+    {
+      id: "2",
+      name: "Sylvia Lewis",
+      image: "http://localhost:5000/assets/sylvia.jpg",
+      skills: ["React", "Php"],
+      suitabilityScore: 8.9,
+      bio:"Sylvia here. I'm an animal lover."
+    },
+  ];
   useEffect(() => {
     // OverallRisk({ projectId: projectId }).then((data) => {
     //   console.log("OVERALL RISK");
     //   console.log(data);
     // });
-    OrderedUsers({ projectId: projectId }).then((data) => {
-      setTeamMemberOptions(data);
-    });
-    AllProjectMembers({ projectId: projectId }).then((data) => {
-      // console.log("Fetching project members");
-      if (data != null) {
-        // console.log(data);
-        let newData = [];
-        var useridSkillMap = new Map();
-        const memberSkillPromises = data.map((member) => {
-          return MemberSkills({ userid: member.userid }).then((skills) => {
-            let skillArr = [];
-            if (skills != null) {
-              skills.map((skill) => {
-                if (skill.skill != null) {
-                  skillArr.push(skill.skill);
-                }
-              });
-            }
-            useridSkillMap.set(member.userid, skillArr);
-          });
-        });
+    // OrderedUsers({ projectId: projectId }).then((data) => {
+    //   setTeamMemberOptions(data);
+    // });
+    // AllProjectMembers({ projectId: projectId }).then((data) => {
+    //   // console.log("Fetching project members");
+    //   if (data != null) {
+    //     // console.log(data);
+    //     let newData = [];
+    //     var useridSkillMap = new Map();
+    //     const memberSkillPromises = data.map((member) => {
+    //       return MemberSkills({ userid: member.userid }).then((skills) => {
+    //         let skillArr = [];
+    //         if (skills != null) {
+    //           skills.map((skill) => {
+    //             if (skill.skill != null) {
+    //               skillArr.push(skill.skill);
+    //             }
+    //           });
+    //         }
+    //         useridSkillMap.set(member.userid, skillArr);
+    //       });
+    //     });
 
-        Promise.all(memberSkillPromises).then(() => {
-          // console.log(useridSkillMap);
-          data.forEach((member) =>
-            newData.push({
-              ...member,
-              skills: useridSkillMap.get(member.userid),
-            })
-          );
-          // console.log(newData);
-          setTeamMembers(newData);
-        });
-      }
-    });
+    //     Promise.all(memberSkillPromises).then(() => {
+    //       // console.log(useridSkillMap);
+    //       data.forEach((member) =>
+    //         newData.push({
+    //           ...member,
+    //           skills: useridSkillMap.get(member.userid),
+    //         })
+    //       );
+    //       // console.log(newData);
+    //       setTeamMembers(newData);
+    //     });
+    //   }
+    // });
 
     // In this updated code, the memberSkillPromises array is created by calling map on the data array, and each element is a promise returned by MemberSkills. The promises are returned from the map function, and then `Promise
 
     // Set the amount of time left: THERE IS AN ISSUEHERE
-    TimeLeft({
-      projectid: projectId,
-    }).then((data) => {
-      console.log(data);
-      setDataTime([data[0].remaining.days, data[0].completed.days]);
-    });
+    // TimeLeft({
+    //   projectid: projectId,
+    // }).then((data) => {
+    //   console.log(data);
+    //   setDataTime([data[0].remaining.days, data[0].completed.days]);
+    // });
 
-    BugCount({
-      projectid: projectId,
-    }).then((data) => {
-      if (data != null) {
-        const counts = {
-          1: 0,
-          2: 0,
-          3: 0,
-        };
+    // BugCount({
+    //   projectid: projectId,
+    // }).then((data) => {
+    //   if (data != null) {
+    //     const counts = {
+    //       1: 0,
+    //       2: 0,
+    //       3: 0,
+    //     };
 
-        // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
-        data
-          .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
-          .reduce((acc, obj) => {
-            // Increment the count for the priority of the current object
-            acc[obj.severity]++;
-            return acc;
-          }, counts); // Use the counts object as the initial value of the reduce function
+    //     // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
+    //     data
+    //       .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
+    //       .reduce((acc, obj) => {
+    //         // Increment the count for the priority of the current object
+    //         acc[obj.severity]++;
+    //         return acc;
+    //       }, counts); // Use the counts object as the initial value of the reduce function
 
-        setDataBugs([counts[1], counts[2], counts[3]]);
-      }
-    });
+    //     setDataBugs([counts[1], counts[2], counts[3]]);
+    //   }
+    // });
 
     // Get the outstanding features
-    AllFeatures({
-      projectid: projectId,
-    }).then((data) => {
-      if (data != null) {
-        const counts = {
-          1: 0,
-          2: 0,
-          3: 0,
-        };
+    // AllFeatures({
+    //   projectid: projectId,
+    // }).then((data) => {
+    //   if (data != null) {
+    //     const counts = {
+    //       1: 0,
+    //       2: 0,
+    //       3: 0,
+    //     };
 
-        // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
-        data
-          .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
-          .reduce((acc, obj) => {
-            // Increment the count for the priority of the current object
-            acc[obj.priority]++;
-            return acc;
-          }, counts); // Use the counts object as the initial value of the reduce function
+    //     // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
+    //     data
+    //       .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
+    //       .reduce((acc, obj) => {
+    //         // Increment the count for the priority of the current object
+    //         acc[obj.priority]++;
+    //         return acc;
+    //       }, counts); // Use the counts object as the initial value of the reduce function
 
-        setDataFeatures([counts[1], counts[2], counts[3]]);
-      }
-    });
+    //     setDataFeatures([counts[1], counts[2], counts[3]]);
+    //   }
+    // });
     let fetchData = [];
     (async () => {
       try {
@@ -363,7 +381,7 @@ const ProjectDashboard = () => {
     <div className="main">
       <div className="grid">
         <p className="projectTitleId">
-          Project number {projectId}
+          {projectId}
           <button
             onClick={handleEndProjecShow}
             className="projectFilterInput viewProject closeProject"
@@ -509,7 +527,7 @@ const ProjectDashboard = () => {
                   })}
                   <div className="projectDashboardSkillMatchTitle">
                     Skills match:
-                    <div className="projectDashboardSkillScore">7.9</div>
+                    <div className="projectDashboardSkillScore">{member.suitabilityScore}</div>
                   </div>
                   <div className="projectDashboardSkillMatchTitle">
                     <p>

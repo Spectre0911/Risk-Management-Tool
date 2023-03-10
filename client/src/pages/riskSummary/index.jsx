@@ -44,8 +44,8 @@ const RiskSummary = () => {
       return backgroundColorTeamList.red;
     }
   }
-    const dates = ["12/12/12","12/1/12","12/1/12","12/1/12"];
-    const values = [0.1, 0.2, 0.1, 0.4];
+    const dates = ['WC 10/02', 'WC 17/02', 'WC 24/02', 'WC 02/03', 'WC 09/03'];
+    const values = [0.9, 0.6, 0.7, 0.5, 0.3];
 
     const risks = [[0.1, 1-0.1],[0.9,1-0.9],[0.5,1-0.5],[0.1,1-0.1]] 
 

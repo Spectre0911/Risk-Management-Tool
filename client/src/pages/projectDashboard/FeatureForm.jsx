@@ -24,7 +24,7 @@ import Dropzone from "react-dropzone";
 import * as yup from "yup";
 import { createGrid } from "@mui/system";
 
-const EditProfileForm = ({ handleClose, projectid }) => {
+const EditProfileForm = ({ handleClose, projectid, edit }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
 
@@ -65,11 +65,11 @@ const EditProfileForm = ({ handleClose, projectid }) => {
   });
 
   const initialValuesRegister = {
-    name: "Task",
-    description: "Description",
-    startTime: "2023-05-24",
-    endTime: "2023-05-24",
-    difficulty: "1",
+    name: "",
+    description: "",
+    startTime: "",
+    endTime: "",
+    difficulty: "",
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
@@ -216,7 +216,7 @@ const EditProfileForm = ({ handleClose, projectid }) => {
                     paddingRight: "20px",
                   }}
                 >
-                  Dependencies {dependencyOptions.length}:
+                  Dependencies:
                 </p>
 
                 <Select

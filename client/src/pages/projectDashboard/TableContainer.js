@@ -141,9 +141,6 @@ const TableContainer = ({
           <tbody {...getTableBodyProps()}>
             {page.map((row) => {
               prepareRow(row);
-              {
-                /* {console.log(row)} */
-              }
               return (
                 <Fragment key={row.getRowProps().key}>
                   <tr>

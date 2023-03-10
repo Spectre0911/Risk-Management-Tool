@@ -41,19 +41,21 @@ const EditProfileForm = ({ handleClose }) => {
     { value: "Python", label: "Python", experience: "0" },
     { value: "Front-End", label: "Front-End", experience: "0" },
     { value: "Backend", label: "Backend", experience: "0" },
+    { value: "SQL", label: "SQL", experience: "0" },
+    { value: "Azure", label: "Azure", experience: "0" },
   ]);
 
   const [skills, setSkills] = useState([
-    { value: "Python", label: "Python", experience: "0" },
-    { value: "React", label: "React", experience: "0" },
+    { value: "Python", label: "Python", experience: "2" },
+    { value: "React", label: "React", experience: "1" },
   ]);
   const [skillExperience, setSkillExperience] = useState([]);
   const [initialValuesRegister, setInitialValueRegister] = useState({
-    name: "",
-    email: "",
-    bio: "",
-    gitHubToken: "",
-    gitHubName: "",
+    name: "Jane Arnold",
+    email: "janearnold@gmail.com",
+    bio: "Hi, I am a frontend developer and love dogs!",
+    gitHubToken: "ghp_1uQaW58iR2c31yfYZqTSFw8ffeUDR30FSmbf",
+    gitHubName: "janearnold",
   });
 
   const reportBugSchema = yup.object().shape({
@@ -64,31 +66,31 @@ const EditProfileForm = ({ handleClose }) => {
     gitHubName: yup.string().required("required")
   });
 
-  useEffect(() => {
-    console.log("SETTING");
-    GetUser({
-      email: userEmail,
-    }).then((data) => {
-      console.log(data);
-      setInitialValueRegister({
-        name: data.name || "",
-        email: data.email || "",
-        bio: data.bio || "",
-        gitHubToken: data.githubtoken || "",
-      });
-      console.log(initialValuesRegister);
-    });
-    AdminSkills({ email: userEmail }).then((data) => {
-      console.log("ADMIN SKILLS");
-      console.log(data);
-      setSkills(data);
-    });
+  // useEffect(() => {
+  //   console.log("SETTING");
+  //   GetUser({
+  //     email: userEmail,
+  //   }).then((data) => {
+  //     console.log(data);
+  //     setInitialValueRegister({
+  //       name: data.name || "",
+  //       email: data.email || "",
+  //       bio: data.bio || "",
+  //       gitHubToken: data.githubtoken || "",
+  //     });
+  //     console.log(initialValuesRegister);
+  //   });
+  //   AdminSkills({ email: userEmail }).then((data) => {
+  //     console.log("ADMIN SKILLS");
+  //     console.log(data);
+  //     setSkills(data);
+  //   });
 
-    AllSkills({ email: userEmail }).then((data) => {
-      console.log(data);
-      setSkillOptions(data);
-    });
-  }, []);
+  //   AllSkills({ email: userEmail }).then((data) => {
+  //     console.log(data);
+  //     setSkillOptions(data);
+  //   });
+  // }, []);
 
   const uploadImage = (e) => {
     setImage(URL.createObjectURL(e.target.files[0]));

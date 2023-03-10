@@ -11,7 +11,21 @@
     padding: 10px 10px;
     margin-bottom: 40px;
     padding-bottom: 30px;
+    display:  block !important;
+}
 
+.projectContainerBox{
+    display: flex;
+    width: 99%;
+    min-height: 180px;
+    height: auto;
+    overflow: hidden;
+    border-radius: 10px;
+    position: relative;
+    margin: auto;
+    padding: 10px 10px;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
 }
 
 .userTitle{

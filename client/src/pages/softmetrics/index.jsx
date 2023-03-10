@@ -17,25 +17,25 @@ import {
 } from "@mui/material";
 
 const SoftMetrics = ({ projectid }) => {
-  const [communicationScore, setCommunicationScore] = useState([0]);
-  const [projectUnderstanding, setProjectUnderstanding] = useState([0]);
-  const [teamCohesion, setTeamCohesion] = useState([0]);
-  const [confidenceInSkillSet, setConfidenceInSkillSet] = useState([0]);
+  const [communicationScore, setCommunicationScore] = useState([1.4]);
+  const [projectUnderstanding, setProjectUnderstanding] = useState([3.1]);
+  const [teamCohesion, setTeamCohesion] = useState([4.5]);
+  const [confidenceInSkillSet, setConfidenceInSkillSet] = useState([2.3]);
 
-  useEffect(() => {
-    SoftSkillScore({ fbtype: 1, projectid: projectid }).then((data) => {
-      setCommunicationScore(parseInt(data[0].avg));
-    });
-    SoftSkillScore({ fbtype: 2, projectid: projectid }).then((data) => {
-      setProjectUnderstanding(parseInt(data[0].avg));
-    });
-    SoftSkillScore({ fbtype: 3, projectid: projectid }).then((data) => {
-      setTeamCohesion(parseInt(data[0].avg));
-    });
-    SoftSkillScore({ fbtype: 4, projectid: projectid }).then((data) => {
-      setConfidenceInSkillSet(parseInt(data[0].avg));
-    });
-  }, []);
+  // useEffect(() => {
+  //   SoftSkillScore({ fbtype: 1, projectid: projectid }).then((data) => {
+  //     setCommunicationScore(parseInt(data[0].avg));
+  //   });
+  //   SoftSkillScore({ fbtype: 2, projectid: projectid }).then((data) => {
+  //     setProjectUnderstanding(parseInt(data[0].avg));
+  //   });
+  //   SoftSkillScore({ fbtype: 3, projectid: projectid }).then((data) => {
+  //     setTeamCohesion(parseInt(data[0].avg));
+  //   });
+  //   SoftSkillScore({ fbtype: 4, projectid: projectid }).then((data) => {
+  //     setConfidenceInSkillSet(parseInt(data[0].avg));
+  //   });
+  // }, []);
 
   const backgroundColorTeamList = {
     green:['rgba(0, 128, 0,1)','#dbe3de'],
@@ -55,9 +55,14 @@ const SoftMetrics = ({ projectid }) => {
   }
 
   const notifications = [{
-    title:"Feedback From Josh",
-    date:"12/12/2023",
-    text:"There is an issue with the server"
+    title:"Feedback From Sylvia",
+    date:"12/02/2023",
+    text:"I am having issues setting up the project"
+  },
+  {
+    title:"Feedback From Jonathon",
+    date:"15/02/2023",
+    text: "I feel like I do not understand the project clearly, could we please organise a meeting"
   }]
 
   return (

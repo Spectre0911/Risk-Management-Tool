@@ -47,7 +47,7 @@ const ProjectDashboardTm = () => {
   ];
 
   const labelsBugs = ["Critical", "Major", "Minor"];
-  const [dataBugs, setDataBugs] = useState([10, 4, 1]);
+  const [dataBugs, setDataBugs] = useState([3,1,2]);
   const backgroundColorBugs = [
     "rgba(215,20,50,1)",
     "rgba(255,128,0,1)",
@@ -55,7 +55,7 @@ const ProjectDashboardTm = () => {
   ];
 
   const labelsFeatures = ["Core", "Optional", "Aesthetic"];
-  const [dataTasks, setDataTasks] = useState([8, 14, 12]);
+  const [dataTasks, setDataTasks] = useState([2, 1, 0]);
   const backgroundColorFeatures = [
     "rgba(255,0,0,1)",
     "rgba(255,128,0,1)",
@@ -63,24 +63,26 @@ const ProjectDashboardTm = () => {
   ];
 
   const labelsTime = ["Remaining", "Completed"];
-  const [dataTime, setDataTime] = useState([0, 0]);
+  const [dataTime, setDataTime] = useState([10, 20]);
   const backgroundColorTime = ["rgba(255,0,0,1)", "rgba(255,128,0,1)"];
   const email = useSelector((state) => state.email);
 
   const teamMembers = [
     {
       id: "1",
-      name: "Jane Arnold",
-      image: "http://localhost:5000/assets/jane.jpg",
-      skills: ["Python", "React"],
-      suitabilityScore: 0,
+      name: "Jonathan Hague",
+      image: "http://localhost:5000/assets/jonathan.jpg",
+      skills: ["Python", "SQL"],
+      suitabilityScore: 4.3,
+      bio:"Hey! I'm Jonathan and I'm a foodie!"
     },
     {
       id: "2",
-      name: "Jane Arnold",
-      image: "http://localhost:5000/assets/jane.jpg",
-      skills: ["Python", "React"],
-      suitabilityScore: 0,
+      name: "Sylvia Lewis",
+      image: "http://localhost:5000/assets/sylvia.jpg",
+      skills: ["React", "Php"],
+      suitabilityScore: 8.9,
+      bio:"Sylvia here. I'm an animal lover."
     },
   ];
 
@@ -138,52 +140,52 @@ const ProjectDashboardTm = () => {
     }
   };
   useEffect(() => {
-    TasksToCompletePID({ email: email.email, projectid: projectId }).then(
-      (data) => {
-        console.log(data);
-        const counts = {
-          1: 0,
-          2: 0,
-          3: 0,
-        };
+    // TasksToCompletePID({ email: email.email, projectid: projectId }).then(
+    //   (data) => {
+    //     console.log(data);
+    //     const counts = {
+    //       1: 0,
+    //       2: 0,
+    //       3: 0,
+    //     };
 
-        // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
-        data.reduce((acc, obj) => {
-          // Increment the count for the priority of the current object
-          acc[obj.priority]++;
-          return acc;
-        }, counts); // Use the counts object as the initial value of the reduce function
-        setDataTasks([counts[1], counts[2], counts[3]]);
-      }
-    );
+    //     // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
+    //     data.reduce((acc, obj) => {
+    //       // Increment the count for the priority of the current object
+    //       acc[obj.priority]++;
+    //       return acc;
+    //     }, counts); // Use the counts object as the initial value of the reduce function
+    //     setDataTasks([counts[1], counts[2], counts[3]]);
+    //   }
+    // );
 
-    TimeLeft({
-      projectid: projectId,
-    }).then((data) => {
-      setDataTime([data[0].remaining.days, data[0].completed.days]);
-    });
-    BugCount({
-      projectid: projectId,
-    }).then((data) => {
-      if (data != null) {
-        const counts = {
-          1: 0,
-          2: 0,
-          3: 0,
-        };
+    // TimeLeft({
+    //   projectid: projectId,
+    // }).then((data) => {
+    //   setDataTime([data[0].remaining.days, data[0].completed.days]);
+    // });
+    // BugCount({
+    //   projectid: projectId,
+    // }).then((data) => {
+    //   if (data != null) {
+    //     const counts = {
+    //       1: 0,
+    //       2: 0,
+    //       3: 0,
+    //     };
 
-        // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
-        data
-          .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
-          .reduce((acc, obj) => {
-            // Increment the count for the priority of the current object
-            acc[obj.severity]++;
-            return acc;
-          }, counts); // Use the counts object as the initial value of the reduce function
+    //     // Filter the array to only include objects where completed is false, then reduce the filtered array to update the counts object
+    //     data
+    //       .filter((obj) => !obj.completed) // Filter the array to only include objects where completed is false
+    //       .reduce((acc, obj) => {
+    //         // Increment the count for the priority of the current object
+    //         acc[obj.severity]++;
+    //         return acc;
+    //       }, counts); // Use the counts object as the initial value of the reduce function
 
-        setDataBugs([counts[1], counts[2], counts[3]]);
-      }
-    });
+    //     setDataBugs([counts[1], counts[2], counts[3]]);
+    //   }
+    // });
   }, []);
   return (
     <div className="main tm">

@@ -140,7 +140,7 @@ const TableContainer = ({
                 <Fragment key={row.getRowProps().key}>
                   <tr
                     onClick={() =>
-                      navigate(`/projects/${row.original.projectId}`)
+                      navigate(`/projects/${row.original.projectName}`)
                     }
                   >
                     {row.cells.map((cell) => {

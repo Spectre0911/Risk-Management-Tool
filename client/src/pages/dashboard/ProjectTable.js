@@ -28,19 +28,19 @@ const ProjectTable = ({ setActiveProjects }) => {
   const [contacts, setContacts] = useState([
     {
       projectId: "1",
-      projectName: "cs261",
+      projectName: "Water Estimation Tool",
       startDate: "26/12/2022",
-      endDate: "26/02/2023",
+      endDate: "26/04/2023",
       closed: "false",
       tasksPending: 2,
-      progress: 20,
-      risk: 10,
+      progress: 80,
+      risk: 30,
     },
     {
       projectId: "2",
-      projectName: "cs261",
-      startDate: "26/12/2022",
-      endDate: "10/04/2023",
+      projectName: "Feedback tool",
+      startDate: "13/01/2023",
+      endDate: "20/04/2023",
       closed: "false",
       tasksPending: 3,
       progress: 20,
@@ -48,31 +48,31 @@ const ProjectTable = ({ setActiveProjects }) => {
     },
   ]);
 
-  const doFetch = async () => {
-    AllProjects(email).then((data) => {
-      console.log(data);
-      setData(
-        data.map((item) => {
-          return {
-            projectId: item.projectid,
-            projectName: item.projectname,
-            projectManager: item.projectmanager,
-            endDate: new Date(item.deadline).toLocaleDateString("en-GB"),
-            startDate: new Date(item.opened).toLocaleDateString("en-GB"),
+  // const doFetch = async () => {
+  //   AllProjects(email).then((data) => {
+  //     console.log(data);
+  //     setData(
+  //       data.map((item) => {
+  //         return {
+  //           projectId: item.projectid,
+  //           projectName: item.projectname,
+  //           projectManager: item.projectmanager,
+  //           endDate: new Date(item.deadline).toLocaleDateString("en-GB"),
+  //           startDate: new Date(item.opened).toLocaleDateString("en-GB"),
 
-            closed: item.closed.toString(),
-            progress: Math.floor(item.progress),
-            risk: 0,
-          };
-        })
-      );
-      setActiveProjects(data.length);
-    });
-  };
+  //           closed: item.closed.toString(),
+  //           progress: Math.floor(item.progress),
+  //           risk: 0,
+  //         };
+  //       })
+  //     );
+  //     setActiveProjects(data.length);
+  //   });
+  // };
 
-  useEffect(() => {
-    doFetch();
-  }, []);
+  // useEffect(() => {
+  //   doFetch();
+  // }, []);
 
   const renderRowSubComponent = (row) => {
     const {
@@ -145,14 +145,6 @@ const ProjectTable = ({ setActiveProjects }) => {
         disableFilters: true,
         filterable: false,
       },
-
-      {
-        Header: "Status",
-        accessor: "status",
-        filterable: false,
-        disableFilters: true,
-        filterable: false,
-      },
       {
         Header: "Risk",
         accessor: "risk",
@@ -181,9 +173,9 @@ const ProjectTable = ({ setActiveProjects }) => {
     <div>
       <TableContainer
         columns={columns}
-        data={data}
+        data={contacts}
         renderRowSubComponent={renderRowSubComponent}
-        fetchProjectFunction={doFetch}
+        // fetchProjectFunction={doFetch}
       />
       {console.log(data)}
     </div>

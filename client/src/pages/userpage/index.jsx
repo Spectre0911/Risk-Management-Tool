@@ -106,35 +106,30 @@ const teamMembers = [
         id: "1",
         name:"Jane Arnold",
         image:"http://localhost:5000/assets/jane.jpg",
-        bio:"I am a software engineer",
-        skills:["Python","React"],
+        bio:"Hey, its Jane! I'm from the Cloud department.",
+        skills:["Python","SQL"],
     },{ 
         id: "2",
-        name:"Jane Arnold",
-        image:"http://localhost:5000/assets/jane.jpg",
-        bio:"I am a backend engineer",
-        skills:["Python","Node","SQL"],
-    }];
+        name:"Jonathan Hague",
+        image:"http://localhost:5000/assets/jonathan.jpg",
+        bio:"Hey! I'm Jonathan and I'm a foodie!",
+        skills:["React","PHP"],
+    },
+    { 
+      id: "3",
+      name:"Sylvia Hague",
+      image:"http://localhost:5000/assets/sylvia.jpg",
+      bio:"Sylvia here. I'm an animal lover and love tech!",
+      skills:["React","PHP"],
+  }];
 
     const recommendedMembers = [
         {
-            id: "1",
-            name:"Jane Doe",
-            image:"http://localhost:5000/assets/jane.jpg",
-            bio:"I am a software engineer",
-            skills:["Python","React"],
-        },{ 
-            id: "2",
-            name:"John Smith",
-            image:"http://localhost:5000/assets/jane.jpg",
-            bio:"I am a backend engineer",
-            skills:["Python","Node","SQL"],
-        },{
-            id: "3",
-            name:"Jane Doe",
-            image:"http://localhost:5000/assets/jane.jpg",
-            bio:"I am a software engineer",
-            skills:["Python","React"],
+            id: "4",
+            name:"Ankit Patel",
+            image:"http://localhost:5000/assets/ankit.jpg",
+            bio:"Always happy to help",
+            skills:["SQL","Cloud"],
         }];
 
     return (

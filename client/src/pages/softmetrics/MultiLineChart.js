@@ -2,29 +2,29 @@ import React from 'react';
 import { Line } from "react-chartjs-2";
 
 const data = {
-  labels: ['1', '2', '3', '4', '5', '6'],
+  labels: ['WC 10/02', 'WC 17/02', 'WC 24/02', 'WC 02/03', 'WC 09/03'],
   datasets: [
     {
       label: 'Communication',
-      data: [80, 85, 90, 75, 80, 85],
+      data: [1.4, 2.2, 2.0, 4.4, 4.0],
       fill: false,
       borderColor: '#8884d8',
     },
     {
       label: 'Project Understanding',
-      data: [60, 68, 80, 65, 70, 75],
+      data: [3.4, 2.2, 1.0, 2.4, 4.2],
       fill: false,
       borderColor: '#82ca9d',
     },
     {
       label: 'Team Cohesion',
-      data: [75, 83, 85, 70, 65, 70],
+      data: [1.2, 3.2, 3.0, 4.4, 4.6],
       fill: false,
       borderColor: '#ffc658',
     },
     {
       label: 'Confidence in Skillset',
-      data: [65, 78, 75, 79, 87, 90],
+      data: [1.1, 3.9, 2.2, 4.2, 3.6],
       fill: false,
       borderColor: '#ad2fa5',
     },

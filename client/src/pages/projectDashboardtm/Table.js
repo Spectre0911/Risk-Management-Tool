@@ -47,7 +47,7 @@ const Table = ({ projectid }) => {
       taskName: "Add sidebar",
       startTime: "12/11/2022",
       endTime: "30/02/2023",
-      daysLeft: "2",
+      daysLeft: "78",
     },
     {
       taskId: "2",
@@ -56,7 +56,7 @@ const Table = ({ projectid }) => {
       taskStatus: "In Progress",
       featureName: "Dashboard",
       taskName: "Add sidebar",
-      startTime: "12/11/2022",
+      startTime: "30/01/2022",
       endTime: "30/02/2023",
       daysLeft: "2",
     },
@@ -71,28 +71,28 @@ const Table = ({ projectid }) => {
     },
   ]);
 
-  useEffect(() => {
-    TasksToCompletePID({ email: login.email, projectid: projectid }).then(
-      (data) => {
-        let newTasks = [];
-        data.map((task) => {
-          let newTask = {
-            taskId: task.taskid.toString(),
-            taskName: task.taskname,
-            featureId: task.featureid.toString(),
-            projectId: task.projectid.toString(),
-            projectName: task.projectname,
-            taskPriority: ["Core", "Optional", "Aesthetic"][task.priority - 1],
-            taskStatus: "In Progress",
-            featureName: task.featurename,
-            daysLeft: task.daysleft,
-          };
-          newTasks.push(newTask);
-        });
-        setData(newTasks);
-      }
-    );
-  }, []);
+  // useEffect(() => {
+  //   TasksToCompletePID({ email: login.email, projectid: projectid }).then(
+  //     (data) => {
+  //       let newTasks = [];
+  //       data.map((task) => {
+  //         let newTask = {
+  //           taskId: task.taskid.toString(),
+  //           taskName: task.taskname,
+  //           featureId: task.featureid.toString(),
+  //           projectId: task.projectid.toString(),
+  //           projectName: task.projectname,
+  //           taskPriority: ["Core", "Optional", "Aesthetic"][task.priority - 1],
+  //           taskStatus: "In Progress",
+  //           featureName: task.featurename,
+  //           daysLeft: task.daysleft,
+  //         };
+  //         newTasks.push(newTask);
+  //       });
+  //       setData(newTasks);
+  //     }
+  //   );
+  // }, []);
   const viewTasks = (e) => {
     // console.log(e.target.value);
   };
@@ -245,7 +245,7 @@ const Table = ({ projectid }) => {
     <div>
       <TableContainer
         columns={columns}
-        data={data}
+        data={tasks}
         // renderRowSubComponent={renderRowSubComponent}
       />
       <div>
