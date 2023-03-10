@@ -12,6 +12,7 @@ create table users (
     password    varchar(100) not null,
     pfppath     varchar(300) default null,
     githubtoken varchar(100) default null,
+    githubuname varchar(50) default null,
     bio         varchar(300) default null,
     guideseen   boolean not null default false,
     primary key (userid)
