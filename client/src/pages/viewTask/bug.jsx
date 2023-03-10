@@ -13,7 +13,7 @@ import Modal from 'react-bootstrap/Modal';
 import EditProfileForm from './FeatureForm';
 import "./bug.css"
 
-const Bug = () => {
+const Bug = ({data}) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggleOverlay = () =>{
         setIsOpen(isOpen);
@@ -46,39 +46,35 @@ const Bug = () => {
     <div className='bugContainer'>      
         <div className="bugLeftPane"> 
             <div className="bugHeader">
-                <div className="bugTitle">Log out button</div>
+                <div className="bugTitle">{data.bugTitle}</div>
                 <div className="bugTrashButton"><BsFillTrashFill/></div>
             </div>
             <div className="bugFeature">
                 <div className="bugSeverityIcon"><GrStatusInfo/></div>
-                <div className="bugFeatureLocation"><p>In Progress</p></div>
+                <div className="bugFeatureLocation"><p>{data.status}</p></div>
             </div>
             <div className="bugDescription">
                 <div className="bugSeverityIcon"><MdDescription/></div>
-                <div className="bugFeatureLocation"><p>The log out button is not working. To fix this please do the following</p></div>
+                <div className="bugFeatureLocation"><p>{data.description}</p></div>
             </div>
             <div className="bugViewButtonContainer">
                 <button className="bugViewButton" onClick={handleEditShow}>
                     Edit
                 </button>
-                <button className="bugAssignButton" style={{backgroundColor:"#00800087"}}>
+                {data.status!="Completed" && <button className="bugAssignButton" style={{backgroundColor:"#00800087"}}>
                     Mark as Complete
-                </button>
+                </button>}
             </div>
         </div>
         <div className="bugRightPane"> 
             <div className="bugDate">
             <div className="bugSeverityIcon"><MdDateRange/></div>
-                <div className="bugFeatureLocation"><p>14/02/2023 - 18/02/2023</p></div>
+                <div className="bugFeatureLocation"><p>{data.startDate} - {data.endDate}</p></div>
             </div>
             <div className="bugPriority">
                 <div className="bugSeverityIcon"><BiTimer/></div>
-                <div className="bugSeverityLevel">High</div>
+                <div className="bugSeverityLevel">{data.priority}</div>
                 
-            </div>
-            <div className="bugSeverity">
-                <div className="bugSeverityIcon"><MdOutlineReportProblem/></div>
-                <div className="bugSeverityLevel med">Med</div>
             </div>
             <div className="bugUserFix">
             <div className="bugSeverityIcon">Assigned to:</div>
@@ -86,12 +82,12 @@ const Bug = () => {
                         <OverlayTrigger
                         placement={'top'}
                         overlay={
-                            <Tooltip id={`tooltip-${"Jane Arnold"}`}>
-                            <strong>{"Jane Arnold"}</strong>.
+                            <Tooltip id={`tooltip-${data.assignedTo}`}>
+                            <strong>{data.assignedTo}</strong>.
                             </Tooltip>
                         }
                         >
-                        <img className="bugProfileImage" src="http://localhost:5000/assets/jane.jpg"></img>
+                        <img className="bugProfileImage" src={`http://localhost:5000/assets/${data.path}`}></img>
                         </OverlayTrigger>
                 </div>
             </div>

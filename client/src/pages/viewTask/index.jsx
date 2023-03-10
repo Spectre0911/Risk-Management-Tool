@@ -65,10 +65,45 @@ const TaskDashboard = () => {
       }, []); 
     
 
+    const todo =[{
+        bugId: 1,
+        bugTitle:"Log out button",
+        status: "In Progress",
+        description: "Insert a login button",
+        startDate: "10/02/2023",
+        endDate: "20/02/2023",
+        priority: "Med",
+        assignedTo: "Jonathan Hague",
+        path: "jonathan.jpg"
+    }]
+
+    const completed =[{
+        bugId: 3,
+        bugTitle:"Logout button",
+        status: "Completed",
+        description: "Button to logout",
+        startDate: "15/02/2023",
+        endDate: "20/02/2023",
+        priority: "Med",
+        assignedTo: "Sylvia Lewis",
+        path: "sylvia.jpg"
+    }]
+
+    const verified =[{
+        bugId: 1,
+        bugTitle:"Reset password",
+        status: "In Progress",
+        description: "Insert a lost password helper",
+        startDate: "25/02/2023",
+        endDate: "30/02/2023",
+        priority: "Med",
+        assignedTo: "Jonathan Hague",
+        path: "jonathan.jpg"
+    }]
+
     return (
         <div className='bugBox'>
             <div className="bugBoxTitle">
-                <p>List of tasks: {featureId}</p>
             </div>
 
             <div className="featureProgress">
@@ -106,15 +141,30 @@ const TaskDashboard = () => {
             <div className="bugBoxTitle" style={{paddingTop:"20px"}}>
                 <p style={{fontSize:"30px"}}>To do:</p>
             </div>
-            <Bug/>
+            {todo.map((task, index)=>{
+                console.log(task);
+                return(
+                <Bug data={task}/>
+                )
+            })}
             <div className="bugBoxTitle" style={{paddingTop:"20px"}}> 
                 <p style={{fontSize:"30px"}}>Completed:</p>
             </div>
-            <Bug/>
+            {completed.map((task, index)=>{
+                console.log(task);
+                return(
+                <Bug data={task}/>
+                )
+            })}
             <div className="bugBoxTitle" style={{paddingTop:"20px"}}>
                 <p style={{fontSize:"30px"}}>Verified</p>
             </div>
-            <Bug/>
+            {verified.map((task, index)=>{
+                console.log(task);
+                return(
+                <Bug data={task}/>
+                )
+            })}
             
             
         </div>
