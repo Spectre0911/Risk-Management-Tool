@@ -17,7 +17,12 @@ import Modal from "react-bootstrap/Modal";
 import { GrClose } from "react-icons/gr";
 import FeatureForm from "./FeatureForm";
 
-const TableContainer = ({ columns, data, renderRowSubComponent }) => {
+const TableContainer = ({
+  columns,
+  data,
+  renderRowSubComponent,
+  projectid,
+}) => {
   const navigate = useNavigate();
   const {
     getTableProps,
@@ -236,7 +241,7 @@ const TableContainer = ({ columns, data, renderRowSubComponent }) => {
             <Modal.Title>Add Feature</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <FeatureForm handleClose={handleAddClose} />
+            <FeatureForm handleClose={handleAddClose} projectid={projectid} />
           </Modal.Body>
         </Modal>
       </div>

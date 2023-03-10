@@ -76,6 +76,7 @@
     border-radius: 10px;
     color: white;
 }
+
 .bottomItem>.ps-menu-button{
     width: 200px !important;
 }
@@ -83,6 +84,10 @@
     width: 200px !important;
     transition: 0.6s;
     background-color: #2b244e !important;
+}
+
+.guideShowButton{
+    bottom: 500px !important;
 }
 
 .profilePic{

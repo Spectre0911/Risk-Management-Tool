@@ -11,6 +11,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { BsBriefcaseFill } from "react-icons/bs";
 import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
+import { AllSkills } from "../services/AllSkills";
 import { CreateProject } from "../services/CreateProject";
 import { useSelector } from "react-redux";
 import {
@@ -25,11 +26,14 @@ import "./index.css";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 import { createGrid } from "@mui/system";
+// import { useSelector } from "react-redux";
 
-const EditProfileForm = ({ handleClose, featureId }) => {
+const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
-
+  const [userEmail, setUserEmail] = useState(
+    useSelector((state) => state.email)
+  );
   const [dependencyOptions, setDependencyOptions] = useState([]);
   const [email, setEmail] = useState(useSelector((state) => state.email));
 
@@ -45,12 +49,19 @@ const EditProfileForm = ({ handleClose, featureId }) => {
   });
 
   const initialValuesRegister = {
-    name: "Task",
+    name: "Project",
     description: "Description",
     startTime: "2023-05-24",
-    endTime: "2023-05-24",
+    endTime: "2023-05-25",
     difficulty: "1",
   };
+
+  useEffect(() => {
+    AllSkills().then((data) => {
+      console.log(data);
+      setSkills(data);
+    });
+  }, []);
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     const newValues = {
@@ -65,7 +76,9 @@ const EditProfileForm = ({ handleClose, featureId }) => {
       email: email,
     };
     CreateProject(newValues);
-    // createFeature(newValues);
+    handleClose();
+    await new Promise(resolve => setTimeout(resolve, 500));
+    fetchProjectFunction();
   };
 
   const handleSkillsRequiredChange = (e) => {
@@ -81,12 +94,12 @@ const EditProfileForm = ({ handleClose, featureId }) => {
     { value: "2", label: "Optional" },
     { value: "3", label: "Aesthetic" },
   ];
-
-  const skillsRequiredOptions = [
-    { value: "1", label: "React" },
-    { value: "2", label: "Databases" },
-    { value: "3", label: "Backend" },
-  ];
+  const [skillsRequiredOptions, setSkills] = useState([]);
+  // const [skillsRequiredOptions, setSkills] = useState([
+  //   { value: "1", label: "React" },
+  //   { value: "2", label: "Databases" },
+  //   { value: "3", label: "Backend" },
+  // ]);
 
   const teamMembersOptions = [
     { value: "1", label: "jc@gmail.com" },
@@ -105,6 +118,7 @@ const EditProfileForm = ({ handleClose, featureId }) => {
       onSubmit={handleFormSubmit}
       initialValues={initialValuesRegister}
       validationSchema={reportBugSchema}
+      enableReinitialize={true}
     >
       {({
         values,

@@ -44,6 +44,11 @@
     width: 50px;
 }
 
+.notificationColumn{
+    position: absolute;
+    width: 100%;
+}
+
 /* .icon{
     display: flex;
     align-items: center;
@@ -156,6 +161,22 @@
     margin-bottom: 10px;
     margin-top: 15px;
 }
+
+@media (min-width: 1350px){
+    .infoBox2.taller{
+        height: 1027px !important;
+        position: absolute !important;
+        right: 3%;
+
+        width: 21% !important;
+        bottom: -1px;
+}}
+
+.infoBox2.taller{
+    position: relative;
+    height: 500px;
+}
+
 
 @media (min-width: 1350px){
     .projectTable{

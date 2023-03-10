@@ -38,44 +38,28 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 
-const Table = () => {
+const Table = (props) => {
   var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
   const navigate = useNavigate();
   const [data, setData] = useState([]);
-  const [contacts, setContacts] = useState([
-    {
-      featureId: "1",
-      featureName: "Add sidebar",
-      startTime: "12/11/2022",
-      endTime: "30/02/2023",
-      progress: 20,
-      risk: 10,
-    },
-    {
-      featureId: "2",
-      featureName: "Add sidebar",
-      startTime: "12/11/2022",
-      endTime: "30/02/2023",
-      progress: 20,
-      risk: 10,
-    },
-  ]);
+  const [contacts, setContacts] = useState([]);
   useEffect(() => {
-    AllFeatures({ projectid: 1 }).then((data) => {
-      console.log("Feature data:");
-      console.log(data);
-      const updatedContacts = data.map((item) => {
-        return {
-          featureid: item.featureid,
-          featureName: item.featurename,
-          startTime: new Date(item.starttime).toLocaleDateString("en-GB"),
-          endTime: new Date(item.endtime).toLocaleDateString("en-GB"),
-          progress: item.progress,
-          risk: 0,
-        };
-      });
-      console.log("IN HERE");
+    AllFeatures({ projectid: props.projectid }).then((data) => {
+      let updatedContacts = [];
+      if (data != null) {
+        updatedContacts = data.map((item) => {
+          return {
+            featureId: item.featureid,
+            featureName: item.featurename,
+            startTime: new Date(item.starttime).toLocaleDateString("en-GB"),
+            endTime: new Date(item.endtime).toLocaleDateString("en-GB"),
+            progress: item.progress,
+            risk: 0,
+          };
+        });
+      }
       setData(updatedContacts);
+      console.log("----------");
     });
   }, []);
 
@@ -105,7 +89,7 @@ const Table = () => {
   };
 
   const deleteFeature = (featureDeleteId) => {
-    console.log("delete this");
+    console.log(featureDeleteId);
     // console.log(featureId);
     setShowDelete(true);
   };
@@ -235,6 +219,7 @@ const Table = () => {
       <TableContainer
         columns={columns}
         data={data}
+        projectid={props.projectid}
         // renderRowSubComponent={renderRowSubComponent}
       />
       <div>
@@ -252,7 +237,10 @@ const Table = () => {
             <Modal.Title>Edit Feature</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <FeatureForm handleClose={handleEditClose} featureId={featureId} />
+            <FeatureForm
+              handleClose={handleEditClose}
+              projectid={props.projectid}
+            />
           </Modal.Body>
         </Modal>
 

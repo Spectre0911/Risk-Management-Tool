@@ -17,52 +17,60 @@ import TableContainer from "./ProjectTableContainer";
 import ProgressBar from "react-bootstrap/ProgressBar";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { SelectColumnFilter } from "./filters";
+import { ActiveProjects } from "../services/ProjectCount";
 import ChangingProgressProvider from "./ChangingProgressProvider";
 import { AllProjects } from "../services/AllProjects";
-const ProjectTable = () => {
+import { useSelector } from "react-redux";
+const ProjectTable = ({ setActiveProjects }) => {
   const [data, setData] = useState([]);
+  const email = useSelector((state) => state.email);
+
   const [contacts, setContacts] = useState([
     {
       projectId: "1",
       projectName: "cs261",
-      projectManager: "Jane Arnold",
-      deadline: "26/12/2022",
+      startDate: "26/12/2022",
+      endDate: "26/02/2023",
       closed: "false",
+      tasksPending: 2,
       progress: 20,
       risk: 10,
     },
     {
       projectId: "2",
       projectName: "cs261",
-      projectManager: "Jane Arnold",
-      deadline: "26/10/2022",
+      startDate: "26/12/2022",
+      endDate: "10/04/2023",
       closed: "false",
+      tasksPending: 3,
       progress: 20,
       risk: 10,
     },
   ]);
-  useEffect(() => {
-    const doFetch = async () => {
-      const response = await fetch("https://randomuser.me/api/?results=100");
-      const body = await response.json();
-      AllProjects().then((data) => {
-        const updatedContacts = data.map((item) => {
+
+  const doFetch = async () => {
+    AllProjects(email).then((data) => {
+      console.log(data);
+      setData(
+        data.map((item) => {
           return {
             projectId: item.projectid,
             projectName: item.projectname,
             projectManager: item.projectmanager,
-            deadline: new Date(item.deadline).toLocaleDateString("en-GB"),
+            endDate: new Date(item.deadline).toLocaleDateString("en-GB"),
+            startDate: new Date(item.opened).toLocaleDateString("en-GB"),
+
             closed: item.closed.toString(),
             progress: Math.floor(item.progress),
             risk: 0,
           };
-        });
-        console.log("IN HERE");
-        setData(updatedContacts);
-      });
+        })
+      );
+      setActiveProjects(data.length);
+    });
+  };
 
-      // console.log(contacts);
-    };
+  useEffect(() => {
     doFetch();
   }, []);
 
@@ -93,7 +101,7 @@ const ProjectTable = () => {
   const columns = useMemo(
     () => [
       {
-        Header: "Title",
+        Header: "Project",
         accessor: "projectName",
         filterable: false,
         disableFilters: true,
@@ -117,19 +125,27 @@ const ProjectTable = () => {
         },
       },
       {
-        Header: "Project Manager",
-        accessor: "projectManager",
+        Header: "Project Start",
+        accessor: "startDate",
         filterable: false,
         disableFilters: true,
         filterable: false,
       },
       {
-        Header: "Deadline",
-        accessor: "deadline",
+        Header: "Tasks pending",
+        accessor: "tasksPending",
         filterable: false,
         disableFilters: true,
         filterable: false,
       },
+      {
+        Header: "Project End",
+        accessor: "endDate",
+        filterable: false,
+        disableFilters: true,
+        filterable: false,
+      },
+
       {
         Header: "Status",
         accessor: "status",
@@ -162,11 +178,15 @@ const ProjectTable = () => {
   );
 
   return (
-    <TableContainer
-      columns={columns}
-      data={data}
-      renderRowSubComponent={renderRowSubComponent}
-    />
+    <div>
+      <TableContainer
+        columns={columns}
+        data={data}
+        renderRowSubComponent={renderRowSubComponent}
+        fetchProjectFunction={doFetch}
+      />
+      {console.log(data)}
+    </div>
   );
 };
 

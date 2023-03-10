@@ -1,11 +1,15 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { FaBell } from "react-icons/fa";
 import { GrClose } from "react-icons/gr";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
+import Select from "react-select";
 import { Formik, Form, Field } from "formik";
+import { AllFeatures } from "../services/AllFeatures";
+import { AllProjectMembers } from "../services/AllProjectMembers";
+import { CreateBug } from "../services/CreateBug";
 import {
   Box,
   TextField,
@@ -19,7 +23,7 @@ import Bug from "./bug";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 
-const BugReportForm = ({ handleClose }) => {
+const BugReportForm = ({ handleClose, projectid }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
 
@@ -27,37 +31,109 @@ const BugReportForm = ({ handleClose }) => {
     bugName: yup.string().required("required"),
     bugDate: yup.string().required("required"),
     bugDescription: yup.string().required("required"),
-    severity: yup.number().required("required"),
-    priority: yup.number().required("required"),
+    bugLocation: yup.string().required("required"),
   });
 
   const initialValuesRegister = {
     bugName: "",
     bugDate: "",
     bugDescription: "",
-    severity: "",
-    priority: "",
+    bugLocation: "",
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    console.log(values);
     try {
-      const body = { values };
-      const response = await fetch("http://localhost:5000/addbug", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body),
-      });
+      console.log(feature);
+      console.log(teamMembers);
+      const body = {
+        ...values,
+        priority: priority.value,
+        severity: severity.value,
+        featureid: feature.value,
+        devid: teamMembers.value,
+      };
+      CreateBug(body);
     } catch (err) {
       console.error(err.message);
     }
   };
+
+  const priorityOptions = [
+    { value: "1", label: "High" },
+    { value: "2", label: "Med" },
+    { value: "3", label: "Low" },
+  ];
+
+  const [priority, setPriority] = useState({ value: "1", label: "High" });
+
+  const handlePriorityChange = (e) => {
+    setPriority(e);
+  };
+
+  const severityOptions = [
+    { value: "1", label: "High" },
+    { value: "2", label: "Med" },
+    { value: "3", label: "Low" },
+  ];
+
+  const [severity, setSeverity] = useState({ value: "1", label: "High" });
+
+  const handleSeverityChange = (e) => {
+    setSeverity(e);
+  };
+
+  const [teamMembers, setTeamMembers] = useState([]);
+
+  const handleTeamMemberChange = (e) => {
+    setTeamMembers(e);
+  };
+
+  const [teamMembersOptions, setTeamMemberOptions] = useState([
+    { value: "1", label: "jc@gmail.com" },
+    { value: "2", label: "mk@gmail.com" },
+    { value: "3", label: "sh@gmail.com" },
+  ]);
+
+  const [feature, setFeature] = useState([]);
+  const [featureOptions, setFeatureOptions] = useState([
+    { value: "1", label: "login page" },
+    { value: "2", label: "logout page" },
+  ]);
+
+  const handleFeatureChange = (e) => {
+    setFeature(e);
+  };
+
+  useEffect(() => {
+    console.log(projectid);
+    AllFeatures({ projectid: parseInt(projectid) }).then((data) => {
+      let newFeatures = [];
+      data.map((feature) => {
+        newFeatures.push({
+          value: feature.featureid.toString(),
+          label: feature.featurename,
+        });
+      });
+      setFeatureOptions(newFeatures);
+    });
+    AllProjectMembers({ projectId: parseInt(projectid) }).then((data) => {
+      let newMembers = [];
+      data.map((member) => {
+        newMembers.push({
+          value: member.userid.toString(),
+          label: member.name,
+        });
+      });
+      setTeamMemberOptions(newMembers);
+    });
+  }, []);
 
   return (
     <Formik
       onSubmit={handleFormSubmit}
       initialValues={initialValuesRegister}
       validationSchema={reportBugSchema}
+      enableReinitialize={true}
     >
       {({
         values,
@@ -96,10 +172,52 @@ const BugReportForm = ({ handleClose }) => {
                   onChange={handleChange}
                   value={values.bugDate}
                   name="bugDate"
+                  type="date"
                   error={Boolean(touched.bugDate) && Boolean(errors.bugDate)}
                   helperText={touched.bugDate && errors.bugDate}
                   sx={{ gridColumn: "span 2" }}
                 />
+
+                <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "2px",
+                  }}
+                >
+                  Team Members:
+                </p>
+                <Select
+                  id="teamMembers"
+                  name="teamMembers"
+                  options={teamMembersOptions}
+                  onChange={handleTeamMemberChange}
+                  onBlur={handleBlur}
+                  className="defineDependenciesBox"
+                  sx={{ gridColumn: "span 3", width: "70%" }}
+                  value={teamMembers}
+                />
+
+                <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "2px",
+                  }}
+                >
+                  Feature:
+                </p>
+                <Select
+                  id="feature"
+                  name="feature"
+                  options={featureOptions}
+                  onChange={handleFeatureChange}
+                  onBlur={handleBlur}
+                  className="defineDependenciesBox"
+                  sx={{ gridColumn: "span 3", width: "70%" }}
+                  value={feature}
+                />
+
                 <TextField
                   label="Description"
                   onBlur={handleBlur}
@@ -113,26 +231,58 @@ const BugReportForm = ({ handleClose }) => {
                   helperText={touched.bugDescription && errors.bugDescription}
                   sx={{ gridColumn: "span 4" }}
                 />
+
                 <TextField
-                  label="Severity"
+                  label="Location"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  value={values.severity}
-                  name="severity"
-                  error={Boolean(touched.severity) && Boolean(errors.severity)}
-                  helperText={touched.severity && errors.severity}
+                  value={values.bugLocation}
+                  name="bugLocation"
+                  error={
+                    Boolean(touched.bugLocation) && Boolean(errors.bugLocation)
+                  }
+                  helperText={touched.bugLocation && errors.bugLocation}
                   sx={{ gridColumn: "span 4" }}
                 />
 
-                <TextField
-                  label="Priority"
+                <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "20px",
+                  }}
+                >
+                  Priority:
+                </p>
+                <Select
+                  id="priority"
+                  options={priorityOptions}
+                  multi={false}
+                  onChange={handlePriorityChange}
                   onBlur={handleBlur}
-                  onChange={handleChange}
-                  value={values.priority}
-                  name="priority"
-                  error={Boolean(touched.priority) && Boolean(errors.priority)}
-                  helperText={touched.priority && errors.priority}
-                  sx={{ gridColumn: "span 4" }}
+                  className="defineDependenciesBox"
+                  sx={{ gridColumn: "span 3", width: "70%" }}
+                  value={priority}
+                />
+
+                <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "20px",
+                  }}
+                >
+                  Severity:
+                </p>
+                <Select
+                  id="priority"
+                  options={severityOptions}
+                  multi={false}
+                  onChange={handleSeverityChange}
+                  onBlur={handleBlur}
+                  className="defineDependenciesBox"
+                  sx={{ gridColumn: "span 3", width: "70%" }}
+                  value={severity}
                 />
               </>
             }
