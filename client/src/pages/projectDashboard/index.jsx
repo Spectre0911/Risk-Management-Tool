@@ -556,7 +556,7 @@ const ProjectDashboard = () => {
 
         <div className="infoBox2 ganttChart">
           <div className="metricTitle2">
-            <p>Gannt Chart</p>
+            <p>Gantt Chart</p>
           </div>
           <div className="ganttContainer">
             {/* <GanttChart viewMode={ganttViewState}/> */}

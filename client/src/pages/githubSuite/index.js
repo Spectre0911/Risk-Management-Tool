@@ -181,6 +181,10 @@ const GithubIntegrator = () => {
         if (index !== -1) {
             uniqueContributors.splice(index, 1);
         }
+        var index = uniqueContributors.indexOf('Henry Ly');
+        if (index !== -1) {
+            uniqueContributors.splice(index, 1);
+        }
         let commitHistory = [];
         for (var i=0; i<uniqueContributors.length; i++){
             let devCommits = [];

@@ -1,5 +1,5 @@
 export const RadarData = {
-    labels: ["Project understanding", "Communication", "Satisfaction", "Team Cohesion", "Committment"],
+    labels: ["Project understanding", "Communication", "Confidence In Skillset", "Team\nCohesion"],
     datasets: [
       {
         label: "Soft Metric Data",
@@ -9,7 +9,7 @@ export const RadarData = {
         poingBorderColor: "#fff",
         pointHoverBackgroundColor: "#fff",
         pointHoverBorderColor: "rgba(34, 202, 236, 1)",
-        data: [13, 10, 12, 6, 5],
+        data: [2.3, 1.1, 4.5, 3.2],
         borderWidth: 4
       }
     ]
@@ -37,7 +37,7 @@ export const RadarData = {
           pointLabels: {
             color: 'black',
             font: {
-              size: 15,
+              size: 13,
               family: 'Montserrat',
               weight: 700,
             }
