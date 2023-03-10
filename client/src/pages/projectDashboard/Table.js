@@ -115,11 +115,11 @@ const Table = (props) => {
         filterable: false,
         Cell: ({ cell }) => {
           const percentage = cell.value;
-          // console.log(percentage);
+          console.log(cell);
           return (
             <div className="progressDisplayContainer">
-              <div className="progressNumber feature">2/3</div>
-              <ProgressBar variant="danger" now={percentage} />
+              <div className="progressNumber feature">{cell.row.original.completedTasks}/{cell.row.original.totalTasks}</div>
+              <ProgressBar variant="danger" now={cell.row.original.completedTasks/cell.row.original.totalTasks*100} />
             </div>
           );
         },
@@ -138,26 +138,7 @@ const Table = (props) => {
         disableFilters: true,
         filterable: false,
       },
-      {
-        Header: "Risk",
-        accessor: "risk",
-        filterable: false,
-        disableFilters: true,
-        filterable: false,
-        Cell: ({ cell }) => {
-          const percentage = cell.value;
-          // console.log(percentage);
-          return (
-            <div className="projectCircularProgressBar">
-              <CircularProgressbar
-                value={percentage}
-                text={`${percentage}%`}
-                strokeWidth={12}
-              />
-            </div>
-          );
-        },
-      },
+     
       {
         Header: "View Tasks",
         Cell: ({ cell }) => {
@@ -238,29 +219,63 @@ const Table = (props) => {
     []
   );
 
-  // const tempData = [
-  //   {
-  //     featureId: "1",
-  //     featureName: "Add sidebar",
-  //     startTime: "12/11/2022",
-  //     endTime: "30/02/2023",
-  //     progress: 20,
-  //     risk: 10,
-  //   },
-  //   {
-  //     featureId: "2",
-  //     featureName: "Add sidebar",
-  //     startTime: "12/11/2022",
-  //     endTime: "30/02/2023",
-  //     progress: 20,
-  //     risk: 10,
-  //   },
-  // ];
+  const tempData = [
+    {
+      featureId: "1",
+      featureName: "Add sidebar",
+      startTime: "10/01/2023",
+      endTime: "13/01/2023",
+      progress: 20,
+      risk: 10,
+      totalTasks: 3,
+      completedTasks: 1,
+    },
+    {
+      featureId: "2",
+      featureName: "Create menu",
+      startTime: "12/02/2023",
+      endTime: "15/02/2023",
+      progress: 20,
+      risk: 10,
+      totalTasks: 3,
+      completedTasks: 2,
+    },
+    {
+      featureId: "3",
+      featureName: "Add dashboard view",
+      startTime: "20/02/2023",
+      endTime: "21/02/2023",
+      progress: 20,
+      risk: 10,
+      totalTasks: 3,
+      completedTasks: 2,
+    },
+    {
+      featureId: "4",
+      featureName: "Add user page",
+      startTime: "16/02/2023",
+      endTime: "18/02/2023",
+      progress: 20,
+      risk: 10,
+      totalTasks: 0,
+      completedTasks: 1,
+    },
+    {
+      featureId: "5",
+      featureName: "Add signout button",
+      startTime: "16/01/2023",
+      endTime: "17/02/2023",
+      progress: 20,
+      risk: 10,
+      totalTasks: 0,
+      completedTasks: 1,
+    },
+  ];
   return (
     <div>
       <TableContainer
         columns={columns}
-        data={data}
+        data={tempData}
         projectid={props.projectid}
         // renderRowSubComponent={renderRowSubComponent}
       />
@@ -282,6 +297,7 @@ const Table = (props) => {
             <FeatureForm
               handleClose={handleEditClose}
               projectid={props.projectid}
+              edit={true}
             />
           </Modal.Body>
         </Modal>
