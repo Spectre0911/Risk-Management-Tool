@@ -45,7 +45,7 @@ const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
     description: yup.string().required("required"),
     startTime: yup.string().required("required"),
     endTime: yup.string().required("required"),
-    difficulty: yup.string().required("required"),
+    gitHubRepoName: yup.string().required("required"),
   });
 
   const initialValuesRegister = {
@@ -53,7 +53,6 @@ const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
     description: "",
     startTime: "",
     endTime: "",
-    difficulty: "",
     gitHubRepoName:"",
   };
 
@@ -209,11 +208,11 @@ const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.gitHubRepoName}
-                  name="Github repository name"
+                  name="gitHubRepoName"
                   error={
-                    Boolean(touched.description) && Boolean(errors.description)
+                    Boolean(touched.gitHubRepoName) && Boolean(errors.gitHubRepoName)
                   }
-                  helperText={touched.description && errors.description}
+                  helperText={touched.gitHubRepoName && errors.gitHubRepoName}
                   sx={{ gridColumn: "span 3" }}
                 />
 
