@@ -79,7 +79,7 @@ const TaskDashboard = () => {
 
     const completed =[{
         bugId: 3,
-        bugTitle:"Logout button",
+        bugTitle:"Login button",
         status: "Completed",
         description: "Button to logout",
         startDate: "15/02/2023",
