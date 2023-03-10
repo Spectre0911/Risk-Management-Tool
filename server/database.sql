@@ -30,6 +30,7 @@ create table projects (
     currentrisk integer not null default 0,
     check (currentrisk >= 0 and currentrisk <= 100),
     githubtoken varchar(100) default null,
+    githubrepo  varchar(100) default null,
     primary key (projectid)
 );
 
