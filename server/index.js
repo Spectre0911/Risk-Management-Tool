@@ -320,8 +320,9 @@ app.post("/api/createFeature", async (req, res) => {
 
 app.post("/api/deleteFeature", async (req, res) => {
   try {
+    console.log(req.body);
     const deleteFeature = await pool.query(
-      "DELETE FROM features WHERE feature.featureid = $1",
+      "DELETE FROM features WHERE featureid = $1",
       [req.body.featureId]
     );
   } catch (err) {

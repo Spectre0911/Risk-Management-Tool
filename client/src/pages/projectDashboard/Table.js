@@ -38,7 +38,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import { CompleteFeature } from "../services/CompleteFeature";
-
+import { DeleteFeature } from "../services/DeleteFeature";
 const Table = (props) => {
   var ReactCSSTransitionGroup = require("react-transition-group"); // ES5 with npm
   const navigate = useNavigate();
@@ -85,13 +85,13 @@ const Table = (props) => {
     setShowDelete(false);
   };
   const handleDeleteShow = (e) => {
+    console.log(e.target.value);
     setFeatureId(e.target.value);
     setShowDelete(true);
   };
 
   const deleteFeature = (featureDeleteId) => {
-    console.log(featureDeleteId);
-    // console.log(featureId);
+    DeleteFeature({ featureId });
     setShowDelete(true);
   };
 
