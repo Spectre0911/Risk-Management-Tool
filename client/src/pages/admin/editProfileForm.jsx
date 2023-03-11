@@ -55,6 +55,7 @@ const EditProfileForm = ({ handleClose }) => {
     bio: "",
     gitHubToken: "",
     gitHubName: "",
+    newPassword: "",
   });
 
   const reportBugSchema = yup.object().shape({
@@ -62,7 +63,8 @@ const EditProfileForm = ({ handleClose }) => {
     email: yup.string().required("required"),
     bio: yup.string().required("required"),
     gitHubToken: yup.string().required("required"),
-    gitHubName: yup.string().required("required")
+    gitHubName: yup.string().required("required"),
+    newPassword: yup.string()
   });
 
 
@@ -113,6 +115,7 @@ const EditProfileForm = ({ handleClose }) => {
     if (e.target.files[0].name!=""){
       setImagePath(e.target.files[0].name);
       setImage(e.target.files[0])
+      console.log(imagePath);
     }
   };
 
@@ -277,6 +280,18 @@ const EditProfileForm = ({ handleClose }) => {
                   sx={{ gridColumn: "span 2" }}
                 />
 
+                <TextField
+                  label="New Password"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.newPassword}
+                  type="password"
+                  name="newPassword"
+                  error={Boolean(touched.newPassword) && Boolean(errors.newPassword)}
+                  helperText={touched.newPassword && errors.newPassword}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                
                 <p style={{ gridColumn: "span 1", margin: "auto" }}>Skills:</p>
                 <Select
                   defaultValue={skills}
