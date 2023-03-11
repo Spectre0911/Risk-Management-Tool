@@ -383,6 +383,22 @@ app.post("/api/getImagePath", async (req, postRes) => {
   }
 });
 
+app.post("/api/editImagePath", async (req, postRes) => {
+  try {
+    await pool.query(
+      "UPDATE USERS SET pfppath = $1 WHERE email = $2",
+      [
+        req.body.values.email,
+        req.body.values.imagePath
+      ]
+    );
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+
 
 
 

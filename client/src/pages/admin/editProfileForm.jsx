@@ -66,7 +66,8 @@ const EditProfileForm = ({ handleClose }) => {
 
 
   const [imagePath, setImagePath] = useState("");
-    const login = useSelector((state) => state.email);
+  const [image, setImage] = useState();
+  const login = useSelector((state) => state.email);
     
    
 
@@ -80,7 +81,8 @@ const EditProfileForm = ({ handleClose }) => {
         setImagePath(data);
         if (data==""){
             setImagePath("jane.jpg")
-    }});
+      }
+    console.log(imagePath)});
     GetUser({
       email: userEmail,
     }).then((data) => {
@@ -107,7 +109,15 @@ const EditProfileForm = ({ handleClose }) => {
 
   const uploadImage = (e) => {
     setImagePath(URL.createObjectURL(e.target.files[0]));
+    setImage(e.target.files[0]);
     console.log(e.target.files[0]);
+
+    let form = new FormData();
+    form.append('file', image);
+    fetch("http://localhost:5000/upload", {
+      method: "POST",
+      body: form,
+    });
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
