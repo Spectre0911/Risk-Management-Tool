@@ -11,6 +11,7 @@ import { Scrollbars } from "react-custom-scrollbars";
 import { BsBriefcaseFill } from "react-icons/bs";
 import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
+import { useSelector } from "react-redux";
 import {
   Box,
   TextField,
@@ -85,13 +86,11 @@ const EditProfileForm = ({ handleClose, projectid }) => {
       difficulty: values.difficulty,
       dependencies: dependencies,
     };
-    console.log("New Values (FeatureForm.jsx):");
     console.log(newValues);
     createFeature(newValues);
   };
 
   const createFeature = (values) => {
-    console.log("CREATING FEATURE, FEATUREFORM.jsx");
     console.log(projectid);
     fetch("http://localhost:5000/api/createFeature", {
       method: "POST",

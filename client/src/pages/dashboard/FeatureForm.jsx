@@ -53,7 +53,7 @@ const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
     description: "",
     startTime: "",
     endTime: "",
-    gitHubRepoName:"",
+    gitHubRepoName: "",
   };
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
     };
     CreateProject(newValues);
     handleClose();
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
     fetchProjectFunction();
   };
 
@@ -204,13 +204,15 @@ const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
                   Github repository name:
                 </p>
                 <TextField
+                  id="gitHubRepoName"
                   label="Github Repository Name"
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.gitHubRepoName}
                   name="gitHubRepoName"
                   error={
-                    Boolean(touched.gitHubRepoName) && Boolean(errors.gitHubRepoName)
+                    Boolean(touched.gitHubRepoName) &&
+                    Boolean(errors.gitHubRepoName)
                   }
                   helperText={touched.gitHubRepoName && errors.gitHubRepoName}
                   sx={{ gridColumn: "span 3" }}

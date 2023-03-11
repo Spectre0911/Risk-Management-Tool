@@ -111,11 +111,7 @@ const ProjectDashboard = () => {
     setGanttViewState(e.target.value);
   };
 
-  const [teamMembersOptions, setTeamMemberOptions] = useState([
-    { value: "1", label: "Joshua" },
-    { value: "2", label: "Morgan" },
-    { value: "3", label: "Sanjula" },
-  ]);
+  const [teamMembersOptions, setTeamMemberOptions] = useState([]);
 
   const [teamMembersList, setTeamMembersList] = useState([]);
   const handleTeamMemberChange = (e) => {
@@ -152,10 +148,10 @@ const ProjectDashboard = () => {
   const [tempData, setTempData] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
-    // OverallRisk({ projectId: projectId }).then((data) => {
-    //   console.log("OVERALL RISK");
-    //   console.log(data);
-    // });
+    OverallRisk({ projectId: projectId }).then((data) => {
+      console.log("OVERALL RISK");
+      console.log(data);
+    });
     OrderedUsers({ projectId: projectId }).then((data) => {
       setTeamMemberOptions(data);
     });
