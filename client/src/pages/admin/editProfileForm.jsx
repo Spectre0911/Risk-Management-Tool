@@ -16,6 +16,7 @@ import { AdminSkills } from "../services/AdminSkills";
 import { AllSkills } from "../services/AllSkills";
 import { useSelector } from "react-redux";
 import { UpdateUser } from "../services/UpdateUser";
+import { GetImagePath } from "../services/GetImagePath";
 import {
   Box,
   TextField,
@@ -30,7 +31,6 @@ import * as yup from "yup";
 
 const EditProfileForm = ({ handleClose }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const [image, setImage] = useState("http://localhost:5000/assets/jane.jpg");
   const { palette } = useTheme();
   const [userInfo, setUserInfo] = useState([]);
   const [userEmail, setUserEmail] = useState(
@@ -64,8 +64,23 @@ const EditProfileForm = ({ handleClose }) => {
     gitHubName: yup.string().required("required")
   });
 
+
+  const [imagePath, setImagePath] = useState("");
+    const login = useSelector((state) => state.email);
+    
+   
+
+
   useEffect(() => {
     console.log("SETTING");
+    GetImagePath({
+      email: userEmail.email,
+    }).then((data) => {
+      console.log(data);
+        setImagePath(data);
+        if (data==""){
+            setImagePath("jane.jpg")
+    }});
     GetUser({
       email: userEmail,
     }).then((data) => {
@@ -91,7 +106,7 @@ const EditProfileForm = ({ handleClose }) => {
   }, []);
 
   const uploadImage = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]));
+    setImagePath(URL.createObjectURL(e.target.files[0]));
     console.log(e.target.files[0]);
   };
 
@@ -151,7 +166,7 @@ const EditProfileForm = ({ handleClose }) => {
                 >
                   <img
                     className="editProfilePic"
-                    src={image}
+                    src={`http://localhost:5000/assets/${imagePath}`}
                     style={{
                       margin: "auto",
                       borderRadius: "200px",

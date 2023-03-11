@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component, useState, useEffect } from "react";
 import { Sidebar, Menu, MenuItem, useProSidebar, SubMenu, ProSidebarProvider } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import { AiOutlineMenu } from 'react-icons/ai';
@@ -9,14 +9,14 @@ import {CgProfile} from 'react-icons/cg'
 import {RiDashboardFill} from 'react-icons/ri'
 import {BiLogOutCircle} from 'react-icons/bi'
 import { NavLink } from 'react-router-dom';
-import { useState } from 'react';
 import {BsGraphUp} from 'react-icons/bs';
 import {IoIosBug} from 'react-icons/io'
 import {AiOutlineTeam} from 'react-icons/ai'
 import {AiOutlineFundProjectionScreen} from 'react-icons/ai'
 import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import {AiOutlineWarning} from 'react-icons/ai'
+import {AiOutlineWarning} from 'react-icons/ai';
+import { GetImagePath } from '../pages/services/GetImagePath';
 import "./AdminSidebar.css";
 import Guide from './Guide';
 
@@ -31,6 +31,20 @@ const AdminSidebar = ({projectId, teamMember}) => {
         setCollapsed(!collapsed);
     };
 
+    const [imagePath, setImagePath] = useState("");
+    const login = useSelector((state) => state.email);
+    
+    useEffect(() => {
+        // Get all active projects
+        GetImagePath({
+          email: login.email,
+        }).then((data) => {
+            setImagePath(data);
+            if (data==""){
+                setImagePath("jane.jpg")
+            }});
+        // Get the number of notifications
+    });
     
 
 
@@ -39,7 +53,7 @@ const AdminSidebar = ({projectId, teamMember}) => {
         <Sidebar className="sideBar" collapsed={false}>
             <Menu iconShape='square'>
                 <div className="profilePicContainer">
-                    <img className='profilePic' src="http://localhost:5000/assets/jane.jpg"></img>
+                    <img className='profilePic' src={`http://localhost:5000/assets/${imagePath}`}></img>
                     <p className="welcomeMessage">{username}</p>
                 </div>
                 <MenuItem className="menuItem dashboard" icon={<RiDashboardFill />} onClick={() => navigate(`/`)}>
