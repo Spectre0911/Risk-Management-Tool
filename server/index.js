@@ -850,7 +850,7 @@ app.post("/api/bugCount", async (req, postRes) => {
 app.post("/api/averageSoftMetrics", async (req, postRes) => {
   try {
     const averageSoftMetrics = await pool.query(
-      "SELECT fbdate, AVG(fbscore) FROM feedback WHERE projectid = $1 GROUP BY fbdate;",
+      "SELECT DATE(fbdate) AS fbdate, AVG(fbscore), fbtype FROM feedback WHERE projectid = $1 GROUP BY DATE(fbdate), fbtype;",
       [req.body.projectid]
     );
     // console.log(allBugs.rows);
