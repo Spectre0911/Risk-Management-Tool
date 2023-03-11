@@ -1,6 +1,6 @@
 export const EditImagePath = (values) => {
 return new Promise((resolve, reject) => {
-    fetch("http://localhost:5000/api/getImagePath", {
+    fetch("http://localhost:5000/api/editImagePath", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
