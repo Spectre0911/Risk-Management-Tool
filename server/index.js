@@ -398,6 +398,26 @@ app.post("/api/getImagePath", async (req, postRes) => {
   }
 });
 
+app.post("/api/getImagePathById", async (req, postRes) => {
+  try {
+    console.log(req.body.id);
+    const pfp = await pool.query(
+      "SELECT pfppath FROM users WHERE userid = $1; ",
+      [req.body.id]
+    );
+    console.log(pfp);
+    if (pfp.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      postRes.json(pfp.rows[0].pfppath);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+
 app.post("/api/editImagePath", async (req, postRes) => {
   try {
     await pool.query(
