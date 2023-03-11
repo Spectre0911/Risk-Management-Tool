@@ -124,6 +124,7 @@ const RiskSummary = () => {
       console.log(riskScores);
     });
   }, []);
+
   return (
     <div className="main">
       <div className="grid">
