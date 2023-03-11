@@ -860,6 +860,33 @@ app.post("/api/averageSoftMetrics", async (req, postRes) => {
   }
 });
 
+// Add a hard risk data point
+app.post("/api/addRisk", async (req, postRes) => {
+  try {
+    const averageSoftMetrics = await pool.query(
+      "INSERT INTO risks(projectid, riskdate, risk, risktype) VALUES($1, DATE(NOW()), ROUND($2), 1)",
+      [req.body.projectid, req.body.risk]
+    );
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Retrieve all hard risk data points
+app.post("/api/getRisks", async (req, postRes) => {
+  try {
+    const hardRisk = await pool.query(
+      "SELECT DATE(riskdate), AVG(risk) FROM risks WHERE projectid = $1 GROUP BY DATE(riskdate);",
+      [req.body.projectid]
+    );
+    // console.log(allBugs.rows);
+    console.log(hardRisk.rows);
+    postRes.json(hardRisk.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 //select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here> and devid = <userid here> and not completed) as tasksleft;
 // Get all task for a particular project
 // app.post("/api/assignedProjects", async (req, postRes) => {

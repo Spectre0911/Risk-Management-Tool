@@ -6,6 +6,7 @@ import LineGraph from "./Line";
 import { useNavigate } from "react-router-dom";
 import HalfDonutChart from "./HalfDonutChart";
 import { OverallRisk } from "../services/OverallRisk";
+import { GetRisk } from "../services/GetRisk";
 const RiskSummary = () => {
   const navigate = useNavigate();
   const { projectId } = useParams();
@@ -47,8 +48,13 @@ const RiskSummary = () => {
       return backgroundColorTeamList.red;
     }
   };
-  const dates = ["12/12/12", "12/1/12", "12/1/12", "12/1/12"];
-  const values = [0.1, 0.2, 0.1, 0.4];
+  const [dates, setLabels] = useState([
+    "12/12/12",
+    "12/1/12",
+    "12/1/12",
+    "12/1/12",
+  ]);
+  const [values, setValues] = useState([0.1, 0.2, 0.1, 0.4]);
 
   const [risks, setRisks] = useState([
     [0.1, 1 - 0.1],
@@ -101,6 +107,21 @@ const RiskSummary = () => {
       setOverallRisk(parseFloat(data.overall_result.toFixed(2)));
 
       console.log(data);
+    });
+    GetRisk({ projectid: projectId }).then((data) => {
+      let dates = new Set();
+      let riskScores = [];
+      data.forEach((obj) => {
+        let date = new Date(obj.date).toLocaleDateString();
+        dates.add(date);
+      });
+      data.forEach((obj) => {
+        let risk = obj.avg;
+        riskScores.push(risk);
+      });
+      setLabels(Array.from(dates));
+      setValues(riskScores);
+      console.log(riskScores);
     });
   }, []);
   return (
