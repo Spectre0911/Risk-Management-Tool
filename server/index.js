@@ -41,6 +41,8 @@ app.post(
   "/upload",
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
+    console.log(req.file);
+    console.log(req.file.path);
     try {
       const tempPath = req.file.path;
       const targetPath = path.join(__dirname, "public/assets/");
@@ -401,8 +403,9 @@ app.post("/api/editImagePath", async (req, postRes) => {
     await pool.query(
       "UPDATE USERS SET pfppath = $1 WHERE email = $2",
       [
-        req.body.values.email,
-        req.body.values.imagePath
+        req.body.path,
+        req.body.email.email,
+        
       ]
     );
   } catch (err) {

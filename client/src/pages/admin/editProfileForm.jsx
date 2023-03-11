@@ -17,6 +17,7 @@ import { AllSkills } from "../services/AllSkills";
 import { useSelector } from "react-redux";
 import { UpdateUser } from "../services/UpdateUser";
 import { GetImagePath } from "../services/GetImagePath";
+import { EditImagePath } from "../services/EditImagePath";
 import {
   Box,
   TextField,
@@ -66,7 +67,7 @@ const EditProfileForm = ({ handleClose }) => {
 
 
   const [imagePath, setImagePath] = useState("");
-  const [image, setImage] = useState();
+  const [image, setImage] = useState("");
   const login = useSelector((state) => state.email);
     
    
@@ -108,17 +109,37 @@ const EditProfileForm = ({ handleClose }) => {
   }, []);
 
   const uploadImage = (e) => {
-    setImagePath(URL.createObjectURL(e.target.files[0]));
-    setImage(e.target.files[0]);
-    console.log(e.target.files[0]);
-
-    let form = new FormData();
-    form.append('file', image);
-    fetch("http://localhost:5000/upload", {
-      method: "POST",
-      body: form,
-    });
+    console.log(e.target.files[0].name);
+    if (e.target.files[0].name!=""){
+      setImagePath(e.target.files[0].name);
+      setImage(e.target.files[0])
+    }
   };
+
+  useEffect(()=>{
+    console.log(image);
+    if (image){
+      let form = new FormData();
+      form.append('file', image);
+      fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: form,
+      });
+      var values = {};
+      values.email=userEmail;
+      values.path=image.name;
+      console.log("values", values);
+      fetch("http://localhost:5000/api/editImagePath", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      console.log(imagePath);
+    }
+  },[image])
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log(skills);
@@ -141,7 +162,7 @@ const EditProfileForm = ({ handleClose }) => {
 
   return (
     <Formik
-      onSubmit={handleFormSubmit}
+      onSubmit={(e)=>{handleFormSubmit(e)}}
       initialValues={initialValuesRegister}
       validationSchema={reportBugSchema}
       enableReinitialize={true}
