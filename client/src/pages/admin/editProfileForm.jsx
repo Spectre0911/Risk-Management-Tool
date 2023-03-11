@@ -43,10 +43,7 @@ const EditProfileForm = ({ handleClose }) => {
     { value: "Backend", label: "Backend", experience: "0" },
   ]);
 
-  const [skills, setSkills] = useState([
-    { value: "Python", label: "Python", experience: "0" },
-    { value: "React", label: "React", experience: "0" },
-  ]);
+  const [skills, setSkills] = useState([]);
   const [skillExperience, setSkillExperience] = useState([]);
   const [initialValuesRegister, setInitialValueRegister] = useState({
     name: "",
@@ -61,30 +58,24 @@ const EditProfileForm = ({ handleClose }) => {
     email: yup.string().required("required"),
     bio: yup.string().required("required"),
     gitHubToken: yup.string().required("required"),
-    gitHubName: yup.string().required("required")
+    gitHubName: yup.string().required("required"),
   });
 
-
   const [imagePath, setImagePath] = useState("");
-    const login = useSelector((state) => state.email);
-    
-   
-
+  const login = useSelector((state) => state.email);
 
   useEffect(() => {
-    console.log("SETTING");
     GetImagePath({
       email: userEmail.email,
     }).then((data) => {
-      console.log(data);
-        setImagePath(data);
-        if (data==""){
-            setImagePath("jane.jpg")
-    }});
+      setImagePath(data);
+      if (data == "") {
+        setImagePath("jane.jpg");
+      }
+    });
     GetUser({
       email: userEmail,
     }).then((data) => {
-      console.log(data);
       setInitialValueRegister({
         name: data.name || "",
         email: data.email || "",
@@ -94,13 +85,10 @@ const EditProfileForm = ({ handleClose }) => {
       console.log(initialValuesRegister);
     });
     AdminSkills({ email: userEmail }).then((data) => {
-      console.log("ADMIN SKILLS");
-      console.log(data);
       setSkills(data);
     });
 
     AllSkills({ email: userEmail }).then((data) => {
-      console.log(data);
       setSkillOptions(data);
     });
   }, []);
@@ -111,6 +99,7 @@ const EditProfileForm = ({ handleClose }) => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
+    console.log("SUBMITTING");
     console.log(skills);
     console.log(values);
     try {

@@ -367,7 +367,7 @@ app.post("/api/projects", async (req, postRes) => {
   try {
     // console.log(req.body);
     const allFeatures = await pool.query(
-      "SELECT projectid, projectname, CONCAT(firstname, ' ', lastname) as projectManager, opened, deadline, closed, ((EXTRACT(DAY FROM (NOW() - opened ))) / (EXTRACT(DAY FROM (deadline - opened)))) as progress FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1)) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
+      "SELECT * FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1) and ismanager = true) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
       [req.body.email]
     );
     if (allFeatures.rows.length == 0) {
@@ -556,7 +556,7 @@ app.post("/api/skills", async (req, postRes) => {
 // Update a users information
 app.post("/api/updateUser", async (req, postRes) => {
   try {
-    // console.log(req.body);
+    console.log(req.body);
     const firstNameLastName = req.body.values.name.split(" ");
     // console.log(firstNameLastName);
     // Update user table
@@ -680,11 +680,11 @@ app.post("/api/dependencies", async (req, postRes) => {
 app.post("/api/user", async (req, postRes) => {
   try {
     if (req.body.email != null) {
-      console.log("Getting info for email");
       const userId = await pool.query(
         "SELECT userid FROM users WHERE email = $1;",
         [req.body.email.email]
       );
+
       const userInfo = await pool.query(
         "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
         [userId.rows[0].userid]
@@ -880,11 +880,12 @@ app.post("/api/assignedProjects", async (req, postRes) => {
 // INSERT FEEDBACK ()
 app.post("/api/insertFeedback", async (req, postRes) => {
   try {
+    console.log(req.body);
     const insertFeedback = await pool.query(
       "INSERT INTO feedback(userid, projectid, fbdate, fbtype, fbquestion, fbscore) VALUES((SELECT userid FROM users WHERE email = $1), $2, $3, $4, $5, $6)",
       [
         req.body.email.email,
-        req.body.projectid,
+        2,
         req.body.fbdate,
         req.body.fbtype,
         req.body.fbquestion,
