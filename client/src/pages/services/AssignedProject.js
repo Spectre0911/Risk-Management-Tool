@@ -1,6 +1,5 @@
 export const AssignedProjects = (values) => {
   return new Promise((resolve, reject) => {
-    let dependencyIds = [];
     fetch("http://localhost:5000/api/assignedProjects", {
       method: "POST",
       headers: {
@@ -9,17 +8,15 @@ export const AssignedProjects = (values) => {
       body: JSON.stringify(values),
     })
       .then((response) => {
-        return response.json();
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error("Unable to fetch data from API");
+        }
       })
       .then((data) => {
-        if (data != null) {
-          for (let i = 0; i < data.length; i++) {
-            dependencyIds.push(data[i].featureid);
-          }
-          resolve(dependencyIds);
-        } else {
-          reject("Null data");
-        }
+        // console.log(data);
+        resolve(data);
       })
       .catch((error) => {
         console.error(error);

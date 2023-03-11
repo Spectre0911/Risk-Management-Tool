@@ -76,11 +76,24 @@ const Table = () => {
     },
   ]);
   useEffect(() => {
-    console.log(login);
     AssignedProjects({ email: login.email }).then((data) => {
-      console.log("ASSIGNED PROJECTS");
-      console.log(data);
-      console.log("---------");
+      let newContacts = [];
+      data.map((project) => {
+        let newProject = {
+          projectId: project.projectid.toString(),
+          projectName: project.projectname,
+          projectManager: project.name,
+          startTime: new Date(project.opened).toLocaleDateString("en-GB"),
+          endTime: new Date(project.deadline).toLocaleDateString("en-GB"),
+          tasksToDo: project.count.toString(),
+          daysLeft: project.daysleft.toString(),
+        };
+        newContacts.push(newProject);
+      });
+      console.log("NEW CONTACT");
+      console.log(newContacts);
+
+      setContacts(newContacts);
     });
     TasksToComplete({ email: login.email }).then((data) => {
       let newTasks = [];
@@ -96,7 +109,6 @@ const Table = () => {
           featureName: task.featurename,
           daysLeft: task.daysleft,
         };
-        console.log(newTask);
         newTasks.push(newTask);
       });
       setData(newTasks);
