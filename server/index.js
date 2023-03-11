@@ -11,7 +11,7 @@ const require = createRequire(import.meta.url);
 var request = require("request-promise"); // to connect to the ML server
 const express = require("express");
 const app = express();
-var cors = require('cors')
+var cors = require("cors");
 const pool = require("./db.cjs");
 const multer = require("multer");
 const topoSort = require("toposort"); // you will need to install this package
@@ -41,33 +41,32 @@ app.post(
   "/upload",
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
-    try{
-    const tempPath = req.file.path;
-    const targetPath = path.join(__dirname, "public/assets/");
+    try {
+      const tempPath = req.file.path;
+      const targetPath = path.join(__dirname, "public/assets/");
 
-    if (true) {
-      fs.rename(
-        tempPath,
-        path.join(targetPath, req.file.originalname),
-        (err) => {
+      if (true) {
+        fs.rename(
+          tempPath,
+          path.join(targetPath, req.file.originalname),
+          (err) => {
+            if (err) return handleError(err, res);
+            res.status(200).contentType("text/plain").end("File uploaded!");
+          }
+        );
+      } else {
+        fs.unlink(tempPath, (err) => {
           if (err) return handleError(err, res);
-          res.status(200).contentType("text/plain").end("File uploaded!");
-        }
-      );
-    } else {
-      fs.unlink(tempPath, (err) => {
-        if (err) return handleError(err, res);
 
-        res
-          .status(403)
-          .contentType("text/plain")
-          .end("Only .png files are allowed!");
-      });
+          res
+            .status(403)
+            .contentType("text/plain")
+            .end("Only .png files are allowed!");
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
-  }catch(err){
-    console.log(err);
-  }
-
   }
 );
 
@@ -90,7 +89,7 @@ testConnect();
 app.post("/api/createProject", async (req, postRes) => {
   try {
     // Create project
-    // console.log(req.body);
+    console.log(req.body);
     const projects = await pool.query(
       "INSERT INTO projects (projectname, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6)",
       [
@@ -197,7 +196,6 @@ app.post("/api/taskToCompletePID", async (req, res) => {
 
 app.post("/api/addTeamMember", async (req, res) => {
   try {
-
     const add = await pool.query(
       "INSERT INTO userproject (userid, projectid, ismanager) VALUES($1, $2, false) RETURNING *",
       [req.body.userid, req.body.projectid]
@@ -321,8 +319,9 @@ app.post("/api/createFeature", async (req, res) => {
 
 app.post("/api/deleteFeature", async (req, res) => {
   try {
+    console.log(req.body);
     const deleteFeature = await pool.query(
-      "DELETE FROM features WHERE feature.featureid = $1",
+      "DELETE FROM features WHERE featureid = $1",
       [req.body.featureId]
     );
   } catch (err) {
@@ -335,7 +334,7 @@ app.post("/api/features", async (req, postRes) => {
   try {
     // console.log(req.body);
     const allFeatures = await pool.query(
-      "SELECT * FROM features WHERE projectid = $1",
+      "SELECT * FROM features WHERE projectid = $1 and completed = false",
       [req.body.projectid]
     );
     if (allFeatures.rows.length == 0) {
@@ -344,6 +343,20 @@ app.post("/api/features", async (req, postRes) => {
       // console.log(allFeatures.rows);
       postRes.json(allFeatures.rows);
     }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+// Complete a feature
+
+app.post("/api/completeFeature", async (req, postRes) => {
+  try {
+    console.log(req.body);
+    await pool.query(
+      "UPDATE features SET completed = true WHERE featureid = $1",
+      [req.body.featureId]
+    );
   } catch (err) {
     console.error(err.message);
   }
@@ -383,10 +396,6 @@ app.post("/api/getImagePath", async (req, postRes) => {
   }
 });
 
-
-
-
-
 // End project
 app.post("/api/endProject", async (req, postRes) => {
   try {
@@ -403,7 +412,7 @@ app.post("/api/endProject", async (req, postRes) => {
 app.post("/api/allBugs", async (req, postRes) => {
   try {
     const allBugs = await pool.query(
-      "SELECT bugid, featureid, devid, bugname, bugdesc, priority, severity FROM ((SELECT projectid, featureid FROM (projects NATURAL JOIN features) as projectFeatures) as pf NATURAL JOIN bugs) WHERE projectid = $1;",
+      "SELECT bugid, featureid, devid, assigner, bugname, bugdesc, location, priority, severity FROM ((SELECT projectid, featureid FROM (projects NATURAL JOIN features) as projectFeatures) as pf NATURAL JOIN bugs) WHERE projectid = $1;",
       [req.body.projectid]
     );
 
@@ -490,7 +499,7 @@ app.post("/api/createBug", async (req, postRes) => {
   try {
     console.log(req.body);
     const createBug = await pool.query(
-      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity) VALUES ($1, $2, $3, $4, $5, $6)",
+      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity, location, assigner) VALUES ($1, $2, $3, $4, $5, $6, $7, (SELECT userid FROM users WHERE email = $8))",
       [
         req.body.featureid,
         req.body.devid,
@@ -498,6 +507,8 @@ app.post("/api/createBug", async (req, postRes) => {
         req.body.bugDescription,
         req.body.priority,
         req.body.severity,
+        req.body.bugLocation,
+        req.body.email,
       ]
     );
   } catch (err) {
@@ -976,7 +987,7 @@ app.post("/api/overallrisk", async (req, res) => {
     // This variable contains the data
     // you want to send
     var data = {
-      "projectid": req.body.projectId
+      projectid: req.body.projectId,
     };
 
     // preparing the post request
@@ -1003,6 +1014,7 @@ app.post("/api/overallrisk", async (req, res) => {
         let result;
         result = parsedBody["result"];
         // return result;
+        res.json(parsedBody);
       })
       .catch(function (err) {
         console.log(err);
