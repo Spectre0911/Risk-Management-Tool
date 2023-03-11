@@ -10,6 +10,7 @@ import { Formik, Form, Field } from "formik";
 import { AllFeatures } from "../services/AllFeatures";
 import { AllProjectMembers } from "../services/AllProjectMembers";
 import { CreateBug } from "../services/CreateBug";
+import { useSelector } from "react-redux";
 import {
   Box,
   TextField,
@@ -26,6 +27,7 @@ import * as yup from "yup";
 const BugReportForm = ({ handleClose, projectid }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
+  const email = useSelector((state) => state.email.email);
 
   const reportBugSchema = yup.object().shape({
     bugName: yup.string().required("required"),
@@ -45,12 +47,15 @@ const BugReportForm = ({ handleClose, projectid }) => {
     try {
       console.log(feature);
       console.log(teamMembers);
+      console.log(values);
+      console.log(email);
       const body = {
         ...values,
         priority: priority.value,
         severity: severity.value,
         featureid: feature.value,
         devid: teamMembers.value,
+        email: email,
       };
       CreateBug(body);
     } catch (err) {
@@ -95,10 +100,7 @@ const BugReportForm = ({ handleClose, projectid }) => {
   ]);
 
   const [feature, setFeature] = useState([]);
-  const [featureOptions, setFeatureOptions] = useState([
-    { value: "1", label: "login page" },
-    { value: "2", label: "logout page" },
-  ]);
+  const [featureOptions, setFeatureOptions] = useState([]);
 
   const handleFeatureChange = (e) => {
     setFeature(e);
@@ -114,6 +116,7 @@ const BugReportForm = ({ handleClose, projectid }) => {
           label: feature.featurename,
         });
       });
+
       setFeatureOptions(newFeatures);
     });
     AllProjectMembers({ projectId: parseInt(projectid) }).then((data) => {

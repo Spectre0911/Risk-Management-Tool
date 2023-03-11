@@ -210,10 +210,9 @@ const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
                   onChange={handleChange}
                   value={values.gitHubRepoName}
                   name="gitHubRepoName"
-                  name="gitHubRepoName"
                   error={
                     Boolean(touched.gitHubRepoName) &&
-                    Boolean(errors.description)
+                    Boolean(errors.gitHubRepoName)
                   }
                   helperText={touched.gitHubRepoName && errors.gitHubRepoName}
                   sx={{ gridColumn: "span 3" }}

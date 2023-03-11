@@ -11,7 +11,7 @@ const require = createRequire(import.meta.url);
 var request = require("request-promise"); // to connect to the ML server
 const express = require("express");
 const app = express();
-var cors = require('cors')
+var cors = require("cors");
 const pool = require("./db.cjs");
 const multer = require("multer");
 const topoSort = require("toposort"); // you will need to install this package
@@ -41,33 +41,32 @@ app.post(
   "/upload",
   upload.single("file" /* name attribute of <file> element in your form */),
   (req, res) => {
-    try{
-    const tempPath = req.file.path;
-    const targetPath = path.join(__dirname, "public/assets/");
+    try {
+      const tempPath = req.file.path;
+      const targetPath = path.join(__dirname, "public/assets/");
 
-    if (true) {
-      fs.rename(
-        tempPath,
-        path.join(targetPath, req.file.originalname),
-        (err) => {
+      if (true) {
+        fs.rename(
+          tempPath,
+          path.join(targetPath, req.file.originalname),
+          (err) => {
+            if (err) return handleError(err, res);
+            res.status(200).contentType("text/plain").end("File uploaded!");
+          }
+        );
+      } else {
+        fs.unlink(tempPath, (err) => {
           if (err) return handleError(err, res);
-          res.status(200).contentType("text/plain").end("File uploaded!");
-        }
-      );
-    } else {
-      fs.unlink(tempPath, (err) => {
-        if (err) return handleError(err, res);
 
-        res
-          .status(403)
-          .contentType("text/plain")
-          .end("Only .png files are allowed!");
-      });
+          res
+            .status(403)
+            .contentType("text/plain")
+            .end("Only .png files are allowed!");
+        });
+      }
+    } catch (err) {
+      console.log(err);
     }
-  }catch(err){
-    console.log(err);
-  }
-
   }
 );
 
@@ -397,10 +396,6 @@ app.post("/api/getImagePath", async (req, postRes) => {
   }
 });
 
-
-
-
-
 // End project
 app.post("/api/endProject", async (req, postRes) => {
   try {
@@ -417,7 +412,7 @@ app.post("/api/endProject", async (req, postRes) => {
 app.post("/api/allBugs", async (req, postRes) => {
   try {
     const allBugs = await pool.query(
-      "SELECT bugid, featureid, devid, bugname, bugdesc, priority, severity FROM ((SELECT projectid, featureid FROM (projects NATURAL JOIN features) as projectFeatures) as pf NATURAL JOIN bugs) WHERE projectid = $1;",
+      "SELECT bugid, featureid, devid, assigner, bugname, bugdesc, location, priority, severity FROM ((SELECT projectid, featureid FROM (projects NATURAL JOIN features) as projectFeatures) as pf NATURAL JOIN bugs) WHERE projectid = $1;",
       [req.body.projectid]
     );
 
@@ -504,7 +499,7 @@ app.post("/api/createBug", async (req, postRes) => {
   try {
     console.log(req.body);
     const createBug = await pool.query(
-      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity) VALUES ($1, $2, $3, $4, $5, $6)",
+      "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity, location, assigner) VALUES ($1, $2, $3, $4, $5, $6, $7, (SELECT userid FROM users WHERE email = $8))",
       [
         req.body.featureid,
         req.body.devid,
@@ -512,6 +507,8 @@ app.post("/api/createBug", async (req, postRes) => {
         req.body.bugDescription,
         req.body.priority,
         req.body.severity,
+        req.body.bugLocation,
+        req.body.email,
       ]
     );
   } catch (err) {

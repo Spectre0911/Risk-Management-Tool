@@ -111,11 +111,7 @@ const ProjectDashboard = () => {
     setGanttViewState(e.target.value);
   };
 
-  const [teamMembersOptions, setTeamMemberOptions] = useState([
-    { value: "1", label: "Joshua" },
-    { value: "2", label: "Morgan" },
-    { value: "3", label: "Sanjula" },
-  ]);
+  const [teamMembersOptions, setTeamMemberOptions] = useState([]);
 
   const [teamMembersList, setTeamMembersList] = useState([]);
   const handleTeamMemberChange = (e) => {
