@@ -845,6 +845,21 @@ app.post("/api/bugCount", async (req, postRes) => {
   }
 });
 
+// Get average score for date
+// Get all bugs for a particular project
+app.post("/api/averageSoftMetrics", async (req, postRes) => {
+  try {
+    const averageSoftMetrics = await pool.query(
+      "SELECT fbdate, AVG(fbscore) FROM feedback WHERE projectid = $1 GROUP BY fbdate;",
+      [req.body.projectid]
+    );
+    // console.log(allBugs.rows);
+    postRes.json(averageSoftMetrics.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 //select count(*) from (select * from tasks inner join features on tasks.featureid = features.featureid where projectid = <projectid here> and devid = <userid here> and not completed) as tasksleft;
 // Get all task for a particular project
 // app.post("/api/assignedProjects", async (req, postRes) => {
