@@ -33,8 +33,9 @@ Chart.register([Legend]);
 const ProjectDashboard = () => {
   const navigate = useNavigate();
   const { projectId } = useParams();
-  const labelsRisk = ["Budget", "Team", "Time", "Code", "Technical"];
-  const [dataRisk, setDataRisk] = useState([29, 24, 25, 25, 10]);
+  const labelsRisk = ["Team", "Time", "Code", "Technical"];
+  const [dataRisk, setDataRisk] = useState([25, 25, 25, 25]);
+  const [overallRisk, setOverallRisk] = useState(0);
   const borderColorRisk = ["rgba(255,206,86,0.2)"];
   const backgroundColorRisk = [
     "rgba(232,99,132,1)",
@@ -150,6 +151,13 @@ const ProjectDashboard = () => {
   useEffect(() => {
     OverallRisk({ projectId: projectId }).then((data) => {
       console.log("OVERALL RISK");
+      let team = (data.employee_replacement + data.feedback) / 7;
+      let time = (data.delay + data.features_changed) / 7;
+      let codeQuality = data.code_quality / 7;
+      let technical = (data.skillset + data.success_story) / 7;
+      setDataRisk([team, time, codeQuality, technical]);
+      setOverallRisk(parseFloat(data.overall_result.toFixed(2)));
+
       console.log(data);
     });
     OrderedUsers({ projectId: projectId }).then((data) => {
@@ -378,7 +386,7 @@ const ProjectDashboard = () => {
               cutOut={60}
             />
             <div className="donutText risk">
-              <p>7.8/10</p>
+              <p>{overallRisk * 10} / 10</p>
             </div>
           </div>
         </div>
