@@ -27,6 +27,7 @@ import { OrderedUsers } from "../services/OrderedUsers";
 import { AddTeamMember } from "../services/AddTeamMember";
 import { EndProject } from "../services/EndProject";
 import { OverallRisk } from "../services/OverallRisk";
+import { GetImagePathById } from "../services/GetImagePathById";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
@@ -147,6 +148,7 @@ const ProjectDashboard = () => {
   };
   //Fetching github commit data
   const [tempData, setTempData] = useState([]);
+  const [teamImages, setTeamImages] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
     OverallRisk({ projectId: projectId }).then((data) => {
@@ -281,6 +283,22 @@ const ProjectDashboard = () => {
       }
     })();
   }, []);
+
+
+  useEffect(()=>{
+    setTeamImages([]);
+    teamMembers.map((teamMember, index)=>{
+      GetImagePathById({
+        id: teamMember.userid,
+      }).then((data) => {
+        setTeamImages([...teamImages, data]);
+          if (data==""){
+            setTeamImages([...teamImages, "jane.jpg"]);
+        }});  
+    })
+  },[teamMembers])
+
+
 
   //Fetching github commit data
   const [dates, setDates] = useState([]);
@@ -493,6 +511,7 @@ const ProjectDashboard = () => {
 
             {teamMembers.map((member, index) => {
               const imageUrl = member.image;
+              console.log(teamMembers);
               return (
                 <div className="projectDashboardProfile">
                   <p className="projectDashboardProfileName">{member.name}</p>
@@ -502,7 +521,7 @@ const ProjectDashboard = () => {
                       key={index}
                       className="profilePic"
                       style={{ marginLeft: "0px" }}
-                      src={imageUrl}
+                      src={`http://localhost:5000/assets/${teamImages[index]}`}
                     ></img>
                   </div>
                   <div className="projectDashboardSkill">Skills:</div>
