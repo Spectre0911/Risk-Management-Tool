@@ -90,7 +90,7 @@ testConnect();
 app.post("/api/createProject", async (req, postRes) => {
   try {
     // Create project
-    // console.log(req.body);
+    console.log(req.body);
     const projects = await pool.query(
       "INSERT INTO projects (projectname, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6)",
       [
@@ -1017,6 +1017,7 @@ app.post("/api/overallrisk", async (req, res) => {
         let result;
         result = parsedBody["result"];
         // return result;
+        res.json(parsedBody);
       })
       .catch(function (err) {
         console.log(err);
