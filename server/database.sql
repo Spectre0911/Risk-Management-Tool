@@ -305,9 +305,9 @@ declare
     pname varchar(50);
     fname varchar(50);
 begin
-    select projectname from projects natural join (tasks inner join features on features.featureid = tasks.featureid) as featuretask into pname;
+    select projectid from features inner join tasks on features.featureid = tasks.featureid where taskid = new.taskid into pid;
     select featurename from features inner join tasks on features.featureid = tasks.featureid into fname;
-    insert into notifications (notifid, userid, projectid, location, notiftype, title, message, seen) values (default, new.devid, pname, 1, 1, 'New task', concat('Assigned task ', new.taskname, ' for feature ', fname, ' in project ', pname), default);
+    insert into notifications (notifid, userid, projectid, location, notiftype, title, message, seen) values (default, new.devid, pid, 1, 1, 'New task', concat('Assigned task ', new.taskname, ' for feature ', fname, ' in project ', pname), default);
     return new;
 end;
 $$ language plpgsql;
