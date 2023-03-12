@@ -492,7 +492,11 @@ app.post("/api/GitubDetails", async (req, postRes) => {
       "SELECT githubrepo FROM projects WHERE projectid= $1; ",
       [req.body.projectId]
     );
-    const result = [githubToken.rows[0].githubtoken, ownerName.rows[0].githubuname, repoName.rows[0].githubrepo]
+    const result = [
+      githubToken.rows[0].githubtoken,
+      ownerName.rows[0].githubuname,
+      repoName.rows[0].githubrepo,
+    ];
     postRes.json(result);
     // if (githubToken.rows.length == 0) {
     //   return postRes.json(null);
@@ -504,28 +508,16 @@ app.post("/api/GitubDetails", async (req, postRes) => {
   }
 });
 
-
-
 app.post("/api/editImagePath", async (req, postRes) => {
   try {
-    await pool.query(
-      "UPDATE USERS SET pfppath = $1 WHERE email = $2",
-      [
-        req.body.path,
-        req.body.email.email,
-        
-      ]
-    );
+    await pool.query("UPDATE USERS SET pfppath = $1 WHERE email = $2", [
+      req.body.path,
+      req.body.email.email,
+    ]);
   } catch (err) {
     console.error(err.message);
   }
 });
-
-
-
-
-
-
 
 // End project
 app.post("/api/endProject", async (req, postRes) => {
@@ -557,8 +549,6 @@ app.post("/api/allBugs", async (req, postRes) => {
   }
 });
 
-
-
 // Get all projects
 app.post("/api/githubToken", async (req, postRes) => {
   try {
@@ -580,9 +570,6 @@ app.post("/api/githubToken", async (req, postRes) => {
     console.error(err.message);
   }
 });
-
-
-
 
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {
@@ -679,17 +666,14 @@ app.post("/api/createTask", async (req, postRes) => {
   console.log("CREATING TASK");
   try {
     console.log(req.body);
-    const createBug = await pool.query(
-      "INSERT INTO tasks(featureid, devid, taskname, description, starttime, endtime, priority, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
+    await pool.query(
+      "INSERT INTO tasks(featureid, devid, taskname, description, starttime, endtime, priority, status) VALUES($1, $2, $3, $4, (SELECT starttime FROM features WHERE featureid = $1), (SELECT endtime FROM features WHERE featureid = $1), $5, 1)",
       [
         req.body.featureid,
         req.body.devid,
-        req.body.taskname,
+        req.body.name,
         req.body.description,
-        req.body.starttime,
-        req.body.endtime,
         req.body.priority,
-        req.body.status,
       ]
     );
   } catch (err) {

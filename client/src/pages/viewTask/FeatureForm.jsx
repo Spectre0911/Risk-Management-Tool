@@ -12,6 +12,7 @@ import { BsBriefcaseFill } from "react-icons/bs";
 import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
 import { AllProjectMembers } from "../services/AllProjectMembers";
+import { CreateTask } from "../services/CreateTask";
 import {
   Box,
   TextField,
@@ -48,6 +49,12 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
     console.log(values);
     console.log(featureId);
     console.log(projectid);
+    CreateTask({
+      ...values,
+      featureid: featureId,
+      projectid: projectid,
+      priority: priority.value,
+    });
     // try {
     //   const body = { values };
     //   const response = await fetch("http://localhost:5000/addbug", {

@@ -79,6 +79,8 @@ const Table = () => {
     AssignedProjects({ email: login.email }).then((data) => {
       let newContacts = [];
       data.map((project) => {
+        console.log("--------------------");
+        console.log(project.projectid);
         let newProject = {
           projectId: project.projectid.toString(),
           projectName: project.projectname,
@@ -95,24 +97,24 @@ const Table = () => {
 
       setContacts(newContacts);
     });
-    TasksToComplete({ email: login.email }).then((data) => {
-      let newTasks = [];
-      data.map((task) => {
-        let newTask = {
-          taskId: task.taskid.toString(),
-          taskName: task.taskname,
-          featureId: task.featureid.toString(),
-          projectId: task.projectid.toString(),
-          projectName: task.projectname,
-          taskPriority: ["Core", "Optional", "Aesthetic"][task.priority - 1],
-          taskStatus: "In Progress",
-          featureName: task.featurename,
-          daysLeft: task.daysleft,
-        };
-        newTasks.push(newTask);
-      });
-      setData(newTasks);
-    });
+    // TasksToComplete({ email: login.email }).then((data) => {
+    //   let newTasks = [];
+    //   data.map((task) => {
+    //     let newTask = {
+    //       taskId: task.taskid.toString(),
+    //       taskName: task.taskname,
+    //       featureId: task.featureid.toString(),
+    //       projectId: task.projectid.toString(),
+    //       projectName: task.projectname,
+    //       taskPriority: ["Core", "Optional", "Aesthetic"][task.priority - 1],
+    //       taskStatus: "In Progress",
+    //       featureName: task.featurename,
+    //       daysLeft: task.daysleft,
+    //     };
+    //     newTasks.push(newTask);
+    //   });
+    //   setData(newTasks);
+    // });
     // setData(contacts);
   }, []);
 
