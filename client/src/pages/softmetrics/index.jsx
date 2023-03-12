@@ -17,11 +17,12 @@ import {
 } from "@mui/material";
 
 const SoftMetrics = ({ projectid }) => {
+  // Sets up the state variables for each metric 
   const [communicationScore, setCommunicationScore] = useState([0]);
   const [projectUnderstanding, setProjectUnderstanding] = useState([0]);
   const [teamCohesion, setTeamCohesion] = useState([0]);
   const [confidenceInSkillSet, setConfidenceInSkillSet] = useState([0]);
-
+  // Fetch soft skill data for the given project
   useEffect(() => {
     SoftSkillScore({ fbtype: 1, projectid: projectid }).then((data) => {
       setCommunicationScore(parseInt(data[0].avg));
@@ -36,14 +37,15 @@ const SoftMetrics = ({ projectid }) => {
       setConfidenceInSkillSet(parseInt(data[0].avg));
     });
   }, []);
-
+// Defines the color scheme for each risk score for the soft skill metrics 
   const backgroundColorTeamList = {
     green: ["rgba(0, 128, 0,1)", "#dbe3de"],
     red: ["rgba(219, 52, 0,1)", "#dbe3de"],
     yellow: ["rgba(255,159,64,1)", "#dbe3de"],
   };
-
+// Define a function to determine the risk colour based on given risk score
   const calculateRiskColor = (risk) => {
+    // Log the risk for debugging purposes
     console.log(risk);
     if (risk < 2) {
       return backgroundColorTeamList.red;
@@ -54,6 +56,7 @@ const SoftMetrics = ({ projectid }) => {
     }
   };
 
+  // Define the notifications for the project
   const notifications = [
     {
       title: "Feedback From Josh",
@@ -62,6 +65,7 @@ const SoftMetrics = ({ projectid }) => {
     },
   ];
 
+  // Return the JSX for the soft metrics page
   return (
     <div className="main">
       <div className="grid">

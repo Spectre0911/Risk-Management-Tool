@@ -47,12 +47,11 @@ const UserPage = (isPm) => {
             </button>
         );
         }
-
+// Define initial state variables
     const [showDelete, setShowDelete] = useState(false);
     const [showAdd, setShowAdd] = useState(false);
     const [showAddUser, setShowAddUser] = useState(false);
     const [removeUserId, setRemoveUserId] = useState();
-  
     const handleDeleteClose = () => {
       setShowDelete(false);
     };
@@ -101,7 +100,8 @@ const UserPage = (isPm) => {
       setTeamMembersList(e);
     };
 
-const teamMembers = [
+    // Array of team member objects
+    const teamMembers = [
     {
         id: "1",
         name:"Jane Arnold",
@@ -115,7 +115,7 @@ const teamMembers = [
         bio:"I am a backend engineer",
         skills:["Python","Node","SQL"],
     }];
-
+// Array of recommended team member objects
     const recommendedMembers = [
         {
             id: "1",

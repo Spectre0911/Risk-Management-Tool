@@ -21,21 +21,27 @@ import Dropzone from "react-dropzone";
 import * as yup from "yup";
 
 const BugAssignForm = ({ handleClose, bugId }) => {
+  // Check if the device width is greater than or equal to 600px 
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  // Get the theme object for colour palette
   const { palette } = useTheme();
 
+  // Define the validation schema for the form
   const reportBugSchema = yup.object().shape({
     memberName: yup.string(),
     
   });
 
+// Define the initial values for the form
   const initialValuesRegister = {
     memberName: "",
   };
 
+  // Define the function to handle the form submission
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log(member);
     try {
+      // Send a POST request to the server with the form data
       const body = { values };
       const response = await fetch("http://localhost:5000/addbug", {
         method: "POST",
@@ -50,15 +56,17 @@ const BugAssignForm = ({ handleClose, bugId }) => {
 
 
 
-
+// Define the options for the select component
   const memberOptions = [
     { value: "1", label: "Josh" },
     { value: "2", label: "Morgan" },
     { value: "3", label: "Hannah" },
   ];
 
+  // Set the state for the select component
   const [member, setMember] = useState([]);
 
+  // Handle changes to selected member
   const handleMemberChange = (e) => {
     setMember(e);
   };
@@ -67,6 +75,7 @@ const BugAssignForm = ({ handleClose, bugId }) => {
 
 
   return (
+    // render the form using Formik
     <Formik
       onSubmit={handleFormSubmit}
       initialValues={initialValuesRegister}

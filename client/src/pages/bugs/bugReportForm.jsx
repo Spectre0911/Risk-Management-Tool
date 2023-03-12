@@ -24,11 +24,15 @@ import Bug from "./bug";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 
+
+// Defining the BugReportForm component, which receives props for handleClose and projectid
 const BugReportForm = ({ handleClose, projectid }) => {
+   // Using a media query to check if the current device is non-mobile
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
   const email = useSelector((state) => state.email.email);
 
+  // Defining Yup validation schema for the form
   const reportBugSchema = yup.object().shape({
     bugName: yup.string().required("required"),
     bugDate: yup.string().required("required"),
@@ -36,6 +40,7 @@ const BugReportForm = ({ handleClose, projectid }) => {
     bugLocation: yup.string().required("required"),
   });
 
+  // Defining initial values for the form
   const initialValuesRegister = {
     bugName: "",
     bugDate: "",
@@ -43,12 +48,14 @@ const BugReportForm = ({ handleClose, projectid }) => {
     bugLocation: "",
   };
 
+  // Handling the form submission
   const handleFormSubmit = async (values, onSubmitProps) => {
     try {
       console.log(feature);
       console.log(teamMembers);
       console.log(values);
       console.log(email);
+      // Constructing the body of the HTTP request using the form data and other necessary data
       const body = {
         ...values,
         priority: priority.value,
@@ -63,49 +70,55 @@ const BugReportForm = ({ handleClose, projectid }) => {
     }
   };
 
+  // Options for priority selector
   const priorityOptions = [
     { value: "1", label: "High" },
     { value: "2", label: "Med" },
     { value: "3", label: "Low" },
   ];
 
+  //State for currently selected priority
   const [priority, setPriority] = useState({ value: "1", label: "High" });
 
+  // Defining the handlePriorityChange function to handle changes to the selected priority
   const handlePriorityChange = (e) => {
     setPriority(e);
   };
 
+  // Options for severity selector
   const severityOptions = [
     { value: "1", label: "High" },
     { value: "2", label: "Med" },
     { value: "3", label: "Low" },
   ];
 
+  // State for currently selected severity
   const [severity, setSeverity] = useState({ value: "1", label: "High" });
 
+  // Defining the handleSeverityChange function to handle changes to the selected severity
   const handleSeverityChange = (e) => {
     setSeverity(e);
   };
-
+// State for currently selected team members
   const [teamMembers, setTeamMembers] = useState([]);
-
+// Defining the handleTeamMemberChange function to handle changes to the selected team members
   const handleTeamMemberChange = (e) => {
     setTeamMembers(e);
   };
-
+// State for currently selected team members
   const [teamMembersOptions, setTeamMemberOptions] = useState([
     { value: "1", label: "jc@gmail.com" },
     { value: "2", label: "mk@gmail.com" },
     { value: "3", label: "sh@gmail.com" },
   ]);
-
+// State for currently selected feature
   const [feature, setFeature] = useState([]);
   const [featureOptions, setFeatureOptions] = useState([]);
 
   const handleFeatureChange = (e) => {
     setFeature(e);
   };
-
+// Defining the useEffect hook to fetch the features and team members for the project
   useEffect(() => {
     console.log(projectid);
     AllFeatures({ projectid: parseInt(projectid) }).then((data) => {
@@ -130,7 +143,7 @@ const BugReportForm = ({ handleClose, projectid }) => {
       setTeamMemberOptions(newMembers);
     });
   }, []);
-
+// Rendering the form
   return (
     <Formik
       onSubmit={handleFormSubmit}

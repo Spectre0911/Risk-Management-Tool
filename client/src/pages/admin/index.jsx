@@ -16,6 +16,7 @@ import ManagedProjects from '../managedProjects';
 import Tasks from '../tasks';
 
 const Admin = () => {
+  // Define state variables for modal windows
   const [isOpen, setIsOpen] = useState(false);
   const toggleOverlay = () =>{
       setIsOpen(isOpen);
@@ -31,7 +32,7 @@ const Admin = () => {
       console.log(show);
   }
 
-
+//Render the component
   return (
     <div>
       <div className="splitScreen">
@@ -44,6 +45,7 @@ const Admin = () => {
                 <p className="accountInitials">JA</p>
               </button>
               <div>
+              {/* Render the modal window */}
                 <Modal className="addProfileModal" fade={false} show={show} onHide={handleClose}>
                     <Modal.Header>
                     <div className="bugFormClose" onClick={handleClose}>
@@ -71,7 +73,7 @@ const Admin = () => {
   );
 };
 
-
+// Export the component
 export default Admin;
 
 

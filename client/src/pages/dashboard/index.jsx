@@ -19,15 +19,15 @@ import { TasksToComplete } from "../services/TasksToComplete";
 import { NotificationInfo } from "../services/NotificationInfo";
 import { LocationNotifications } from "../services/LocationNotifcations";
 const Dashboard = () => {
+  // State variables
   const [activeProjects, setActiveProjects] = useState(0);
   const [notifications, setActiveNotifications] = useState(0);
   const [warnings, setActiveWarnings] = useState(0);
 
   const [tasksToComplete, setTasksToComplete] = useState(0);
-
+// Get login email from redux
   const login = useSelector((state) => state.email);
 
-  // This is going to be location 1
   const [notificationData, setNotifications] = useState([]);
 
   useEffect(() => {

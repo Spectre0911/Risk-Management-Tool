@@ -37,7 +37,7 @@ const RiskSummary = () => {
     red: ["rgba(219, 52, 0,1)", "#dbe3de"],
     yellow: ["rgba(255,159,64,1)", "#dbe3de"],
   };
-
+// Changes colour according to risk score
   const calculateRiskColor = (risk) => {
     console.log(risk);
     if (risk < 0.4) {
@@ -62,8 +62,8 @@ const RiskSummary = () => {
     [0.5, 1 - 0.5],
     [0.1, 1 - 0.1],
   ]);
-
-  const recommendations = {
+// Recommendations for each risk
+  const recommendations = { 
     softSkills: [
       {
         title: "Increase quality of communication",

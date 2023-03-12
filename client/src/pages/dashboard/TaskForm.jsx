@@ -24,12 +24,11 @@ import "./index.css";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 import { createGrid } from "@mui/system";
-
 const TaskForm = ({ handleClose, taskId }) => {
-  const isNonMobile = useMediaQuery("(min-width:600px)");
-  const { palette } = useTheme();
+  const isNonMobile = useMediaQuery("(min-width:600px)"); // 600px is the breakpoint for non-mobile
+  const { palette } = useTheme(); // useTheme() is a hook that returns the theme object
 
-  const [dependencies, setDependencies] = useState([]);
+  const [dependencies, setDependencies] = useState([]); 
   const [dependencyOptions, setDependencyOptions] = useState([]);
 
   useEffect(() => {
@@ -56,7 +55,7 @@ const TaskForm = ({ handleClose, taskId }) => {
     };
     getAllFeatures({ projectid: 1 });
   }, []);
-
+// Defining Yup schema for form validation
   const reportBugSchema = yup.object().shape({
     name: yup.string().required("required"),
     description: yup.string().required("required"),
@@ -64,7 +63,7 @@ const TaskForm = ({ handleClose, taskId }) => {
     endTime: yup.string().required("required"),
     difficulty: yup.string().required("required"),
   });
-
+// Defining initial values for form
   const initialValuesRegister = {
     name: "Task",
     description: "Description",
@@ -72,7 +71,7 @@ const TaskForm = ({ handleClose, taskId }) => {
     endTime: "2023-05-24",
     difficulty: "1",
   };
-
+// Defining form fields
   const handleFormSubmit = async (values, onSubmitProps) => {
     // console.log(dependencies);
     const newValues = {
@@ -90,7 +89,7 @@ const TaskForm = ({ handleClose, taskId }) => {
 
     createFeature(newValues);
   };
-
+// Function to create a new feature
   const createFeature = (values) => {
     fetch("http://localhost:5000/api/createFeature", {
       method: "POST",
@@ -106,7 +105,7 @@ const TaskForm = ({ handleClose, taskId }) => {
         console.log(data);
       });
   };
-
+// Function to handle dependency change
   const handleDependencyChange = (e) => {
     const chosenDependencies = dependencies;
     chosenDependencies.push(e);
@@ -118,9 +117,9 @@ const TaskForm = ({ handleClose, taskId }) => {
     { value: "2", label: "Optional" },
     { value: "3", label: "Aesthetic" },
   ];
-
+// Defining state for priority
   const [priority, setPriority] = useState({ value: "1", label: "Core" });
-
+// Function to handle priority change
   const handlePriorityChange = (e) => {
     setPriority(e);
   };

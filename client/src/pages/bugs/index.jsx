@@ -24,12 +24,14 @@ import * as yup from "yup";
 import BugReportForm from "./bugReportForm";
 import BugAssignForm from "./bugAssignForm";
 const Bugs = () => {
+  // Define state variables for modal windows
   const { projectId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const toggleOverlay = () => {
     setIsOpen(isOpen);
   };
 
+  // Define state for the modal window for reporting a bug
   const [show, setShow] = useState(false);
   const handleClose = () => {
     setShow(false);
@@ -40,6 +42,7 @@ const Bugs = () => {
     console.log(show);
   };
 
+  // Define state for the modal window for assigning a bug
   const [bugData, setBugData] = useState([
     {
       bugId: "1",
@@ -65,6 +68,7 @@ const Bugs = () => {
     },
   ]);
 
+  // Fetch bug data from API
   useEffect(() => {
     AllBugs({ projectid: projectId }).then((data) => {
       let newBugs = [];
@@ -102,6 +106,7 @@ const Bugs = () => {
     console.log(bugId);
   };
 
+  // Render the bug reporting modal window
   return (
     <div className="bugBox">
       <div className="bugBoxTitle">
@@ -137,5 +142,5 @@ const Bugs = () => {
     </div>
   );
 };
-
+// Export the component
 export default Bugs;

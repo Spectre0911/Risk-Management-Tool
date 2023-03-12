@@ -21,9 +21,13 @@ import Dropzone from "react-dropzone";
 import * as yup from "yup";
 
 const BugDetailForm = ({ handleClose, bugId, data }) => {
+  // useMediaQuery is a hook from Material-UI that returns a boolean value indicating whether the screen size matches the specified media query.
+  // This hook is used to determine whether the device is a mobile or a desktop screen.
   const isNonMobile = useMediaQuery("(min-width:600px)");
+  // useTheme is a hook from Material-UI that returns the theme object. Here we're destructuring the palette object from the theme.
   const { palette } = useTheme();
 
+   // This schema defines the validation rules for the form fields using the Yup validation library.
   const reportBugSchema = yup.object().shape({
     bugName: yup.string().required("required"),
     bugDate: yup.string().required("required"),
@@ -31,6 +35,7 @@ const BugDetailForm = ({ handleClose, bugId, data }) => {
     bugLocation: yup.string().required("required"),
   });
 
+  // This object defines the initial values for the form fields.
   const initialValuesRegister = {
     bugName: data.bugName,
     bugDate: data.bugReportDate,
@@ -39,7 +44,7 @@ const BugDetailForm = ({ handleClose, bugId, data }) => {
   };
 
   
-
+// This function is called when the form is submitted
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log(values);
     console.log(priority);
@@ -56,12 +61,14 @@ const BugDetailForm = ({ handleClose, bugId, data }) => {
     }
   };
 
+  // These options are used to populate the dropdown for selecting bug priority.
   const priorityOptions = [
     { value: "1", label: "High" },
     { value: "2", label: "Med" },
     { value: "3", label: "Low" },
   ];
 
+  // This function maps the string value of priority to an object with the corresponding value and label.
   const translatePriority = (priority) =>{
     if (priority=="High"){
       return { value: "1", label: "High" }
@@ -72,13 +79,16 @@ const BugDetailForm = ({ handleClose, bugId, data }) => {
     }
   }
 
+  // This state variable holds the current priority value for the bug report.
   const [priority, setPriority] = useState(translatePriority(data.bugPriority));
 
+  // This function is called when the priority dropdown value changes.
   const handlePriorityChange = (e) => {
     setPriority(e);
   };
 
 
+  // These options are used to populate the dropdown for selecting bug severity.
   const severityOptions = [
     { value: "1", label: "High" },
     { value: "2", label: "Med" },
@@ -87,12 +97,14 @@ const BugDetailForm = ({ handleClose, bugId, data }) => {
 
   const [severity, setSeverity] = useState(translatePriority(data.bugSeverity));
 
+  // This function is called when the severity dropdown value changes.
   const handleSeverityChange = (e) => {
     setSeverity(e);
   };
 
   const [teamMembers, setTeamMembers] = useState([{ value: "1", label: "jc@gmail.com" }]);
 
+  // This function is called when the team members dropdown value changes.
   const handleTeamMemberChange = (e) => {
     setTeamMembers(e);
   };
