@@ -54,6 +54,7 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
       featureid: featureId,
       projectid: projectid,
       priority: priority.value,
+      devid: user.value,
     });
     // try {
     //   const body = { values };

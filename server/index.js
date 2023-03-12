@@ -186,8 +186,8 @@ app.post("/api/taskToComplete", async (req, res) => {
 app.post("/api/taskToCompletePID", async (req, res) => {
   try {
     const tasksToComplete = await pool.query(
-      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1);",
-      [req.body.email]
+      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1) and projects.projectid = $2;",
+      [req.body.email, req.body.projectid]
     );
     // console.log(createAccount.rows);
     res.json(tasksToComplete.rows);
