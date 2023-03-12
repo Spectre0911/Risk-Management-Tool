@@ -159,7 +159,9 @@ const ProjectDashboard = () => {
       let codeQuality = data.code_quality / 7;
       let technical = (data.skillset + data.success_story) / 7;
       setDataRisk([team, time, codeQuality, technical]);
-      setOverallRisk(parseFloat(data.overall_result.toFixed(2)));
+
+      setOverallRisk(data.overall_result.toFixed(2));
+
       AddRisk({
         projectid: projectId,
         risk: parseFloat(data.overall_result.toFixed(2)),
@@ -289,21 +291,19 @@ const ProjectDashboard = () => {
     })();
   }, []);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     setTeamImages([]);
-    teamMembers.map((teamMember, index)=>{
+    teamMembers.map((teamMember, index) => {
       GetImagePathById({
         id: teamMember.userid,
       }).then((data) => {
         setTeamImages([...teamImages, data]);
-          if (data==""){
-            setTeamImages([...teamImages, "jane.jpg"]);
-        }});  
-    })
-  },[teamMembers])
-
-
+        if (data == "") {
+          setTeamImages([...teamImages, "jane.jpg"]);
+        }
+      });
+    });
+  }, [teamMembers]);
 
   //Fetching github commit data
   const [dates, setDates] = useState([]);

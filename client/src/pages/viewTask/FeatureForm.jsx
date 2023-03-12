@@ -32,40 +32,24 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
   const reportBugSchema = yup.object().shape({
     name: yup.string().required("required"),
     description: yup.string().required("required"),
-    startTime: yup.string().required("required"),
-    endTime: yup.string().required("required"),
+
     difficulty: yup.string().required("required"),
   });
 
   const initialValuesRegister = {
     name: "feature name",
     description: "Add login screen",
-    startTime: "2017-05-24",
-    endTime: "2017-05-24",
+
     difficulty: "0",
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
-    console.log(values);
-    console.log(featureId);
-    console.log(projectid);
     CreateTask({
       ...values,
       featureid: featureId,
-      projectid: projectid,
       priority: priority.value,
       devid: user.value,
     });
-    // try {
-    //   const body = { values };
-    //   const response = await fetch("http://localhost:5000/addbug", {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify(body),
-    //   });
-    // } catch (err) {
-    //   console.error(err.message);
-    // }
   };
 
   const dependencyOptions = [
@@ -107,7 +91,7 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
   const [user, setUser] = useState();
 
   useEffect(() => {
-    console.log(projectid);
+    // console.log(projectid);
     // AllFeatures({ projectid: parseInt(projectid) }).then((data) => {
     //   let newFeatures = [];
     //   data.map((feature) => {

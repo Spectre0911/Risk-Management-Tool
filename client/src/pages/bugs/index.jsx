@@ -60,7 +60,7 @@ const Bugs = () => {
       bugReportDate: "2023-03-14",
       bugSeverity: "High",
       bugPriority: "High",
-      ReportedByUser: { id: 20,name: "Jane Arnold", imagePath: "jane.jpg" },
+      ReportedByUser: { id: 20, name: "Jane Arnold", imagePath: "jane.jpg" },
       AssignedToUser: { id: 21, name: "Jane Arnold", imagePath: "jane.jpg" },
     },
   ]);
@@ -68,32 +68,43 @@ const Bugs = () => {
   useEffect(() => {
     AllBugs({ projectid: projectId }).then((data) => {
       let newBugs = [];
-      const promises = data.map((bug) => {
-        return GetUser({ userid: bug.devid }).then((assignedToName) => {
-          return GetUser({ userid: bug.assigner }).then((asssignedName) => {
-            let newBug = {
-              bugId: bug.bugid.toString(),
-              bugName: bug.bugname,
-              bugLocation: bug.location,
-              bugDescription: bug.bugdesc || "Default",
-              bugReportDate: new Date().toISOString().slice(0, 10),
-              bugPriority: ["Low", "Medium", "High"][
-                parseInt(bug.severity) - 1
-              ],
-              bugSeverity: ["Low", "Medium", "High"][
-                parseInt(bug.priority) - 1
-              ],
-              ReportedByUser: { id: bug.assigner, asssignedName, imagePath: "jane.jpg" },
-              AssignedToUser: { id:bug.devid, name: assignedToName, imagePath: "jane.jpg" },
-            };
-            return newBug;
-          });
+
+      data.map((bug) => {
+        let aName = null;
+        let atName = null;
+        GetUser({ userid: bug.devid }).then((assignedToName) => {
+          aName = assignedToName.name;
         });
+        GetUser({ userid: bug.assigner }).then((assignedName) => {
+          atName = assignedName.name;
+        });
+
+        let newBug = {
+          bugId: bug.bugid.toString(),
+          bugName: bug.bugname,
+          bugLocation: bug.location,
+          bugDescription: bug.bugdesc || "Default",
+          bugReportDate: new Date().toISOString().slice(0, 10),
+          bugPriority: ["Low", "Medium", "High"][parseInt(bug.severity) - 1],
+          bugSeverity: ["Low", "Medium", "High"][parseInt(bug.priority) - 1],
+          ReportedByUser: {
+            id: bug.assigner,
+            name: aName,
+            imagePath: "jane.jpg",
+          },
+          AssignedToUser: {
+            id: bug.devid,
+            name: atName,
+            imagePath: "jane.jpg",
+          },
+        };
+        newBugs.push(newBug);
       });
-      Promise.all(promises).then((newBugs) => {
-        console.log(newBugs);
-        setBugData(newBugs);
-      });
+      setBugData(newBugs);
+      // Promise.all(promises).then((newBugs) => {
+      //   console.log(newBugs);
+      //   setBugData(newBugs);
+      // });
     });
   }, []);
 

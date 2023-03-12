@@ -559,7 +559,7 @@ app.post("/api/endProject", async (req, postRes) => {
 app.post("/api/allBugs", async (req, postRes) => {
   try {
     const allBugs = await pool.query(
-      "SELECT bugid, featureid, devid, assigner, bugname, bugdesc, location, priority, severity FROM ((SELECT projectid, featureid FROM (projects NATURAL JOIN features) as projectFeatures) as pf NATURAL JOIN bugs) WHERE projectid = $1;",
+      "SELECT projectid, bugid, featureid, devid, assigner, bugname, bugdesc, location, priority, severity FROM bugs NATURAL JOIN features WHERE projectid = $1;",
       [req.body.projectid]
     );
 
@@ -622,13 +622,12 @@ app.post("/api/notifications", async (req, postRes) => {
 // Get location specific notifications
 app.post("/api/locationNotifications", async (req, postRes) => {
   try {
-    console.log(req.body);
     const userId = await pool.query(
       "SELECT userid FROM users WHERE email = $1;",
       [req.body.email]
     );
 
-    let allNotifications = [];
+    let allNotifications = null;
     if (req.body.projectid) {
       allNotifications = await pool.query(
         "SELECT notifid, location, projectid, title, message as description, notiftype  FROM notifications WHERE userid = $1 and location = $2 and projectid = $3",
@@ -673,8 +672,7 @@ app.post("/api/projectMembers", async (req, postRes) => {
 app.post("/api/createBug", async (req, postRes) => {
   console.log("CREATING BUG");
   try {
-    console.log(req.body);
-    const createBug = await pool.query(
+    await pool.query(
       "INSERT INTO bugs(featureid, devid, bugname, bugdesc, priority, severity, location, assigner) VALUES ($1, $2, $3, $4, $5, $6, $7, (SELECT userid FROM users WHERE email = $8))",
       [
         req.body.featureid,
@@ -696,6 +694,7 @@ app.post("/api/createBug", async (req, postRes) => {
 app.post("/api/createTask", async (req, postRes) => {
   console.log("CREATING TASK");
   try {
+    let projectid = 0;
     console.log(req.body);
     await pool.query(
       "INSERT INTO tasks(featureid, devid, taskname, description, starttime, endtime, priority, status) VALUES($1, $2, $3, $4, (SELECT starttime FROM features WHERE featureid = $1), (SELECT endtime FROM features WHERE featureid = $1), $5, 1)",
@@ -752,7 +751,7 @@ app.post("/api/skills", async (req, postRes) => {
 // Update a users information
 app.post("/api/updateUser", async (req, postRes) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const firstNameLastName = req.body.values.name.split(" ");
     // console.log(firstNameLastName);
     // Update user table
@@ -887,7 +886,7 @@ app.post("/api/user", async (req, postRes) => {
       );
       postRes.json(userInfo.rows[0]);
     } else {
-      console.log("Getting info for id");
+      // console.log("Getting info for id");
 
       const userInfo = await pool.query(
         "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
@@ -1030,6 +1029,7 @@ app.post("/api/dependencies", async (req, postRes) => {
 // Get all bugs for a particular project
 app.post("/api/bugCount", async (req, postRes) => {
   try {
+    // console.
     const allBugs = await pool.query(
       "select * from bugs inner join features on bugs.featureid = features.featureid where projectid = $1",
       [req.body.projectid]
@@ -1037,7 +1037,7 @@ app.post("/api/bugCount", async (req, postRes) => {
     // console.log(allBugs.rows);
     postRes.json(allBugs.rows);
   } catch (err) {
-    console.error(err.message);
+    // console.error(err.message);
   }
 });
 
@@ -1076,7 +1076,7 @@ app.post("/api/getRisks", async (req, postRes) => {
       [req.body.projectid]
     );
     // console.log(allBugs.rows);
-    console.log(hardRisk.row);
+    // console.log(hardRisk.row);
     postRes.json(hardRisk.rows);
   } catch (err) {
     console.error(err.message);
@@ -1102,6 +1102,7 @@ app.post("/api/getRisks", async (req, postRes) => {
 // Assigned Project Summary
 app.post("/api/assignedProjects", async (req, postRes) => {
   try {
+    // console.log(req.body.email);
     const assignedProjects = await pool.query(
       "SELECT projectid, projectname, opened, deadline, CONCAT(firstname, ' ', lastname) as name, extract(day from (deadline - current_date)) as daysleft FROM (SELECT projectid, projectname, opened, deadline,(SELECT userid FROM userproject WHERE projectid =  projectUserInfo.projectid and ismanager = true) FROM (projects NATURAL JOIN userproject) as projectUserInfo WHERE userid = (SELECT userid FROM users WHERE email = $1) and ismanager = false) as o1 NATURAL JOIN users;",
       [req.body.email]
@@ -1128,7 +1129,7 @@ app.post("/api/assignedProjects", async (req, postRes) => {
 // INSERT FEEDBACK ()
 app.post("/api/insertFeedback", async (req, postRes) => {
   try {
-    console.log(req.body);
+    // console.log(req.body);
     const insertFeedback = await pool.query(
       "INSERT INTO feedback(userid, projectid, fbdate, fbtype, fbquestion, fbscore) VALUES((SELECT userid FROM users WHERE email = $1), $2, $3, $4, $5, $6)",
       [
@@ -1152,7 +1153,7 @@ app.post("/api/softSkillsScore", async (req, postRes) => {
       "SELECT projectid, AVG(fbscore) FROM feedback WHERE fbtype = $1 AND projectid = $2 GROUP BY projectid;",
       [req.body.fbtype, req.body.projectid]
     );
-    console.log(communicationScore.rows);
+    // console.log(communicationScore.rows);
 
     postRes.json(communicationScore.rows);
   } catch (err) {
