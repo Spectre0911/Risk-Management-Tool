@@ -384,15 +384,39 @@ ORDER BY
 
 app.post("/api/maximumOne", async (req, postRes) => {
   try {
+    // Get all the feature ids for a project
     const featureids = await pool.query(
-      "SELECT featureid, starttime FROM features WHERE projectid = $1 ORDER BY starttime;",
+      "SELECT featureid, starttime, featurename FROM features WHERE projectid = $1 ORDER BY starttime ASC;",
       [req.body.projectid]
     );
+    const featureidList = featureids.rows.map((item) => item.featureid);
+    let resolvedIds = new Set(featureidList);
 
-    for (let i = 0; i < featureids.length; i++) {
+    // Loop through all the featureids to resolve all overlaps
+    // While resolvedIds != featureidList.length
+    for (let i = 0; i < featureidList.length; i++) {
+      console.log("UPDATING");
+      // Get the current feature id
+      let currentFeatureid = featureidList[i];
+      console.log(currentFeatureid);
+      // Find feature with the greatest overlap time
       const featureidOverlaps = await pool.query(
-        "SELECT f.featureid, EXTRACT(EPOCH FROM LEAST(f.endtime, o.endtime) - GREATEST(f.starttime, o.starttime)) / 60.0 AS overlap_minutes FROM features AS f JOIN features AS o ON f.projectid = o.projectid AND f.featureid <> o.featureid AND NOT (f.endtime <= o.starttime OR f.starttime >= o.endtime) WHERE f.featureid = 11 ORDER BY f.starttime;"
+        "SELECT f2.featureid, f2.featurename, CEIL(EXTRACT(EPOCH FROM LEAST(f1.endtime, f2.endtime) - GREATEST(f1.starttime, f2.starttime)) / 86400) AS overlap_length_days FROM features f1 JOIN features f2 ON f1.projectid = f2.projectid AND f1.featureid <> f2.featureid WHERE f1.featureid = $1 AND f2.starttime < f1.endtime AND f2.endtime > f1.starttime ORDER BY overlap_length_days DESC LIMIT 1;",
+        [currentFeatureid]
       );
+      console.log(featureidOverlaps.rows.length);
+
+      if (featureidOverlaps.rows.length > 0) {
+        for (let j = i + 1; j < featureidList.length; j++) {
+          let featureId = featureidList[j];
+          await pool.query(
+            "UPDATE features SET endtime = endtime + $1 *  INTERVAL '1 day', starttime = starttime + $1 * INTERVAL '1 day' WHERE featureid = $2",
+            [featureidOverlaps.rows[0].overlap_length_days, featureId]
+          );
+        }
+        // console.log(featureids.rows.length, k);
+      }
+      resolvedIds.add(currentFeatureid);
     }
   } catch (err) {
     console.error(err.message);

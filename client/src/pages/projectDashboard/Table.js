@@ -44,6 +44,7 @@ const Table = (props) => {
   const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [contacts, setContacts] = useState([]);
+  const [progress, setProgress] = useState({});
   useEffect(() => {
     AllFeatures({ projectid: props.projectid }).then((data) => {
       let updatedContacts = [];
@@ -117,10 +118,11 @@ const Table = (props) => {
         filterable: false,
         Cell: ({ cell }) => {
           const percentage = cell.value;
-          // console.log(percentage);
+          console.log("HERE");
+          console.log(percentage);
           return (
             <div className="progressDisplayContainer">
-              <div className="progressNumber feature">2/3</div>
+              <div className="progressNumber feature">{percentage}</div>
               <ProgressBar variant="danger" now={percentage} />
             </div>
           );
