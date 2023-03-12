@@ -93,9 +93,10 @@ app.post("/api/createProject", async (req, postRes) => {
     // Create project
     console.log(req.body);
     const projects = await pool.query(
-      "INSERT INTO projects (projectname, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6)",
+      "INSERT INTO projects (projectname, githubrepo, closed, opened, deadline, brief, budget) VALUES($1, $2, $3, $4, $5, $6, $7)",
       [
         req.body.projectName,
+        req.body.gitHubRepoName,
         req.body.closed,
         req.body.opened,
         req.body.deadline,
@@ -264,6 +265,7 @@ app.post("/api/login", async (req, postResult) => {
 app.post("/api/createFeature", async (req, res) => {
   try {
     // Insert the feature into the database
+    console.log(req.body);
     const createFeature = await pool.query(
       "INSERT INTO features (projectid, featurename, starttime, endtime, completed, priority, currentrisk, progress, difficulty, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, 1) RETURNING *",
       [
@@ -281,7 +283,7 @@ app.post("/api/createFeature", async (req, res) => {
 
     // recording the change in features
     const recordChange = await pool.query(
-      "INSERT INTO featureChange (projectid, priority, dateChanged) VALUES ($1, $2)",
+      "INSERT INTO featureChange (projectid, priority, dateChanged) VALUES ($1, $2, $3)",
       [req.body.projectid, req.body.priority, Date.now()]
     );
 
@@ -439,9 +441,25 @@ app.post("/api/maximumOne", async (req, postRes) => {
     console.log("RESOLVED, ", orderedList);
     for (let k = 1; k < orderedList.length; k++) {
       // Calculate the duration of the kth feature
+      const duration = await pool.query(
+        "SELECT (starttime - endtime) as duration FROM features WHERE featureid = $1",
+        [orderedList[k]]
+      );
       // Find the end time of the k - 1th feature
-      // Update the start time of the kth feature to be
-      //§
+      const endTime = await pool.query(
+        "SELECT endtime FROM features WHERE featureid = $1",
+        [orderedList[k - 1]]
+      );
+      // Update the start time of the kth feature to be the end time of the k-1th feature
+      await pool.query(
+        "UPDATE features SET starttime = $1 WHERE featureid = $2",
+        [endTime.rows[0].endtime, orderedList[k]]
+      );
+      // Update the endtime to be the new startime duration
+      await pool.query(
+        "UPDATE features SET endtime = starttime + $1 WHERE featureid = $2",
+        [duration.rows[0].duration, orderedList[k]]
+      );
     }
   } catch (err) {
     // console.log("ERROR");

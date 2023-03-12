@@ -74,6 +74,7 @@ const EditProfileForm = ({ handleClose, featureId, fetchProjectFunction }) => {
       skills: skillsRequired,
       teamMembers: teamMembers,
       email: email,
+      gitHubRepoName: values.gitHubRepoName,
     };
     CreateProject(newValues);
     handleClose();
