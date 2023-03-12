@@ -6,6 +6,7 @@ import pickle
 import json 
 import psycopg2
 
+#set up the connection with the database
 conn = psycopg2.connect(
     database = "riskmanager",
     user = "postgres",
