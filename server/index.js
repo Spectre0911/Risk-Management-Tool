@@ -393,6 +393,7 @@ app.post("/api/maximumOne", async (req, postRes) => {
     );
     let featureidList = sortedIds.rows.map((item) => item.featureid);
     let resolvedIds = new Set();
+    let orderedList = [];
 
     // Loop through all the featureids to resolve all overlaps
     // console.log(resolvedIds.size);
@@ -433,6 +434,14 @@ app.post("/api/maximumOne", async (req, postRes) => {
         }
       }
       resolvedIds.add(currentFeatureid);
+      orderedList.push(currentFeatureid);
+    }
+    console.log("RESOLVED, ", orderedList);
+    for (let k = 1; k < orderedList.length; k++) {
+      // Calculate the duration of the kth feature
+      // Find the end time of the k - 1th feature
+      // Update the start time of the kth feature to be
+      //§
     }
   } catch (err) {
     // console.log("ERROR");
@@ -613,17 +622,24 @@ app.post("/api/notifications", async (req, postRes) => {
 // Get location specific notifications
 app.post("/api/locationNotifications", async (req, postRes) => {
   try {
-    // console.log("locationNotifications");
+    console.log(req.body);
     const userId = await pool.query(
       "SELECT userid FROM users WHERE email = $1;",
       [req.body.email]
     );
-    const allNotifications = await pool.query(
-      "SELECT notifid, location, projectid, title, message as description, notiftype  FROM notifications WHERE userid = $1 and location = $2",
-      [userId.rows[0].userid, req.body.location]
-    );
-    // console.log(allNotifications.rows);
 
+    let allNotifications = [];
+    if (req.body.projectid) {
+      allNotifications = await pool.query(
+        "SELECT notifid, location, projectid, title, message as description, notiftype  FROM notifications WHERE userid = $1 and location = $2 and projectid = $3",
+        [userId.rows[0].userid, req.body.location, req.body.projectid]
+      );
+    } else {
+      allNotifications = await pool.query(
+        "SELECT notifid, location, projectid, title, message as description, notiftype  FROM notifications WHERE userid = $1 and location = $2",
+        [userId.rows[0].userid, req.body.location]
+      );
+    }
     // console.log(allNotifications.rows);
     if (allNotifications.rows.length == 0) {
       return postRes.json([]);

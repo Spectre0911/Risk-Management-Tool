@@ -7,7 +7,8 @@ import "./index.css";
 import MultiLineChart from "./MultiLineChart";
 import HalfDoughnutChart from "./HalfDoughnutChart";
 import { SoftSkillScore } from "../services/SoftSkillScore";
-
+import { LocationNotifications } from "../services/LocationNotifcations";
+import { useSelector } from "react-redux";
 import {
   Box,
   TextField,
@@ -21,6 +22,7 @@ const SoftMetrics = ({ projectid }) => {
   const [projectUnderstanding, setProjectUnderstanding] = useState([0]);
   const [teamCohesion, setTeamCohesion] = useState([0]);
   const [confidenceInSkillSet, setConfidenceInSkillSet] = useState([0]);
+  const email = useSelector((state) => state.email.email);
 
   useEffect(() => {
     SoftSkillScore({ fbtype: 1, projectid: projectid }).then((data) => {
@@ -34,6 +36,22 @@ const SoftMetrics = ({ projectid }) => {
     });
     SoftSkillScore({ fbtype: 4, projectid: projectid }).then((data) => {
       setConfidenceInSkillSet(parseInt(data[0].avg));
+    });
+    LocationNotifications({
+      email: email,
+      location: 2,
+      projectid: projectid,
+    }).then((data) => {
+      console.log("HELLO");
+      let newNotifications = [];
+      data.map((notification) => {
+        let newNotification = {
+          title: notification.title,
+          text: notification.description,
+        };
+        newNotifications.push(newNotification);
+      });
+      setNotifications(newNotifications);
     });
   }, []);
 
@@ -54,13 +72,12 @@ const SoftMetrics = ({ projectid }) => {
     }
   };
 
-  const notifications = [
+  const [notifications, setNotifications] = useState([
     {
       title: "Feedback From Josh",
-      date: "12/12/2023",
       text: "There is an issue with the server",
     },
-  ];
+  ]);
 
   return (
     <div className="main">
