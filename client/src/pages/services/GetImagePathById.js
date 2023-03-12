@@ -1,6 +1,6 @@
-export const GetImagePath = (values) => {
+export const GetImagePathById = (values) => {
 return new Promise((resolve, reject) => {
-    fetch("http://localhost:5000/api/getImagePath", {
+    fetch("http://localhost:5000/api/getImagePathById", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
