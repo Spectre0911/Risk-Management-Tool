@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { FaBell } from "react-icons/fa";
@@ -6,11 +6,12 @@ import { AiFillCamera } from "react-icons/ai";
 import { Button } from "react-bootstrap";
 import { Modal } from "react-bootstrap";
 import { Formik, Form, Field } from "formik";
-import { IconButton, Tooltip } from '@mui/material';
+import { IconButton, Tooltip } from "@mui/material";
 import { Scrollbars } from "react-custom-scrollbars";
 import { BsBriefcaseFill } from "react-icons/bs";
 import { AiFillWarning } from "react-icons/ai";
 import Select from "react-select";
+import { AllProjectMembers } from "../services/AllProjectMembers";
 import {
   Box,
   TextField,
@@ -23,10 +24,9 @@ import "./index.css";
 import Dropzone from "react-dropzone";
 import * as yup from "yup";
 
-const EditProfileForm = ({ handleClose, featureId, mode}) => {
+const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
-  
 
   const reportBugSchema = yup.object().shape({
     name: yup.string().required("required"),
@@ -43,7 +43,7 @@ const EditProfileForm = ({ handleClose, featureId, mode}) => {
     endTime: "2017-05-24",
     difficulty: "0",
   };
-  
+
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log(values);
     console.log("ddd");
@@ -59,52 +59,73 @@ const EditProfileForm = ({ handleClose, featureId, mode}) => {
     //   console.error(err.message);
     // }
   };
-  
+
   const dependencyOptions = [
-    {value: '1', label:"Login Screen"}, 
-    {value: '2', label:"Render Screen"},
-    {value: '3', label:"Rendering Screen"}
+    { value: "1", label: "Login Screen" },
+    { value: "2", label: "Render Screen" },
+    { value: "3", label: "Rendering Screen" },
   ];
 
-  const [dependencies, setDependencies] = useState([{value: '1', label:"Login Screen"}])
- 
+  const [dependencies, setDependencies] = useState([
+    { value: "1", label: "Login Screen" },
+  ]);
+
   const handleDependencyChange = (e) => {
     setDependencies(e);
   };
 
-
-
   const priorityOptions = [
-    {value: '1', label:"Core"}, 
-    {value: '2', label:"Optional"},
-    {value: '3', label:"Aesthetic"}
+    { value: "1", label: "Core" },
+    { value: "2", label: "Optional" },
+    { value: "3", label: "Aesthetic" },
   ];
 
-  const [priority, setPriority] = useState({value: '1', label:"Core"});
- 
+  const [priority, setPriority] = useState({ value: "1", label: "Core" });
+
   const handlePriorityChange = (e) => {
     setPriority(e);
-  }
+  };
 
-  const teamMembers = [
-    {value: '1', label:"Jane Arnold"}, 
-    {value: '2', label:"Joshua"},
-    {value: '3', label:"Morgan"}
-  ];
+  const [teamMembers, setTeamMemberOptions] = useState([
+    { value: "1", label: "Jane Arnold" },
+    { value: "2", label: "Joshua" },
+    { value: "3", label: "Morgan" },
+  ]);
 
   const handleUserChange = (e) => {
     setUser(e);
   };
 
-  const [user, setUser] = useState({value: '3', label:"Morgan"});
+  const [user, setUser] = useState();
 
-
-
+  useEffect(() => {
+    console.log(projectid);
+    // AllFeatures({ projectid: parseInt(projectid) }).then((data) => {
+    //   let newFeatures = [];
+    //   data.map((feature) => {
+    //     newFeatures.push({
+    //       value: feature.featureid.toString(),
+    //       label: feature.featurename,
+    //     });
+    //   });
+    //   setFeatureOptions(newFeatures);
+    // });
+    AllProjectMembers({ projectId: projectid }).then((data) => {
+      let newMembers = [];
+      data.map((member) => {
+        newMembers.push({
+          value: member.userid.toString(),
+          label: member.name,
+        });
+      });
+      setTeamMemberOptions(newMembers);
+    });
+  }, []);
 
   return (
     <Formik
       onSubmit={handleFormSubmit}
-      initialValues={mode ? initialValuesRegister: {}}
+      initialValues={mode ? initialValuesRegister : {}}
       validationSchema={reportBugSchema}
     >
       {({
@@ -144,7 +165,9 @@ const EditProfileForm = ({ handleClose, featureId, mode}) => {
                   onChange={handleChange}
                   value={values.difficulty}
                   name="difficulty"
-                  error={Boolean(touched.difficulty) && Boolean(errors.difficulty)}
+                  error={
+                    Boolean(touched.difficulty) && Boolean(errors.difficulty)
+                  }
                   helperText={touched.difficulty && errors.difficulty}
                   sx={{ gridColumn: "span 2" }}
                 />
@@ -155,12 +178,22 @@ const EditProfileForm = ({ handleClose, featureId, mode}) => {
                   onChange={handleChange}
                   value={values.description}
                   name="description"
-                  error={Boolean(touched.description) && Boolean(errors.description)}
+                  error={
+                    Boolean(touched.description) && Boolean(errors.description)
+                  }
                   helperText={touched.description && errors.description}
                   sx={{ gridColumn: "span 4" }}
                 />
 
-                <p style={{ gridColumn: "span 1", margin:'auto', paddingRight:'20px'}}>Priority:</p>
+                <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "20px",
+                  }}
+                >
+                  Priority:
+                </p>
                 <Select
                   id="priority"
                   options={priorityOptions}
@@ -168,48 +201,82 @@ const EditProfileForm = ({ handleClose, featureId, mode}) => {
                   onChange={handlePriorityChange}
                   onBlur={handleBlur}
                   className="defineDependenciesBox"
-                  sx={{ gridColumn: "span 3", width:"70%"}}
+                  sx={{ gridColumn: "span 3", width: "70%" }}
                   value={priority}
                 />
 
-                <p style={{ gridColumn: "span 1", margin:'auto', paddingRight:'20px'}}>Dependencies:</p>
+                {/* <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "20px",
+                  }}
+                >
+                  Dependencies:
+                </p>
                 <Select
-                    defaultValue={dependencies}
-                    label="Dependencies"
-                    isMulti
-                    name="Dependencies"
-                    options={dependencyOptions}
-                    className="defineDependenciesBox"
-                    classNamePrefix="select"
-                    onChange={handleDependencyChange}
-                    style={{ gridColumn: "span 3", width:"70%"}}
+                  defaultValue={dependencies}
+                  label="Dependencies"
+                  isMulti
+                  name="Dependencies"
+                  options={dependencyOptions}
+                  className="defineDependenciesBox"
+                  classNamePrefix="select"
+                  onChange={handleDependencyChange}
+                  style={{ gridColumn: "span 3", width: "70%" }}
+                /> */}
+
+                <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "20px",
+                  }}
+                >
+                  Assign to:
+                </p>
+                <Select
+                  defaultValue={user}
+                  label="Users"
+                  name="Users"
+                  options={teamMembers}
+                  className="defineDependenciesBox"
+                  classNamePrefix="select"
+                  onChange={handleUserChange}
+                  style={{ gridColumn: "span 3", width: "70%" }}
                 />
 
-                <p style={{ gridColumn: "span 1", margin:'auto', paddingRight:'20px'}}>Assign to:</p>
-                <Select
-                    defaultValue={user}
-                    label="Users"
-                    name="Users"
-                    options={teamMembers}
-                    className="defineDependenciesBox"
-                    classNamePrefix="select"
-                    onChange={handleUserChange}
-                    style={{ gridColumn: "span 3", width:"70%"}}
-                />
-                
-                <p style={{ gridColumn: "span 1", margin:'auto', paddingRight:'20px'}}>Start:</p>
+                <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "20px",
+                  }}
+                >
+                  Start:
+                </p>
                 <TextField
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.startTime}
                   name="startTime"
                   type="date"
-                  error={Boolean(touched.startTime) && Boolean(errors.startTime)}
+                  error={
+                    Boolean(touched.startTime) && Boolean(errors.startTime)
+                  }
                   helperText={touched.startTime && errors.startTime}
                   sx={{ gridColumn: "span 3" }}
                 />
-              
-              <p style={{ gridColumn: "span 1", margin:'auto', paddingRight:'20px'}}>End:</p>
+
+                <p
+                  style={{
+                    gridColumn: "span 1",
+                    margin: "auto",
+                    paddingRight: "20px",
+                  }}
+                >
+                  End:
+                </p>
                 <TextField
                   onBlur={handleBlur}
                   onChange={handleChange}
@@ -220,7 +287,6 @@ const EditProfileForm = ({ handleClose, featureId, mode}) => {
                   helperText={touched.endTime && errors.endTime}
                   sx={{ gridColumn: "span 3" }}
                 />
-                 
               </>
             }
           </Box>
@@ -254,7 +320,6 @@ const EditProfileForm = ({ handleClose, featureId, mode}) => {
         </form>
       )}
     </Formik>
-    
   );
 };
 

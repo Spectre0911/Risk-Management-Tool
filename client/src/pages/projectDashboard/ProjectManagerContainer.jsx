@@ -83,7 +83,10 @@ const ProjectContainer = () => {
               element={<ProjectDashboardTm />}
             />
             <Route path="/bugs/:projectId" element={<Bugs />} />
-            <Route path="/viewtasks/:featureId" element={<TaskDashboard />} />
+            <Route
+              path="/viewtasks/:featureId"
+              element={<TaskDashboard projectid={projectId} />}
+            />
             <Route path="/github/:projectId" element={<GithubIntegrator />} />
             <Route path="/risks/:projectId" element={<RiskSummary />} />
             <Route

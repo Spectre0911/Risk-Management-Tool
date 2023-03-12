@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux";
 import { FaBell } from "react-icons/fa";
@@ -52,7 +52,29 @@ const BugReportForm = ({ handleClose }) => {
       console.error(err.message);
     }
   };
-
+  useEffect(() => {
+    // console.log(projectid);
+    // AllFeatures({ projectid: parseInt(projectid) }).then((data) => {
+    //   let newFeatures = [];
+    //   data.map((feature) => {
+    //     newFeatures.push({
+    //       value: feature.featureid.toString(),
+    //       label: feature.featurename,
+    //     });
+    //   });
+    //   setFeatureOptions(newFeatures);
+    // });
+    // AllProjectMembers({ projectId: parseInt(projectid) }).then((data) => {
+    //   let newMembers = [];
+    //   data.map((member) => {
+    //     newMembers.push({
+    //       value: member.userid.toString(),
+    //       label: member.name,
+    //     });
+    //   });
+    //   // setTeamMemberOptions(newMembers);
+    // });
+  }, []);
   return (
     <Formik
       onSubmit={handleFormSubmit}
