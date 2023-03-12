@@ -9,7 +9,7 @@ const ProfileCard = ({ name, bio, image, skills, button, isPm }) => {
   return (
     <div className="card-container">
       {button}
-      <img className="round" src={image} alt={`${name}'s profile`} />
+      <img className="round" src={`http://localhost:5000/assets/${image}`} alt={`${name}'s profile`} />
       <h3 className="UserH3">{name}</h3>
       <p className="UserP">{bio}</p>
       <div className="skills">

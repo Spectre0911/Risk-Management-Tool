@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import {IoIosPersonAdd} from "react-icons/io";
+import { useParams } from "react-router-dom";
 import {GrClose} from "react-icons/gr";
 import {Modal, Button} from "react-bootstrap";
 import { Box } from "@mui/material";
@@ -10,8 +11,12 @@ import "./index.css";
 import "../projectDashboard/index.css";
 import "../projectDashboard/index.jsx";
 import ProfileCard from "./ProfileCard";
-
+import { MemberSkills } from "../services/MemberSkills";
+import { AllProjectMembers } from "../services/AllProjectMembers";
+import { OrderedUsers } from "../services/OrderedUsers";
 const UserPage = (isPm) => {
+    const {projectId} = useParams();
+  
 
     const DeleteButton = ({ id, handleDeleteShow }) => {
     return (
@@ -90,31 +95,33 @@ const UserPage = (isPm) => {
       console.log(teamMembersList);
     };
   
-    const teamMembersOptions = [
-      { value: "1", label: "Joshua" },
-      { value: "2", label: "Morgan" },
-      { value: "3", label: "Sanjula" },
-    ];
+
   
     const [teamMembersList, setTeamMembersList] = useState([]);
     const handleTeamMemberChange = (e) => {
       setTeamMembersList(e);
     };
 
-const teamMembers = [
-    {
-        id: "1",
-        name:"Jane Arnold",
-        image:"http://localhost:5000/assets/jane.jpg",
-        bio:"I am a software engineer",
-        skills:["Python","React"],
-    },{ 
-        id: "2",
-        name:"Jane Arnold",
-        image:"http://localhost:5000/assets/jane.jpg",
-        bio:"I am a backend engineer",
-        skills:["Python","Node","SQL"],
-    }];
+    const [teamMembersOptions, setTeamMemberOptions] = useState([
+      { value: "1", label: "Joshua" },
+      { value: "2", label: "Morgan" },
+      { value: "3", label: "Sanjula" },
+    ]);
+
+  // const teamMembers = [
+  //   {
+  //       id: "1",
+  //       name:"Jane Arnold",
+  //       image:"http://localhost:5000/assets/jane.jpg",
+  //       bio:"I am a software engineer",
+  //       skills:["Python","React"],
+  //   },{ 
+  //       id: "2",
+  //       name:"Jane Arnold",
+  //       image:"http://localhost:5000/assets/jane.jpg",
+  //       bio:"I am a backend engineer",
+  //       skills:["Python","Node","SQL"],
+  //   }];
 
     const recommendedMembers = [
         {
@@ -136,7 +143,78 @@ const teamMembers = [
             bio:"I am a software engineer",
             skills:["Python","React"],
         }];
-
+        const [teamMembers, setTeamMembers] = useState([]);
+        const [recommendedTeamMembers, setRecommendedTeamMembersSkills] = useState([]);
+        useEffect(() => {
+          // OverallRisk(
+          //   console.log("OVERALL RISK");
+          //   console.log(data);
+          // });
+          OrderedUsers({ projectId: projectId }).then((data) => {
+            console.log(data);
+            setTeamMemberOptions(data);
+            var useridSkillMap = new Map();
+            const memberSkillPromise = data.map((member) => {
+              return MemberSkills({ userid: member.userid }).then((skills) => {
+                let skillArr = [];
+                if (skills != null) {
+                  skills.map((skill) => {
+                    if (skill.skill != null) {
+                      skillArr.push(skill.skill);
+                    }
+                  });
+                }
+                useridSkillMap.set(member.userid, skillArr);
+              });
+            });
+    
+            Promise.all(memberSkillPromise).then(() => {
+              console.log(useridSkillMap);
+              let newData = [];
+              data.forEach((member) =>
+                newData.push({
+                  ...member,
+                  skills: useridSkillMap.get(member.userid),
+                })
+              );
+              setTeamMemberOptions(newData);
+              console.log(teamMembersOptions);
+            });
+          });
+          AllProjectMembers({ projectId: projectId }).then((data) => {
+            // console.log("Fetching project members");
+            if (data != null) {
+              // console.log(data);
+              let newData = [];
+              var useridSkillMap = new Map();
+              const memberSkillPromises = data.map((member) => {
+                return MemberSkills({ userid: member.userid }).then((skills) => {
+                  let skillArr = [];
+                  if (skills != null) {
+                    skills.map((skill) => {
+                      if (skill.skill != null) {
+                        skillArr.push(skill.skill);
+                      }
+                    });
+                  }
+                  useridSkillMap.set(member.userid, skillArr);
+                });
+              });
+      
+              Promise.all(memberSkillPromises).then(() => {
+                // console.log(useridSkillMap);
+                data.forEach((member) =>
+                  newData.push({
+                    ...member,
+                    skills: useridSkillMap.get(member.userid),
+                  })
+                );
+                setTeamMembers(newData);
+                console.log(newData)
+              });
+            }
+          })},[]);
+       
     return (
         <>
         <div className="spacer">
@@ -149,14 +227,15 @@ const teamMembers = [
               </div>
               <div>
                   {teamMembers.map((member) => {
+                    console.log(member);
                       return (
                           <div>
                           <ProfileCard
                               key={member.id}
                               name={member.name}
-                              image={member.image}
+                              image={member.pfppath}
                               bio={member.bio}
-                              skills={member.skills}
+                              skills={[]}
                               isPm={isPm}
                               button={<DeleteButton id={member.id} handleDeleteShow={handleDeleteShow} />} />
                           </div>
@@ -182,7 +261,9 @@ const teamMembers = [
                           <IoIosPersonAdd />
                       </button>
                   <div>
-                      {recommendedMembers.map((member) => {
+                      {teamMembersOptions.map((member) => {
+                        console.log(teamMembers);
+                        console.log(teamMembersOptions)
                           return (
                               <div>
                               <ProfileCard
@@ -190,7 +271,7 @@ const teamMembers = [
                                   name={member.name}
                                   image={member.image}
                                   bio={member.bio}
-                                  skills={member.skills}
+                                  skills={[]}
                                   button={<AddButton id={member.id} handleDeleteShow={handleAddUser} />} />
                               </div>
                           );
