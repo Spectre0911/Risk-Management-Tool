@@ -1,4 +1,4 @@
-export const CompleteFeature = (values) => {
+export const CompleteBug = (values) => {
   fetch("http://localhost:5000/api/completeBug", {
     method: "POST",
     headers: {
