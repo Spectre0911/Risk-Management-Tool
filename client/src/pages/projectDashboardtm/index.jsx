@@ -27,6 +27,8 @@ import { Octokit } from "octokit";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import SoftFeedbackForm from "./SoftFeedbackForm";
+import { AllProjectMembers } from "../services/AllProjectMembers";
+import { MemberSkills } from "../services/MemberSkills";
 
 import { TasksToCompletePID } from "../services/TasksToCompletePID";
 Chart.register(ArcElement);
@@ -67,7 +69,7 @@ const ProjectDashboardTm = () => {
   const backgroundColorTime = ["rgba(255,0,0,1)", "rgba(255,128,0,1)"];
   const email = useSelector((state) => state.email);
 
-  const teamMembers = [
+  const [teamMembers, setTeamMembers] = useState([
     {
       id: "1",
       name: "Jane Arnold",
@@ -82,7 +84,7 @@ const ProjectDashboardTm = () => {
       skills: ["Python", "React"],
       suitabilityScore: 0,
     },
-  ];
+  ]);
 
   const [showDelete, setShowDelete] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
@@ -138,6 +140,39 @@ const ProjectDashboardTm = () => {
     }
   };
   useEffect(() => {
+    AllProjectMembers({ projectId: projectId }).then((data) => {
+      // console.log("Fetching project members");
+      if (data != null) {
+        // console.log(data);
+        let newData = [];
+        var useridSkillMap = new Map();
+        const memberSkillPromises = data.map((member) => {
+          return MemberSkills({ userid: member.userid }).then((skills) => {
+            let skillArr = [];
+            if (skills != null) {
+              skills.map((skill) => {
+                if (skill.skill != null) {
+                  skillArr.push(skill.skill);
+                }
+              });
+            }
+            useridSkillMap.set(member.userid, skillArr);
+          });
+        });
+
+        Promise.all(memberSkillPromises).then(() => {
+          // console.log(useridSkillMap);
+          data.forEach((member) =>
+            newData.push({
+              ...member,
+              skills: useridSkillMap.get(member.userid),
+            })
+          );
+          // console.log(newData);
+          setTeamMembers(newData);
+        });
+      }
+    });
     TasksToCompletePID({ email: email.email, projectid: projectId }).then(
       (data) => {
         console.log(data);
