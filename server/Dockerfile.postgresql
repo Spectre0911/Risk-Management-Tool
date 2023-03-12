@@ -4,6 +4,10 @@ FROM postgres:latest
 # Set the working directory to /app
 WORKDIR /app
 
+ENV POSTGRES_USER postgres
+ENV POSTGRES_PASSWORD root
+ENV POSTGRES_DB riskmanager
+
 COPY server/database.sql /docker-entrypoint-initdb.d/
 COPY server/fakedata.sql /docker-entrypoint-initdb.d/
 COPY server/queries.sql /docker-entrypoint-initdb.d/

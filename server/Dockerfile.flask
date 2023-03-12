@@ -8,5 +8,5 @@ RUN pip install requests
 RUN pip install joblib
 RUN pip install -U scikit-learn
 RUN pip install psycopg2
-EXPOSE 5432
+EXPOSE 5001
 CMD ["python", "pyfile.py"]
