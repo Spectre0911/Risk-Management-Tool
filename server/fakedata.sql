@@ -2,7 +2,7 @@
 -- Should help with testing whether the database rejects invalid data
 
 insert into users (userid, email, firstname, lastname, password, pfppath, githubtoken, bio) values
-    (1, 'lpittet0@reddit.com', 'Louise', 'Pittet', '30d869f2a8459ceabd6828ff3ce89e522e338e53efba9ec210972d71aba72727', 'http://dummyimage.com/237x100.png/ff4444/ffffff', '0a8a5b47d799538e7dc62d57cce19298793f7777be82cdf2479f75c111b20ac0', 'Enterprise-wide non-volatile function'),
+    -- (1, 'lpittet0@reddit.com', 'Louise', 'Pittet', '30d869f2a8459ceabd6828ff3ce89e522e338e53efba9ec210972d71aba72727', 'http://dummyimage.com/237x100.png/ff4444/ffffff', '0a8a5b47d799538e7dc62d57cce19298793f7777be82cdf2479f75c111b20ac0', 'Enterprise-wide non-volatile function'),
     (2, 'kpoile1@mozilla.org', 'Kriste', 'Poile', 'eb9ea74bda05c854451f9a498db1551f18b239e5f7783d13b0923d3238705739', 'http://dummyimage.com/113x100.png/ff4444/ffffff', '8d1dd31381f4052606cad529fd4d45b4e6c90916ef7df77196862cfe2934732f', 'Digitized optimal synergy'),
     (3, 'skilban2@rambler.ru', 'Shel', 'Kilban', 'a67ee6cdfc440ae7fe5bc120aed87c27fd6f361610b29ceb4c699411dbce8404', 'http://dummyimage.com/168x100.png/cc0000/ffffff', '6802ae8559b3a7cc04e5e3acccc56ed10c3c1cf07633fe1381eea2e34fadd465', 'Progressive asymmetric algorithm'),
     (4, 'wloddy3@sphinn.com', 'Walden', 'Loddy', '18d4ab999a4f89bd66a6192e0f822ef7e9854c68f2a3e965556bf9fd45e68550', 'http://dummyimage.com/158x100.png/cc0000/ffffff', '1ebbc146b16ddc0d55dd25ea0158cbb1fbbcb89228a663c05e876a950aeaf109', 'Progressive eco-centric toolset'),
@@ -20,20 +20,20 @@ insert into projects (projectid, projectname, closed, opened, deadline, brief, b
     (4, 'Bitchip', default, '2024-06-30 05:24:41', '2024-07-13 13:14:26', 'Reverse-engineered radical implementation', 607954),
     (5, 'Veribet', default, '2024-02-20 11:08:39', '2024-03-11 08:23:35', 'Persistent multi-tasking protocol', 508067);
 
-INSERT INTO userproject (userid, projectid, role, ismanager)
+INSERT INTO userproject (userid, projectid, ismanager)
 VALUES
-    (1, 1, 'Developer', false),
-    (2, 1, 'Developer', false),
-    (3, 1, 'Manager', true),
-    (4, 2, 'Manager', true),
-    (1, 3, 'Developer', false),
-    (2, 3, 'Manager', true),
-    (3, 3, 'Developer', false),
-    (4, 3, 'Developer', false),
-    (1, 4, 'Manager', true),
-    (2, 4, 'Developer', false),
-    (3, 4, 'Developer', false),
-    (4, 4, 'Developer', false);
+    (1, 1,  true),
+    (2, 1,  false),
+    (3, 1, true),
+    (4, 2, true),
+    (1, 3,  false),
+    (2, 3,  true),
+    (3, 3,  false),
+    (4, 3, false),
+    (1, 4,  true),
+    (2, 4,  false),
+    (3, 4,  false),
+    (4, 4,  false);
 
 
 INSERT INTO features (featureid, projectid, featurename, featuredesc, starttime, endtime, completed, difficulty, priority, status, currentrisk, progress, members)
