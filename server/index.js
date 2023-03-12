@@ -450,7 +450,7 @@ app.post("/api/projectMembers", async (req, postRes) => {
   try {
     // console.log(req.body);
     const projectMembers = await pool.query(
-      "SELECT userid, CONCAT(firstname, ' ', lastname) as name, bio FROM users NATURAL JOIN userproject WHERE projectid = $1;",
+      "SELECT userid, CONCAT(firstname, ' ', lastname) as name, bio, pfppath FROM users NATURAL JOIN userproject WHERE projectid = $1;",
       [req.body.projectId]
     );
     if (projectMembers.rows.length == 0) {
@@ -725,7 +725,7 @@ app.post("/api/orderedUsers", async (req, postRes) => {
         );
 
         intersectionUserCount.set(
-          { value: user.userid, label: user.firstname + " " + user.lastname },
+          { value: user.userid, image: user.pfppath, bio: user.bio, name: user.firstname + " " + user.lastname },
           intersection.size
         );
       })
