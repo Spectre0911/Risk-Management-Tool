@@ -37,9 +37,9 @@ create table projects (
 
 drop table if exists replacements;
 create table replacements (
-    projectid serial not null,
-    dateChanged timestamp not null,
-    changeType INTEGER not null, -- 0 for removing the team member; 1 for adding a new member
+    projectid   serial not null,
+    datechanged timestamp not null,
+    changetype  integer not null, -- 0 for removing the team member; 1 for adding a new member
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
@@ -85,11 +85,11 @@ create table features (
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
-drop table if exists featureChange;
+drop table if exists featurechange;
 create table featureChange (
-    projectid serial not null,
+    projectid   serial not null,
     priority    integer not null check (priority >= 1 and priority <= 3),
-    dateChanged timestamp not null,
+    datechanged timestamp not null,
     foreign key (projectid) references projects(projectid) on delete cascade
 );
 
@@ -298,6 +298,23 @@ $$ language plpgsql;
 create trigger addmember after insert on userproject
 for each row
     execute procedure membernotif();
+
+-- Notify user when they have been assigned a new task
+create or replace function tasknotif() returns trigger as $$
+declare
+    pname varchar(50);
+    fname varchar(50);
+begin
+    select projectname from projects natural join (tasks inner join features on features.featureid = tasks.featureid) as featuretask into pname;
+    select featurename from features inner join tasks on features.featureid = tasks.featureid into fname;
+    insert into notifications (notifid, userid, projectid, location, notiftype, title, message, seen) values (default, new.devid, pname, 1, 1, 'New task', concat('Assigned task ', new.taskname, ' for feature ', fname, ' in project ', pname), default);
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger usertask after insert on tasks
+for each row
+    execute procedure tasknotif();
 
 -- When a type 1 feedback is created, notify PM of user who has sent feedback
 create or replace function fbreceived() returns trigger as $$
