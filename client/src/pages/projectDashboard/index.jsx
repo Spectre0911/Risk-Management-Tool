@@ -27,6 +27,7 @@ import { OrderedUsers } from "../services/OrderedUsers";
 import { AddTeamMember } from "../services/AddTeamMember";
 import { EndProject } from "../services/EndProject";
 import { OverallRisk } from "../services/OverallRisk";
+import { AddRisk } from "../services/AddRisk";
 import { GetImagePathById } from "../services/GetImagePathById";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
@@ -159,6 +160,10 @@ const ProjectDashboard = () => {
       let technical = (data.skillset + data.success_story) / 7;
       setDataRisk([team, time, codeQuality, technical]);
       setOverallRisk(parseFloat(data.overall_result.toFixed(2)));
+      AddRisk({
+        projectid: projectId,
+        risk: parseFloat(data.overall_result.toFixed(2)),
+      });
 
       console.log(data);
     });

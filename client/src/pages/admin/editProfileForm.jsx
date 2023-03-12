@@ -44,10 +44,7 @@ const EditProfileForm = ({ handleClose }) => {
     { value: "Backend", label: "Backend", experience: "0" },
   ]);
 
-  const [skills, setSkills] = useState([
-    { value: "Python", label: "Python", experience: "0" },
-    { value: "React", label: "React", experience: "0" },
-  ]);
+  const [skills, setSkills] = useState([]);
   const [skillExperience, setSkillExperience] = useState([]);
   const [initialValuesRegister, setInitialValueRegister] = useState({
     name: "",
@@ -67,8 +64,8 @@ const EditProfileForm = ({ handleClose }) => {
     newPassword: yup.string()
   });
 
-
   const [imagePath, setImagePath] = useState("");
+
   const [image, setImage] = useState("");
   const login = useSelector((state) => state.email);
     
@@ -76,10 +73,10 @@ const EditProfileForm = ({ handleClose }) => {
 
 
   useEffect(() => {
-    console.log("SETTING");
     GetImagePath({
       email: userEmail.email,
     }).then((data) => {
+
       console.log(data);
         setImagePath(data);
         if (data==""){
@@ -89,7 +86,6 @@ const EditProfileForm = ({ handleClose }) => {
     GetUser({
       email: userEmail,
     }).then((data) => {
-      console.log(data);
       setInitialValueRegister({
         name: data.name || "",
         email: data.email || "",
@@ -99,13 +95,10 @@ const EditProfileForm = ({ handleClose }) => {
       console.log(initialValuesRegister);
     });
     AdminSkills({ email: userEmail }).then((data) => {
-      console.log("ADMIN SKILLS");
-      console.log(data);
       setSkills(data);
     });
 
     AllSkills({ email: userEmail }).then((data) => {
-      console.log(data);
       setSkillOptions(data);
     });
   }, []);
@@ -145,6 +138,7 @@ const EditProfileForm = ({ handleClose }) => {
   },[image])
 
   const handleFormSubmit = async (values, onSubmitProps) => {
+    console.log("SUBMITTING");
     console.log(skills);
     console.log(values);
     try {
