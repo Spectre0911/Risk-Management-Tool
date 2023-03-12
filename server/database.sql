@@ -277,9 +277,9 @@ begin
 end;
 $$ language plpgsql;
 
-create trigger newdep before insert on featuredep
-for each row
-    execute procedure checkdep();
+-- create trigger newdep before insert on featuredep
+-- for each row
+--     execute procedure checkdep();
 
 -- Create a notification when a member is added to the team for a project
 create or replace function membernotif() returns trigger as $$
