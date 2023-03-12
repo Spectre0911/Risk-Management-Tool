@@ -573,6 +573,23 @@ app.post("/api/allBugs", async (req, postRes) => {
   }
 });
 
+// Complete a bug
+app.post("/api/completeBug", async (req, postRes) => {
+  try {
+    const allBugs = await pool.query("DELETE FROM bugs WHERE bugid = $1", [
+      req.body.bugid,
+    ]);
+
+    if (allBugs.rows.length == 0) {
+      return postRes.json([]);
+    } else {
+      postRes.json(allBugs.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 // Get all projects
 app.post("/api/githubToken", async (req, postRes) => {
   try {
