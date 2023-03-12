@@ -1,4 +1,4 @@
-export const AddTask = (values) => {
+export const CreateTask = (values) => {
   console.log(values);
   fetch("http://localhost:5000/api/createTask", {
     method: "POST",

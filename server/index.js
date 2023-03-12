@@ -2,7 +2,7 @@ import { createRequire } from "module";
 import { fileURLToPath } from "url";
 
 import bcrypt from "bcryptjs";
-import path from "path";
+import path, { resolve } from "path";
 import { create } from "domain";
 // import { reverse } from "dns";
 // import { user } from "pg/lib/defaults.js";
@@ -186,8 +186,8 @@ app.post("/api/taskToComplete", async (req, res) => {
 app.post("/api/taskToCompletePID", async (req, res) => {
   try {
     const tasksToComplete = await pool.query(
-      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1);",
-      [req.body.email]
+      "SELECT projects.projectid, projectname, featureinfo.featureid, featurename, tasks.taskid, taskname, priority, status, extract(day from (endtime - current_date)) as daysleft FROM projects INNER JOIN (SELECT featureid, featurename, projectid FROM features) AS featureinfo ON projects.projectid = featureinfo.projectid INNER JOIN tasks ON featureinfo.featureid = tasks.featureid WHERE devid = (SELECT userid FROM users WHERE email = $1) and projects.projectid = $2;",
+      [req.body.email, req.body.projectid]
     );
     // console.log(createAccount.rows);
     res.json(tasksToComplete.rows);
@@ -387,40 +387,55 @@ ORDER BY
 app.post("/api/maximumOne", async (req, postRes) => {
   try {
     // Get all the feature ids for a project
-    const featureids = await pool.query(
+    let sortedIds = await pool.query(
       "SELECT featureid, starttime, featurename FROM features WHERE projectid = $1 ORDER BY starttime ASC;",
       [req.body.projectid]
     );
-    const featureidList = featureids.rows.map((item) => item.featureid);
-    let resolvedIds = new Set(featureidList);
+    let featureidList = sortedIds.rows.map((item) => item.featureid);
+    let resolvedIds = new Set();
 
     // Loop through all the featureids to resolve all overlaps
-    // While resolvedIds != featureidList.length
-    for (let i = 0; i < featureidList.length; i++) {
-      console.log("UPDATING");
+    // console.log(resolvedIds.size);
+    // console.log(featureidList.length);
+
+    while (resolvedIds.size != featureidList.length) {
+      console.log("Changed");
+
+      sortedIds = await pool.query(
+        "SELECT featureid, starttime, featurename FROM features WHERE projectid = $1 ORDER BY endtime ASC;",
+        [req.body.projectid]
+      );
+      featureidList = sortedIds.rows.map((item) => item.featureid);
+
+      let i = 0;
+      while (resolvedIds.has(featureidList[i])) {
+        i += 1;
+      }
+
       // Get the current feature id
       let currentFeatureid = featureidList[i];
-      console.log(currentFeatureid);
+
       // Find feature with the greatest overlap time
       const featureidOverlaps = await pool.query(
         "SELECT f2.featureid, f2.featurename, CEIL(EXTRACT(EPOCH FROM LEAST(f1.endtime, f2.endtime) - GREATEST(f1.starttime, f2.starttime)) / 86400) AS overlap_length_days FROM features f1 JOIN features f2 ON f1.projectid = f2.projectid AND f1.featureid <> f2.featureid WHERE f1.featureid = $1 AND f2.starttime < f1.endtime AND f2.endtime > f1.starttime ORDER BY overlap_length_days DESC LIMIT 1;",
         [currentFeatureid]
       );
-      console.log(featureidOverlaps.rows.length);
 
       if (featureidOverlaps.rows.length > 0) {
         for (let j = i + 1; j < featureidList.length; j++) {
           let featureId = featureidList[j];
-          await pool.query(
-            "UPDATE features SET endtime = endtime + $1 *  INTERVAL '1 day', starttime = starttime + $1 * INTERVAL '1 day' WHERE featureid = $2",
-            [featureidOverlaps.rows[0].overlap_length_days, featureId]
-          );
+          if (featureId != currentFeatureid) {
+            await pool.query(
+              "UPDATE features SET endtime = endtime + $1 *  INTERVAL '1 day', starttime = starttime + $1 * INTERVAL '1 day' WHERE featureid = $2",
+              [featureidOverlaps.rows[0].overlap_length_days, featureId]
+            );
+          }
         }
-        // console.log(featureids.rows.length, k);
       }
       resolvedIds.add(currentFeatureid);
     }
   } catch (err) {
+    // console.log("ERROR");
     console.error(err.message);
   }
 });
@@ -492,7 +507,11 @@ app.post("/api/GitubDetails", async (req, postRes) => {
       "SELECT githubrepo FROM projects WHERE projectid= $1; ",
       [req.body.projectId]
     );
-    const result = [githubToken.rows[0].githubtoken, ownerName.rows[0].githubuname, repoName.rows[0].githubrepo]
+    const result = [
+      githubToken.rows[0].githubtoken,
+      ownerName.rows[0].githubuname,
+      repoName.rows[0].githubrepo,
+    ];
     postRes.json(result);
     // if (githubToken.rows.length == 0) {
     //   return postRes.json(null);
@@ -504,28 +523,16 @@ app.post("/api/GitubDetails", async (req, postRes) => {
   }
 });
 
-
-
 app.post("/api/editImagePath", async (req, postRes) => {
   try {
-    await pool.query(
-      "UPDATE USERS SET pfppath = $1 WHERE email = $2",
-      [
-        req.body.path,
-        req.body.email.email,
-        
-      ]
-    );
+    await pool.query("UPDATE USERS SET pfppath = $1 WHERE email = $2", [
+      req.body.path,
+      req.body.email.email,
+    ]);
   } catch (err) {
     console.error(err.message);
   }
 });
-
-
-
-
-
-
 
 // End project
 app.post("/api/endProject", async (req, postRes) => {
@@ -557,8 +564,6 @@ app.post("/api/allBugs", async (req, postRes) => {
   }
 });
 
-
-
 // Get all projects
 app.post("/api/githubToken", async (req, postRes) => {
   try {
@@ -580,9 +585,6 @@ app.post("/api/githubToken", async (req, postRes) => {
     console.error(err.message);
   }
 });
-
-
-
 
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {
@@ -679,17 +681,14 @@ app.post("/api/createTask", async (req, postRes) => {
   console.log("CREATING TASK");
   try {
     console.log(req.body);
-    const createBug = await pool.query(
-      "INSERT INTO tasks(featureid, devid, taskname, description, starttime, endtime, priority, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
+    await pool.query(
+      "INSERT INTO tasks(featureid, devid, taskname, description, starttime, endtime, priority, status) VALUES($1, $2, $3, $4, (SELECT starttime FROM features WHERE featureid = $1), (SELECT endtime FROM features WHERE featureid = $1), $5, 1)",
       [
         req.body.featureid,
         req.body.devid,
-        req.body.taskname,
+        req.body.name,
         req.body.description,
-        req.body.starttime,
-        req.body.endtime,
         req.body.priority,
-        req.body.status,
       ]
     );
   } catch (err) {
