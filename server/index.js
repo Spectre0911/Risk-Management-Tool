@@ -362,6 +362,43 @@ app.post("/api/completeFeature", async (req, postRes) => {
   }
 });
 
+/*
+SELECT featureid, starttime FROM features WHERE projectid = 2 ORDER BY starttime;
+
+
+
+SELECT 
+  f.featureid,
+  EXTRACT(EPOCH FROM LEAST(f.endtime, o.endtime) - GREATEST(f.starttime, o.starttime)) / 60.0 AS overlap_minutes
+FROM 
+  features AS f 
+  JOIN features AS o 
+    ON f.projectid = o.projectid 
+      AND f.featureid <> o.featureid 
+      AND NOT (f.endtime <= o.starttime OR f.starttime >= o.endtime)
+WHERE 
+  f.featureid = 11                
+ORDER BY 
+  f.starttime;
+*/
+
+app.post("/api/maximumOne", async (req, postRes) => {
+  try {
+    const featureids = await pool.query(
+      "SELECT featureid, starttime FROM features WHERE projectid = $1 ORDER BY starttime;",
+      [req.body.projectid]
+    );
+
+    for (let i = 0; i < featureids.length; i++) {
+      const featureidOverlaps = await pool.query(
+        "SELECT f.featureid, EXTRACT(EPOCH FROM LEAST(f.endtime, o.endtime) - GREATEST(f.starttime, o.starttime)) / 60.0 AS overlap_minutes FROM features AS f JOIN features AS o ON f.projectid = o.projectid AND f.featureid <> o.featureid AND NOT (f.endtime <= o.starttime OR f.starttime >= o.endtime) WHERE f.featureid = 11 ORDER BY f.starttime;"
+      );
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 // Get all projects
 app.post("/api/projects", async (req, postRes) => {
   try {
