@@ -416,6 +416,33 @@ app.post("/api/getImagePathById", async (req, postRes) => {
   }
 });
 
+app.post("/api/GitubDetails", async (req, postRes) => {
+  try {
+    console.log(req.body.projectId);
+    const githubToken = await pool.query(
+      "SELECT githubtoken FROM users WHERE email= $1; ",
+      [req.body.email]
+    );
+    const ownerName = await pool.query(
+      "SELECT githubuname FROM users WHERE email= $1; ",
+      [req.body.email]
+    );
+    const repoName = await pool.query(
+      "SELECT githubrepo FROM projects WHERE projectid= $1; ",
+      [req.body.projectId]
+    );
+    const result = [githubToken.rows[0].githubtoken, ownerName.rows[0].githubuname, repoName.rows[0].githubrepo]
+    postRes.json(result);
+    // if (githubToken.rows.length == 0) {
+    //   return postRes.json(null);
+    // } else {
+    //   postRes.json(githubToken.rows[0].githubtoken, repoName.rows[0].githubrepo);
+    // }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 
 
 app.post("/api/editImagePath", async (req, postRes) => {
@@ -468,6 +495,33 @@ app.post("/api/allBugs", async (req, postRes) => {
     console.error(err.message);
   }
 });
+
+
+
+// Get all projects
+app.post("/api/githubToken", async (req, postRes) => {
+  try {
+    // console.log(req.body);
+    const accessToken = await pool.query(
+      "SELECT githubtoken FROM users WHERE email=$1",
+      [req.body.email]
+    );
+    const repoName = await pool.query(
+      "SELECT githubrepo FROM projects WHERE projectid=$1",
+      [req.body.projectid]
+    );
+    if (allFeatures.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      postRes.json(allFeatures.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+
+
 
 // Get all notifcations
 app.post("/api/notifications", async (req, postRes) => {

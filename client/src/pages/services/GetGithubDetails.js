@@ -1,6 +1,7 @@
-export const GetImagePath = (values) => {
+
+export const GetGithubDetails = (values) => {
 return new Promise((resolve, reject) => {
-    fetch("http://localhost:5000/api/getImagePath", {
+    fetch("http://localhost:5000/api/GitubDetails", {
     method: "POST",
     headers: {
         "Content-Type": "application/json",
