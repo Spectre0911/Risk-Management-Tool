@@ -577,6 +577,29 @@ app.post("/api/createBug", async (req, postRes) => {
   }
 });
 
+// create Bug
+app.post("/api/createTask", async (req, postRes) => {
+  console.log("CREATING TASK");
+  try {
+    console.log(req.body);
+    const createBug = await pool.query(
+      "INSERT INTO tasks(featureid, devid, taskname, description, starttime, endtime, priority, status) VALUES($1, $2, $3, $4, $5, $6, $7, $8)",
+      [
+        req.body.featureid,
+        req.body.devid,
+        req.body.taskname,
+        req.body.description,
+        req.body.starttime,
+        req.body.endtime,
+        req.body.priority,
+        req.body.status,
+      ]
+    );
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
 // Get all skills for a team member on id
 app.post("/api/memberSkills", async (req, postRes) => {
   try {

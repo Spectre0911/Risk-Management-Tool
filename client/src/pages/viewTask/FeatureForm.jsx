@@ -46,8 +46,8 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log(values);
-    console.log("ddd");
     console.log(featureId);
+    console.log(projectid);
     // try {
     //   const body = { values };
     //   const response = await fetch("http://localhost:5000/addbug", {
@@ -127,6 +127,7 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
       onSubmit={handleFormSubmit}
       initialValues={mode ? initialValuesRegister : {}}
       validationSchema={reportBugSchema}
+      enableReinitialize={true}
     >
       {({
         values,
