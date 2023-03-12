@@ -49,8 +49,8 @@ const Bugs = () => {
       bugReportDate: "2023-03-14",
       bugSeverity: "High",
       bugPriority: "Med",
-      ReportedByUser: { name: "Jane Arnold", imagePath: "jane.jpg" },
-      AssignedToUser: { name: "Jane Arnold", imagePath: "jane.jpg" },
+      ReportedByUser: { id: 20, name: "Jane Arnold", imagePath: "jane.jpg" },
+      AssignedToUser: { id: 20, name: "Jane Arnold", imagePath: "jane.jpg" },
     },
     {
       bugId: "2",
@@ -60,8 +60,8 @@ const Bugs = () => {
       bugReportDate: "2023-03-14",
       bugSeverity: "High",
       bugPriority: "High",
-      ReportedByUser: { name: "Jane Arnold", imagePath: "jane.jpg" },
-      AssignedToUser: { name: "Jane Arnold", imagePath: "jane.jpg" },
+      ReportedByUser: { id: 20,name: "Jane Arnold", imagePath: "jane.jpg" },
+      AssignedToUser: { id: 21, name: "Jane Arnold", imagePath: "jane.jpg" },
     },
   ]);
 
@@ -83,8 +83,8 @@ const Bugs = () => {
               bugSeverity: ["Low", "Medium", "High"][
                 parseInt(bug.priority) - 1
               ],
-              ReportedByUser: { name: asssignedName, imagePath: "jane.jpg" },
-              AssignedToUser: { name: assignedToName, imagePath: "jane.jpg" },
+              ReportedByUser: { id: bug.assigner, asssignedName, imagePath: "jane.jpg" },
+              AssignedToUser: { id:bug.devid, name: assignedToName, imagePath: "jane.jpg" },
             };
             return newBug;
           });

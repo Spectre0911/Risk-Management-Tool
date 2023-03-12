@@ -299,6 +299,30 @@ create trigger addmember after insert on userproject
 for each row
     execute procedure membernotif();
 
+-- When a type 1 feedback is created, notify PM of user who has sent feedback
+create or replace function fbreceived() returns trigger as $$
+declare
+    manager integer;
+    fname   varchar(50);
+    lname   varchar(50);
+    pname   varchar(50);
+begin
+    select userid from userproject where projectid = new.projectid and ismanager into manager;
+    select firstname from users where userid = new.userid into fname;
+    select lastname from users where userid = new.userid into lname;
+    select projectname from projects where projectid = new.projectid into pname;
+
+    if (new.fbtype = 1) then
+        insert into notifications (notifid, userid, projectid, location, notiftype, title, message, seen) values (default, manager, new.projectid, 2, 1, 'New feedback on project', concat(fname, lname, ' provided feedback on ', pname), default);
+    end if;
+    return new;
+end;
+$$ language plpgsql;
+
+create trigger newfb after insert on feedback
+for each row
+    execute procedure fbreceived();
+
 -- Update project's current risk in projects when new data added to risks
 create or replace function newrisk() returns trigger as $$
 begin

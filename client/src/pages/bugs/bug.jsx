@@ -17,6 +17,7 @@ import Modal from "react-bootstrap/Modal";
 import { GrClose } from "react-icons/gr";
 import "./bug.css";
 import BugDetailForm from "./bugDetailForm";
+import { GetImagePathById } from "../services/GetImagePathById";
 
 const Bug = ({ data, deleteBug, key }) => {
   const [show, setShow] = useState(false);
@@ -42,6 +43,32 @@ const Bug = ({ data, deleteBug, key }) => {
   const complete = (bugId) =>{
     console.log("completed", bugId);
   }
+
+  const devId = data.ReportedByUser.id;
+  const assignId = data.AssignedToUser.id;
+
+  const [devImg, setDevImage] = useState();
+  const [assignImg, setAssignImg] = useState();
+
+  useEffect(() => {
+    // Get all active projects
+    GetImagePathById({
+      id: devId
+    }).then((data) => {
+        setDevImage(data);
+        if (data==""){
+          setDevImage("jane.jpg")
+        }});
+    
+    GetImagePathById({
+      id: assignId
+    }).then((data) => {
+      setAssignImg(data);
+        if (data==""){
+          setAssignImg("jane.jpg")
+      }});  
+    // Get the number of notifications
+});
 
   return (
     <div className="bugContainer">
@@ -118,7 +145,7 @@ const Bug = ({ data, deleteBug, key }) => {
             >
               <img
                 className="bugProfileImage"
-                src={`http://localhost:5000/assets/${data.ReportedByUser.imagePath}`}
+                src={`http://localhost:5000/assets/${devImg}`}
               ></img>
             </OverlayTrigger>
           </div>
@@ -136,7 +163,7 @@ const Bug = ({ data, deleteBug, key }) => {
             >
               <img
                 className="bugProfileImage"
-                src={`http://localhost:5000/assets/${data.AssignedToUser.imagePath}`}
+                src={`http://localhost:5000/assets/${assignImg}`}
               ></img>
             </OverlayTrigger>
           </div>

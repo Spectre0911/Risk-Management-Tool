@@ -17,6 +17,7 @@ import { AllSkills } from "../services/AllSkills";
 import { useSelector } from "react-redux";
 import { UpdateUser } from "../services/UpdateUser";
 import { GetImagePath } from "../services/GetImagePath";
+import { EditImagePath } from "../services/EditImagePath";
 import {
   Box,
   TextField,
@@ -51,6 +52,7 @@ const EditProfileForm = ({ handleClose }) => {
     bio: "",
     gitHubToken: "",
     gitHubName: "",
+    newPassword: "",
   });
 
   const reportBugSchema = yup.object().shape({
@@ -59,20 +61,28 @@ const EditProfileForm = ({ handleClose }) => {
     bio: yup.string().required("required"),
     gitHubToken: yup.string().required("required"),
     gitHubName: yup.string().required("required"),
+    newPassword: yup.string()
   });
 
   const [imagePath, setImagePath] = useState("");
+
+  const [image, setImage] = useState("");
   const login = useSelector((state) => state.email);
+    
+   
+
 
   useEffect(() => {
     GetImagePath({
       email: userEmail.email,
     }).then((data) => {
-      setImagePath(data);
-      if (data == "") {
-        setImagePath("jane.jpg");
+
+      console.log(data);
+        setImagePath(data);
+        if (data==""){
+            setImagePath("jane.jpg")
       }
-    });
+    console.log(imagePath)});
     GetUser({
       email: userEmail,
     }).then((data) => {
@@ -94,9 +104,38 @@ const EditProfileForm = ({ handleClose }) => {
   }, []);
 
   const uploadImage = (e) => {
-    setImagePath(URL.createObjectURL(e.target.files[0]));
-    console.log(e.target.files[0]);
+    console.log(e.target.files[0].name);
+    if (e.target.files[0].name!=""){
+      setImagePath(e.target.files[0].name);
+      setImage(e.target.files[0])
+      console.log(imagePath);
+    }
   };
+
+  useEffect(()=>{
+    console.log(image);
+    if (image){
+      let form = new FormData();
+      form.append('file', image);
+      fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: form,
+      });
+      var values = {};
+      values.email=userEmail;
+      values.path=image.name;
+      console.log("values", values);
+      fetch("http://localhost:5000/api/editImagePath", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      console.log(imagePath);
+    }
+  },[image])
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log("SUBMITTING");
@@ -120,7 +159,7 @@ const EditProfileForm = ({ handleClose }) => {
 
   return (
     <Formik
-      onSubmit={handleFormSubmit}
+      onSubmit={(e)=>{handleFormSubmit(e)}}
       initialValues={initialValuesRegister}
       validationSchema={reportBugSchema}
       enableReinitialize={true}
@@ -235,6 +274,18 @@ const EditProfileForm = ({ handleClose }) => {
                   sx={{ gridColumn: "span 2" }}
                 />
 
+                <TextField
+                  label="New Password"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.newPassword}
+                  type="password"
+                  name="newPassword"
+                  error={Boolean(touched.newPassword) && Boolean(errors.newPassword)}
+                  helperText={touched.newPassword && errors.newPassword}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                
                 <p style={{ gridColumn: "span 1", margin: "auto" }}>Skills:</p>
                 <Select
                   defaultValue={skills}
