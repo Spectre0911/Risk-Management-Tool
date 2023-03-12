@@ -3,6 +3,7 @@ import Modal from 'react-bootstrap/Modal';
 import {BsFillQuestionCircleFill} from 'react-icons/bs';
 import {GrClose} from 'react-icons/gr';
 import './Guide.css'
+// Guide content
 const images = [
   {
     title: 'Home Dashboard',
@@ -138,7 +139,6 @@ const images = [
     </div>,
   },
 ];
-
 const customStyles = {
   content: {
     top: '50%',
@@ -153,38 +153,44 @@ const customStyles = {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
 };
-
+// Define a functional component called Guide.
 const Guide = () => {
+  // Declare states for modalIsOpen and page with their initial values.
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [page, setPage] = useState(0);
 
+  // Define a function to open the modal window.
   const openModal = () => {
     setModalIsOpen(true);
     console.log(modalIsOpen);
   };
 
+  // Define a function to close the modal window.
   const closeModal = () => {
     setModalIsOpen(false);
   };
 
+  // Define a function to go to the next image in the guide.
   const nextPage = () => {
     setPage((page + 1) % images.length);
   };
 
+  // Define a function to go to the previous image in the guide.
   const prevPage = () => {
     setPage((page + images.length - 1) % images.length);
   };
 
-const handleKeyDown = (event) => {
-  if (event.key === 'ArrowLeft') {
-    // left arrow key
-    prevPage();
-  } else if (event.key === 'ArrowRight') {
-    // right arrow key
-    nextPage();
-  }
-};
-
+  // Define a function to handle keydown events.
+  const handleKeyDown = (event) => {
+    if (event.key === 'ArrowLeft') {
+      // If left arrow key is pressed, go to the previous page.
+      prevPage();
+    } else if (event.key === 'ArrowRight') {
+      // If right arrow key is pressed, go to the next page.
+      nextPage();
+    }
+  };
+// Render the guide component
   return (
     <>
       <button onClick={openModal} className="helpButton featureViewTasksButton">?</button>
