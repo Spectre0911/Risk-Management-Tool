@@ -367,7 +367,7 @@ app.post("/api/projects", async (req, postRes) => {
   try {
     // console.log(req.body);
     const allFeatures = await pool.query(
-      "SELECT * FROM (SELECT projectid, projectname, deadline, opened, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1) and ismanager = true) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
+      "SELECT * FROM (SELECT projectid, projectname, deadline, opened, (EXTRACT(epoch FROM CURRENT_TIMESTAMP - opened) / EXTRACT(epoch FROM deadline - opened)) * 100 AS progress, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1) and ismanager = true) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
       [req.body.email]
     );
     if (allFeatures.rows.length == 0) {
@@ -880,7 +880,7 @@ app.post("/api/getRisks", async (req, postRes) => {
       [req.body.projectid]
     );
     // console.log(allBugs.rows);
-    console.log(hardRisk.rows);
+    console.log(hardRisk.row);
     postRes.json(hardRisk.rows);
   } catch (err) {
     console.error(err.message);
