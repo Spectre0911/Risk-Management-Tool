@@ -1,31 +1,21 @@
 import React, { Component, useEffect, useState } from "react";
 import Gantt from "./Gantt/";
 import Toolbar from "./Toolbar/";
+import "./index.css";
 import { getAllDependencies } from "../services/AllDependencies";
-// const data = {
-//   data: [
-//     {
-//       id: 1,
-//       text: "Task #1",
-//       start_date: "2020-02-12",
-//       duration: 3,
-//       progress: 0.6,
-//     },
-//     {
-//       id: 2,
-//       text: "Task #2",
-//       start_date: "2020-02-16",
-//       duration: 3,
-//       progress: 0.4,
-//     },
-//   ],
-//   links: [{ id: 1, source: 1, target: 2, type: "0" }],
-// };
+import { CallTopoSort } from "../services/TopoSort";
+import { MinimiseOverlappingTasks } from "../services/MinimiseOverlap";
+import { MaxOne } from "../services/MaxOne";
+const data = {
+  data: [{}],
+  links: [],
+};
 
 const NewGantt = ({ projectid }) => {
   const [currentZoom, setZoom] = useState("Days");
   const [tasks, setTasks] = useState([]);
-  const [links, setLinks] = useState([]);
+  const [links, setLinks] = useState([{}]);
+
   const handleZoomChange = (zoom) => {
     setZoom(zoom);
   };
@@ -33,6 +23,12 @@ const NewGantt = ({ projectid }) => {
   const logDataUpdate = (tasks) => {
     console.log(tasks);
   };
+
+  useEffect(() => {
+    getAllFeatures({ projectid: projectid });
+    // sortTopologically({ projectid: projectid });
+  }, []);
+
   const getAllFeatures = (values) => {
     var outputList = [];
     var links = [];
@@ -99,17 +95,74 @@ const NewGantt = ({ projectid }) => {
         }
       });
   };
+  const sortTopologically = (values) => {
+    console.log("SORTING 1");
+    var outputList = [];
+    fetch("http://localhost:5000/api/features", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(values),
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        if (data != null) {
+          let featureDepMap = new Map();
+          let promises = [];
 
-  useEffect(() => {
-    getAllFeatures({ projectid: projectid });
-  }, []);
+          for (let i = 0; i < data.length; i++) {
+            let currentFeatureId = data[i].featureid;
+            let promise = getAllDependencies({ featureid: currentFeatureId })
+              .then((dependencyIds) => {
+                featureDepMap.set(currentFeatureId, dependencyIds);
+              })
+              .catch((error) => {
+                featureDepMap.set(currentFeatureId, []);
+              });
+            promises.push(promise);
+          }
+
+          Promise.all(promises)
+            .then(() => {
+              CallTopoSort({
+                dependencies: featureDepMap,
+                projectid: projectid,
+              });
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        }
+      });
+  };
 
   return (
     <div>
       <div className="zoom-bar">
+        {/* <button
+          className="toplogicalOrderButton"
+          onClick={() => {
+            sortTopologically({ projectid: projectid });
+          }}
+        >
+          Topological ordering
+        </button>
+        <button
+          className="toplogicalOrderButton max"
+          onClick={() => {
+            // sortTopologically({ projectid: projectid });
+            MaxOne({ projectid: projectid });
+          }}
+        >
+          Maximum 1
+        </button> */}
         <Toolbar zoom={currentZoom} onZoomChange={handleZoomChange} />
       </div>
       <div className="gantt-container">
+        {/* {tasks} */}
         <Gantt
           tasks={{ data: tasks, links: links }}
           zoom={currentZoom}

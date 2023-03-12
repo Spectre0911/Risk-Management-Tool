@@ -76,31 +76,45 @@ const Table = () => {
     },
   ]);
   useEffect(() => {
-    console.log(login);
     AssignedProjects({ email: login.email }).then((data) => {
-      console.log("ASSIGNED PROJECTS");
-      console.log(data);
-      console.log("---------");
-    });
-    TasksToComplete({ email: login.email }).then((data) => {
-      let newTasks = [];
-      data.map((task) => {
-        let newTask = {
-          taskId: task.taskid.toString(),
-          taskName: task.taskname,
-          featureId: task.featureid.toString(),
-          projectId: task.projectid.toString(),
-          projectName: task.projectname,
-          taskPriority: ["Core", "Optional", "Aesthetic"][task.priority - 1],
-          taskStatus: "In Progress",
-          featureName: task.featurename,
-          daysLeft: task.daysleft,
+      let newContacts = [];
+      data.map((project) => {
+        console.log("--------------------");
+        console.log(project.projectid);
+        let newProject = {
+          projectId: project.projectid.toString(),
+          projectName: project.projectname,
+          projectManager: project.name,
+          startTime: new Date(project.opened).toLocaleDateString("en-GB"),
+          endTime: new Date(project.deadline).toLocaleDateString("en-GB"),
+          tasksToDo: project.count.toString(),
+          daysLeft: project.daysleft.toString(),
         };
-        console.log(newTask);
-        newTasks.push(newTask);
+        newContacts.push(newProject);
       });
-      setData(newTasks);
+      console.log("NEW CONTACT");
+      console.log(newContacts);
+
+      setContacts(newContacts);
     });
+    // TasksToComplete({ email: login.email }).then((data) => {
+    //   let newTasks = [];
+    //   data.map((task) => {
+    //     let newTask = {
+    //       taskId: task.taskid.toString(),
+    //       taskName: task.taskname,
+    //       featureId: task.featureid.toString(),
+    //       projectId: task.projectid.toString(),
+    //       projectName: task.projectname,
+    //       taskPriority: ["Core", "Optional", "Aesthetic"][task.priority - 1],
+    //       taskStatus: "In Progress",
+    //       featureName: task.featurename,
+    //       daysLeft: task.daysleft,
+    //     };
+    //     newTasks.push(newTask);
+    //   });
+    //   setData(newTasks);
+    // });
     // setData(contacts);
   }, []);
 

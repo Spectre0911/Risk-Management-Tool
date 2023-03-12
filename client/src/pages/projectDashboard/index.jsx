@@ -27,14 +27,17 @@ import { OrderedUsers } from "../services/OrderedUsers";
 import { AddTeamMember } from "../services/AddTeamMember";
 import { EndProject } from "../services/EndProject";
 import { OverallRisk } from "../services/OverallRisk";
+import { AddRisk } from "../services/AddRisk";
+import { GetImagePathById } from "../services/GetImagePathById";
 Chart.register(ArcElement);
 Chart.register([Tooltip]);
 Chart.register([Legend]);
 const ProjectDashboard = () => {
   const navigate = useNavigate();
   const { projectId } = useParams();
-  const labelsRisk = ["Budget", "Team", "Time", "Code", "Technical"];
-  const [dataRisk, setDataRisk] = useState([29, 24, 25, 25, 10]);
+  const labelsRisk = ["Team", "Time", "Code", "Technical"];
+  const [dataRisk, setDataRisk] = useState([25, 25, 25, 25]);
+  const [overallRisk, setOverallRisk] = useState(0);
   const borderColorRisk = ["rgba(255,206,86,0.2)"];
   const backgroundColorRisk = [
     "rgba(232,99,132,1)",
@@ -111,11 +114,7 @@ const ProjectDashboard = () => {
     setGanttViewState(e.target.value);
   };
 
-  const [teamMembersOptions, setTeamMemberOptions] = useState([
-    { value: "1", label: "Joshua" },
-    { value: "2", label: "Morgan" },
-    { value: "3", label: "Sanjula" },
-  ]);
+  const [teamMembersOptions, setTeamMemberOptions] = useState([]);
 
   const [teamMembersList, setTeamMembersList] = useState([]);
   const handleTeamMemberChange = (e) => {
@@ -150,12 +149,24 @@ const ProjectDashboard = () => {
   };
   //Fetching github commit data
   const [tempData, setTempData] = useState([]);
+  const [teamImages, setTeamImages] = useState([]);
   const [dataset, setDataset] = useState([]);
   useEffect(() => {
-    // OverallRisk({ projectId: projectId }).then((data) => {
-    //   console.log("OVERALL RISK");
-    //   console.log(data);
-    // });
+    OverallRisk({ projectId: projectId }).then((data) => {
+      console.log("OVERALL RISK");
+      let team = (data.employee_replacement + data.feedback) / 7;
+      let time = (data.delay + data.features_changed) / 7;
+      let codeQuality = data.code_quality / 7;
+      let technical = (data.skillset + data.success_story) / 7;
+      setDataRisk([team, time, codeQuality, technical]);
+      setOverallRisk(parseFloat(data.overall_result.toFixed(2)));
+      AddRisk({
+        projectid: projectId,
+        risk: parseFloat(data.overall_result.toFixed(2)),
+      });
+
+      console.log(data);
+    });
     OrderedUsers({ projectId: projectId }).then((data) => {
       setTeamMemberOptions(data);
     });
@@ -278,6 +289,22 @@ const ProjectDashboard = () => {
     })();
   }, []);
 
+
+  useEffect(()=>{
+    setTeamImages([]);
+    teamMembers.map((teamMember, index)=>{
+      GetImagePathById({
+        id: teamMember.userid,
+      }).then((data) => {
+        setTeamImages([...teamImages, data]);
+          if (data==""){
+            setTeamImages([...teamImages, "jane.jpg"]);
+        }});  
+    })
+  },[teamMembers])
+
+
+
   //Fetching github commit data
   const [dates, setDates] = useState([]);
   const [commits, setCommits] = useState([]);
@@ -382,7 +409,7 @@ const ProjectDashboard = () => {
               cutOut={60}
             />
             <div className="donutText risk">
-              <p>7.8/10</p>
+              <p>{overallRisk * 10} / 10</p>
             </div>
           </div>
         </div>
@@ -489,6 +516,7 @@ const ProjectDashboard = () => {
 
             {teamMembers.map((member, index) => {
               const imageUrl = member.image;
+              console.log(teamMembers);
               return (
                 <div className="projectDashboardProfile">
                   <p className="projectDashboardProfileName">{member.name}</p>
@@ -498,7 +526,7 @@ const ProjectDashboard = () => {
                       key={index}
                       className="profilePic"
                       style={{ marginLeft: "0px" }}
-                      src={imageUrl}
+                      src={`http://localhost:5000/assets/${teamImages[index]}`}
                     ></img>
                   </div>
                   <div className="projectDashboardSkill">Skills:</div>

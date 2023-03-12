@@ -17,8 +17,7 @@ describe("profile management", () =>{
         }
         it("Register", async () => {
         const response = await request(baseURL).post("/api/createAccount").send(registerDetails);
-        // expect(response.statusCode).toBe(200);
-        expect(true).toEqual(true);
+        expect(response.statusCode).toBe(200);
     });
 
 
@@ -32,8 +31,8 @@ describe("profile management", () =>{
         }
         it("Register with duplicate email", async () => {
         const response = await request(baseURL).post("/api/createAccount").send(registerDetails);
-        // expect(response.statusCode).toBe(400);
-        expect(true).toEqual(true);
+        expect(response.statusCode).toBe(400);
+
     });
     
     })
@@ -54,8 +53,7 @@ describe("profile management", () =>{
         }
         it("login incorrect credentials", async () => {
         const response = await request(baseURL).post("/api/login").send(loginDetails);
-        // expect(response.body.loggedIn).toBe(false);
-        expect(true).toEqual(true);
+        expect(response.body.loggedIn).toBe(false);
         });
     })
 })
@@ -71,9 +69,8 @@ describe("project management", () => {
         email:"jack@mail.com"
     }
     it("create project", async () => {
-        expect(true).toEqual(true);
-        // const response = await request(baseURL).post("/api/createProject").send(projectDetails);
-        // expect(response.statusCode).toBe(200); 
+        const response = await request(baseURL).post("/api/createProject").send(projectDetails);
+        expect(response.statusCode).toBe(200); 
     
     });
 
@@ -90,9 +87,8 @@ describe("project management", () => {
         difficulty:1
     }
     it("create feature", async () => {
-    expect(true).toEqual(true);
-    // const response = await request(baseURL).post("/api/createFeature").send(featureDetails);
-    // expect(response.statusCode).toBe(400); //Should be 200
+    const response = await request(baseURL).post("/api/createFeature").send(featureDetails);
+    expect(response.statusCode).toBe(400); //Should be 200
     });
 
 
@@ -102,9 +98,8 @@ describe("project management", () => {
         lastName:"2023-12-10",
     }
     it("create task", async () => {
-    expect(true).toEqual(true);
-    // const response = await request(baseURL).post("/api/createBug").send(bugDetails);
-    // expect(response.statusCode).toBe(400); //Should be 200
+    const response = await request(baseURL).post("/api/createBug").send(bugDetails);
+    expect(response.statusCode).toBe(400); //Should be 200
     });
 
     var teamMember = {
@@ -112,9 +107,8 @@ describe("project management", () => {
         projectid:1,
     }
     it("Add user to project", async () => {
-    expect(true).toEqual(true);
-    // const response = await request(baseURL).post("/api/addTeamMember").send(teamMember);
-    // expect(response.statusCode).toBe(400); //Should be 200
+    const response = await request(baseURL).post("/api/addTeamMember").send(teamMember);
+    expect(response.statusCode).toBe(400); //Should be 200
     });
 
     var teamMember = {
@@ -122,9 +116,8 @@ describe("project management", () => {
         projectid:1,
     }
     it("Fetch task", async () => {
-    expect(true).toEqual(true);
-    // const response = await request(baseURL).post("/api/addTeamMember").send(teamMember);
-    // expect(response.statusCode).toBe(400); //Should be 200
+    const response = await request(baseURL).post("/api/addTeamMember").send(teamMember);
+    expect(response.statusCode).toBe(400); //Should be 200
     });
 
     

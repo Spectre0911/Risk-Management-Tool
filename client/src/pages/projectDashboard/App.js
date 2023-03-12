@@ -5,6 +5,7 @@ import "./index.css";
 import { getAllDependencies } from "../services/AllDependencies";
 import { CallTopoSort } from "../services/TopoSort";
 import { MinimiseOverlappingTasks } from "../services/MinimiseOverlap";
+import { MaxOne } from "../services/MaxOne";
 const data = {
   data: [{}],
   links: [],
@@ -152,7 +153,8 @@ const NewGantt = ({ projectid }) => {
         <button
           className="toplogicalOrderButton max"
           onClick={() => {
-            sortTopologically({ projectid: projectid });
+            // sortTopologically({ projectid: projectid });
+            MaxOne({ projectid: projectid });
           }}
         >
           Maximum 1

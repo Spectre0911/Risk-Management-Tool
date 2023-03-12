@@ -16,6 +16,8 @@ import { AdminSkills } from "../services/AdminSkills";
 import { AllSkills } from "../services/AllSkills";
 import { useSelector } from "react-redux";
 import { UpdateUser } from "../services/UpdateUser";
+import { GetImagePath } from "../services/GetImagePath";
+import { EditImagePath } from "../services/EditImagePath";
 import {
   Box,
   TextField,
@@ -30,7 +32,6 @@ import * as yup from "yup";
 
 const EditProfileForm = ({ handleClose }) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const [image, setImage] = useState("http://localhost:5000/assets/jane.jpg");
   const { palette } = useTheme();
   const [userInfo, setUserInfo] = useState([]);
   const [userEmail, setUserEmail] = useState(
@@ -43,10 +44,7 @@ const EditProfileForm = ({ handleClose }) => {
     { value: "Backend", label: "Backend", experience: "0" },
   ]);
 
-  const [skills, setSkills] = useState([
-    { value: "Python", label: "Python", experience: "0" },
-    { value: "React", label: "React", experience: "0" },
-  ]);
+  const [skills, setSkills] = useState([]);
   const [skillExperience, setSkillExperience] = useState([]);
   const [initialValuesRegister, setInitialValueRegister] = useState({
     name: "",
@@ -54,6 +52,7 @@ const EditProfileForm = ({ handleClose }) => {
     bio: "",
     gitHubToken: "",
     gitHubName: "",
+    newPassword: "",
   });
 
   const reportBugSchema = yup.object().shape({
@@ -61,15 +60,32 @@ const EditProfileForm = ({ handleClose }) => {
     email: yup.string().required("required"),
     bio: yup.string().required("required"),
     gitHubToken: yup.string().required("required"),
-    gitHubName: yup.string().required("required")
+    gitHubName: yup.string().required("required"),
+    newPassword: yup.string()
   });
 
+  const [imagePath, setImagePath] = useState("");
+
+  const [image, setImage] = useState("");
+  const login = useSelector((state) => state.email);
+    
+   
+
+
   useEffect(() => {
-    console.log("SETTING");
+    GetImagePath({
+      email: userEmail.email,
+    }).then((data) => {
+
+      console.log(data);
+        setImagePath(data);
+        if (data==""){
+            setImagePath("jane.jpg")
+      }
+    console.log(imagePath)});
     GetUser({
       email: userEmail,
     }).then((data) => {
-      console.log(data);
       setInitialValueRegister({
         name: data.name || "",
         email: data.email || "",
@@ -79,23 +95,50 @@ const EditProfileForm = ({ handleClose }) => {
       console.log(initialValuesRegister);
     });
     AdminSkills({ email: userEmail }).then((data) => {
-      console.log("ADMIN SKILLS");
-      console.log(data);
       setSkills(data);
     });
 
     AllSkills({ email: userEmail }).then((data) => {
-      console.log(data);
       setSkillOptions(data);
     });
   }, []);
 
   const uploadImage = (e) => {
-    setImage(URL.createObjectURL(e.target.files[0]));
-    console.log(e.target.files[0]);
+    console.log(e.target.files[0].name);
+    if (e.target.files[0].name!=""){
+      setImagePath(e.target.files[0].name);
+      setImage(e.target.files[0])
+      console.log(imagePath);
+    }
   };
 
+  useEffect(()=>{
+    console.log(image);
+    if (image){
+      let form = new FormData();
+      form.append('file', image);
+      fetch("http://localhost:5000/upload", {
+        method: "POST",
+        body: form,
+      });
+      var values = {};
+      values.email=userEmail;
+      values.path=image.name;
+      console.log("values", values);
+      fetch("http://localhost:5000/api/editImagePath", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      console.log(imagePath);
+    }
+  },[image])
+
   const handleFormSubmit = async (values, onSubmitProps) => {
+    console.log("SUBMITTING");
     console.log(skills);
     console.log(values);
     try {
@@ -116,7 +159,7 @@ const EditProfileForm = ({ handleClose }) => {
 
   return (
     <Formik
-      onSubmit={handleFormSubmit}
+      onSubmit={(e)=>{handleFormSubmit(e)}}
       initialValues={initialValuesRegister}
       validationSchema={reportBugSchema}
       enableReinitialize={true}
@@ -151,7 +194,7 @@ const EditProfileForm = ({ handleClose }) => {
                 >
                   <img
                     className="editProfilePic"
-                    src={image}
+                    src={`http://localhost:5000/assets/${imagePath}`}
                     style={{
                       margin: "auto",
                       borderRadius: "200px",
@@ -231,6 +274,18 @@ const EditProfileForm = ({ handleClose }) => {
                   sx={{ gridColumn: "span 2" }}
                 />
 
+                <TextField
+                  label="New Password"
+                  onBlur={handleBlur}
+                  onChange={handleChange}
+                  value={values.newPassword}
+                  type="password"
+                  name="newPassword"
+                  error={Boolean(touched.newPassword) && Boolean(errors.newPassword)}
+                  helperText={touched.newPassword && errors.newPassword}
+                  sx={{ gridColumn: "span 4" }}
+                />
+                
                 <p style={{ gridColumn: "span 1", margin: "auto" }}>Skills:</p>
                 <Select
                   defaultValue={skills}

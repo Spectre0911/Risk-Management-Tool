@@ -25,28 +25,7 @@ const ProjectTable = ({ setActiveProjects }) => {
   const [data, setData] = useState([]);
   const email = useSelector((state) => state.email);
 
-  const [contacts, setContacts] = useState([
-    {
-      projectId: "1",
-      projectName: "cs261",
-      startDate: "26/12/2022",
-      endDate: "26/02/2023",
-      closed: "false",
-      tasksPending: 2,
-      progress: 20,
-      risk: 10,
-    },
-    {
-      projectId: "2",
-      projectName: "cs261",
-      startDate: "26/12/2022",
-      endDate: "10/04/2023",
-      closed: "false",
-      tasksPending: 3,
-      progress: 20,
-      risk: 10,
-    },
-  ]);
+  const [contacts, setContacts] = useState([]);
 
   const doFetch = async () => {
     AllProjects(email).then((data) => {

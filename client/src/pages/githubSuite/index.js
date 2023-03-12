@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState }  from 'react';
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { connect } from "react-redux"
+import { useSelector } from 'react-redux';
 import {FaBell} from 'react-icons/fa';
 import {GrClose} from 'react-icons/gr';
 import {Button} from 'react-bootstrap';
@@ -32,6 +33,7 @@ import { setDate } from 'date-fns';
 import Table from "./Table";
 import Warning from './warning';
 import { Scrollbars } from "react-custom-scrollbars";
+import { GetGithubDetails } from '../services/GetGithubDetails';
 Chart.register(
     CategoryScale,
     LinearScale,
@@ -44,6 +46,7 @@ Chart.register(
 
 const GithubIntegrator = () => {
     const {projectId} = useParams();
+    const login = useSelector((state) => state.email);
     const [dataset, setDataset] = useState([]);
     const colors = ['rgb(230, 25, 75)', 'rgb(60, 180, 75)', 'rgb(255, 225, 25)', 'rgb(0, 130, 200)', 'rgb(245, 130, 48)', 'rgb(145, 30, 180)', 'rgb(70, 240, 240)', 'rgb(240, 50, 230)', 'rgb(210, 245, 60)', 'rgb(250, 190, 212)', 'rgb(0, 128, 128)', 'rgb(220, 190, 255)', 'rgb(170, 110, 40)', 'rgb(255, 250, 200)', 'rgb(128, 0, 0)', 'rgb(170, 255, 195)', 'rgb(128, 128, 0)', 'rgb(255, 215, 180)', 'rgb(0, 0, 128)', 'rgb(128, 128, 128)', 'rgb(0, 0, 0)']
 
@@ -98,18 +101,40 @@ const GithubIntegrator = () => {
       const [data, setData] = useState();
 
 
-      const octokit = new Octokit({ 
+      var [octokit, setoctoKit] = useState(new Octokit({ 
         auth: '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',
-      });
+      }));
+
+
       const [tempData, setTempData] = useState([]);
       
+      const [authKey, setAuthKey] = useState("");
+      const [reponame, setReponame] = useState("");
+      const [githubName, setgithubName] = useState("");
+      useEffect(()=>{
+        GetGithubDetails({
+            email: login.email,
+            projectId: projectId
+        }).then((data)=>{
+            if (data[0]!=""){
+                setoctoKit(new Octokit({ 
+                    auth: data[0],
+                }))
+                setReponame(data[2]);
+                setgithubName(data[1]);
+            }
+        })
+      },[])
+
       useEffect(() => {
         let fetchData = [];
+        console.log("fetching");
+        console.log(githubName, reponame);
         (async () => {
             try{
                 const iterator = await octokit.paginate.iterator("GET /repos/{owner}/{repo}/commits", {
-                    owner: "Spectre0911",
-                    repo: "CS261",
+                    owner: githubName,
+                    repo: reponame,
                     per_page:100,
                 });
                 for await (const {data} of iterator) {
@@ -127,7 +152,7 @@ const GithubIntegrator = () => {
                 console.error(error)
             }
         })();
-      },[]);
+      },[githubName]);
 
       const [tempCodeIssues, setTempCodeIssues] = useState([]);
       useEffect(() => {
@@ -135,8 +160,8 @@ const GithubIntegrator = () => {
         (async () => {
             try{
                 const iterator = await octokit.paginate.iterator("GET /repos/{owner}/{repo}/code-scanning/alerts", {
-                    owner: "sanjula-hettiarachchige",
-                    repo: "fileman",
+                    owner: githubName,
+                    repo: reponame,
                     per_page:100,
                 });
                 for await (const {data} of iterator) {
@@ -154,7 +179,65 @@ const GithubIntegrator = () => {
                 console.error(error)
             }
         })();
-      },[]);
+      },[githubName]);
+
+    // Uncomment to display CS261 project data
+    //   useEffect(() => {
+    //     let fetchData = [];
+    //     (async () => {
+    //         try{
+    //             const iterator = await octokit.paginate.iterator("GET /repos/{owner}/{repo}/commits", {
+    //                 owner: "Spectre0911",
+    //                 repo: "CS261",
+    //                 per_page:100,
+    //             });
+    //             for await (const {data} of iterator) {
+    //                 for (var i=0; i<data.length; i++){
+    //                     fetchData = [...fetchData,data[i]];
+    //                 }
+    //             }
+                
+    //             setTempData(fetchData);
+    
+    //         } catch (error) {
+    //             if (error.response) {
+    //             console.error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`)
+    //             }
+    //             console.error(error)
+    //         }
+    //     })();
+    //   },[]);
+
+    //   const [tempCodeIssues, setTempCodeIssues] = useState([]);
+    //   useEffect(() => {
+    //     let fetchData = [];
+    //     (async () => {
+    //         try{
+    //             const iterator = await octokit.paginate.iterator("GET /repos/{owner}/{repo}/code-scanning/alerts", {
+    //                 owner: "sanjula-hettiarachchige",
+    //                 repo: "fileman",
+    //                 per_page:100,
+    //             });
+    //             for await (const {data} of iterator) {
+    //                 for (var i=0; i<data.length; i++){
+    //                     fetchData = [...fetchData,data[i]];
+    //                 }
+    //             }
+                
+    //             setTempCodeIssues(fetchData);
+    
+    //         } catch (error) {
+    //             if (error.response) {
+    //             console.error(`Error! Status: ${error.response.status}. Message: ${error.response.data.message}`)
+    //             }
+    //             console.error(error)
+    //         }
+    //     })();
+    //   },[]);
+
+
+
+
 
     useEffect(() => {
         if (tempData.length==0){

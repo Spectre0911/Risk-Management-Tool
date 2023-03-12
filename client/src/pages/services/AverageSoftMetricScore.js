@@ -1,6 +1,6 @@
-export const AssignedProjects = (values) => {
+export const AverageSoftMetrics = (values) => {
   return new Promise((resolve, reject) => {
-    fetch("http://localhost:5000/api/assignedProjects", {
+    fetch("http://localhost:5000/api/averageSoftMetrics", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
