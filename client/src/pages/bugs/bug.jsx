@@ -18,7 +18,7 @@ import { GrClose } from "react-icons/gr";
 import "./bug.css";
 import BugDetailForm from "./bugDetailForm";
 import { GetImagePathById } from "../services/GetImagePathById";
-
+import { CompleteBug } from "../services/CompleteBug";
 const Bug = ({ data, deleteBug, key }) => {
   const [show, setShow] = useState(false);
   const handleClose = () => {
@@ -40,9 +40,9 @@ const Bug = ({ data, deleteBug, key }) => {
     console.log(show);
   };
 
-  const complete = (bugId) =>{
-    console.log("completed", bugId);
-  }
+  const complete = (bugId) => {
+    CompleteBug({ bugid: bugId });
+  };
 
   const devId = data.ReportedByUser.id;
   const assignId = data.AssignedToUser.id;
@@ -53,22 +53,24 @@ const Bug = ({ data, deleteBug, key }) => {
   useEffect(() => {
     // Get all active projects
     GetImagePathById({
-      id: devId
+      id: devId,
     }).then((data) => {
-        setDevImage(data);
-        if (data==""){
-          setDevImage("jane.jpg")
-        }});
-    
+      setDevImage(data);
+      if (data == "") {
+        setDevImage("jane.jpg");
+      }
+    });
+
     GetImagePathById({
-      id: assignId
+      id: assignId,
     }).then((data) => {
       setAssignImg(data);
-        if (data==""){
-          setAssignImg("jane.jpg")
-      }});  
+      if (data == "") {
+        setAssignImg("jane.jpg");
+      }
+    });
     // Get the number of notifications
-});
+  });
 
   return (
     <div className="bugContainer">
@@ -99,10 +101,13 @@ const Bug = ({ data, deleteBug, key }) => {
           <button className="bugViewButton" onClick={handleEditShow}>
             Details
           </button>
-          <button className="bugAssignButton" type="submit" onClick={(()=>
-          {
-            complete(data.bugId)
-          })}>
+          <button
+            className="bugAssignButton"
+            type="submit"
+            onClick={() => {
+              complete(data.bugId);
+            }}
+          >
             Completed
           </button>
         </div>

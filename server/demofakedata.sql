@@ -85,7 +85,7 @@ INSERT INTO userskill (userid, skill, sklevel) VALUES
 
 
 INSERT INTO userproject (userid, projectid, ismanager) VALUES
-(1, 1, false),
+(1, 1, true),
 (2, 1, false),
 (3, 1, true),
 (4, 1, true),
@@ -96,7 +96,7 @@ INSERT INTO userproject (userid, projectid, ismanager) VALUES
 (9, 1, false),
 (10, 1, false);
 
-INSERT INTO features (featureid, projectid, featurename, featuredesc, starttime, endtime, completed, difficulty, priority, status, currentrisk, progress, members) VALUES
+INSERT INTO features ( projectid, featurename, featuredesc, starttime, endtime, completed, difficulty, priority, status, currentrisk, progress, members) VALUES
 (1, 'Login Page', 'Add a login page to the project', '2023-03-25 09:00:00', '2023-03-30 18:00:00', false, 3, 2, 1, 10, 0, 2),
 (1, 'User Dashboard', 'Add a user dashboard page to the project', '2023-03-25 09:00:00', '2023-03-31 18:00:00', false, 5, 1, 2, 30, 0, 3),
 (1, 'Settings Page', 'Add a settings page to the project', '2023-03-25 09:00:00', '2023-03-29 18:00:00', false, 4, 2, 1, 20, 0, 2),
