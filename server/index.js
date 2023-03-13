@@ -917,7 +917,7 @@ app.post("/api/user", async (req, postRes) => {
       );
 
       const userInfo = await pool.query(
-        "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio FROM users WHERE userid = $1",
+        "SELECT CONCAT(firstname, ' ', lastname) as Name, email, githubtoken, bio, githubuname FROM users WHERE userid = $1",
         [userId.rows[0].userid]
       );
       postRes.json(userInfo.rows[0]);
