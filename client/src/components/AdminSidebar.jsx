@@ -53,7 +53,11 @@ const AdminSidebar = ({projectId, teamMember}) => {
         <Sidebar className="sideBar" collapsed={false}>
             <Menu iconShape='square'>
                 <div className="profilePicContainer">
-                    <img className='profilePic' src={`http://localhost:5000/assets/${imagePath}`}></img>
+                    <img className='profilePic' src={`http://localhost:5000/assets/${imagePath}`}
+                    onError={({ currentTarget }) => {
+                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.src="http://localhost:5000/assets/placeholder.png";
+                      }}></img>
                     <p className="welcomeMessage">{username}</p>
                 </div>
                 <MenuItem className="menuItem dashboard" icon={<RiDashboardFill />} onClick={() => navigate(`/`)}>

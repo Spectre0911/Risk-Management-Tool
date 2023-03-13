@@ -7,6 +7,7 @@ import Dashboard from '../dashboard';
 import Bugs from '../bugs';
 import Modal from 'react-bootstrap/Modal';
 import {GrClose} from 'react-icons/gr';
+import {CgProfile} from 'react-icons/cg';
 import EditProfileForm from './editProfileForm';
 import ProjectDashboard from '../projectDashboard';
 import TaskDashboard from '../viewTask';
@@ -41,7 +42,7 @@ const Admin = () => {
         <div className="rightPane">
             <div className='titleBar'>
               <button className="accountInitialsCircle" onClick={handleShow}>
-                <p className="accountInitials">JA</p>
+                <p className="accountInitials"><CgProfile/></p>
               </button>
               <div>
                 <Modal className="addProfileModal" fade={false} show={show} onHide={handleClose}>
