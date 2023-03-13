@@ -22,8 +22,9 @@ import Dropzone from "react-dropzone";
 import * as yup from "yup";
 import BugReportForm from "./bugReportForm";
 import EditProfileForm from "./FeatureForm";
+import { GetTasks } from "../services/GetTasks";
 const TaskDashboard = ({ projectid }) => {
-  const percentage = 70;
+  const percentage = 0;
   const { featureId } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const toggleOverlay = () => {
@@ -42,6 +43,25 @@ const TaskDashboard = ({ projectid }) => {
     left: `calc(${percentage}%)`,
     top: "9px",
   });
+
+  const [tasks, setTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([0]);
+  useEffect(() => {
+    GetTasks({
+       projectid: projectid 
+    }).then((data)=>{
+        console.log(data);
+        setTasks(data);
+        for (var i=0; i<data.length; i++){
+            var temp = 0;
+            if (data[i].status="completed"){
+                temp+=1
+            }
+            setCompletedTasks(temp);
+        }
+    })
+  }, []);
+
 
   useEffect(() => {
     const head = document.getElementsByTagName("head")[0];
@@ -71,7 +91,7 @@ const TaskDashboard = ({ projectid }) => {
   return (
     <div className="bugBox">
       <div className="bugBoxTitle">
-        <p>List of tasks: {featureId}</p>
+        <p>List of tasks</p>
       </div>
 
       <div className="featureProgress">
@@ -86,7 +106,7 @@ const TaskDashboard = ({ projectid }) => {
           </div>
           <ProgressBar now={percentage} />
           <div className="progressAddTaskButtonontainer">
-            <p className="progressText">2/3 Tasks Completed</p>
+            <p className="progressText">{completedTasks}/{tasks.length} Tasks Completed</p>
             <button className="progressAddTaskButton" onClick={handleShow}>
               Add Task
             </button>
@@ -117,18 +137,32 @@ const TaskDashboard = ({ projectid }) => {
           </Modal.Body>
         </Modal>
       </div>
+      {tasks.length!=0 ?   
       <div className="bugBoxTitle" style={{ paddingTop: "20px" }}>
         <p style={{ fontSize: "30px" }}>To do:</p>
       </div>
-      <Bug />
+      :null}
+      {tasks.map((task, index)=>{
+        <Bug task={task}/>
+      })}
+      
+      {tasks.length!=0 ?   
       <div className="bugBoxTitle" style={{ paddingTop: "20px" }}>
         <p style={{ fontSize: "30px" }}>Completed:</p>
       </div>
-      <Bug />
+      :null}
+
+      {tasks.map((task, index)=>{
+        <Bug task={task}/>})}
+      
+      {tasks.length!=0 ?  
       <div className="bugBoxTitle" style={{ paddingTop: "20px" }}>
         <p style={{ fontSize: "30px" }}>Verified</p>
       </div>
-      <Bug />
+      :null}
+      {tasks.map((task, index)=>{
+        <Bug task={task}/>
+      })}
     </div>
   );
 };
