@@ -11,81 +11,9 @@ import { OverallRisk } from "../services/OverallRisk";
 import { TasksToCompletePID } from "../services/TasksToCompletePID";
 const ManagedProjects = () => {
   const login = useSelector((state) => state.email.email);
-  const [data, setData] = useState([
-    {
-      projectId: "1",
-      projectName: "CS261 Coursework",
-      projectDescription: "Group coursework run by James Archbold",
-      progress: 70,
-      // teamMembers: [{
-      //     name:"Jack Arnold",
-      //     imagePath: "jane.jpg"
-      //     },
-      //     {
-      //     name:"Jane Arnold",
-      //     imagePath: "jane.jpg"
-      // }],
-      startDate: "12/10/22",
-      endDate: "12/12/22",
-      tasksPending: "2",
-      risk: 50,
-    },
-    {
-      projectId: "1",
-      projectName: "CS261 Coursework",
-      projectDescription: "Group coursework run by James Archbold",
-      progress: 70,
-      // teamMembers: [{
-      //     name:"Jack Arnold",
-      //     imagePath: "jane.jpg"
-      //     },
-      //     {
-      //     name:"Jane Arnold",
-      //     imagePath: "jane.jpg"
-      // }],
-      startDate: "12/10/22",
-      endDate: "12/12/22",
-      tasksPending: "2",
-      risk: 50,
-    },
-    {
-      projectId: "1",
-      projectName: "CS261 Coursework",
-      projectDescription: "Group coursework run by James Archbold",
-      progress: 70,
-      // teamMembers: [{
-      //     name:"Jack Arnold",
-      //     imagePath: "jane.jpg"
-      //     },
-      //     {
-      //     name:"Jane Arnold",
-      //     imagePath: "jane.jpg"
-      // }],
-      startDate: "12/10/22",
-      endDate: "12/12/22",
-      tasksPending: "2",
-      risk: 50,
-    },
-    {
-      projectId: "1",
-      projectName: "CS261 Coursework",
-      projectDescription: "Group coursework run by James Archbold",
-      progress: 70,
-      // teamMembers: [{
-      //     name:"Jack Arnold",
-      //     imagePath: "jane.jpg"
-      //     },
-      //     {
-      //     name:"Jane Arnold",
-      //     imagePath: "jane.jpg"
-      // }],
-      startDate: "12/10/22",
-      endDate: "12/12/22",
-      tasksPending: "2",
-      risk: 50,
-    },
-  ]);
+  const [data, setData] = useState([]);
   useEffect(() => {
+    console.log("d");
     AllProjects({ email: login }).then((data) => {
       Promise.all(
         data.map(async (project) => {
@@ -94,7 +22,6 @@ const ManagedProjects = () => {
             projectId: project.projectid,
           });
           console.log(tasksToComplete);
-
           return {
             projectId: project.projectid.toString(),
             projectName: project.projectname,
@@ -109,10 +36,17 @@ const ManagedProjects = () => {
             ).toString(),
             progress: (Math.round(project.progress * 100) / 100).toString(),
             tasksPending: tasksToComplete.toString() || "0",
+            
+
           };
+          
         })
-      ).then((newContacts) => setData(newContacts));
+      ).then((newContacts) => {
+        console.log("fff");
+        console.log(newContacts);
+        setData(newContacts)});
     });
+    console.log(data);
   }, []);
 
   return (
