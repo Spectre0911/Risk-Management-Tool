@@ -13,14 +13,14 @@ const ManagedProjects = () => {
         projectName:"CS261 Coursework",
         projectDescription:"Group coursework run by James Archbold",
         progress:70,
-        teamMembers: [{
-            name:"Jack Arnold",
-            imagePath: "jane.jpg"
-            },
-            {
-            name:"Jane Arnold",
-            imagePath: "jane.jpg"
-        }],
+        // teamMembers: [{
+        //     name:"Jack Arnold",
+        //     imagePath: "jane.jpg"
+        //     },
+        //     {
+        //     name:"Jane Arnold",
+        //     imagePath: "jane.jpg"
+        // }],
         startDate: "12/10/22",
         endDate: "12/12/22",
         tasksPending:"2",
@@ -31,14 +31,14 @@ const ManagedProjects = () => {
         projectName:"CS261 Coursework",
         projectDescription:"Group coursework run by James Archbold",
         progress:70,
-        teamMembers: [{
-            name:"Jack Arnold",
-            imagePath: "jane.jpg"
-            },
-            {
-            name:"Jane Arnold",
-            imagePath: "jane.jpg"
-        }],
+        // teamMembers: [{
+        //     name:"Jack Arnold",
+        //     imagePath: "jane.jpg"
+        //     },
+        //     {
+        //     name:"Jane Arnold",
+        //     imagePath: "jane.jpg"
+        // }],
         startDate: "12/10/22",
         endDate: "12/12/22",
         tasksPending:"2",
@@ -49,14 +49,14 @@ const ManagedProjects = () => {
         projectName:"CS261 Coursework",
         projectDescription:"Group coursework run by James Archbold",
         progress:70,
-        teamMembers: [{
-            name:"Jack Arnold",
-            imagePath: "jane.jpg"
-            },
-            {
-            name:"Jane Arnold",
-            imagePath: "jane.jpg"
-        }],
+        // teamMembers: [{
+        //     name:"Jack Arnold",
+        //     imagePath: "jane.jpg"
+        //     },
+        //     {
+        //     name:"Jane Arnold",
+        //     imagePath: "jane.jpg"
+        // }],
         startDate: "12/10/22",
         endDate: "12/12/22",
         tasksPending:"2",
@@ -67,14 +67,14 @@ const ManagedProjects = () => {
         projectName:"CS261 Coursework",
         projectDescription:"Group coursework run by James Archbold",
         progress:70,
-        teamMembers: [{
-            name:"Jack Arnold",
-            imagePath: "jane.jpg"
-            },
-            {
-            name:"Jane Arnold",
-            imagePath: "jane.jpg"
-        }],
+        // teamMembers: [{
+        //     name:"Jack Arnold",
+        //     imagePath: "jane.jpg"
+        //     },
+        //     {
+        //     name:"Jane Arnold",
+        //     imagePath: "jane.jpg"
+        // }],
         startDate: "12/10/22",
         endDate: "12/12/22",
         tasksPending:"2",
