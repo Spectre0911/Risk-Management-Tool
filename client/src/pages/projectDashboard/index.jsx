@@ -151,6 +151,8 @@ const ProjectDashboard = () => {
   const [tempData, setTempData] = useState([]);
   const [teamImages, setTeamImages] = useState([]);
   const [dataset, setDataset] = useState([]);
+  const [changeFeature, setFeatureChange] = useState(0);
+
   useEffect(() => {
     OverallRisk({ projectId: projectId }).then((data) => {
       console.log("OVERALL RISK");
@@ -260,9 +262,10 @@ const ProjectDashboard = () => {
           }, counts); // Use the counts object as the initial value of the reduce function
 
         setDataFeatures([counts[1], counts[2], counts[3]]);
-        console.log("fddw");
       }
     });
+
+   
     let fetchData = [];
     (async () => {
       try {
@@ -290,7 +293,7 @@ const ProjectDashboard = () => {
         console.error(error);
       }
     })();
-  }, []);
+  }, [changeFeature]);
 
   useEffect(() => {
     setTeamImages([]);
@@ -386,7 +389,7 @@ const ProjectDashboard = () => {
     output.push(end);
     return output;
   }
-
+  
   return (
     <div className="main">
       <div className="grid">
@@ -489,7 +492,7 @@ const ProjectDashboard = () => {
 
         <div className="infoBox2 projectTable feature">
           <div className="metricTitle2">Features</div>
-          <Table projectid={projectId} />
+          <Table projectid={projectId} features={changeFeature} changeFeatures={setFeatureChange}/>
         </div>
 
         <div className="infoBox2">
