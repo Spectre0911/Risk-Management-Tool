@@ -100,12 +100,18 @@ const EditProfileForm = ({ handleClose, projectid, features, changeFeatures}) =>
       body: JSON.stringify(values),
     })
       .then((response) => {
+        console.log("fffff");
         return response.json();
       })
       .then((data) => {
+        console.log("fff");
         console.log(data);
         changeFeatures(features+1);
+        console.log("added feature");
       });
+      console.log("fff");
+      // changeFeatures(features+1);
+      console.log(features);
   };
 
   const handleDependencyChange = (e) => {

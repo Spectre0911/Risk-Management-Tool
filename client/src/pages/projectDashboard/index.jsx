@@ -154,6 +154,7 @@ const ProjectDashboard = () => {
   const [changeFeature, setFeatureChange] = useState(0);
 
   useEffect(() => {
+    console.log("renredneringggg");
     OverallRisk({ projectId: projectId }).then((data) => {
       console.log("OVERALL RISK");
       let team = (data.employee_replacement + data.feedback) / 7;
