@@ -258,6 +258,7 @@ const ProjectDashboard = () => {
           }, counts); // Use the counts object as the initial value of the reduce function
 
         setDataFeatures([counts[1], counts[2], counts[3]]);
+        console.log("fddw");
       }
     });
     let fetchData = [];
