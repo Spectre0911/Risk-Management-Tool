@@ -1202,11 +1202,11 @@ app.post("/api/allTasks", async (req, postRes) => {
     // console.log(req.body);
 
     const timeLeft = await pool.query(
-      "SELECT * FROM tasks WHERE projectid = $1",
+      "SELECT * FROM (SELECT * FROM (projects NATURAL JOIN features) ) as o1 NATURAL JOIN tasks WHERE projectid = $1 ;",
       [req.body.projectid]
     );
     if (timeLeft.rows.length == 0) {
-      return postRes.json(null);
+      return postRes.json([]);
     } else {
       // console.log(allFeatures.rows);
       postRes.json(timeLeft.rows);
