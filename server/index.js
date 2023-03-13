@@ -478,6 +478,11 @@ app.post("/api/projects", async (req, postRes) => {
     if (allFeatures.rows.length == 0) {
       return postRes.json(null);
     } else {
+      allFeatures.rows.map((project, index)=>{
+        if (project.progress<0){
+          project.progress=0;
+        }
+      })
       postRes.json(allFeatures.rows);
     }
   } catch (err) {
