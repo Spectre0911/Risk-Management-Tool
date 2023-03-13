@@ -88,7 +88,7 @@ const EditProfileForm = ({ handleClose }) => {
         email: data.email || "",
         bio: data.bio || "",
         gitHubToken: data.githubtoken || "",
-        gitHubName: "",
+        gitHubName: data.githubuname,
         newPassword: "",
       });
       console.log(initialValuesRegister);

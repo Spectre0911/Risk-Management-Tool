@@ -97,25 +97,6 @@ const Table = () => {
 
       setContacts(newContacts);
     });
-    // TasksToComplete({ email: login.email }).then((data) => {
-    //   let newTasks = [];
-    //   data.map((task) => {
-    //     let newTask = {
-    //       taskId: task.taskid.toString(),
-    //       taskName: task.taskname,
-    //       featureId: task.featureid.toString(),
-    //       projectId: task.projectid.toString(),
-    //       projectName: task.projectname,
-    //       taskPriority: ["Core", "Optional", "Aesthetic"][task.priority - 1],
-    //       taskStatus: "In Progress",
-    //       featureName: task.featurename,
-    //       daysLeft: task.daysleft,
-    //     };
-    //     newTasks.push(newTask);
-    //   });
-    //   setData(newTasks);
-    // });
-    // setData(contacts);
   }, []);
 
   const viewTasks = (e) => {
