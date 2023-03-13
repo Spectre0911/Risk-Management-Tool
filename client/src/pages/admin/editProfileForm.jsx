@@ -196,6 +196,10 @@ const EditProfileForm = ({ handleClose }) => {
                   <img
                     className="editProfilePic"
                     src={`http://localhost:5000/assets/${imagePath}`}
+                    onError={({ currentTarget }) => {
+                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.src="http://localhost:5000/assets/placeholder.png";
+                    }}
                     style={{
                       margin: "auto",
                       borderRadius: "200px",

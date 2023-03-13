@@ -34,7 +34,8 @@ const Dashboard = () => {
     // Get all active projects
     ActiveProjects({
       email: login.email,
-    }).then((data) => setActiveProjects(data));
+    }).then((data) => {setActiveProjects(data)
+    console.log(data)});
     // Get the number of notifications
     NotificationCount({
       email: login.email,
