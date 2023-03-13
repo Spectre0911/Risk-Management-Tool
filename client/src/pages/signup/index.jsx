@@ -1,13 +1,15 @@
 import React, { Component } from "react";
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate} from "react-router-dom";
 import { connect } from "react-redux";
 import "bootstrap/dist/css/bootstrap.css";
 import "../login/index.css";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 const SignupPage = () => {
+  const navigate = useNavigate();
   const initialValues = {
     firstName: "",
     lastName: "",
@@ -46,8 +48,10 @@ const SignupPage = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(values),
-    });
+    }
+    );
 
+    navigate("/login");
 
     let form = new FormData();
     form.append('file', image);
