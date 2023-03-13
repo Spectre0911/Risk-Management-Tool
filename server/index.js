@@ -1197,6 +1197,26 @@ app.post("/api/softSkillsScore", async (req, postRes) => {
 });
 
 //SELECT deadline - NOW() FROM projects where projectid = 1
+app.post("/api/allTasks", async (req, postRes) => {
+  try {
+    // console.log(req.body);
+
+    const timeLeft = await pool.query(
+      "SELECT * FROM tasks WHERE projectid = $1",
+      [req.body.projectid]
+    );
+    if (timeLeft.rows.length == 0) {
+      return postRes.json(null);
+    } else {
+      // console.log(allFeatures.rows);
+      postRes.json(timeLeft.rows);
+    }
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//SELECT deadline - NOW() FROM projects where projectid = 1
 app.post("/api/timeLeft", async (req, postRes) => {
   try {
     // console.log(req.body);
