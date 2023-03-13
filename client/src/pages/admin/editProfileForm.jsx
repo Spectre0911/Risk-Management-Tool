@@ -61,28 +61,25 @@ const EditProfileForm = ({ handleClose }) => {
     bio: yup.string().required("required"),
     gitHubToken: yup.string().required("required"),
     gitHubName: yup.string().required("required"),
-    newPassword: yup.string()
+    newPassword: yup.string(),
   });
 
   const [imagePath, setImagePath] = useState("");
 
   const [image, setImage] = useState("");
   const login = useSelector((state) => state.email);
-    
-   
-
 
   useEffect(() => {
     GetImagePath({
       email: userEmail.email,
     }).then((data) => {
-
       console.log(data);
-        setImagePath(data);
-        if (data==""){
-            setImagePath("jane.jpg")
+      setImagePath(data);
+      if (data == "") {
+        setImagePath("jane.jpg");
       }
-    console.log(imagePath)});
+      console.log(imagePath);
+    });
     GetUser({
       email: userEmail,
     }).then((data) => {
@@ -91,6 +88,8 @@ const EditProfileForm = ({ handleClose }) => {
         email: data.email || "",
         bio: data.bio || "",
         gitHubToken: data.githubtoken || "",
+        gitHubName: "",
+        newPassword: "",
       });
       console.log(initialValuesRegister);
     });
@@ -105,25 +104,25 @@ const EditProfileForm = ({ handleClose }) => {
 
   const uploadImage = (e) => {
     console.log(e.target.files[0].name);
-    if (e.target.files[0].name!=""){
+    if (e.target.files[0].name != "") {
       setImagePath(e.target.files[0].name);
-      setImage(e.target.files[0])
+      setImage(e.target.files[0]);
       console.log(imagePath);
     }
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     console.log(image);
-    if (image){
+    if (image) {
       let form = new FormData();
-      form.append('file', image);
+      form.append("file", image);
       fetch("http://localhost:5000/upload", {
         method: "POST",
         body: form,
       });
       var values = {};
-      values.email=userEmail;
-      values.path=image.name;
+      values.email = userEmail;
+      values.path = image.name;
       console.log("values", values);
       fetch("http://localhost:5000/api/editImagePath", {
         method: "POST",
@@ -135,7 +134,7 @@ const EditProfileForm = ({ handleClose }) => {
 
       console.log(imagePath);
     }
-  },[image])
+  }, [image]);
 
   const handleFormSubmit = async (values, onSubmitProps) => {
     console.log("SUBMITTING");
@@ -159,7 +158,9 @@ const EditProfileForm = ({ handleClose }) => {
 
   return (
     <Formik
-      onSubmit={(e)=>{handleFormSubmit(e)}}
+      onSubmit={(e) => {
+        handleFormSubmit(e);
+      }}
       initialValues={initialValuesRegister}
       validationSchema={reportBugSchema}
       enableReinitialize={true}
@@ -281,11 +282,13 @@ const EditProfileForm = ({ handleClose }) => {
                   value={values.newPassword}
                   type="password"
                   name="newPassword"
-                  error={Boolean(touched.newPassword) && Boolean(errors.newPassword)}
+                  error={
+                    Boolean(touched.newPassword) && Boolean(errors.newPassword)
+                  }
                   helperText={touched.newPassword && errors.newPassword}
                   sx={{ gridColumn: "span 4" }}
                 />
-                
+
                 <p style={{ gridColumn: "span 1", margin: "auto" }}>Skills:</p>
                 <Select
                   defaultValue={skills}

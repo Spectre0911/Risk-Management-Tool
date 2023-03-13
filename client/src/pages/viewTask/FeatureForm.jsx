@@ -32,14 +32,12 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
   const reportBugSchema = yup.object().shape({
     name: yup.string().required("required"),
     description: yup.string().required("required"),
-
     difficulty: yup.string().required("required"),
   });
 
   const initialValuesRegister = {
     name: "feature name",
     description: "Add login screen",
-
     difficulty: "0",
   };
 
@@ -219,7 +217,7 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
                   style={{ gridColumn: "span 3", width: "70%" }}
                 /> */}
 
-                <p
+                {/* <p
                   style={{
                     gridColumn: "span 1",
                     margin: "auto",
@@ -237,9 +235,9 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
                   classNamePrefix="select"
                   onChange={handleUserChange}
                   style={{ gridColumn: "span 3", width: "70%" }}
-                />
+                /> */}
 
-                <p
+                {/* <p
                   style={{
                     gridColumn: "span 1",
                     margin: "auto",
@@ -259,9 +257,9 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
                   }
                   helperText={touched.startTime && errors.startTime}
                   sx={{ gridColumn: "span 3" }}
-                />
+                /> */}
 
-                <p
+                {/* <p
                   style={{
                     gridColumn: "span 1",
                     margin: "auto",
@@ -279,7 +277,7 @@ const EditProfileForm = ({ handleClose, featureId, mode, projectid }) => {
                   error={Boolean(touched.endTime) && Boolean(errors.endTime)}
                   helperText={touched.endTime && errors.endTime}
                   sx={{ gridColumn: "span 3" }}
-                />
+                /> */}
               </>
             }
           </Box>

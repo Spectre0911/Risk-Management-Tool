@@ -786,7 +786,7 @@ app.post("/api/skills", async (req, postRes) => {
 // Update a users information
 app.post("/api/updateUser", async (req, postRes) => {
   try {
-    // console.log(req.body);
+    console.log(req.body);
     const firstNameLastName = req.body.values.name.split(" ");
     // console.log(firstNameLastName);
     // Update user table
@@ -796,7 +796,7 @@ app.post("/api/updateUser", async (req, postRes) => {
       [req.body.userEmail.email]
     );
     await pool.query(
-      "UPDATE USERS SET firstname = $1, lastname = $2, email = $3, githubtoken = $4, bio = $6 WHERE email = $5",
+      "UPDATE USERS SET firstname = $1, lastname = $2, email = $3, githubtoken = $4, bio = $6, githubuname = $7 WHERE email = $5",
       [
         firstNameLastName[0],
         firstNameLastName[1],
@@ -804,6 +804,7 @@ app.post("/api/updateUser", async (req, postRes) => {
         req.body.values.gitHubToken,
         req.body.userEmail.email,
         req.body.values.bio,
+        req.body.values.gitHubName,
       ]
     );
     // Delete all exisiting skills in the table
@@ -1191,6 +1192,26 @@ app.post("/api/softSkillsScore", async (req, postRes) => {
     // console.log(communicationScore.rows);
 
     postRes.json(communicationScore.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+});
+
+//SELECT deadline - NOW() FROM projects where projectid = 1
+app.post("/api/allTasks", async (req, postRes) => {
+  try {
+    // console.log(req.body);
+
+    const timeLeft = await pool.query(
+      "SELECT * FROM (SELECT * FROM (projects NATURAL JOIN features) ) as o1 NATURAL JOIN tasks WHERE projectid = $1 ;",
+      [req.body.projectid]
+    );
+    if (timeLeft.rows.length == 0) {
+      return postRes.json([]);
+    } else {
+      // console.log(allFeatures.rows);
+      postRes.json(timeLeft.rows);
+    }
   } catch (err) {
     console.error(err.message);
   }
