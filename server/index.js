@@ -470,7 +470,7 @@ app.post("/api/maximumOne", async (req, postRes) => {
 // Get all projects
 app.post("/api/projects", async (req, postRes) => {
   try {
-    // console.log(req.body);
+    console.log(req.body);
     const allFeatures = await pool.query(
       "SELECT * FROM (SELECT projectid, projectname, deadline, opened, (EXTRACT(epoch FROM CURRENT_TIMESTAMP - opened) / EXTRACT(epoch FROM deadline - opened)) * 100 AS progress, closed FROM projects NATURAL JOIN userproject WHERE userid = (SELECT userid FROM users WHERE email = $1) and ismanager = true) AS subquery1 NATURAL JOIN (SELECT projectid, userid FROM userproject WHERE ismanager) AS subquery2 NATURAL JOIN users WHERE closed = false;",
       [req.body.email]
@@ -988,7 +988,12 @@ app.post("/api/orderedUsers", async (req, postRes) => {
         );
 
         intersectionUserCount.set(
-          { value: user.userid, image: user.pfppath, bio: user.bio, name: user.firstname + " " + user.lastname },
+          {
+            value: user.userid,
+            image: user.pfppath,
+            bio: user.bio,
+            name: user.firstname + " " + user.lastname,
+          },
           intersection.size
         );
       })
