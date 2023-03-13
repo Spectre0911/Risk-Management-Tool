@@ -63,6 +63,7 @@ const Table = (props) => {
       setData(updatedContacts);
       console.log("----------");
     });
+    props.changeFeatures(props.features+1);
   }, []);
 
   const viewTasks = (e) => {
@@ -284,6 +285,8 @@ const Table = (props) => {
             <FeatureForm
               handleClose={handleEditClose}
               projectid={props.projectid}
+              features={props.features} 
+              changeFeatures={props.changeFeatures}
             />
           </Modal.Body>
         </Modal>

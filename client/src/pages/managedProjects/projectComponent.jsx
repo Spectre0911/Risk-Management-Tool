@@ -31,22 +31,6 @@ const ProjectComponent = ({data}) => {
         </div>
           <ProgressBar now={data.progress} />
         </div>
-        <div className="teamMemberTitle">Team Members:</div>
-        <div className="userImagesProjects">
-          {data.teamMembers.map((member) => (
-              <OverlayTrigger
-              key={member.name}
-              placement={'top'}
-              overlay={
-                  <Tooltip id={`tooltip-${member.name}`}>
-                  <strong>{member.name}</strong>.
-                  </Tooltip>
-              }
-              >
-              <img className="ProjectProfileImage" src={`http://localhost:5000/assets/${member.imagePath}`}></img>
-              </OverlayTrigger>
-          ))}  
-        </div>
         <div className="projectCardDate"><b>Timeline: </b>{data.startDate} - {data.endDate}</div>
         
         <div className="projectCardDate"><b>Tasks pending: </b>3</div>

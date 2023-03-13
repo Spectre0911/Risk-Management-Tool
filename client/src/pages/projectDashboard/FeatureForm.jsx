@@ -25,7 +25,7 @@ import Dropzone from "react-dropzone";
 import * as yup from "yup";
 import { createGrid } from "@mui/system";
 
-const EditProfileForm = ({ handleClose, projectid }) => {
+const EditProfileForm = ({ handleClose, projectid, features, changeFeatures}) => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const { palette } = useTheme();
 
@@ -104,6 +104,7 @@ const EditProfileForm = ({ handleClose, projectid }) => {
       })
       .then((data) => {
         console.log(data);
+        changeFeatures(features+1);
       });
   };
 
