@@ -10,7 +10,7 @@ import psycopg2
 conn = psycopg2.connect(
     database = "riskmanager",
     user = "postgres",
-    password = "Avazbek2002",
+    password = "root",
     host = "localhost",
     port = "5432"
 )
