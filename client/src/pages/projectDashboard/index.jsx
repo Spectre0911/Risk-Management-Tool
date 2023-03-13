@@ -532,6 +532,10 @@ const ProjectDashboard = () => {
                       className="profilePic"
                       style={{ marginLeft: "0px" }}
                       src={`http://localhost:5000/assets/${teamImages[index]}`}
+                      onError={({ currentTarget }) => {
+                        currentTarget.onerror = null; // prevents looping
+                        currentTarget.src="http://localhost:5000/assets/placeholder.png";
+                        }}
                     ></img>
                   </div>
                   <div className="projectDashboardSkill">Skills:</div>
